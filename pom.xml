@@ -12,8 +12,23 @@
     <java.version>1.8</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
+    
+    <vessel-java.version>1.0-SNAPSHOT</vessel-java.version>
   </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.committed.vessel</groupId>
+        <artifactId>vessel-plugins</artifactId>
+        <version>${vessel-java.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <modules>
+    <module>ketos-plugin-data-baleen-mongo</module>
   </modules>
 </project>
