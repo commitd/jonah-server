@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import io.committed.dao.BaleenRelation;
+import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenRelation;
 
 @Repository
 public interface BaleenRelationRepository

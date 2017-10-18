@@ -1,12 +1,10 @@
-package io.committed.dto;
+package io.committed.ketos.plugins.data.baleenmongo.dto;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotNull;
-
-import io.committed.ketos.dao.BaleenEntities;
+import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -28,7 +26,7 @@ public class Entity {
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
   private List<Mention> mentions;
 
-  public Entity(BaleenEntities baleen) {
+  public Entity(final BaleenEntities baleen) {
     id = baleen.getId();
     docId = baleen.getDocId();
     mentions = baleen.getEntities().stream().map(new Mention.MentionFactory(id))
@@ -41,7 +39,7 @@ public class Entity {
   }
 
   @GraphQLQuery(name = "longestValue")
-  public Optional<String> longestValue(@GraphQLContext @NotNull Entity entity) {
+  public Optional<String> longestValue(@GraphQLContext final Entity entity) {
     return entity.getMentions().stream().map(Mention::getValue)
         .collect(Collectors.maxBy((o1, o2) -> Integer.compare(o1.length(), o2.length())));
   }

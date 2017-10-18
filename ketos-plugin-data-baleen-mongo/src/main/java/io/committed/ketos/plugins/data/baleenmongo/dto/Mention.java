@@ -1,8 +1,8 @@
-package io.committed.dto;
+package io.committed.ketos.plugins.data.baleenmongo.dto;
 
 import java.util.function.Function;
 
-import io.committed.ketos.dao.BaleenMention;
+import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenMention;
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class Mention {
   private String value;
   private String entityId;
 
-  public Mention(String entityId, BaleenMention baleen) {
+  public Mention(final String entityId, final BaleenMention baleen) {
     this.entityId = entityId;
     id = baleen.getExternalId();
     confidence = baleen.getConfidence();
@@ -37,12 +37,12 @@ public class Mention {
 
     private final String entityId;
 
-    public MentionFactory(String entityId) {
+    public MentionFactory(final String entityId) {
       this.entityId = entityId;
     }
 
     @Override
-    public Mention apply(BaleenMention mention) {
+    public Mention apply(final BaleenMention mention) {
       return new Mention(entityId, mention);
     }
   }

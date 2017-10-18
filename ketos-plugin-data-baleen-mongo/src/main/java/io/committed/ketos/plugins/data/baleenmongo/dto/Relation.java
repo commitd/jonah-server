@@ -1,6 +1,6 @@
-package io.committed.dto;
+package io.committed.ketos.plugins.data.baleenmongo.dto;
 
-import io.committed.ketos.dao.BaleenRelation;
+import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenRelation;
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +32,7 @@ public class Relation {
 
   private double confidence;
 
-  public Relation(BaleenRelation baleen) {
+  public Relation(final BaleenRelation baleen) {
     id = baleen.getExternalId();
     docId = baleen.getDocId();
     begin = baleen.getBegin();

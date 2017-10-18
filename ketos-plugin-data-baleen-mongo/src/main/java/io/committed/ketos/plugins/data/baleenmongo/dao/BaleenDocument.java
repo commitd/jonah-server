@@ -1,4 +1,4 @@
-package io.committed.ketos.dao;
+package io.committed.ketos.plugins.data.baleenmongo.dao;
 
 import java.util.HashMap;
 import java.util.List;
