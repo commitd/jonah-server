@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo.dto;
+package io.committed.ketos.plugins.graphql.baleen;
 
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.AllArgsConstructor;

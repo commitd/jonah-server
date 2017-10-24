@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import io.committed.ketos.plugins.data.baleenmongo.dto.DocumentInfo;
+import io.committed.ketos.plugins.graphql.baleen.DocumentInfo;
 import lombok.Data;
 
 @Data
@@ -24,9 +24,9 @@ public class BaleenDocument {
   @TextIndexed
   private String content;
 
-  public io.committed.ketos.plugins.data.baleenmongo.dto.Document toDocument() {
-    final io.committed.ketos.plugins.data.baleenmongo.dto.Document d =
-        new io.committed.ketos.plugins.data.baleenmongo.dto.Document();
+  public io.committed.ketos.plugins.graphql.baleen.Document toDocument() {
+    final io.committed.ketos.plugins.graphql.baleen.Document d =
+        new io.committed.ketos.plugins.graphql.baleen.Document();
     d.setId(getExternalId());
     d.setInfo(getDocument());
     d.setPublishedIds(getPublishedIds());

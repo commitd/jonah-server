@@ -3,8 +3,8 @@ package io.committed.ketos.plugins.data.baleenmongo.query;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenDocument;
-import io.committed.ketos.plugins.data.baleenmongo.dto.Document;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenDocumentRepository;
+import io.committed.ketos.plugins.graphql.baleen.Document;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLId;

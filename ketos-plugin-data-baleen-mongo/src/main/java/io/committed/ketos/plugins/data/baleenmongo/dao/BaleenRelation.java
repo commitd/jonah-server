@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import io.committed.ketos.plugins.data.baleenmongo.dto.Relation;
+import io.committed.ketos.plugins.graphql.baleen.Relation;
 import lombok.Data;
 
 @Document(collection = "relations")
