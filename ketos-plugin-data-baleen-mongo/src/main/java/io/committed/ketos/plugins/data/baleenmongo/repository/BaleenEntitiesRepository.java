@@ -1,21 +1,21 @@
 package io.committed.ketos.plugins.data.baleenmongo.repository;
 
 import java.util.Collection;
-import java.util.List;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
+import reactor.core.publisher.Flux;
 
 @Repository
 public interface BaleenEntitiesRepository
-    extends PagingAndSortingRepository<BaleenEntities, String> {
+    extends ReactiveCrudRepository<BaleenEntities, String> {
 
-  List<BaleenEntities> findByDocId(String id);
+  Flux<BaleenEntities> findByDocId(String id);
 
-  List<BaleenEntities> deleteByDocId(String id);
+  Flux<BaleenEntities> deleteByDocId(String id);
 
-  List<BaleenEntities> deleteByDocIdIn(Collection<String> ids);
+  Flux<BaleenEntities> deleteByDocIdIn(Collection<String> ids);
 
 }

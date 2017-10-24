@@ -1,9 +1,5 @@
 package io.committed.ketos.plugins.data.baleenmongo.query;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenDocument;
@@ -13,6 +9,8 @@ import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @VesselGraphQlService
 public class DocumentService {
@@ -20,23 +18,28 @@ public class DocumentService {
   @Autowired
   private BaleenDocumentRepository documents;
 
+  @GraphQLQuery(name = "hello")
+  public Flux<String> hello() {
+    return Flux.just("a", "good", "night");
+  }
+
   @GraphQLQuery(name = "documents")
-  public Stream<Document> getDocuments(
+  public Flux<Document> getDocuments(
       @GraphQLArgument(name = "limit", defaultValue = "0") final int limit) {
-    Stream<BaleenDocument> stream = StreamSupport.stream(documents.findAll().spliterator(), false);
+    Flux<BaleenDocument> stream = documents.findAll();
     if (limit > 0) {
-      stream = stream.limit(limit);
+      stream = stream.take(limit);
     }
 
     return stream.map(BaleenDocument::toDocument);
   }
 
   @GraphQLQuery(name = "documents")
-  public Stream<Document> getDocuments(@GraphQLArgument(name = "search") final String search,
+  public Flux<Document> getDocuments(@GraphQLArgument(name = "search") final String search,
       @GraphQLArgument(name = "limit") final int limit) {
-    Stream<BaleenDocument> stream = documents.searchDocuments(search);
+    Flux<BaleenDocument> stream = documents.searchDocuments(search);
     if (limit > 0) {
-      stream = stream.limit(limit);
+      stream = stream.take(limit);
     }
 
     return stream.map(BaleenDocument::toDocument);
@@ -44,7 +47,7 @@ public class DocumentService {
 
 
   @GraphQLQuery(name = "document")
-  public Optional<Document> getDocument(
+  public Mono<Document> getDocument(
       @GraphQLArgument(name = "id") @GraphQLId final String id) {
     return documents.findByExternalId(id).map(BaleenDocument::toDocument);
   }

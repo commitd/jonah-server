@@ -13,8 +13,11 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
+    <!-- Dependencies as per Vessel version -->
     <vessel-java.version>1.0-SNAPSHOT</vessel-java.version>
     <spring-boot.version>2.0.0.M5</spring-boot.version>
+    <spring-data-elasticsearch.version>3.0.0.RELEASE</spring-data-elasticsearch.version>
+    
   </properties>
 
   <dependencyManagement>
@@ -36,13 +39,29 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+      <!-- Spring -->
       <dependency>
         <!-- Import dependency management from Spring Boot -->
+        <!-- TODO: Should be importanted as provded... so doesn't really 
+          work! -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        <version>${spring-boot.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-elasticsearch</artifactId>
+        <version>${spring-data-elasticsearch}</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -86,7 +105,7 @@
   </pluginRepositories>
 
   <modules>
-      <module>ketos-core-data</module>
+    <module>ketos-core-data</module>
     <module>ketos-plugin-data-baleen-mongo</module>
     <module>ketes-plugin-data-elasticsearch</module>
   </modules>

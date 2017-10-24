@@ -14,6 +14,6 @@ public class EntityConverter implements Converter<String, BaleenEntities> {
 
   @Override
   public BaleenEntities convert(final String id) {
-    return repository.findById(id).orElse(null);
+    return repository.findById(id).block();
   }
 }

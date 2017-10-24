@@ -1,8 +1,5 @@
 package io.committed.ketos.plugins.data.baleenmongo.query;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
@@ -15,6 +12,8 @@ import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @VesselGraphQlService
@@ -24,32 +23,32 @@ public class MentionService {
   BaleenEntitiesRepository entities;
 
 
-  private Stream<Entity> getByDocumentId(@GraphQLArgument(name = "id") final String id) {
-    return entities.findByDocId(id).stream().map(BaleenEntities::toEntity);
+  private Flux<Entity> getByDocumentId(@GraphQLArgument(name = "id") final String id) {
+    return entities.findByDocId(id).map(BaleenEntities::toEntity);
   }
 
-  private Stream<Mention> getMentionsByDocumentId(final String documentId) {
-    return getByDocumentId(documentId).flatMap(e -> e.getMentions().stream());
+  private Flux<Mention> getMentionsByDocumentId(final String documentId) {
+    return getByDocumentId(documentId).flatMap(e -> Flux.fromIterable(e.getMentions()));
   }
 
-  private Optional<Mention> relationMentionById(final Relation relation, final String sourceId) {
+  private Mono<Mention> relationMentionById(final Relation relation, final String sourceId) {
     return getMentionsByDocumentId(relation.getDocId()).filter(m -> sourceId.equals(m.getId()))
-        .findFirst();
+        .next();
   }
 
 
   @GraphQLQuery(name = "mentions")
-  public Stream<Mention> getMentionsByDocument(@GraphQLContext final Document document) {
+  public Flux<Mention> getMentionsByDocument(@GraphQLContext final Document document) {
     return getMentionsByDocumentId(document.getId());
   }
 
   @GraphQLQuery(name = "source")
-  public Optional<Mention> source(@GraphQLContext final Relation relation) {
+  public Mono<Mention> source(@GraphQLContext final Relation relation) {
     return relationMentionById(relation, relation.getSourceId());
   }
 
   @GraphQLQuery(name = "target")
-  public Optional<Mention> target(@GraphQLContext final Relation relation) {
+  public Mono<Mention> target(@GraphQLContext final Relation relation) {
     return relationMentionById(relation, relation.getTargetId());
   }
 

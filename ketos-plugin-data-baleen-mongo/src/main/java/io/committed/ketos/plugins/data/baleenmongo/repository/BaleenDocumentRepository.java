@@ -1,42 +1,40 @@
 package io.committed.ketos.plugins.data.baleenmongo.repository;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenDocument;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLQuery;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Repository
 public interface BaleenDocumentRepository
-    extends PagingAndSortingRepository<BaleenDocument, String> {
+    extends ReactiveCrudRepository<BaleenDocument, String> {
 
+  Mono<BaleenDocument> findByDocumentSource(String path);
 
-  Optional<BaleenDocument> findByDocumentSource(String path);
+  Flux<BaleenDocument> findByDocumentSourceIn(Collection<String> paths, Pageable page);
 
-  Page<BaleenDocument> findByDocumentSourceIn(Collection<String> paths, Pageable page);
+  Flux<BaleenDocument> findByDocumentSourceIn(Collection<String> paths);
 
-  Stream<BaleenDocument> findByDocumentSourceIn(Collection<String> paths);
+  Flux<BaleenDocument> findByDocumentSourceIn(Collection<String> paths, Sort sort);
 
-  Stream<BaleenDocument> findByDocumentSourceIn(Collection<String> paths, Sort sort);
+  Flux<BaleenDocument> findByDocumentSourceStartsWith(String absolutePath, Pageable page);
 
-  Page<BaleenDocument> findByDocumentSourceStartsWith(String absolutePath, Pageable page);
-
-  Stream<BaleenDocument> findByDocumentSourceStartsWith(String absolutePath);
+  Flux<BaleenDocument> findByDocumentSourceStartsWith(String absolutePath);
 
   @GraphQLQuery(name = "document")
-  Optional<BaleenDocument> findByExternalId(@GraphQLArgument(name = "id") String id);
+  Mono<BaleenDocument> findByExternalId(@GraphQLArgument(name = "id") String id);
 
   @Query(value = "{ $text: { $search: ?0 } }")
-  Stream<BaleenDocument> searchDocuments(String terms);
+  Flux<BaleenDocument> searchDocuments(String terms);
 
 
 }
