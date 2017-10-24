@@ -60,7 +60,7 @@
       <dependency>
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-elasticsearch</artifactId>
-        <version>${spring-data-elasticsearch}</version>
+        <version>${spring-data-elasticsearch.version}</version>
         <scope>provided</scope>
       </dependency>
     </dependencies>
@@ -108,5 +108,6 @@
     <module>ketos-core-data</module>
     <module>ketos-plugin-data-baleen-mongo</module>
     <module>ketes-plugin-data-elasticsearch</module>
+    <module>ketos-plugin-data-sql</module>
   </modules>
 </project>
