@@ -2,7 +2,7 @@ package io.committed.ketos.plugins.data.baleenmongo.query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
+import io.committed.ketos.plugins.data.baleenmongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenEntitiesRepository;
 import io.committed.ketos.plugins.graphql.baleen.Document;
 import io.committed.ketos.plugins.graphql.baleen.Entity;
@@ -24,7 +24,7 @@ public class MentionService {
 
 
   private Flux<Entity> getByDocumentId(@GraphQLArgument(name = "id") final String id) {
-    return entities.findByDocId(id).map(BaleenEntities::toEntity);
+    return entities.findByDocId(id).map(MongoEntities::toEntity);
   }
 
   private Flux<Mention> getMentionsByDocumentId(final String documentId) {

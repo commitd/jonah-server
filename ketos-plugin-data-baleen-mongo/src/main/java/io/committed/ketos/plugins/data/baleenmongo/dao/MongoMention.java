@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaleenMention {
+public class MongoMention {
 
   private double confidence;
   private String externalId;

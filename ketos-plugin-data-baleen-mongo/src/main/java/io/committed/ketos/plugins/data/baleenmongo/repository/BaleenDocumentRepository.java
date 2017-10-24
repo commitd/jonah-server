@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenDocument;
+import io.committed.ketos.plugins.data.baleenmongo.dao.MongoDocument;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
@@ -16,25 +16,25 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface BaleenDocumentRepository
-    extends ReactiveCrudRepository<BaleenDocument, String> {
+    extends ReactiveCrudRepository<MongoDocument, String> {
 
-  Mono<BaleenDocument> findByDocumentSource(String path);
+  Mono<MongoDocument> findByDocumentSource(String path);
 
-  Flux<BaleenDocument> findByDocumentSourceIn(Collection<String> paths, Pageable page);
+  Flux<MongoDocument> findByDocumentSourceIn(Collection<String> paths, Pageable page);
 
-  Flux<BaleenDocument> findByDocumentSourceIn(Collection<String> paths);
+  Flux<MongoDocument> findByDocumentSourceIn(Collection<String> paths);
 
-  Flux<BaleenDocument> findByDocumentSourceIn(Collection<String> paths, Sort sort);
+  Flux<MongoDocument> findByDocumentSourceIn(Collection<String> paths, Sort sort);
 
-  Flux<BaleenDocument> findByDocumentSourceStartsWith(String absolutePath, Pageable page);
+  Flux<MongoDocument> findByDocumentSourceStartsWith(String absolutePath, Pageable page);
 
-  Flux<BaleenDocument> findByDocumentSourceStartsWith(String absolutePath);
+  Flux<MongoDocument> findByDocumentSourceStartsWith(String absolutePath);
 
   @GraphQLQuery(name = "document")
-  Mono<BaleenDocument> findByExternalId(@GraphQLArgument(name = "id") String id);
+  Mono<MongoDocument> findByExternalId(@GraphQLArgument(name = "id") String id);
 
   @Query(value = "{ $text: { $search: ?0 } }")
-  Flux<BaleenDocument> searchDocuments(String terms);
+  Flux<MongoDocument> searchDocuments(String terms);
 
 
 }

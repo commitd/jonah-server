@@ -2,7 +2,7 @@ package io.committed.ketos.plugins.data.baleenmongo.query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
+import io.committed.ketos.plugins.data.baleenmongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenEntitiesRepository;
 import io.committed.ketos.plugins.graphql.baleen.Document;
 import io.committed.ketos.plugins.graphql.baleen.Entity;
@@ -45,7 +45,7 @@ public class EntityService {
       @GraphQLArgument(name = "limit", defaultValue = "0") final int limit) {
 
     return filterEntities(
-        entities.findAll().map(BaleenEntities::toEntity),
+        entities.findAll().map(MongoEntities::toEntity),
         type, value,
         limit);
   }
@@ -54,7 +54,7 @@ public class EntityService {
 
   @GraphQLQuery(name = "entitiesByDocument")
   public Flux<Entity> getByDocumentId(@GraphQLArgument(name = "id") final String id) {
-    return entities.findByDocId(id).map(BaleenEntities::toEntity);
+    return entities.findByDocId(id).map(MongoEntities::toEntity);
   }
 
 
@@ -97,7 +97,7 @@ public class EntityService {
 
   @GraphQLQuery(name = "entity")
   public Mono<Entity> getById(@GraphQLArgument(name = "id") @GraphQLId final String id) {
-    return entities.findById(id).map(BaleenEntities::toEntity);
+    return entities.findById(id).map(MongoEntities::toEntity);
   }
 
   @GraphQLQuery(name = "of")

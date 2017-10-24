@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Document(collection = "relations")
 @Data
-public class BaleenRelation {
+public class MongoRelation {
   @Id
   private String id;
 

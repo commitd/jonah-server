@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data
 @Document(collection = "documents")
-public class BaleenDocument {
+public class MongoDocument {
 
   @Id
   private String id;

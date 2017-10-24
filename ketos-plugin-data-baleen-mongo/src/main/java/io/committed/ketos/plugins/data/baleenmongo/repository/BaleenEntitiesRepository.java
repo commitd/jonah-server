@@ -5,17 +5,17 @@ import java.util.Collection;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
+import io.committed.ketos.plugins.data.baleenmongo.dao.MongoEntities;
 import reactor.core.publisher.Flux;
 
 @Repository
 public interface BaleenEntitiesRepository
-    extends ReactiveCrudRepository<BaleenEntities, String> {
+    extends ReactiveCrudRepository<MongoEntities, String> {
 
-  Flux<BaleenEntities> findByDocId(String id);
+  Flux<MongoEntities> findByDocId(String id);
 
-  Flux<BaleenEntities> deleteByDocId(String id);
+  Flux<MongoEntities> deleteByDocId(String id);
 
-  Flux<BaleenEntities> deleteByDocIdIn(Collection<String> ids);
+  Flux<MongoEntities> deleteByDocIdIn(Collection<String> ids);
 
 }

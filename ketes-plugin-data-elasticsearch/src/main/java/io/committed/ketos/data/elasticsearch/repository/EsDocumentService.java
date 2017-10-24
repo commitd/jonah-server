@@ -1,4 +1,4 @@
-package io.committed.ketos.data.elasticsearch.query;
+package io.committed.ketos.data.elasticsearch.repository;
 
 import org.elasticsearch.action.ListenableActionFuture;
 import org.elasticsearch.action.get.GetResponse;

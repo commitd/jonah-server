@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Document(collection = "entities")
 @Data
-public class BaleenEntities {
+public class MongoEntities {
 
   @Id
   private String id;
@@ -24,7 +24,7 @@ public class BaleenEntities {
 
   @JsonProperty("entities")
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
-  private List<BaleenMention> entities;
+  private List<MongoMention> entities;
 
   public Entity toEntity() {
     final Entity entity = new Entity();

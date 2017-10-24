@@ -2,7 +2,7 @@ package io.committed.ketos.plugins.data.baleenmongo.query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenRelation;
+import io.committed.ketos.plugins.data.baleenmongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenRelationRepository;
 import io.committed.ketos.plugins.graphql.baleen.Document;
 import io.committed.ketos.plugins.graphql.baleen.Mention;
@@ -24,8 +24,8 @@ public class RelationService {
   @Autowired
   EntityService entityService;
 
-  private Flux<Relation> toRelations(final Flux<BaleenRelation> stream) {
-    return stream.map(BaleenRelation::toRelation);
+  private Flux<Relation> toRelations(final Flux<MongoRelation> stream) {
+    return stream.map(MongoRelation::toRelation);
   }
 
   // private Flux<Relation> toRelations(final List<BaleenRelation> findByDocId) {
@@ -36,7 +36,7 @@ public class RelationService {
   @GraphQLQuery(name = "allRelations")
   public Flux<Relation> getAllRelations(
       @GraphQLArgument(name = "limit", defaultValue = "0") final int limit) {
-    Flux<BaleenRelation> stream = relations.findAll();
+    Flux<MongoRelation> stream = relations.findAll();
     if (limit > 0) {
       stream = stream.take(limit);
     }
@@ -70,7 +70,7 @@ public class RelationService {
 
   @GraphQLQuery(name = "relation")
   public Mono<Relation> getById(@GraphQLArgument(name = "id") final String id) {
-    return relations.findByExternalId(id).map(BaleenRelation::toRelation);
+    return relations.findByExternalId(id).map(MongoRelation::toRelation);
   }
 
 
