@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo;
+package io.committed.ketos.plugins.data.mongo;
 
 import io.committed.vessel.extensions.VesselGraphQlExtension;
 

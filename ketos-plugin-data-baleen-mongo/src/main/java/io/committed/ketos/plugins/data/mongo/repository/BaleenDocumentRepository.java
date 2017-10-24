@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo.repository;
+package io.committed.ketos.plugins.data.mongo.repository;
 
 import java.util.Collection;
 
@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.MongoDocument;
+import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;

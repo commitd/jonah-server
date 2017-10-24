@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo.dao;
+package io.committed.ketos.plugins.data.mongo.dao;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

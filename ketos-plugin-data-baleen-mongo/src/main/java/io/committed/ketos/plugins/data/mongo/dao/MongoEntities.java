@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo.dao;
+package io.committed.ketos.plugins.data.mongo.dao;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,11 +1,11 @@
-package io.committed.ketos.plugins.data.baleenmongo.repository;
+package io.committed.ketos.plugins.data.mongo.repository;
 
 import java.util.Collection;
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.MongoEntities;
+import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import reactor.core.publisher.Flux;
 
 @Repository

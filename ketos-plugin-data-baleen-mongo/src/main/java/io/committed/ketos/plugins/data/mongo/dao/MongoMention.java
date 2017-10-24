@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo.dao;
+package io.committed.ketos.plugins.data.mongo.dao;
 
 import io.committed.ketos.plugins.data.baleen.BaleenMention;
 import lombok.AllArgsConstructor;
