@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class DocumentInfo {
+public class BaleenDocumentInfo {
   private String type;
   private String source;
   private String language;

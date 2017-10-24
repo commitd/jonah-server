@@ -1,6 +1,6 @@
 package io.committed.ketos.plugins.data.baleenmongo.dao;
 
-import io.committed.ketos.plugins.graphql.baleen.Mention;
+import io.committed.ketos.plugins.graphql.baleen.BaleenMention;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +18,8 @@ public class MongoMention {
   private String value;
 
 
-  public Mention toMention(final String entityId) {
-    final Mention m = new Mention();
+  public BaleenMention toMention(final String entityId) {
+    final BaleenMention m = new BaleenMention();
     m.setEntityId(entityId);
     m.setId(getExternalId());
     m.setConfidence(getConfidence());

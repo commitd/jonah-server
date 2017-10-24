@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenDocumentRepository;
-import io.committed.ketos.plugins.graphql.baleen.Document;
+import io.committed.ketos.plugins.graphql.baleen.BaleenDocument;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLId;
@@ -24,7 +24,7 @@ public class DocumentService {
   }
 
   @GraphQLQuery(name = "documents")
-  public Flux<Document> getDocuments(
+  public Flux<BaleenDocument> getDocuments(
       @GraphQLArgument(name = "limit", defaultValue = "0") final int limit) {
     Flux<MongoDocument> stream = documents.findAll();
     if (limit > 0) {
@@ -35,7 +35,7 @@ public class DocumentService {
   }
 
   @GraphQLQuery(name = "documents")
-  public Flux<Document> getDocuments(@GraphQLArgument(name = "search") final String search,
+  public Flux<BaleenDocument> getDocuments(@GraphQLArgument(name = "search") final String search,
       @GraphQLArgument(name = "limit") final int limit) {
     Flux<MongoDocument> stream = documents.searchDocuments(search);
     if (limit > 0) {
@@ -47,7 +47,7 @@ public class DocumentService {
 
 
   @GraphQLQuery(name = "document")
-  public Mono<Document> getDocument(
+  public Mono<BaleenDocument> getDocument(
       @GraphQLArgument(name = "id") @GraphQLId final String id) {
     return documents.findByExternalId(id).map(MongoDocument::toDocument);
   }

@@ -10,11 +10,11 @@ import lombok.Data;
 
 
 @Data
-public class Document {
+public class BaleenDocument {
 
   @GraphQLId
   private String id;
-  private DocumentInfo info;
+  private BaleenDocumentInfo info;
   private List<String> publishedIds;
   private Map<String, Object> metadata = new HashMap<>();
   private String content;

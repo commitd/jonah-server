@@ -1,23 +1,35 @@
 package io.committed.ketos.plugins.graphql.baleen;
 
 import io.leangen.graphql.annotations.GraphQLId;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Mention {
+public class BaleenRelation {
 
   @GraphQLId
   private String id;
-  private double confidence;
+
+  private String docId;
+
+  private String sourceId;
+
+  private String targetId;
+
   private int begin;
+
   private int end;
+
   private String type;
+
+  private String relationshipType;
+
+  private String relationSubtype;
+
   private String value;
-  private String entityId;
+
+  private double confidence;
 
 
 }

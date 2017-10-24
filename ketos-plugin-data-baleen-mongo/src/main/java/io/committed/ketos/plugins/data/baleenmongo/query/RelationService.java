@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.plugins.data.baleenmongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenRelationRepository;
-import io.committed.ketos.plugins.graphql.baleen.Document;
-import io.committed.ketos.plugins.graphql.baleen.Mention;
-import io.committed.ketos.plugins.graphql.baleen.Relation;
+import io.committed.ketos.plugins.graphql.baleen.BaleenDocument;
+import io.committed.ketos.plugins.graphql.baleen.BaleenMention;
+import io.committed.ketos.plugins.graphql.baleen.BaleenRelation;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -24,7 +24,7 @@ public class RelationService {
   @Autowired
   EntityService entityService;
 
-  private Flux<Relation> toRelations(final Flux<MongoRelation> stream) {
+  private Flux<BaleenRelation> toRelations(final Flux<MongoRelation> stream) {
     return stream.map(MongoRelation::toRelation);
   }
 
@@ -34,7 +34,7 @@ public class RelationService {
 
   // FIXME: should be relations - current bug in spqr
   @GraphQLQuery(name = "allRelations")
-  public Flux<Relation> getAllRelations(
+  public Flux<BaleenRelation> getAllRelations(
       @GraphQLArgument(name = "limit", defaultValue = "0") final int limit) {
     Flux<MongoRelation> stream = relations.findAll();
     if (limit > 0) {
@@ -46,30 +46,30 @@ public class RelationService {
 
 
   @GraphQLQuery(name = "relationsByDocument")
-  public Flux<Relation> getByDocument(@GraphQLArgument(name = "id") @GraphQLId final String id) {
+  public Flux<BaleenRelation> getByDocument(@GraphQLArgument(name = "id") @GraphQLId final String id) {
     return toRelations(relations.findByDocId(id));
   }
 
   @GraphQLQuery(name = "relations")
-  public Flux<Relation> getRelations(@GraphQLContext final Document document) {
+  public Flux<BaleenRelation> getRelations(@GraphQLContext final BaleenDocument document) {
     return getByDocument(document.getId());
   }
 
 
   @GraphQLQuery(name = "sourceOf")
-  public Flux<Relation> getSourceRelations(@GraphQLContext final Mention mention) {
+  public Flux<BaleenRelation> getSourceRelations(@GraphQLContext final BaleenMention mention) {
     return toRelations(relations.findBySource(mention.getId()));
   }
 
   @GraphQLQuery(name = "targetOf")
-  public Flux<Relation> getTargetRelations(@GraphQLContext final Mention mention) {
+  public Flux<BaleenRelation> getTargetRelations(@GraphQLContext final BaleenMention mention) {
     return toRelations(relations.findByTarget(mention.getId()));
   }
 
 
 
   @GraphQLQuery(name = "relation")
-  public Mono<Relation> getById(@GraphQLArgument(name = "id") final String id) {
+  public Mono<BaleenRelation> getById(@GraphQLArgument(name = "id") final String id) {
     return relations.findByExternalId(id).map(MongoRelation::toRelation);
   }
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Entity {
+public class BaleenEntity {
 
   @GraphQLId
   @GraphQLQuery(name = "id", description = "The id for this entity")
@@ -23,28 +23,28 @@ public class Entity {
   private String docId;
 
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
-  private List<Mention> mentions;
+  private List<BaleenMention> mentions;
 
   @GraphQLQuery(name = "values")
   public List<String> getValues() {
-    return mentions.stream().map(Mention::getValue).collect(Collectors.toList());
+    return mentions.stream().map(BaleenMention::getValue).collect(Collectors.toList());
   }
 
   @GraphQLQuery(name = "longestValue")
-  public Optional<String> longestValue(@GraphQLContext final Entity entity) {
-    return entity.getMentions().stream().map(Mention::getValue)
+  public Optional<String> longestValue(@GraphQLContext final BaleenEntity entity) {
+    return entity.getMentions().stream().map(BaleenMention::getValue)
         .collect(Collectors.maxBy((o1, o2) -> Integer.compare(o1.length(), o2.length())));
   }
 
 
   @GraphQLQuery(name = "types")
   public List<String> getTypes() {
-    return mentions.stream().map(Mention::getType).collect(Collectors.toList());
+    return mentions.stream().map(BaleenMention::getType).collect(Collectors.toList());
   }
 
   @GraphQLQuery(name = "type")
   public Optional<String> getType() {
-    return mentions.stream().map(Mention::getType).findFirst();
+    return mentions.stream().map(BaleenMention::getType).findFirst();
   }
 
 
