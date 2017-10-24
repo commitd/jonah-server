@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -25,13 +24,6 @@ public class Entity {
 
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
   private List<Mention> mentions;
-
-  public Entity(final BaleenEntities baleen) {
-    id = baleen.getId();
-    docId = baleen.getDocId();
-    mentions = baleen.getEntities().stream().map(new Mention.MentionFactory(id))
-        .collect(Collectors.toList());
-  }
 
   @GraphQLQuery(name = "values")
   public List<String> getValues() {

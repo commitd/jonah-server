@@ -28,7 +28,7 @@ public class RelationService {
   EntityService entityService;
 
   private Stream<Relation> toRelations(final Stream<BaleenRelation> stream) {
-    return stream.map(Relation::new);
+    return stream.map(BaleenRelation::toRelation);
   }
 
   private Stream<Relation> toRelations(final List<BaleenRelation> findByDocId) {
@@ -73,7 +73,7 @@ public class RelationService {
 
   @GraphQLQuery(name = "relation")
   public Optional<Relation> getById(@GraphQLArgument(name = "id") final String id) {
-    return relations.findByExternalId(id).map(Relation::new);
+    return relations.findByExternalId(id).map(BaleenRelation::toRelation);
   }
 
 

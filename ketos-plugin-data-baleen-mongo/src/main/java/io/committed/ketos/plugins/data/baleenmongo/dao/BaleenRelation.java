@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import io.committed.ketos.plugins.data.baleenmongo.dto.Relation;
 import lombok.Data;
 
 @Document(collection = "relations")
@@ -35,5 +36,21 @@ public class BaleenRelation {
   private String value;
 
   private double confidence;
+
+  public Relation toRelation() {
+    final Relation r = new Relation();
+    r.setId(getExternalId());
+    r.setDocId(getDocId());
+    r.setBegin(getBegin());
+    r.setEnd(getEnd());
+    r.setType(getType());
+    r.setRelationshipType(getRelationshipType());
+    r.setRelationSubtype(getRelationSubtype());
+    r.setValue(getValue());
+    r.setConfidence(getConfidence());
+    r.setSourceId(getSource());
+    r.setTargetId(getTarget());
+    return r;
+  }
 
 }

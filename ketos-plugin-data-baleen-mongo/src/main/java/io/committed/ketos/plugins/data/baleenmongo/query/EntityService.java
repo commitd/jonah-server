@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
 import io.committed.ketos.plugins.data.baleenmongo.dto.Document;
 import io.committed.ketos.plugins.data.baleenmongo.dto.Entity;
 import io.committed.ketos.plugins.data.baleenmongo.dto.Mention;
@@ -23,7 +24,7 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 public class EntityService {
 
   @Autowired
-  BaleenEntitiesRepository entities;
+  private BaleenEntitiesRepository entities;
 
   private Stream<Entity> filterEntities(Stream<Entity> stream, final String type,
       final String value,
@@ -48,7 +49,8 @@ public class EntityService {
       @GraphQLArgument(name = "limit", defaultValue = "0") final int limit) {
 
     return filterEntities(
-        StreamSupport.stream(entities.findAll().spliterator(), false).map(Entity::new), type, value,
+        StreamSupport.stream(entities.findAll().spliterator(), false).map(BaleenEntities::toEntity),
+        type, value,
         limit).collect(Collectors.toList());
   }
 
@@ -56,7 +58,7 @@ public class EntityService {
 
   @GraphQLQuery(name = "entitiesByDocument")
   public Stream<Entity> getByDocumentId(@GraphQLArgument(name = "id") final String id) {
-    return entities.findByDocId(id).stream().map(Entity::new);
+    return entities.findByDocId(id).stream().map(BaleenEntities::toEntity);
   }
 
 
@@ -99,7 +101,7 @@ public class EntityService {
 
   @GraphQLQuery(name = "entity")
   public Optional<Entity> getById(@GraphQLArgument(name = "id") @GraphQLId final String id) {
-    return entities.findById(id).map(Entity::new);
+    return entities.findById(id).map(BaleenEntities::toEntity);
   }
 
   @GraphQLQuery(name = "of")

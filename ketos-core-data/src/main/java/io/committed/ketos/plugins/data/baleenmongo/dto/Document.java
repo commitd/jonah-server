@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenDocument;
-import io.committed.ketos.plugins.data.baleenmongo.dao.DocumentInfo;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
@@ -20,15 +18,6 @@ public class Document {
   private List<String> publishedIds;
   private Map<String, Object> metadata = new HashMap<>();
   private String content;
-
-  public Document(final BaleenDocument baleen) {
-    id = baleen.getExternalId();
-    info = baleen.getDocument();
-    publishedIds = baleen.getPublishedIds();
-    metadata = baleen.getMetadata();
-    content = baleen.getContent();
-  }
-
 
   @GraphQLQuery(name = "length")
   public int length() {

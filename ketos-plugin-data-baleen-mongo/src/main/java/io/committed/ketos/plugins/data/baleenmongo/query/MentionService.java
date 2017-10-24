@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.committed.ketos.plugins.data.baleenmongo.dao.BaleenEntities;
 import io.committed.ketos.plugins.data.baleenmongo.dto.Document;
 import io.committed.ketos.plugins.data.baleenmongo.dto.Entity;
 import io.committed.ketos.plugins.data.baleenmongo.dto.Mention;
@@ -24,7 +25,7 @@ public class MentionService {
 
 
   private Stream<Entity> getByDocumentId(@GraphQLArgument(name = "id") final String id) {
-    return entities.findByDocId(id).stream().map(Entity::new);
+    return entities.findByDocId(id).stream().map(BaleenEntities::toEntity);
   }
 
   private Stream<Mention> getMentionsByDocumentId(final String documentId) {

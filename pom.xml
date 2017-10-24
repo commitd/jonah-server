@@ -19,6 +19,16 @@
 
   <dependencyManagement>
     <dependencies>
+
+      <!-- Ketos -->
+      <dependency>
+        <groupId>io.committed.ketos</groupId>
+        <artifactId>ketos-core-data</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- Vessel -->
+
       <dependency>
         <groupId>io.committed.vessel</groupId>
         <artifactId>vessel-plugins</artifactId>
@@ -74,8 +84,10 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-  
+
   <modules>
+      <module>ketos-core-data</module>
     <module>ketos-plugin-data-baleen-mongo</module>
+    <module>ketes-plugin-data-elasticsearch</module>
   </modules>
 </project>

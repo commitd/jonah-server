@@ -18,7 +18,7 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 public class DocumentService {
 
   @Autowired
-  BaleenDocumentRepository documents;
+  private BaleenDocumentRepository documents;
 
   @GraphQLQuery(name = "documents")
   public Stream<Document> getDocuments(
@@ -28,7 +28,7 @@ public class DocumentService {
       stream = stream.limit(limit);
     }
 
-    return stream.map(Document::new);
+    return stream.map(BaleenDocument::toDocument);
   }
 
   @GraphQLQuery(name = "documents")
@@ -39,13 +39,13 @@ public class DocumentService {
       stream = stream.limit(limit);
     }
 
-    return stream.map(Document::new);
+    return stream.map(BaleenDocument::toDocument);
   }
 
 
   @GraphQLQuery(name = "document")
   public Optional<Document> getDocument(
       @GraphQLArgument(name = "id") @GraphQLId final String id) {
-    return documents.findByExternalId(id).map(Document::new);
+    return documents.findByExternalId(id).map(BaleenDocument::toDocument);
   }
 }
