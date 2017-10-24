@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
-import io.committed.utils.reactiveelasticsearch.ReativeElasticsearchUtils;
+import io.committed.utils.reactiveelasticsearch.ReactiveElasticsearchUtils;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -35,8 +35,8 @@ public class EsDocumentService {
         .setId(id)
         .execute();
 
-    return ReativeElasticsearchUtils.toMono(future)
-        .flatMap(r -> ReativeElasticsearchUtils.convertSource(mapper, r.getSourceAsBytes(),
+    return ReactiveElasticsearchUtils.toMono(future)
+        .flatMap(r -> ReactiveElasticsearchUtils.convertSource(mapper, r.getSourceAsBytes(),
             EsDocument.class));
   }
 
