@@ -6,7 +6,7 @@ public class BaleenJdbcPlugin implements VesselGraphQlExtension {
 
   @Override
   public Class<?> getConfiguration() {
-    return BaleenMongoConfig.class;
+    return BaleenJdbcConfig.class;
   }
 
 }

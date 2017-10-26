@@ -3,11 +3,18 @@ package io.committed.vessel.plugin.data.jdbc.dao;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import io.committed.ketos.plugins.data.baleen.BaleenDocument;
+import io.committed.ketos.plugins.data.baleen.BaleenDocumentInfo;
 import lombok.Data;
+import reactor.core.publisher.Flux;
 
 @Entity
 @Data
 public class SqlDocument {
+
   @Id
   private Long key;
 
@@ -20,4 +27,22 @@ public class SqlDocument {
   private String classification;
   private List<String> caveats;
   private List<String> releasability;
+
+  public BaleenDocument toBaleenDocument(final Flux<SqlDocumentMetadata> metadata) {
+    return BaleenDocument.builder()
+        .id(externalId)
+        .content(content)
+        .metadata(metadata.collectMap(SqlDocumentMetadata::getName, m -> (Object) m.getValue())
+            .block())
+        .info(BaleenDocumentInfo.builder()
+            .caveats(caveats)
+            .classification(classification)
+            .releasability(releasability)
+            .language(language)
+            .source(source)
+            .ts(processed.getTime())
+            .type(type)
+            .build())
+        .build();
+  }
 }

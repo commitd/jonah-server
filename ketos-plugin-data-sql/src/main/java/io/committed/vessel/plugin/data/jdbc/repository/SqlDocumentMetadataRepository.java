@@ -1,9 +1,14 @@
 package io.committed.vessel.plugin.data.jdbc.repository;
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import java.util.stream.Stream;
 
-import io.committed.vessel.plugin.data.jdbc.dao.SqlDocument;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SqlDocumentMetadataRepository extends ReactiveCrudRepository<SqlDocument, Long> {
+import io.committed.vessel.plugin.data.jdbc.dao.SqlDocumentMetadata;
+
+public interface SqlDocumentMetadataRepository
+    extends JpaRepository<SqlDocumentMetadata, Long> {
+
+  Stream<SqlDocumentMetadata> findByDocId(String externalId);
 
 }

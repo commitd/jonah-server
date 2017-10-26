@@ -1,9 +1,16 @@
 package io.committed.vessel.plugin.data.jdbc.repository;
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import io.committed.vessel.plugin.data.jdbc.dao.SqlDocument;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SqlEntityRepository extends ReactiveCrudRepository<SqlDocument, Long> {
+import io.committed.vessel.plugin.data.jdbc.dao.SqlEntity;
+
+public interface SqlEntityRepository extends JpaRepository<SqlEntity, Long> {
+
+  Optional<SqlEntity> findByExternalid(String id);
+
+  Stream<SqlEntity> findByDocId(String id);
 
 }
