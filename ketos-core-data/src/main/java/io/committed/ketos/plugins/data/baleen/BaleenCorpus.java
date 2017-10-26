@@ -8,19 +8,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class BaleenMention extends AbstractGraphQLNodeSupport<BaleenMention> {
+public class BaleenCorpus extends AbstractGraphQLNodeSupport<BaleenCorpus> {
 
   @GraphQLId
   private String id;
-  private double confidence;
-  private int begin;
-  private int end;
-  private String type;
-  private String value;
-  private String entityId;
 
-
+  private String name;
 }

@@ -1,12 +1,15 @@
 package io.committed.ketos.plugins.data.baleen;
 
+import io.committed.graphql.support.AbstractGraphQLNodeSupport;
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BaleenRelation {
+@EqualsAndHashCode(callSuper = true)
+public class BaleenRelation extends AbstractGraphQLNodeSupport<BaleenRelation> {
 
   @GraphQLId
   private String id;

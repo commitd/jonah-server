@@ -4,15 +4,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.committed.graphql.support.AbstractGraphQLNodeSupport;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BaleenEntity {
+@EqualsAndHashCode(callSuper = true)
+public class BaleenEntity extends AbstractGraphQLNodeSupport<BaleenEntity> {
 
   @GraphQLId
   @GraphQLQuery(name = "id", description = "The id for this entity")
@@ -35,7 +38,6 @@ public class BaleenEntity {
     return entity.getMentions().stream().map(BaleenMention::getValue)
         .collect(Collectors.maxBy((o1, o2) -> Integer.compare(o1.length(), o2.length())));
   }
-
 
   @GraphQLQuery(name = "types")
   public List<String> getTypes() {
