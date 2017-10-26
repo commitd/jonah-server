@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.committed.ketos.plugins.data.baleen.BaleenDocument;
+import io.committed.ketos.plugins.data.baleen.BaleenDocumentInfo;
 import lombok.Data;
 
 @Data
@@ -29,4 +31,21 @@ public class EsDocument {
 
   private List<EsRelation> relations;
 
+  public BaleenDocument toBaleenDocument() {
+    return BaleenDocument.builder()
+        .content(content)
+        .id(externalId)
+        .metadata(metadata)
+        .publishedIds(publishedId)
+        .info(BaleenDocumentInfo.builder()
+            .caveats(caveats)
+            .classification(classification)
+            .language(language)
+            .releasability(releasability)
+            .source(sourceUri)
+            .ts(dateAccessed.getTime())
+            .type(docType)
+            .build())
+        .build();
+  }
 }

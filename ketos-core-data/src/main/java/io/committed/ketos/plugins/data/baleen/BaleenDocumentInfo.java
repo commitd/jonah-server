@@ -2,9 +2,11 @@ package io.committed.ketos.plugins.data.baleen;
 
 import java.util.List;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class BaleenDocumentInfo {
   private String type;
   private String source;
