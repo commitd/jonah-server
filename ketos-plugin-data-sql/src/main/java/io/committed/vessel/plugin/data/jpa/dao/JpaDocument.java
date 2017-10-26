@@ -1,4 +1,4 @@
-package io.committed.vessel.plugin.data.jdbc.dao;
+package io.committed.vessel.plugin.data.jpa.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 
 @Entity
 @Data
-public class SqlDocument {
+public class JpaDocument {
 
   @Id
   private Long key;
@@ -28,11 +28,11 @@ public class SqlDocument {
   private List<String> caveats;
   private List<String> releasability;
 
-  public BaleenDocument toBaleenDocument(final Flux<SqlDocumentMetadata> metadata) {
+  public BaleenDocument toBaleenDocument(final Flux<JpaDocumentMetadata> metadata) {
     return BaleenDocument.builder()
         .id(externalId)
         .content(content)
-        .metadata(metadata.collectMap(SqlDocumentMetadata::getName, m -> (Object) m.getValue())
+        .metadata(metadata.collectMap(JpaDocumentMetadata::getName, m -> (Object) m.getValue())
             .block())
         .info(BaleenDocumentInfo.builder()
             .caveats(caveats)

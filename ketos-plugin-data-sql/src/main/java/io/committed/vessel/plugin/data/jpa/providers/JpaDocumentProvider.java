@@ -1,4 +1,4 @@
-package io.committed.vessel.plugin.data.jdbc.providers;
+package io.committed.vessel.plugin.data.jpa.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,22 +7,22 @@ import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
-import io.committed.vessel.plugin.data.jdbc.dao.SqlDocument;
-import io.committed.vessel.plugin.data.jdbc.dao.SqlDocumentMetadata;
-import io.committed.vessel.plugin.data.jdbc.repository.SqlDocumentMetadataRepository;
-import io.committed.vessel.plugin.data.jdbc.repository.SqlDocumentRepository;
+import io.committed.vessel.plugin.data.jpa.dao.JpaDocument;
+import io.committed.vessel.plugin.data.jpa.dao.JpaDocumentMetadata;
+import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentMetadataRepository;
+import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 public class JpaDocumentProvider implements DocumentProvider {
 
-  private final SqlDocumentRepository documents;
-  private final SqlDocumentMetadataRepository metadataRepo;
+  private final JpaDocumentRepository documents;
+  private final JpaDocumentMetadataRepository metadataRepo;
 
   @Autowired
-  public JpaDocumentProvider(final SqlDocumentRepository documents,
-      final SqlDocumentMetadataRepository metadata) {
+  public JpaDocumentProvider(final JpaDocumentRepository documents,
+      final JpaDocumentMetadataRepository metadata) {
     this.documents = documents;
     this.metadataRepo = metadata;
 
@@ -41,12 +41,12 @@ public class JpaDocumentProvider implements DocumentProvider {
 
   @Override
   public Flux<BaleenDocument> all(final int limit) {
-    final Page<SqlDocument> page = documents.findAll(PageRequest.of(0, limit));
+    final Page<JpaDocument> page = documents.findAll(PageRequest.of(0, limit));
     return Flux.fromStream(page.stream().map(this::addMetadataAndConvert));
   }
 
-  private BaleenDocument addMetadataAndConvert(final SqlDocument document) {
-    final Flux<SqlDocumentMetadata> metadata =
+  private BaleenDocument addMetadataAndConvert(final JpaDocument document) {
+    final Flux<JpaDocumentMetadata> metadata =
         Flux.fromStream(metadataRepo.findByDocId(document.getExternalId()));
     return document.toBaleenDocument(metadata);
   }

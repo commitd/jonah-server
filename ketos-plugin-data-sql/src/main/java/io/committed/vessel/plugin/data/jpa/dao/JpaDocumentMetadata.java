@@ -1,4 +1,4 @@
-package io.committed.vessel.plugin.data.jdbc.dao;
+package io.committed.vessel.plugin.data.jpa.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class SqlDocumentMetadata {
+public class JpaDocumentMetadata {
 
   @Id
   private Long key;

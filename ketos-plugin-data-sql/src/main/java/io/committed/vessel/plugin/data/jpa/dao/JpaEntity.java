@@ -1,4 +1,4 @@
-package io.committed.vessel.plugin.data.jdbc.dao;
+package io.committed.vessel.plugin.data.jpa.dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import lombok.Data;
 // TODO: Also geojson entity table.
 @Entity
 @Data
-public class SqlEntity {
+public class JpaEntity {
   @Id
   private Long key;
 
