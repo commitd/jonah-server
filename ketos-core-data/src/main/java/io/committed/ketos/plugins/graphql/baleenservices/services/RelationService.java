@@ -11,7 +11,6 @@ import io.committed.ketos.plugins.providers.services.CorpusProviders;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
-import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
@@ -58,7 +57,7 @@ public class RelationService extends AbstractGraphQlService {
   }
 
   // FIXME: should be relations - current bug in spqr
-  @GraphQLQuery(name = "relations")
+  @GraphQLQuery(name = "allRelations")
   public Flux<BaleenRelation> getAllRelations(
       @GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
@@ -67,13 +66,14 @@ public class RelationService extends AbstractGraphQlService {
         .map(this.addContext(corpus));
   }
 
-  @GraphQLQuery(name = "relations")
-  public Flux<BaleenRelation> getByDocument(
-      @GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "documentId") @GraphQLId final String id) {
-    return getProviders(corpus, RelationProvider.class)
-        .flatMap(p -> p.getByDocument(id))
-        .map(this.addContext(corpus));
-  }
+  // request this via document bean)
+  // @GraphQLQuery(name = "allRelations")
+  // public Flux<BaleenRelation> getByDocument(
+  // @GraphQLContext final BaleenCorpus corpus,
+  // @GraphQLNonNull @GraphQLArgument(name = "documentId") @GraphQLId final String id) {
+  // return getProviders(corpus, RelationProvider.class)
+  // .flatMap(p -> p.getByDocument(id))
+  // .map(this.addContext(corpus));
+  // }
 
 }
