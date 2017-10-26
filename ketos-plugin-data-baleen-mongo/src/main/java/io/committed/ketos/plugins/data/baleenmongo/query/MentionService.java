@@ -2,12 +2,12 @@ package io.committed.ketos.plugins.data.baleenmongo.query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.committed.ketos.plugins.data.baleen.BaleenDocument;
+import io.committed.ketos.plugins.data.baleen.BaleenEntity;
+import io.committed.ketos.plugins.data.baleen.BaleenMention;
+import io.committed.ketos.plugins.data.baleen.BaleenRelation;
 import io.committed.ketos.plugins.data.baleenmongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenEntitiesRepository;
-import io.committed.ketos.plugins.graphql.baleen.BaleenDocument;
-import io.committed.ketos.plugins.graphql.baleen.BaleenEntity;
-import io.committed.ketos.plugins.graphql.baleen.BaleenMention;
-import io.committed.ketos.plugins.graphql.baleen.BaleenRelation;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;

@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.graphql.baleen;
+package io.committed.ketos.plugins.data.baleen;
 
 import java.util.List;
 import java.util.Optional;

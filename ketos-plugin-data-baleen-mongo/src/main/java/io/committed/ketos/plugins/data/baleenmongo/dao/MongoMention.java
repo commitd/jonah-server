@@ -1,6 +1,6 @@
 package io.committed.ketos.plugins.data.baleenmongo.dao;
 
-import io.committed.ketos.plugins.graphql.baleen.BaleenMention;
+import io.committed.ketos.plugins.data.baleen.BaleenMention;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.graphql.baleen;
+package io.committed.ketos.plugins.data.baleen;
 
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Data;
