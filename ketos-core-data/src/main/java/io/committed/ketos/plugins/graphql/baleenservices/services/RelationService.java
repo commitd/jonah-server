@@ -12,6 +12,7 @@ import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
+import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -49,7 +50,7 @@ public class RelationService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "relation")
   public Mono<BaleenRelation> getById(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "id") final String id) {
+      @GraphQLNonNull @GraphQLArgument(name = "id") final String id) {
     return getProviders(corpus, RelationProvider.class)
         .flatMap(p -> p.getById(id))
         .map(this.addContext(corpus))
@@ -69,7 +70,7 @@ public class RelationService extends AbstractGraphQlService {
   @GraphQLQuery(name = "relations")
   public Flux<BaleenRelation> getByDocument(
       @GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "documentId") @GraphQLId final String id) {
+      @GraphQLNonNull @GraphQLArgument(name = "documentId") @GraphQLId final String id) {
     return getProviders(corpus, RelationProvider.class)
         .flatMap(p -> p.getByDocument(id))
         .map(this.addContext(corpus));

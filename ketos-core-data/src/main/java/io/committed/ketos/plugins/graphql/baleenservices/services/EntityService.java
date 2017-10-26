@@ -2,7 +2,6 @@ package io.committed.ketos.plugins.graphql.baleenservices.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.committed.graphql.support.NullProvider;
 import io.committed.ketos.plugins.data.baleen.BaleenCorpus;
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.data.baleen.BaleenEntity;
@@ -13,6 +12,7 @@ import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
+import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -38,7 +38,8 @@ public class EntityService extends AbstractGraphQlService {
   @GraphQLQuery(name = "entities")
   public Flux<BaleenEntity> getByDocumentAndType(
       @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
-      @GraphQLArgument(name = "type", description = "The type of the entity") final String type,
+      @GraphQLNonNull @GraphQLArgument(name = "type",
+          description = "The type of the entity") final String type,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
 
     return getProvidersFromContext(document, EntityProvider.class)
@@ -49,7 +50,8 @@ public class EntityService extends AbstractGraphQlService {
   @GraphQLQuery(name = "entities")
   public Flux<BaleenEntity> getByDocumentAndValue(
       @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
-      @GraphQLArgument(name = "value", description = "A value of the entity") final String value,
+      @GraphQLNonNull @GraphQLArgument(name = "value",
+          description = "A value of the entity") final String value,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
 
     return getProvidersFromContext(document, EntityProvider.class)
@@ -60,10 +62,8 @@ public class EntityService extends AbstractGraphQlService {
   @GraphQLQuery(name = "entities")
   public Flux<BaleenEntity> getByDocumentAndType(
       @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
-      @GraphQLArgument(name = "type", description = "The type of the entity",
-          defaultValueProvider = NullProvider.class) final String type,
-      @GraphQLArgument(name = "value", description = "A value of the entity",
-          defaultValueProvider = NullProvider.class) final String value,
+      @GraphQLArgument(name = "type", description = "The type of the entity") final String type,
+      @GraphQLArgument(name = "value", description = "A value of the entity") final String value,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
 
     return getProvidersFromContext(document, EntityProvider.class)

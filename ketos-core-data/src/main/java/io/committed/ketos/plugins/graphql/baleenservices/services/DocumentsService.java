@@ -10,6 +10,7 @@ import io.committed.ketos.plugins.providers.services.CorpusProviders;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
+import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +25,7 @@ public class DocumentsService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "document")
   public Mono<BaleenDocument> getDocument(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "id") final String id) {
+      @GraphQLNonNull @GraphQLArgument(name = "id") final String id) {
 
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(p -> p.getById(id))
@@ -34,7 +35,7 @@ public class DocumentsService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "documents")
   public BaleenDocuments getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "search") final String search,
+      @GraphQLNonNull @GraphQLArgument(name = "search") final String search,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
 
     return new BaleenDocuments(
