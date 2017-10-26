@@ -108,6 +108,6 @@
     <module>ketos-core-data</module>
     <module>ketos-plugin-data-baleen-mongo</module>
     <module>ketes-plugin-data-elasticsearch</module>
-    <module>ketos-plugin-data-sql</module>
+    <module>ketos-plugin-data-jpa</module>
   </modules>
 </project>
