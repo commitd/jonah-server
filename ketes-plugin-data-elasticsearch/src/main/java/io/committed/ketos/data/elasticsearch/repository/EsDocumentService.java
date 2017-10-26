@@ -53,9 +53,7 @@ public class EsDocumentService {
         .execute();
 
     return ReactiveElasticsearchUtils.toMono(future)
-        .flatMapMany(r -> Flux.fromArray(r.getHits().getHits()))
-        .flatMap(r -> SourceUtils.convertSource(mapper, r.getSourceAsString(),
-            EsDocument.class));
+        .flatMapMany(r -> SourceUtils.convertHits(mapper, r, EsDocument.class));
   }
 
 
