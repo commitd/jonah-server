@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.data.baleen.BaleenEntity;
-import io.committed.ketos.plugins.data.baleenmongo.dao.MongoEntities;
-import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenEntitiesRepository;
+import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
+import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.EntityProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

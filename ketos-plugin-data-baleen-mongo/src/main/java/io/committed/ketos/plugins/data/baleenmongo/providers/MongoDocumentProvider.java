@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
-import io.committed.ketos.plugins.data.baleenmongo.dao.MongoDocument;
-import io.committed.ketos.plugins.data.baleenmongo.repository.BaleenDocumentRepository;
+import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
+import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
