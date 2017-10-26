@@ -36,6 +36,10 @@ public class GraphQLNode {
   // This is checked
   @SuppressWarnings("unchecked")
   public <T> Optional<T> findParent(final Class<T> clazz) {
+    if (context != null && clazz.isInstance(context)) {
+      return Optional.of((T) context);
+    }
+
     if (hasParent()) {
       final Object parent = getRawParent();
       if (clazz.isInstance(parent)) {

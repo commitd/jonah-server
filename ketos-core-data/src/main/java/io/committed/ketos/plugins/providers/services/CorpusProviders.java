@@ -14,15 +14,15 @@ public class CorpusProviders {
 
   public static final List<DataProvider> EMPTY_PROVIDER_LIST = Collections.emptyList();
 
-  private final Map<BaleenCorpus, List<DataProvider>> providers;
+  private final Map<String, List<DataProvider>> providers;
 
   @Autowired
-  public CorpusProviders(final Map<BaleenCorpus, List<DataProvider>> providers) {
+  public CorpusProviders(final Map<String, List<DataProvider>> providers) {
     this.providers = providers;
   }
 
   public Flux<DataProvider> findForCorpus(final BaleenCorpus corpus) {
-    return Flux.fromIterable(providers.getOrDefault(corpus, EMPTY_PROVIDER_LIST));
+    return Flux.fromIterable(providers.getOrDefault(corpus.getId(), EMPTY_PROVIDER_LIST));
   }
 
   // It is checked...

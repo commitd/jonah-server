@@ -40,7 +40,8 @@ public class DocumentsService extends AbstractGraphQlService {
 
     return new BaleenDocuments(
         getProviders(corpus, DocumentProvider.class)
-            .flatMap(p -> p.search(search, limit))
+            .flatMap(p -> p.search(search, limit)
+                .map(addContext(corpus)))
             .take(limit))
                 .addNodeContext(corpus);
   }

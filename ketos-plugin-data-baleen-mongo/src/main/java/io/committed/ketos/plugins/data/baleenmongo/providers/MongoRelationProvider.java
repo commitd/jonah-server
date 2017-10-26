@@ -1,6 +1,7 @@
 package io.committed.ketos.plugins.data.baleenmongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.data.baleen.BaleenMention;
@@ -11,7 +12,7 @@ import io.committed.ketos.plugins.graphql.baleenservices.providers.RelationProvi
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
+@Service
 public class MongoRelationProvider implements RelationProvider {
 
   private final BaleenRelationRepository relations;
