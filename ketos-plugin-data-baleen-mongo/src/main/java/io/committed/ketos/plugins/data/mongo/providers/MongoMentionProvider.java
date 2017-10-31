@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.baleenmongo.providers;
+package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
