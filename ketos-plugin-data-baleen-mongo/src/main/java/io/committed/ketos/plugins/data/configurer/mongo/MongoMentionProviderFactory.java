@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
 
+import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.plugins.data.mongo.providers.MongoMentionProvider;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.MentionProvider;
 import reactor.core.publisher.Mono;
 
 public class MongoMentionProviderFactory

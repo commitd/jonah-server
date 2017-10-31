@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.committed.ketos.plugins.data.baleen.BaleenEntity;
+import io.committed.ketos.common.data.BaleenEntity;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
 

@@ -6,8 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import io.committed.ketos.plugins.data.baleen.BaleenDocument;
-import io.committed.ketos.plugins.data.baleen.BaleenDocumentInfo;
+import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.BaleenDocumentInfo;
 import lombok.Data;
 import reactor.core.publisher.Flux;
 

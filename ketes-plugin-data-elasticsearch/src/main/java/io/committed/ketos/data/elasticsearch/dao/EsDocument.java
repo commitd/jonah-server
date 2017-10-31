@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import io.committed.ketos.plugins.data.baleen.BaleenDocument;
-import io.committed.ketos.plugins.data.baleen.BaleenDocumentInfo;
+import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.BaleenDocumentInfo;
 import lombok.Data;
 
 @Data

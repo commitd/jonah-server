@@ -7,8 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import io.committed.ketos.plugins.data.baleen.BaleenEntity;
-import io.committed.ketos.plugins.data.baleen.BaleenMention;
+import io.committed.ketos.common.data.BaleenEntity;
+import io.committed.ketos.common.data.BaleenMention;
 import lombok.Data;
 
 // TODO: Also geojson entity table.

@@ -1,10 +1,10 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
-import io.committed.ketos.plugins.data.baleen.BaleenDocument;
+import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.providers.baleen.DatasourceConstants;
+import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

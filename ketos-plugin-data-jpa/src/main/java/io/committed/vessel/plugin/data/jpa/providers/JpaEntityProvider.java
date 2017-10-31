@@ -2,10 +2,10 @@ package io.committed.vessel.plugin.data.jpa.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.committed.ketos.plugins.data.baleen.BaleenDocument;
-import io.committed.ketos.plugins.data.baleen.BaleenEntity;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.EntityProvider;
+import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.BaleenEntity;
+import io.committed.ketos.common.providers.baleen.DatasourceConstants;
+import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.vessel.plugin.data.jpa.dao.JpaEntity;
 import io.committed.vessel.plugin.data.jpa.repository.JpaEntityRepository;
 import reactor.core.publisher.Flux;

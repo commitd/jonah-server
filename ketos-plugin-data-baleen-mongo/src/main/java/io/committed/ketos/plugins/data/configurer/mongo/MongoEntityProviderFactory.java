@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
 
+import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.plugins.data.mongo.providers.MongoEntityProvider;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.EntityProvider;
 import reactor.core.publisher.Mono;
 
 public class MongoEntityProviderFactory
