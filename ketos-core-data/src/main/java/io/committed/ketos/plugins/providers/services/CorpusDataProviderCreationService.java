@@ -1,5 +1,7 @@
 package io.committed.ketos.plugins.providers.services;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -10,10 +12,6 @@ import io.committed.ketos.plugins.data.configurer.DataProviderSpecification;
 import io.committed.ketos.plugins.data.corupus.Corpus;
 import io.committed.ketos.plugins.data.corupus.CorpusRegistry;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DataProvider;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.EntityProvider;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.MentionProvider;
-import io.committed.ketos.plugins.graphql.baleenservices.providers.RelationProvider;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -22,6 +20,8 @@ public class CorpusDataProviderCreationService implements BeanFactoryPostProcess
 
   private final CorpusRegistry corpusRegistry;
   private final DataProviderFactoryRegistry dataProviderFactoryRegistry;
+
+  private final AtomicInteger nextId = new AtomicInteger();
 
   @Autowired
   public CorpusDataProviderCreationService(final CorpusRegistry corpusRegistry,
@@ -50,7 +50,6 @@ public class CorpusDataProviderCreationService implements BeanFactoryPostProcess
 
     final Mono<? extends DataProvider> mono =
         dataProviderFactoryRegistry.build(spec.getFactory(),
-            getProviderClass(spec.getProvider()),
             corpus.getId(),
             spec.getSettings());
 
@@ -68,23 +67,12 @@ public class CorpusDataProviderCreationService implements BeanFactoryPostProcess
   }
 
   private String makeId(final DataProviderSpecification spec, final Corpus corpus) {
-    return String.format("dp-%s-%s-%s", corpus.getId(), spec.getFactory(), spec.getProvider());
+    // Note we might have the same corpus having the same provider (eg as a way of federating over
+    // mutiple datasets)
+    // that's probably not questionable/unsupported but just in case we add a unique number to the
+    // end of the bean name.
+    return String.format("dp-%s-%s-%d", corpus.getId(), spec.getFactory(),
+        nextId.incrementAndGet());
   }
 
-  private Class<? extends DataProvider> getProviderClass(final String provider) {
-    // TODO this needs to be extensibly.. so does that me we need a dataprovider extension??
-
-    switch (provider) {
-      case "DocumentProvider":
-        return DocumentProvider.class;
-      case "EntityProvider":
-        return EntityProvider.class;
-      case "RelationProvider":
-        return RelationProvider.class;
-      case "MentionProvider":
-        return MentionProvider.class;
-      default:
-        throw new RuntimeException("Unknown data provider");
-    }
-  }
 }

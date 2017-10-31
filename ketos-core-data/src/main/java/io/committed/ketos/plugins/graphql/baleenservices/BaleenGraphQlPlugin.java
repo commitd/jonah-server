@@ -65,7 +65,13 @@ public class BaleenGraphQlPlugin implements VesselGraphQlExtension {
       c.setDescription("Baleen default corpus");
       c.setName("Baleen");
       c.setProviders(Arrays.asList(
-          DataProviderSpecification.builder().factory("baleen-mongo").provider("DocumentProvider")
+          DataProviderSpecification.builder().factory("baleen-mongo-documents")
+              .build(),
+          DataProviderSpecification.builder().factory("baleen-mongo-mentions")
+              .build(),
+          DataProviderSpecification.builder().factory("baleen-mongo-entities")
+              .build(),
+          DataProviderSpecification.builder().factory("baleen-mongo-relations")
               .build()));
       return c;
     }

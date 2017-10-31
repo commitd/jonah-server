@@ -13,7 +13,7 @@ public class MongoDocumentProviderFactory
     extends AbstractMongoDataProviderFactory<DocumentProvider> {
 
   public MongoDocumentProviderFactory() {
-    super("baleen-mongo", DocumentProvider.class);
+    super("baleen-mongo-documents", DocumentProvider.class);
   }
 
   @Override

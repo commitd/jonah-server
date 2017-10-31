@@ -13,9 +13,6 @@ public class DataProviderSpecification {
   // the dataproviderfactory id
   private String factory;
 
-  // One of DocumentProvider, EntityProvider, etc
-  private String provider;
-
   private Map<String, Object> settings = Collections.emptyMap();
 
 }

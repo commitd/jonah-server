@@ -35,30 +35,4 @@ public class BaleenMongoConfig {
     return new MongoMentionProviderFactory();
   }
 
-  // TODO: Shouldn't have these... they should be from config
-
-  // @Bean
-  // public DocumentProvider mongoDocumentProvider(
-  // final MongoDocumentProviderFactory factory) {
-  // return factory.build("baleen", Maps.newHashMap()).block();
-  // }
-  //
-  // @Bean
-  // public EntityProvider mongoEntityProvider(
-  // final MongoEntityProviderFactory factory) {
-  // return factory.build("baleen", Maps.newHashMap()).block();
-  // }
-  //
-  // @Bean
-  // public RelationProvider mongoRelationProvider(
-  // final MongoRelationProviderFactory factory) {
-  // return factory.build("baleen", Maps.newHashMap()).block();
-  // }
-  //
-  // @Bean
-  // public MentionProvider mongoMentionProvider(
-  // final MongoMentionProviderFactory factory) {
-  // return factory.build("baleen", Maps.newHashMap()).block();
-  // }
-
 }

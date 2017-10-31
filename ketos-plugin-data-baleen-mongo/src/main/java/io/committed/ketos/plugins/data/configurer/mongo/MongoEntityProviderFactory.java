@@ -13,7 +13,7 @@ public class MongoEntityProviderFactory
     extends AbstractMongoDataProviderFactory<EntityProvider> {
 
   public MongoEntityProviderFactory() {
-    super("baleen-mongo", EntityProvider.class);
+    super("baleen-mongo-entities", EntityProvider.class);
   }
 
   @Override

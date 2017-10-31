@@ -23,7 +23,7 @@ public class DataProviderFactoryRegistry {
     this.factories = factories;
   }
 
-  public Flux<DataProviderFactory<?>> findFactories(final String id) {
+  public Flux<DataProviderFactory<? extends DataProvider>> findFactories(final String id) {
     return Flux.fromIterable(factories)
         .filter(f -> f.getId().equalsIgnoreCase(id));
   }
@@ -37,15 +37,14 @@ public class DataProviderFactoryRegistry {
         .map(f -> (DataProviderFactory<P>) f);
   }
 
-  public <P extends DataProvider> Mono<P> build(final String id,
-      final Class<P> clazz, final String corpus, final Map<String, Object> settings) {
+  public Mono<? extends DataProvider> build(final String id, final String corpus,
+      final Map<String, Object> settings) {
 
     final Map<String, Object> safeSettings = settings == null ? Collections.emptyMap() : settings;
 
-    return findFactories(id, clazz)
+    return findFactories(id)
         .flatMap(f -> {
           try {
-
             return f.build(corpus, safeSettings);
           } catch (final Exception e) {
             log.warn("Unable to create data provider due to error", e);

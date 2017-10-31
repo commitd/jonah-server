@@ -13,7 +13,7 @@ public class MongoMentionProviderFactory
     extends AbstractMongoDataProviderFactory<MentionProvider> {
 
   public MongoMentionProviderFactory() {
-    super("baleen-mongo", MentionProvider.class);
+    super("baleen-mongo-mentions", MentionProvider.class);
   }
 
   @Override
