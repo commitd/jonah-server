@@ -20,4 +20,8 @@ public interface RelationProvider extends DataProvider {
 
   Mono<BaleenRelation> getById(String id);
 
+  @Override
+  default String getProviderType() {
+    return "RelationProvider";
+  }
 }

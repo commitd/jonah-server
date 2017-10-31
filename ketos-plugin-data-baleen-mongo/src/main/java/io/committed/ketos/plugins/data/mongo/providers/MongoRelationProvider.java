@@ -1,24 +1,26 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.data.baleen.BaleenMention;
 import io.committed.ketos.plugins.data.baleen.BaleenRelation;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
+import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.RelationProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class MongoRelationProvider implements RelationProvider {
 
+  private final String corpus;
   private final BaleenRelationRepository relations;
 
   @Autowired
-  public MongoRelationProvider(final BaleenRelationRepository relations) {
+  public MongoRelationProvider(final String corpus,
+      final BaleenRelationRepository relations) {
+    this.corpus = corpus;
     this.relations = relations;
   }
 
@@ -56,4 +58,13 @@ public class MongoRelationProvider implements RelationProvider {
     return stream.map(MongoRelation::toRelation);
   }
 
+  @Override
+  public String getDatasource() {
+    return DatasourceConstants.MONGO;
+  }
+
+  @Override
+  public String getCorpus() {
+    return corpus;
+  }
 }

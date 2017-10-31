@@ -2,9 +2,12 @@ package io.committed.ketos.plugins.providers.services;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Multimaps;
 
 import io.committed.ketos.plugins.data.baleen.BaleenCorpus;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DataProvider;
@@ -13,16 +16,20 @@ import reactor.core.publisher.Flux;
 public class CorpusProviders {
 
   public static final List<DataProvider> EMPTY_PROVIDER_LIST = Collections.emptyList();
-
-  private final Map<String, List<DataProvider>> providers;
+  private final ImmutableListMultimap<String, DataProvider> providers;
 
   @Autowired
-  public CorpusProviders(final Map<String, List<DataProvider>> providers) {
-    this.providers = providers;
+  public CorpusProviders(final List<DataProvider> providers) {
+    this.providers = Multimaps.index(providers, DataProvider::getCorpus);
   }
 
   public Flux<DataProvider> findForCorpus(final BaleenCorpus corpus) {
-    return Flux.fromIterable(providers.getOrDefault(corpus.getId(), EMPTY_PROVIDER_LIST));
+    final ImmutableList<DataProvider> list = providers.get(corpus.getId());
+    if (list == null || list.isEmpty()) {
+      return Flux.empty();
+    } else {
+      return Flux.fromIterable(list);
+    }
   }
 
   // It is checked...
@@ -34,3 +41,4 @@ public class CorpusProviders {
   }
 
 }
+

@@ -14,4 +14,8 @@ public interface MentionProvider extends DataProvider {
 
   Flux<BaleenMention> getMentionsByDocument(BaleenDocument document);
 
+  @Override
+  default String getProviderType() {
+    return "MentionProvider";
+  }
 }

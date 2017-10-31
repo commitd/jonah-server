@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
+import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
 import io.committed.vessel.plugin.data.jpa.dao.JpaDocument;
 import io.committed.vessel.plugin.data.jpa.dao.JpaDocumentMetadata;
@@ -17,12 +18,16 @@ import reactor.core.publisher.Mono;
 @Service
 public class JpaDocumentProvider implements DocumentProvider {
 
+  private final String corpus;
+
   private final JpaDocumentRepository documents;
   private final JpaDocumentMetadataRepository metadataRepo;
 
   @Autowired
-  public JpaDocumentProvider(final JpaDocumentRepository documents,
+  public JpaDocumentProvider(final String corpus,
+      final JpaDocumentRepository documents,
       final JpaDocumentMetadataRepository metadata) {
+    this.corpus = corpus;
     this.documents = documents;
     this.metadataRepo = metadata;
 
@@ -49,6 +54,16 @@ public class JpaDocumentProvider implements DocumentProvider {
     final Flux<JpaDocumentMetadata> metadata =
         Flux.fromStream(metadataRepo.findByDocId(document.getExternalId()));
     return document.toBaleenDocument(metadata);
+  }
+
+  @Override
+  public String getDatasource() {
+    return DatasourceConstants.SQL;
+  }
+
+  @Override
+  public String getCorpus() {
+    return corpus;
   }
 
 }

@@ -48,4 +48,9 @@ public interface EntityProvider extends DataProvider {
     }
     return flux;
   }
+
+  @Override
+  default String getProviderType() {
+    return "EntityProvider";
+  }
 }

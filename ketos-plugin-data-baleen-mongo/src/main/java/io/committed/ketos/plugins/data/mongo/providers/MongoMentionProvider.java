@@ -1,7 +1,6 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.data.baleen.BaleenEntity;
@@ -9,18 +8,20 @@ import io.committed.ketos.plugins.data.baleen.BaleenMention;
 import io.committed.ketos.plugins.data.baleen.BaleenRelation;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
+import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.MentionProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class MongoMentionProvider implements MentionProvider {
 
+  private final String corpus;
 
   private final BaleenEntitiesRepository entities;
 
   @Autowired
-  public MongoMentionProvider(final BaleenEntitiesRepository entities) {
+  public MongoMentionProvider(final String corpus, final BaleenEntitiesRepository entities) {
+    this.corpus = corpus;
     this.entities = entities;
   }
 
@@ -51,6 +52,16 @@ public class MongoMentionProvider implements MentionProvider {
       final String sourceId) {
     return getMentionsByDocumentId(relation.getDocId()).filter(m -> sourceId.equals(m.getId()))
         .next();
+  }
+
+  @Override
+  public String getDatasource() {
+    return DatasourceConstants.MONGO;
+  }
+
+  @Override
+  public String getCorpus() {
+    return corpus;
   }
 
 }

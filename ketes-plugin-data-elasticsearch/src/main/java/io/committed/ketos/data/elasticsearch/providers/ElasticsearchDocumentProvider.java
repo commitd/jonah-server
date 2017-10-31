@@ -1,10 +1,12 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
+import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,9 +14,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class ElasticsearchDocumentProvider implements DocumentProvider {
 
+  private final String corpus;
   private final EsDocumentService documentService;
 
-  public ElasticsearchDocumentProvider(final EsDocumentService documentService) {
+  @Autowired
+  public ElasticsearchDocumentProvider(final String corpus,
+      final EsDocumentService documentService) {
+    this.corpus = corpus;
     this.documentService = documentService;
   }
 
@@ -33,6 +39,16 @@ public class ElasticsearchDocumentProvider implements DocumentProvider {
     // TODO: Throw error or just return nothing?
     // return Flux.error(new Exception("Not supported"));
     return Flux.empty();
+  }
+
+  @Override
+  public String getDatasource() {
+    return DatasourceConstants.ELASTICSEARCH;
+  }
+
+  @Override
+  public String getCorpus() {
+    return corpus;
   }
 
 }

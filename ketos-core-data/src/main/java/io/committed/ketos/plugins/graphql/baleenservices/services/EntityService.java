@@ -28,7 +28,7 @@ public class EntityService extends AbstractGraphQlService {
 
 
 
-  @GraphQLQuery(name = "entities")
+  @GraphQLQuery(name = "allEntities")
   public Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document) {
     return getProvidersFromContext(document, EntityProvider.class)
         .flatMap(p -> p.getByDocument(document))

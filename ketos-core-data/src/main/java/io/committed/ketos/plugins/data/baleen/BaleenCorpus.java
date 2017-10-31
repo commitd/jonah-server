@@ -19,4 +19,6 @@ public class BaleenCorpus extends AbstractGraphQLNodeSupport<BaleenCorpus> {
   private String id;
 
   private String name;
+
+  private String description;
 }

@@ -1,22 +1,20 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import io.committed.ketos.plugins.data.baleen.BaleenDocument;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
+import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DocumentProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class MongoDocumentProvider implements DocumentProvider {
 
   private final BaleenDocumentRepository documents;
+  private final String corpus;
 
-  @Autowired
-  public MongoDocumentProvider(final BaleenDocumentRepository documents) {
+  public MongoDocumentProvider(final String corpus, final BaleenDocumentRepository documents) {
+    this.corpus = corpus;
     this.documents = documents;
   }
 
@@ -36,6 +34,16 @@ public class MongoDocumentProvider implements DocumentProvider {
   @Override
   public Flux<BaleenDocument> all(final int limit) {
     return documents.findAll().take(limit).map(MongoDocument::toDocument);
+  }
+
+  @Override
+  public String getDatasource() {
+    return DatasourceConstants.MONGO;
+  }
+
+  @Override
+  public String getCorpus() {
+    return corpus;
   }
 
 }

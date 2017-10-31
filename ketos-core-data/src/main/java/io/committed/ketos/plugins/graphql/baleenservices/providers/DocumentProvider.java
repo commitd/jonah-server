@@ -12,4 +12,9 @@ public interface DocumentProvider extends DataProvider {
 
   Flux<BaleenDocument> all(int limit);
 
+  @Override
+  default String getProviderType() {
+    return "DocumentProvider";
+  }
+
 }

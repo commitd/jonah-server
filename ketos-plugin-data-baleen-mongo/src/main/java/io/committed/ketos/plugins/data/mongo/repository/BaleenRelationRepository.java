@@ -2,14 +2,14 @@ package io.committed.ketos.plugins.data.mongo.repository;
 
 import java.util.Collection;
 
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import org.springframework.stereotype.Repository;
 
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Repository
+@NoRepositoryBean
 public interface BaleenRelationRepository
     extends ReactiveCrudRepository<MongoRelation, String> {
 
