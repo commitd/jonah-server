@@ -10,7 +10,7 @@
   
      <dependency>
       <groupId>io.committed.ketos</groupId>
-      <artifactId>ketos-core-data</artifactId>
+      <artifactId>ketos-common</artifactId>
     </dependency>
 
     <dependency>

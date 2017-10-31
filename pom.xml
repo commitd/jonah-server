@@ -17,8 +17,36 @@
     <vessel-java.version>1.0-SNAPSHOT</vessel-java.version>
     <spring-boot.version>2.0.0.M5</spring-boot.version>
     <spring-data-elasticsearch.version>3.0.0.RELEASE</spring-data-elasticsearch.version>
-    
+
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.vessel</groupId>
+      <artifactId>vessel-extensions</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.leangen.graphql</groupId>
+      <artifactId>spqr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>23.3-jre</version>
+    </dependency>
+  </dependencies>
 
   <dependencyManagement>
     <dependencies>
@@ -26,7 +54,17 @@
       <!-- Ketos -->
       <dependency>
         <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-core-data</artifactId>
+        <artifactId>ketos-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.committed.ketos</groupId>
+        <artifactId>ketos-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.committed.ketos</groupId>
+        <artifactId>ketos-graphql-baleen</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -105,9 +143,11 @@
   </pluginRepositories>
 
   <modules>
-    <module>ketos-core-data</module>
+    <module>ketos-common</module>
     <module>ketos-plugin-data-baleen-mongo</module>
     <module>ketes-plugin-data-elasticsearch</module>
     <module>ketos-plugin-data-jpa</module>
+    <module>ketos-graphql-baleen</module>
+    <module>ketos-core</module>
   </modules>
 </project>
