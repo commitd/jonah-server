@@ -15,9 +15,9 @@ public class GraphQLNode {
     return (T) context;
   }
 
-  public Object getRawParent() {
+  public <T> T getRawParent() {
     if (hasParent()) {
-      return Optional.of(((GraphQLNode) context).getContext());
+      return ((AbstractGraphQLNodeSupport<?>) context).getGqlNode().getContext();
     } else {
       return null;
     }
@@ -29,8 +29,8 @@ public class GraphQLNode {
 
   public boolean hasParent() {
     return context != null
-        && context instanceof GraphQLNode
-        && ((GraphQLNode) context).getContext() != null;
+        && context instanceof AbstractGraphQLNodeSupport
+        && ((AbstractGraphQLNodeSupport<?>) context).getGqlNode() != null;
   }
 
   // This is checked
