@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.committed.ketos</groupId>
@@ -6,16 +7,10 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>ketos-plugin-data-jpa</artifactId>
-    <dependencies>
-  
-     <dependency>
+  <dependencies>
+    <dependency>
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.committed.vessel</groupId>
-      <artifactId>vessel-extensions</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -26,13 +21,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.leangen.graphql</groupId>
-      <artifactId>spqr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
+
   </dependencies>
 </project>

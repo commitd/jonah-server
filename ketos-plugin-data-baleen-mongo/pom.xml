@@ -9,16 +9,12 @@
   <artifactId>ketos-plugin-data-baleen-mongo</artifactId>
 
   <dependencies>
-  
-     <dependency>
+
+    <dependency>
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>io.committed.vessel</groupId>
-      <artifactId>vessel-extensions</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
@@ -29,13 +25,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.leangen.graphql</groupId>
-      <artifactId>spqr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
+
   </dependencies>
 </project>
