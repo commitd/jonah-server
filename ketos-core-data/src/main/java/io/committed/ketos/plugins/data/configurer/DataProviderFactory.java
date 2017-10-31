@@ -13,4 +13,6 @@ public interface DataProviderFactory<T extends DataProvider> {
 
   Class<T> getDataProvider();
 
+  String getDatasource();
+
 }

@@ -9,11 +9,16 @@ public abstract class AbstractDataProviderFactory<P extends DataProvider>
     implements DataProviderFactory<P> {
 
   private String id;
+
   private final Class<P> dataProvider;
 
-  protected AbstractDataProviderFactory(final String id, final Class<P> clazz) {
+  private final String datasource;
+
+  protected AbstractDataProviderFactory(final String id, final Class<P> clazz,
+      final String datasource) {
     this.id = id;
     this.dataProvider = clazz;
+    this.datasource = datasource;
   }
 
 

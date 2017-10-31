@@ -16,6 +16,8 @@ public class MongoDocumentProviderFactory
     super("baleen-mongo-documents", DocumentProvider.class);
   }
 
+
+
   @Override
   public Mono<DocumentProvider> build(final String corpus, final Map<String, Object> settings) {
     final ReactiveRepositoryFactorySupport support = buildRepositoryFactory(settings);

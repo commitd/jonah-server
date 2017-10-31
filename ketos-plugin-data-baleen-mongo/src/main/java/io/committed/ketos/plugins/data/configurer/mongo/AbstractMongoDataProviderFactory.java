@@ -12,12 +12,13 @@ import com.mongodb.reactivestreams.client.MongoClients;
 
 import io.committed.ketos.plugins.data.configurer.impl.AbstractDataProviderFactory;
 import io.committed.ketos.plugins.graphql.baleenservices.providers.DataProvider;
+import io.committed.ketos.plugins.graphql.baleenservices.providers.DatasourceConstants;
 
 public abstract class AbstractMongoDataProviderFactory<P extends DataProvider>
     extends AbstractDataProviderFactory<P> {
 
   protected AbstractMongoDataProviderFactory(final String id, final Class<P> clazz) {
-    super(id, clazz);
+    super(id, clazz, DatasourceConstants.MONGO);
   }
 
   protected ReactiveRepositoryFactorySupport buildRepositoryFactory(
