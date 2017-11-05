@@ -30,7 +30,7 @@ public class CorpusService {
 
   @GraphQLQuery(name = "corpora")
   public Flux<BaleenCorpus> corpora() {
-    return corpusRegistry.getCorpora().map(this::toBaleenCorpus);
+    return corpusRegistry.getDatasets().map(this::toBaleenCorpus);
   }
 
   private BaleenCorpus toBaleenCorpus(final Dataset corpus) {
