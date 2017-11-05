@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
-import io.committed.ketos.common.providers.baleen.DatasourceConstants;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.vessel.plugin.data.jpa.dao.JpaEntity;
 import io.committed.vessel.plugin.data.jpa.repository.JpaEntityRepository;
+import io.committed.vessel.server.data.providers.DatasourceConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -38,7 +38,7 @@ public class JpaEntityProvider implements EntityProvider {
   }
 
   @Override
-  public String getCorpus() {
+  public String getDataset() {
     return corpus;
   }
 }

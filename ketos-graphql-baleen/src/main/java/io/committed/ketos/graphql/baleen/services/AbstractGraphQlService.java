@@ -6,14 +6,14 @@ import java.util.function.Function;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.committed.ketos.common.graphql.support.GraphQLNode;
-import io.committed.ketos.common.providers.baleen.DataProvider;
-import io.committed.ketos.core.services.CorpusProviders;
+import io.committed.vessel.server.data.providers.DataProvider;
+import io.committed.vessel.server.data.services.DatasetProviders;
 import reactor.core.publisher.Flux;
 
 public abstract class AbstractGraphQlService {
-  private final CorpusProviders corpusProviders;
+  private final DatasetProviders corpusProviders;
 
-  protected AbstractGraphQlService(final CorpusProviders corpusProviders) {
+  protected AbstractGraphQlService(final DatasetProviders corpusProviders) {
     this.corpusProviders = corpusProviders;
   }
 
@@ -24,7 +24,7 @@ public abstract class AbstractGraphQlService {
 
   protected <T extends DataProvider> Flux<T> getProviders(final BaleenCorpus corpus,
       final Class<T> clazz) {
-    return corpusProviders.findForCorpus(corpus, clazz);
+    return corpusProviders.findForDataset(corpus.getId(), clazz);
   }
 
   protected <T extends DataProvider> Flux<T> getProvidersFromContext(
@@ -34,7 +34,7 @@ public abstract class AbstractGraphQlService {
       final GraphQLNode gqlNode = node.getGqlNode();
       final Optional<BaleenCorpus> corpus = gqlNode.findParent(BaleenCorpus.class);
       if (corpus.isPresent()) {
-        return corpusProviders.findForCorpus(corpus.get(), clazz);
+        return corpusProviders.findForDataset(corpus.get().getId(), clazz);
       }
     }
     return Flux.empty();

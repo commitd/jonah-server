@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
-import io.committed.ketos.common.providers.baleen.DatasourceConstants;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
+import io.committed.vessel.server.data.providers.DatasourceConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -39,7 +39,7 @@ public class MongoEntityProvider implements EntityProvider {
   }
 
   @Override
-  public String getCorpus() {
+  public String getDataset() {
     return corpus;
   }
 

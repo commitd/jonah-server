@@ -10,9 +10,9 @@ import org.springframework.data.repository.core.support.ReactiveRepositoryFactor
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 
-import io.committed.ketos.common.dataproviders.configuration.AbstractDataProviderFactory;
-import io.committed.ketos.common.providers.baleen.DataProvider;
-import io.committed.ketos.common.providers.baleen.DatasourceConstants;
+import io.committed.vessel.server.data.providers.AbstractDataProviderFactory;
+import io.committed.vessel.server.data.providers.DataProvider;
+import io.committed.vessel.server.data.providers.DatasourceConstants;
 
 public abstract class AbstractMongoDataProviderFactory<P extends DataProvider>
     extends AbstractDataProviderFactory<P> {

@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.providers.baleen.DatasourceConstants;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
+import io.committed.vessel.server.data.providers.DatasourceConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -47,7 +47,7 @@ public class ElasticsearchDocumentProvider implements DocumentProvider {
   }
 
   @Override
-  public String getCorpus() {
+  public String getDataset() {
     return corpus;
   }
 

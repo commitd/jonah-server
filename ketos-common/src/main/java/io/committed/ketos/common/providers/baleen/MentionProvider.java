@@ -3,6 +3,7 @@ package io.committed.ketos.common.providers.baleen;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
+import io.committed.vessel.server.data.providers.DataProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

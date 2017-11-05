@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
-import io.committed.ketos.common.providers.baleen.DatasourceConstants;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
+import io.committed.vessel.server.data.providers.DatasourceConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -64,7 +64,7 @@ public class MongoRelationProvider implements RelationProvider {
   }
 
   @Override
-  public String getCorpus() {
+  public String getDataset() {
     return corpus;
   }
 }

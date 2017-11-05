@@ -6,8 +6,8 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
-import io.committed.ketos.core.services.CorpusProviders;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
+import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 public class MentionService extends AbstractGraphQlService {
 
   @Autowired
-  public MentionService(final CorpusProviders corpusProviders) {
+  public MentionService(final DatasetProviders corpusProviders) {
     super(corpusProviders);
   }
 

@@ -7,8 +7,8 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
-import io.committed.ketos.core.services.CorpusProviders;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
+import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 public class RelationService extends AbstractGraphQlService {
 
   @Autowired
-  public RelationService(final CorpusProviders corpusProviders) {
+  public RelationService(final DatasetProviders corpusProviders) {
     super(corpusProviders);
   }
 

@@ -11,6 +11,9 @@
   <description>Data beans for common Baleen objects</description>
 
   <dependencies>
-
+    <dependency>
+      <groupId>io.committed.vessel</groupId>
+      <artifactId>vessel-server-data</artifactId>
+    </dependency>
   </dependencies>
 </project>
