@@ -24,7 +24,7 @@ public class JpaEntityProvider implements EntityProvider {
 
   @Override
   public Mono<BaleenEntity> getById(final String id) {
-    return Mono.justOrEmpty(entities.findByExternalid(id)).map(JpaEntity::toBaleenEntity);
+    return Mono.justOrEmpty(entities.findInExternalid(id)).map(JpaEntity::toBaleenEntity);
   }
 
   @Override

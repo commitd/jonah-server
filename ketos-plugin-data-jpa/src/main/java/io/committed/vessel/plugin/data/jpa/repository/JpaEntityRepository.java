@@ -9,7 +9,7 @@ import io.committed.vessel.plugin.data.jpa.dao.JpaEntity;
 
 public interface JpaEntityRepository extends JpaRepository<JpaEntity, Long> {
 
-  Optional<JpaEntity> findByExternalid(String id);
+  Optional<JpaEntity> findInExternalid(String id);
 
   Stream<JpaEntity> findByDocId(String id);
 
