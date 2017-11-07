@@ -1,9 +1,12 @@
 package io.committed.ketos.graphql.baleen.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.data.BaleenDocuments;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
@@ -32,20 +35,16 @@ public class DocumentsService extends AbstractGraphQlService {
         .next();
   }
 
-  @GraphQLQuery(name = "documents")
-  public BaleenDocuments getDocuments(@GraphQLContext final BaleenCorpus corpus,
+  @GraphQLQuery(name = "searchDocuments")
+  public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "search") final String search,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
 
-    return new BaleenDocuments(
-        getProviders(corpus, DocumentProvider.class)
-            .flatMap(p -> p.search(search, limit)
-                .map(addContext(corpus)))
-            .take(limit))
-                .addNodeContext(corpus);
+    return new BaleenDocumentSearch(search, limit)
+        .addNodeContext(corpus);
   }
 
-  @GraphQLQuery(name = "documents")
+  @GraphQLQuery(name = "sampleDocuments")
   public BaleenDocuments getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
 
@@ -53,6 +52,26 @@ public class DocumentsService extends AbstractGraphQlService {
         getProviders(corpus, DocumentProvider.class).flatMap(p -> p.all(limit))
             .take(limit))
                 .addNodeContext(corpus);
+  }
+
+
+  @GraphQLQuery(name = "hits")
+  public BaleenDocuments getDocuments(@GraphQLContext final BaleenDocumentSearch documentSearch,
+      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
+
+    final Optional<BaleenCorpus> corpus =
+        documentSearch.getGqlNode().findParent(BaleenCorpus.class);
+
+    if (!corpus.isPresent()) {
+      return null;
+    }
+
+    return new BaleenDocuments(
+        getProviders(corpus.get(), DocumentProvider.class)
+            .flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getLimit())
+                .map(addContext(documentSearch)))
+            .take(limit))
+                .addNodeContext(documentSearch);
   }
 
 

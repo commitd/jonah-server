@@ -5,8 +5,12 @@ import java.util.Optional;
 import io.leangen.graphql.annotations.GraphQLIgnore;
 import lombok.Data;
 
-@GraphQLIgnore
+
 @Data
+@GraphQLIgnore
+// TODO: Because SQPR seems to be ignoring @GraphQLIgnore, but as BeanResolver on it tends it pull
+// out getters hence and that causes problems with this class (which is should have ignored).
+// So I've renamed
 public class GraphQLNode {
 
   private Object context;
@@ -15,7 +19,7 @@ public class GraphQLNode {
     return (T) context;
   }
 
-  public <T> T getRawParent() {
+  public <T> T findRawParent() {
     if (hasParent()) {
       return ((AbstractGraphQLNodeSupport<?>) context).getGqlNode().getContext();
     } else {
@@ -23,8 +27,8 @@ public class GraphQLNode {
     }
   }
 
-  public <T> Optional<T> getParent() {
-    return Optional.ofNullable((T) getRawParent());
+  public <T> Optional<T> findParent() {
+    return Optional.ofNullable((T) findRawParent());
   }
 
   public boolean hasParent() {
@@ -41,7 +45,7 @@ public class GraphQLNode {
     }
 
     if (hasParent()) {
-      final Object parent = getRawParent();
+      final Object parent = findRawParent();
       if (clazz.isInstance(parent)) {
         return Optional.of((T) parent);
       } else if (parent instanceof GraphQLNode) {
