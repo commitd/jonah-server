@@ -5,9 +5,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +15,6 @@ import io.committed.vesssel.support.elasticsearch.SourceUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class EsDocumentService {
 
   private static final String DOCUMENT_INDEX = "documents";
@@ -26,7 +23,6 @@ public class EsDocumentService {
   private final Client client;
   private final ObjectMapper mapper;
 
-  @Autowired
   public EsDocumentService(final ObjectMapper mapper, final ElasticsearchTemplate elastic) {
     this.mapper = mapper;
     this.client = elastic.getClient();

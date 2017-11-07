@@ -1,4 +1,4 @@
-package io.committed.ketos.plugins.data.configurer.mongo;
+package io.committed.ketos.plugins.data.mongo.factory;
 
 import java.util.Map;
 
