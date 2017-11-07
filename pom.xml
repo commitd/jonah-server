@@ -9,42 +9,20 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
-
     <!-- Dependencies as per Vessel version -->
     <vessel-java.version>1.0-SNAPSHOT</vessel-java.version>
-    <spring-boot.version>2.0.0.M5</spring-boot.version>
-    <spring-data-elasticsearch.version>3.0.0.RELEASE</spring-data-elasticsearch.version>
 
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.committed.vessel</groupId>
-      <artifactId>vessel-extensions</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.leangen.graphql</groupId>
-      <artifactId>spqr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>23.3-jre</version>
+      <artifactId>vessel-plugin</artifactId>
     </dependency>
   </dependencies>
 
@@ -69,37 +47,12 @@
       </dependency>
 
       <!-- Vessel -->
-
       <dependency>
         <groupId>io.committed.vessel</groupId>
-        <artifactId>vessel-plugins</artifactId>
+        <artifactId>vessel-dependencies</artifactId>
         <version>${vessel-java.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-
-      <!-- Spring -->
-      <dependency>
-        <!-- Import dependency management from Spring Boot -->
-        <!-- TODO: Should be importanted as provded... so doesn't really 
-          work! -->
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-        <version>${spring-boot.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-elasticsearch</artifactId>
-        <version>${spring-data-elasticsearch.version}</version>
-        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
