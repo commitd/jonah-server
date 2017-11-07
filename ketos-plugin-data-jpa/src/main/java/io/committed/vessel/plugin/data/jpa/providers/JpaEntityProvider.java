@@ -7,7 +7,7 @@ import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.vessel.plugin.data.jpa.dao.JpaEntity;
 import io.committed.vessel.plugin.data.jpa.repository.JpaEntityRepository;
-import io.committed.vessel.server.data.providers.DatasourceConstants;
+import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -33,8 +33,8 @@ public class JpaEntityProvider implements EntityProvider {
   }
 
   @Override
-  public String getDatasource() {
-    return DatasourceConstants.SQL;
+  public String getDatabase() {
+    return DatabaseConstants.SQL;
   }
 
   @Override

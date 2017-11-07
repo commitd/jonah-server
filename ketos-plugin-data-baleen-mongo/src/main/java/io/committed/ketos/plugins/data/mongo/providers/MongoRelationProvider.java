@@ -8,7 +8,7 @@ import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
-import io.committed.vessel.server.data.providers.DatasourceConstants;
+import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -59,8 +59,8 @@ public class MongoRelationProvider implements RelationProvider {
   }
 
   @Override
-  public String getDatasource() {
-    return DatasourceConstants.MONGO;
+  public String getDatabase() {
+    return DatabaseConstants.MONGO;
   }
 
   @Override

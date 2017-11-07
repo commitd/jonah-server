@@ -12,13 +12,13 @@ import com.mongodb.reactivestreams.client.MongoClients;
 
 import io.committed.vessel.server.data.providers.AbstractDataProviderFactory;
 import io.committed.vessel.server.data.providers.DataProvider;
-import io.committed.vessel.server.data.providers.DatasourceConstants;
+import io.committed.vessel.server.data.providers.DatabaseConstants;
 
 public abstract class AbstractMongoDataProviderFactory<P extends DataProvider>
     extends AbstractDataProviderFactory<P> {
 
   protected AbstractMongoDataProviderFactory(final String id, final Class<P> clazz) {
-    super(id, clazz, DatasourceConstants.MONGO);
+    super(id, clazz, DatabaseConstants.MONGO);
   }
 
   protected ReactiveRepositoryFactorySupport buildRepositoryFactory(

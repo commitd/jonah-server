@@ -9,7 +9,7 @@ import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
-import io.committed.vessel.server.data.providers.DatasourceConstants;
+import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -55,8 +55,8 @@ public class MongoMentionProvider implements MentionProvider {
   }
 
   @Override
-  public String getDatasource() {
-    return DatasourceConstants.MONGO;
+  public String getDatabase() {
+    return DatabaseConstants.MONGO;
   }
 
   @Override

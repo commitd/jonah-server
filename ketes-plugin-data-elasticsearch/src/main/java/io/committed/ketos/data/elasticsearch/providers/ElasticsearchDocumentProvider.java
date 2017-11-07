@@ -7,7 +7,7 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
-import io.committed.vessel.server.data.providers.DatasourceConstants;
+import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -42,8 +42,8 @@ public class ElasticsearchDocumentProvider implements DocumentProvider {
   }
 
   @Override
-  public String getDatasource() {
-    return DatasourceConstants.ELASTICSEARCH;
+  public String getDatabase() {
+    return DatabaseConstants.ELASTICSEARCH;
   }
 
   @Override

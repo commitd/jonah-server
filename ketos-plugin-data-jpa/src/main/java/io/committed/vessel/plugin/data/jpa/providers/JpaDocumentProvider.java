@@ -11,7 +11,7 @@ import io.committed.vessel.plugin.data.jpa.dao.JpaDocument;
 import io.committed.vessel.plugin.data.jpa.dao.JpaDocumentMetadata;
 import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentMetadataRepository;
 import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentRepository;
-import io.committed.vessel.server.data.providers.DatasourceConstants;
+import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -57,8 +57,8 @@ public class JpaDocumentProvider implements DocumentProvider {
   }
 
   @Override
-  public String getDatasource() {
-    return DatasourceConstants.SQL;
+  public String getDatabase() {
+    return DatabaseConstants.SQL;
   }
 
   @Override
