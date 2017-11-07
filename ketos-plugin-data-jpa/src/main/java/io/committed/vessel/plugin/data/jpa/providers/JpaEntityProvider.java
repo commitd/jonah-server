@@ -1,7 +1,5 @@
 package io.committed.vessel.plugin.data.jpa.providers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
@@ -16,7 +14,6 @@ public class JpaEntityProvider extends AbstractDataProvider implements EntityPro
 
   private final JpaEntityRepository entities;
 
-  @Autowired
   public JpaEntityProvider(final String dataset, final String datasource,
       final JpaEntityRepository entities) {
     super(dataset, datasource);

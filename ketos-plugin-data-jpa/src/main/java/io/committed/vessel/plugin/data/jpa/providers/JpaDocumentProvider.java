@@ -2,7 +2,6 @@ package io.committed.vessel.plugin.data.jpa.providers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
@@ -15,7 +14,6 @@ import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class JpaDocumentProvider extends AbstractDataProvider implements DocumentProvider {
 
   private final JpaDocumentRepository documents;
