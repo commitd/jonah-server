@@ -1,26 +1,22 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
-public class ElasticsearchDocumentProvider implements DocumentProvider {
+public class ElasticsearchDocumentProvider extends AbstractDataProvider
+    implements DocumentProvider {
 
-  private final String corpus;
   private final EsDocumentService documentService;
 
-  @Autowired
-  public ElasticsearchDocumentProvider(final String corpus,
+  public ElasticsearchDocumentProvider(final String dataset, final String datasource,
       final EsDocumentService documentService) {
-    this.corpus = corpus;
+    super(dataset, datasource);
     this.documentService = documentService;
   }
 
@@ -46,9 +42,5 @@ public class ElasticsearchDocumentProvider implements DocumentProvider {
     return DatabaseConstants.ELASTICSEARCH;
   }
 
-  @Override
-  public String getDataset() {
-    return corpus;
-  }
 
 }

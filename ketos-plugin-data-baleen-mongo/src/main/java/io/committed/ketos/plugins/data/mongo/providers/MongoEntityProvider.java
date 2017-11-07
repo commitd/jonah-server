@@ -7,18 +7,19 @@ import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoEntityProvider implements EntityProvider {
+public class MongoEntityProvider extends AbstractDataProvider implements EntityProvider {
 
   private final BaleenEntitiesRepository entities;
-  private final String corpus;
 
   @Autowired
-  public MongoEntityProvider(final String corpus, final BaleenEntitiesRepository entities) {
-    this.corpus = corpus;
+  public MongoEntityProvider(final String dataset, final String datasource,
+      final BaleenEntitiesRepository entities) {
+    super(dataset, datasource);
     this.entities = entities;
   }
 
@@ -36,11 +37,6 @@ public class MongoEntityProvider implements EntityProvider {
   @Override
   public String getDatabase() {
     return DatabaseConstants.MONGO;
-  }
-
-  @Override
-  public String getDataset() {
-    return corpus;
   }
 
 }

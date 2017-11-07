@@ -17,13 +17,14 @@ public class MongoRelationProviderFactory
   }
 
   @Override
-  public Mono<RelationProvider> build(final String corpus, final Map<String, Object> settings) {
+  public Mono<RelationProvider> build(final String dataset, final String datasoruce,
+      final Map<String, Object> settings) {
     final ReactiveRepositoryFactorySupport support = buildRepositoryFactory(settings);
 
     final BaleenRelationRepository repository =
         support.getRepository(BaleenRelationRepository.class);
 
-    return Mono.just(new MongoRelationProvider(corpus, repository));
+    return Mono.just(new MongoRelationProvider(dataset, datasoruce, repository));
   }
 
 }

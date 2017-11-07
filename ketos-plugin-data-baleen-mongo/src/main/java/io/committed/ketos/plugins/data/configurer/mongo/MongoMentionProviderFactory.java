@@ -17,13 +17,14 @@ public class MongoMentionProviderFactory
   }
 
   @Override
-  public Mono<MentionProvider> build(final String corpus, final Map<String, Object> settings) {
+  public Mono<MentionProvider> build(final String dataset, final String datasource,
+      final Map<String, Object> settings) {
     final ReactiveRepositoryFactorySupport support = buildRepositoryFactory(settings);
 
     final BaleenEntitiesRepository repository =
         support.getRepository(BaleenEntitiesRepository.class);
 
-    return Mono.just(new MongoMentionProvider(corpus, repository));
+    return Mono.just(new MongoMentionProvider(dataset, datasource, repository));
   }
 
 }

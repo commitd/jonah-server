@@ -8,19 +8,20 @@ import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoRelationProvider implements RelationProvider {
+public class MongoRelationProvider extends AbstractDataProvider implements RelationProvider {
 
-  private final String corpus;
   private final BaleenRelationRepository relations;
 
   @Autowired
-  public MongoRelationProvider(final String corpus,
+  public MongoRelationProvider(final String dataset, final String datasource,
       final BaleenRelationRepository relations) {
-    this.corpus = corpus;
+    super(dataset, datasource);
+
     this.relations = relations;
   }
 
@@ -63,8 +64,4 @@ public class MongoRelationProvider implements RelationProvider {
     return DatabaseConstants.MONGO;
   }
 
-  @Override
-  public String getDataset() {
-    return corpus;
-  }
 }

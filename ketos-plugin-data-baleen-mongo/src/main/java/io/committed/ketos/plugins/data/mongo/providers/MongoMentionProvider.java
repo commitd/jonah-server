@@ -9,19 +9,21 @@ import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoMentionProvider implements MentionProvider {
+public class MongoMentionProvider extends AbstractDataProvider implements MentionProvider {
 
-  private final String corpus;
 
   private final BaleenEntitiesRepository entities;
 
   @Autowired
-  public MongoMentionProvider(final String corpus, final BaleenEntitiesRepository entities) {
-    this.corpus = corpus;
+  public MongoMentionProvider(final String dataset, final String datasource,
+      final BaleenEntitiesRepository entities) {
+    super(dataset, datasource);
+
     this.entities = entities;
   }
 
@@ -59,9 +61,6 @@ public class MongoMentionProvider implements MentionProvider {
     return DatabaseConstants.MONGO;
   }
 
-  @Override
-  public String getDataset() {
-    return corpus;
-  }
+
 
 }

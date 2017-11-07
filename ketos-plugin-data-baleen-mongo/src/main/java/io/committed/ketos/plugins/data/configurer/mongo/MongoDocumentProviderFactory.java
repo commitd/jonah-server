@@ -17,15 +17,15 @@ public class MongoDocumentProviderFactory
   }
 
 
-
   @Override
-  public Mono<DocumentProvider> build(final String corpus, final Map<String, Object> settings) {
+  public Mono<DocumentProvider> build(final String dataset, final String datasource,
+      final Map<String, Object> settings) {
     final ReactiveRepositoryFactorySupport support = buildRepositoryFactory(settings);
 
     final BaleenDocumentRepository repository =
         support.getRepository(BaleenDocumentRepository.class);
 
-    return Mono.just(new MongoDocumentProvider(corpus, repository));
+    return Mono.just(new MongoDocumentProvider(dataset, datasource, repository));
   }
 
 }

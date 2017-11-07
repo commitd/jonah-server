@@ -17,13 +17,14 @@ public class MongoEntityProviderFactory
   }
 
   @Override
-  public Mono<EntityProvider> build(final String corpus, final Map<String, Object> settings) {
+  public Mono<EntityProvider> build(final String dataset, final String datasource,
+      final Map<String, Object> settings) {
     final ReactiveRepositoryFactorySupport support = buildRepositoryFactory(settings);
 
     final BaleenEntitiesRepository repository =
         support.getRepository(BaleenEntitiesRepository.class);
 
-    return Mono.just(new MongoEntityProvider(corpus, repository));
+    return Mono.just(new MongoEntityProvider(dataset, datasource, repository));
   }
 
 }

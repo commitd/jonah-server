@@ -4,17 +4,18 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoDocumentProvider implements DocumentProvider {
+public class MongoDocumentProvider extends AbstractDataProvider implements DocumentProvider {
 
   private final BaleenDocumentRepository documents;
-  private final String corpus;
 
-  public MongoDocumentProvider(final String corpus, final BaleenDocumentRepository documents) {
-    this.corpus = corpus;
+  public MongoDocumentProvider(final String dataset, final String datasource,
+      final BaleenDocumentRepository documents) {
+    super(dataset, datasource);
     this.documents = documents;
   }
 
@@ -41,9 +42,5 @@ public class MongoDocumentProvider implements DocumentProvider {
     return DatabaseConstants.MONGO;
   }
 
-  @Override
-  public String getDataset() {
-    return corpus;
-  }
 
 }

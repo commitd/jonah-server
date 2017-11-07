@@ -1,6 +1,5 @@
 package io.committed.vessel.plugin.data.jpa.providers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -11,23 +10,21 @@ import io.committed.vessel.plugin.data.jpa.dao.JpaDocument;
 import io.committed.vessel.plugin.data.jpa.dao.JpaDocumentMetadata;
 import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentMetadataRepository;
 import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentRepository;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class JpaDocumentProvider implements DocumentProvider {
-
-  private final String corpus;
+public class JpaDocumentProvider extends AbstractDataProvider implements DocumentProvider {
 
   private final JpaDocumentRepository documents;
   private final JpaDocumentMetadataRepository metadataRepo;
 
-  @Autowired
-  public JpaDocumentProvider(final String corpus,
+  public JpaDocumentProvider(final String dataset, final String datasource,
       final JpaDocumentRepository documents,
       final JpaDocumentMetadataRepository metadata) {
-    this.corpus = corpus;
+    super(dataset, datasource);
     this.documents = documents;
     this.metadataRepo = metadata;
 
@@ -61,9 +58,5 @@ public class JpaDocumentProvider implements DocumentProvider {
     return DatabaseConstants.SQL;
   }
 
-  @Override
-  public String getDataset() {
-    return corpus;
-  }
 
 }

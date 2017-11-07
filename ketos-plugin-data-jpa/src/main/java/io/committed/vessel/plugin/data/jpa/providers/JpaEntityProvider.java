@@ -7,18 +7,19 @@ import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.vessel.plugin.data.jpa.dao.JpaEntity;
 import io.committed.vessel.plugin.data.jpa.repository.JpaEntityRepository;
+import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class JpaEntityProvider implements EntityProvider {
+public class JpaEntityProvider extends AbstractDataProvider implements EntityProvider {
 
   private final JpaEntityRepository entities;
-  private final String corpus;
 
   @Autowired
-  public JpaEntityProvider(final String corpus, final JpaEntityRepository entities) {
-    this.corpus = corpus;
+  public JpaEntityProvider(final String dataset, final String datasource,
+      final JpaEntityRepository entities) {
+    super(dataset, datasource);
     this.entities = entities;
   }
 
@@ -35,10 +36,5 @@ public class JpaEntityProvider implements EntityProvider {
   @Override
   public String getDatabase() {
     return DatabaseConstants.SQL;
-  }
-
-  @Override
-  public String getDataset() {
-    return corpus;
   }
 }
