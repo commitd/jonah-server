@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots App renders 1`] = `
+<div>
+  <div>
+    <h2>
+      Welcome to Vessel
+    </h2>
+  </div>
+  <p>
+    To get started, edit 
+    <code>
+      src/App.tsx
+    </code>
+     and save to reload.
+  </p>
+</div>
+`;
