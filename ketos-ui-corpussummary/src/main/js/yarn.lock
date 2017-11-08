@@ -4950,7 +4950,11 @@ lodash@^3.10.1:
   version "3.10.1"
   resolved "http://localhost:4873/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-loglevel@^1.4.1:
+loglevel-plugin-prefix@^0.5.3:
+  version "0.5.3"
+  resolved "http://localhost:4873/loglevel-plugin-prefix/-/loglevel-plugin-prefix-0.5.3.tgz#8e9131b96e4697a0dba517996f76b9e6c3f43210"
+
+loglevel@^1.4.1, loglevel@^1.5.1:
   version "1.5.1"
   resolved "http://localhost:4873/loglevel/-/loglevel-1.5.1.tgz#189078c94ab9053ee215a0acdbf24244ea0f6502"
 
@@ -8145,6 +8149,14 @@ vessel-rpc@0.1.0:
   dependencies:
     shortid "^2.2.8"
     uniqueid "^1.0.0"
+
+vessel-utils@0.1.0:
+  version "0.1.0"
+  resolved "http://localhost:4873/vessel-utils/-/vessel-utils-0.1.0.tgz#87a48241c6ab6a56440bb0a574423e5315e9a8e6"
+  dependencies:
+    loglevel "^1.5.1"
+    loglevel-plugin-prefix "^0.5.3"
+    qs "^6.5.1"
 
 vm-browserify@0.0.4:
   version "0.0.4"
