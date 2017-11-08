@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "graphql": "^0.11.0",
+    "numeral": "^2.0.6",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-apollo": "^1.4.16",
@@ -32,7 +33,8 @@
     "@types/jest": "^21.1.5",
     "@types/loglevel": "^1.5.3",
     "@types/node": "^8.0.48",
-    "@types/react": "^16.0.20",
+    "@types/numeral": "^0.0.22",
+    "@types/react": "16.0.20",
     "@types/react-dom": "^16.0.2",
     "@types/storybook__addon-actions": "^3.0.1",
     "@types/storybook__addon-info": "^3.2.0",
@@ -47,5 +49,6 @@
   "resolutions": {
     "@types/react": "16.0.20"
   },
- "homepage": "."
+  "proxy": "http://localhost:8080/",
+  "homepage": "."
 }

@@ -1,20 +1,61 @@
 import * as React from 'react'
 import { ChildProps } from 'vessel-plugin'
-type Props = ChildProps
+import { graphql, gql, QueryProps } from 'react-apollo'
 
-class App extends React.Component<Props> {
+import View from './components/View'
+import DatasetSelector from './containers/DatasetSelectorContainer'
+
+interface Response {
+  corpora: {
+    id: string
+    name: string
+  }[]
+}
+
+interface GqlProps {
+  data?: QueryProps & Partial<Response>
+}
+
+type OwnProps = {}
+
+type Props = OwnProps & GqlProps & ChildProps
+
+type State = {
+  datasetId?: string,
+}
+
+class App extends React.Component<Props, State> {
+
+  state: State = {
+
+  }
+
+  handleDatasetSelected = (datasetId: string) => {
+    this.setState({
+      datasetId
+    })
+  }
+
   render() {
+
+    const { datasetId } = this.state
+
     return (
       <div>
-        <div>
-          <h2>Welcome to Vessel</h2>
-        </div>
-        <p>
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <DatasetSelector selectedDataset={datasetId} onDatasetSelected={this.handleDatasetSelected} />
+        {datasetId && <View />}
       </div>
     )
   }
 }
 
-export default App
+const CORPUS_SUMMARY_QUERY = gql`
+query Corpora {
+  corpora {
+    id
+    name
+  }
+}
+`
+
+export default graphql<Response, OwnProps & ChildProps, Props>(CORPUS_SUMMARY_QUERY)(App)
