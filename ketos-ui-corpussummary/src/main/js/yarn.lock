@@ -211,9 +211,9 @@
     "@types/node" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.0.20", "@types/react@^16.0.18":
-  version "16.0.20"
-  resolved "http://localhost:4873/@types%2freact/-/react-16.0.20.tgz#dc16feb9c0bdf50e439482c6fd3c43d5a1d9f3b1"
+"@types/react@*", "@types/react@16.0.21", "@types/react@^16.0.18", "@types/react@^16.0.21":
+  version "16.0.21"
+  resolved "http://localhost:4873/@types%2freact/-/react-16.0.21.tgz#1f4313594f784a477521a0795c46e7b832051ef3"
 
 "@types/storybook__addon-actions@^3.0.1":
   version "3.0.1"
@@ -6011,8 +6011,8 @@ postcss-minify-selectors@^2.0.4:
     postcss-selector-parser "^2.0.0"
 
 postcss-modules-extract-imports@^1.0.0:
-  version "1.2.0"
-  resolved "http://localhost:4873/postcss-modules-extract-imports/-/postcss-modules-extract-imports-1.2.0.tgz#66140ecece38ef06bf0d3e355d69bf59d141ea85"
+  version "1.1.0"
+  resolved "http://localhost:4873/postcss-modules-extract-imports/-/postcss-modules-extract-imports-1.1.0.tgz#b614c9720be6816eaee35fb3a5faa1dba6a05ddb"
   dependencies:
     postcss "^6.0.1"
 
@@ -8119,11 +8119,11 @@ verror@1.10.0:
 
 vessel-common@0.1.0:
   version "0.1.0"
-  resolved "http://localhost:4873/vessel-common/-/vessel-common-0.1.0.tgz#f53da65e5199f5484f1221fd85af9c41a149a18a"
+  resolved "http://localhost:4873/vessel-common/-/vessel-common-0.1.0.tgz#5ea7d4f2b3f6088f86c4457b3aa1219a19dbf2ea"
 
 vessel-components@*:
   version "0.1.0"
-  resolved "http://localhost:4873/vessel-components/-/vessel-components-0.1.0.tgz#2e9e28389bf4def9656049f32db475ed7989f599"
+  resolved "http://localhost:4873/vessel-components/-/vessel-components-0.1.0.tgz#89a81cee0828dbba92e87235d937fe02b484baed"
   dependencies:
     material-ui "^1.0.0-beta.17"
     material-ui-icons "^1.0.0-beta.17"
@@ -8132,14 +8132,14 @@ vessel-components@*:
 
 vessel-graphql@0.1.0:
   version "0.1.0"
-  resolved "http://localhost:4873/vessel-graphql/-/vessel-graphql-0.1.0.tgz#723add850c6acaf004400c3045682a0da1a0c894"
+  resolved "http://localhost:4873/vessel-graphql/-/vessel-graphql-0.1.0.tgz#812850c67da611a760db673be9d36ad399beff85"
   dependencies:
     lodash.merge "^4.6.0"
     react-apollo "^1.4.16"
 
 vessel-plugin@*:
   version "0.1.0"
-  resolved "http://localhost:4873/vessel-plugin/-/vessel-plugin-0.1.0.tgz#35fc100edae2f305cd3f53b5caa2304760922706"
+  resolved "http://localhost:4873/vessel-plugin/-/vessel-plugin-0.1.0.tgz#1b7e8fb21af246757ab3e41368d9c50004eb777a"
   dependencies:
     prop-types "^15.6.0"
     vessel-common "0.1.0"
@@ -8149,14 +8149,14 @@ vessel-plugin@*:
 
 vessel-rpc@0.1.0:
   version "0.1.0"
-  resolved "http://localhost:4873/vessel-rpc/-/vessel-rpc-0.1.0.tgz#3897194e67d974c3b172f1a51d25dee551ed831d"
+  resolved "http://localhost:4873/vessel-rpc/-/vessel-rpc-0.1.0.tgz#8f779ab0c5dfe8587661f8830ce6df6872dfbfe2"
   dependencies:
     shortid "^2.2.8"
     uniqueid "^1.0.0"
 
 vessel-utils@0.1.0:
   version "0.1.0"
-  resolved "http://localhost:4873/vessel-utils/-/vessel-utils-0.1.0.tgz#87a48241c6ab6a56440bb0a574423e5315e9a8e6"
+  resolved "http://localhost:4873/vessel-utils/-/vessel-utils-0.1.0.tgz#fdfd7cc3b45f9347ba207fcd5170e86d50d8fcb3"
   dependencies:
     loglevel "^1.5.1"
     loglevel-plugin-prefix "^0.5.3"

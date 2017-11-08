@@ -6,4 +6,4 @@ import View from '../src/components/View'
 
 storiesOf('View', module)
     .add('No props', () => <View />)
-    .add('All props', () => <View numDocuments={0} numEntities={0} numEvents={0} numRelations={0} />)
+    .add('All props', () => <View numDocuments={100000} numEntities={2000000} numEvents={40} numRelations={12300} />)

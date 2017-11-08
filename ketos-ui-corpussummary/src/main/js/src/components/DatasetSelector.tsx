@@ -27,11 +27,29 @@ type Props = OwnProps & WithStyles
 
 class DatasetSelector extends React.Component<Props> {
 
-    handleDatasetSelected = () => {
+    handleDatasetSelected = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         if (this.props.onDatasetSelected) {
-            this.props.onDatasetSelected('hello')
+            this.props.onDatasetSelected(e.target.value)
         }
     }
+
+    componentWillMount() {
+        this.checkIfSingle(this.props)
+    }
+
+    componentWillReceiveProps(nextProps: Props) {
+        this.checkIfSingle(nextProps)
+    }
+
+    checkIfSingle(props: Props) {
+        // If we only have one dataset we auto select that
+        if (props.selectedDataset == null
+            && (props.datasets != null && props.datasets.length === 1)
+            && props.onDatasetSelected != null) {
+            props.onDatasetSelected(props.datasets[0].id)
+        }
+    }
+
     render() {
 
         const { classes, datasets, selectedDataset } = this.props
@@ -40,9 +58,13 @@ class DatasetSelector extends React.Component<Props> {
             < div className={classes.root} >
                 <AppBar position="static" color="default">
                     <Toolbar>
-                        <FormControl >
-
-                            <Select value={selectedDataset}>
+                        <FormControl>
+                            <Select
+                                value={selectedDataset || ''}
+                                onChange={this.handleDatasetSelected}
+                                displayEmpty={true}
+                            >
+                                <MenuItem value=""><em>Select corpus</em></MenuItem>
                                 {datasets.map(d => <MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>)}
                             </Select>
                         </FormControl>
