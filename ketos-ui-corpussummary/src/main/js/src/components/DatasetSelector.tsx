@@ -5,6 +5,7 @@ import { withStyles, StyleRulesCallback, WithStyles, Theme } from 'material-ui/s
 import Select from 'material-ui/Select'
 import { MenuItem } from 'material-ui/Menu'
 import { FormControl } from 'material-ui/Form'
+import Typography from 'material-ui/Typography'
 
 const styles: StyleRulesCallback = (theme: Theme) => ({
     root: {
@@ -58,13 +59,14 @@ class DatasetSelector extends React.Component<Props> {
             < div className={classes.root} >
                 <AppBar position="static" color="default">
                     <Toolbar>
+                        <Typography type="subheading">Dataset:&nbsp;</Typography>
                         <FormControl>
                             <Select
                                 value={selectedDataset || ''}
                                 onChange={this.handleDatasetSelected}
                                 displayEmpty={true}
                             >
-                                <MenuItem value=""><em>Select corpus</em></MenuItem>
+                                <MenuItem value=""><em>Select...</em></MenuItem>
                                 {datasets.map(d => <MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>)}
                             </Select>
                         </FormControl>
