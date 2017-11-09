@@ -4,8 +4,9 @@ import Grid from 'material-ui/Grid'
 import { withStyles, StyleRulesCallback, WithStyles, Theme } from 'material-ui/styles'
 import Counter from './components/Counter'
 import PieChart from './components/PieChart'
+import BarChart from './components/BarChart'
 import TimelineChart from './components/TimelineChart'
-import Paper from 'material-ui/Paper'
+import Card from './components/Card'
 
 const styles: StyleRulesCallback = (theme: Theme) => ({
     root: {
@@ -13,18 +14,17 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
         margin: 10,
     },
     graph: {
-        maxHeight: 400,
-        height: 400
+
     }
 })
 
-type TypeCount = {
-    type: string,
+type TermCount = {
+    term: string,
     count: number
 }
 
 type TimeCount = {
-    ts: Date,
+    ts: number | Date,
     count: number
 }
 
@@ -33,19 +33,21 @@ type OwnProps = {
     numEntities?: number,
     numRelations?: number,
     numEvents?: number,
-    documentTypes?: TypeCount[],
-    entityTypes?: TypeCount[],
+    documentTypes?: TermCount[],
+    documentLanguages?: TermCount[],
+    documentClassifications?: TermCount[],
+    entityTypes?: TermCount[],
     documentTimeline?: TimeCount[],
 }
 
-function typeCountToXY(array: TypeCount[]): { x: string, y: number }[] {
+function typeCountToXY(array: TermCount[]): { x: string, y: number }[] {
     return array.map(i => ({
-        x: i.type,
+        x: i.term,
         y: i.count
     }))
 }
 
-function timeCountToXY(array: TimeCount[]): { x: Date, y: number }[] {
+function timeCountToXY(array: TimeCount[]): { x: Date | number, y: number }[] {
     return array.map(i => ({
         x: i.ts,
         y: i.count
@@ -60,6 +62,7 @@ class View extends React.Component<Props> {
         const { classes } = this.props
 
         const { numDocuments, numEntities, numRelations,
+            documentClassifications, documentLanguages,
             numEvents, documentTypes, entityTypes, documentTimeline } = this.props
 
         return (
@@ -78,19 +81,35 @@ class View extends React.Component<Props> {
                         <Counter value={numEvents || 0} singular="event" plural="events" />
                     </Grid>}
                 </Grid>
-                <Grid container={true}>
-                    {documentTypes && <Grid item={true} xs={6}>
-                        <Paper><PieChart data={typeCountToXY(documentTypes)} /></Paper>
-                    </Grid>}
-                    {entityTypes && <Grid item={true} xs={6}>
-                        <Paper><PieChart data={typeCountToXY(entityTypes)} /></Paper>
-                    </Grid>}
-                </Grid>
                 <Grid container={true} className={classes.graph}>
                     {documentTimeline && <Grid item={true} xs={12}>
-                        <Paper><TimelineChart data={timeCountToXY(documentTimeline)} /></Paper>
+                        <Card title="Document timeline"><TimelineChart data={timeCountToXY(documentTimeline)} /></Card>
                     </Grid>}
                 </Grid>
+                <Grid container={true}>
+                    {documentTypes && <Grid item={true} xs={4}>
+                        <Card title="Types"><PieChart data={typeCountToXY(documentTypes)} /></Card>
+                    </Grid>}
+                    {documentLanguages && <Grid item={true} xs={4}>
+                        <Card title="Languages"><PieChart data={typeCountToXY(documentLanguages)} /></Card>
+                    </Grid>}
+                    {documentClassifications && <Grid item={true} xs={4}>
+                        <Card title="Classifications">
+                            <PieChart data={typeCountToXY(documentClassifications)} />
+                        </Card>
+                    </Grid>}
+                </Grid>
+                <Grid container={true}>
+                    {entityTypes && <Grid item={true} xs={12}>
+                        <Card
+                            title="Entity types"
+                            subTitle={`${entityTypes.length} entity types within the corpus`}
+                        >
+                            <BarChart data={typeCountToXY(entityTypes)} />
+                        </Card>
+                    </Grid>}
+                </Grid>
+
             </div>
         )
     }

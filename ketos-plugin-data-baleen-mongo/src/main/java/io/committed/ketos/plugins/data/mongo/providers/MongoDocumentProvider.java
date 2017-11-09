@@ -1,9 +1,21 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
+import io.committed.vessel.core.dto.analytic.TermBin;
+import io.committed.vessel.core.dto.analytic.TimeBin;
 import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
@@ -12,10 +24,12 @@ import reactor.core.publisher.Mono;
 public class MongoDocumentProvider extends AbstractDataProvider implements DocumentProvider {
 
   private final BaleenDocumentRepository documents;
+  private final ReactiveMongoTemplate mongoTemplate;
 
   public MongoDocumentProvider(final String dataset, final String datasource,
-      final BaleenDocumentRepository documents) {
+      final ReactiveMongoTemplate mongoTemplate, final BaleenDocumentRepository documents) {
     super(dataset, datasource);
+    this.mongoTemplate = mongoTemplate;
     this.documents = documents;
   }
 
@@ -41,6 +55,50 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
   public String getDatabase() {
     return DatabaseConstants.MONGO;
   }
+
+  @Override
+  public Mono<Long> count() {
+    return documents.count();
+  }
+
+  @Override
+  public Flux<TermBin> countByType() {
+    return termAggregation("document.type");
+  }
+
+  private Flux<TermBin> termAggregation(final String field) {
+    final Aggregation aggregation = newAggregation(
+        group(field).count().as("count"),
+        project("count").and("_id").as("term"));
+    return mongoTemplate.aggregate(aggregation, MongoDocument.class, TermBin.class);
+  }
+
+  @Override
+  public Flux<TermBin> countByLanguage() {
+    return termAggregation("document.language");
+
+  }
+
+  @Override
+  public Flux<TermBin> countByClassification() {
+    return termAggregation("document.classification");
+
+  }
+
+
+  @Override
+  public Flux<TimeBin> countByDate() {
+    final Aggregation aggregation = newAggregation(
+        project().and("document.timestamp").dateAsFormattedString("%Y-%m-%d").as("date"),
+        group("date").count().as("count"),
+        project("count").and("_id").as("term"));
+    return mongoTemplate.aggregate(aggregation, MongoDocument.class, TermBin.class)
+        .map(t -> {
+          final LocalDate date = LocalDate.parse(t.getTerm());
+          return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
+        });
+  }
+
 
 
 }

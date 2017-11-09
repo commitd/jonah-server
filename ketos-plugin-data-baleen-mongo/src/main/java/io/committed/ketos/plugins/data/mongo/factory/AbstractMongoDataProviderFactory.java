@@ -21,8 +21,7 @@ public abstract class AbstractMongoDataProviderFactory<P extends DataProvider>
     super(id, clazz, DatabaseConstants.MONGO);
   }
 
-  protected ReactiveRepositoryFactorySupport buildRepositoryFactory(
-      final Map<String, Object> settings) {
+  protected ReactiveMongoTemplate buildMongoTemplate(final Map<String, Object> settings) {
     final String connectionString =
         (String) settings.getOrDefault("uri", "mongodb://localhost:27017/");
     final String databaseName = (String) settings.getOrDefault("db", "baleen");
@@ -56,13 +55,13 @@ public abstract class AbstractMongoDataProviderFactory<P extends DataProvider>
 
 
     // Finally create the factory support
-    final ReactiveMongoTemplate mongoOperations =
-        new ReactiveMongoTemplate(mongoDatabaseFactory);
-    final ReactiveRepositoryFactorySupport support =
-        new ReactiveMongoRepositoryFactory(mongoOperations);
+    return new ReactiveMongoTemplate(mongoDatabaseFactory);
+  }
 
+  protected ReactiveRepositoryFactorySupport buildRepositoryFactory(
+      final ReactiveMongoTemplate mongoOperations) {
 
-    return support;
+    return new ReactiveMongoRepositoryFactory(mongoOperations);
   }
 
 

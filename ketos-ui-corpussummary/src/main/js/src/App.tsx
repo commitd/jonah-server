@@ -2,7 +2,7 @@ import * as React from 'react'
 import { ChildProps } from 'vessel-plugin'
 import { graphql, gql, QueryProps } from 'react-apollo'
 
-import View from './View'
+import View from './ViewContainer'
 import DatasetSelector from './containers/DatasetSelectorContainer'
 
 interface Response {
@@ -37,13 +37,12 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-
     const { datasetId } = this.state
 
     return (
       <div>
         <DatasetSelector selectedDataset={datasetId} onDatasetSelected={this.handleDatasetSelected} />
-        {datasetId && <View />}
+        {datasetId && <View dataset={datasetId} />}
       </div>
     )
   }

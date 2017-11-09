@@ -25,4 +25,6 @@ public interface RelationProvider extends DataProvider {
   default String getProviderType() {
     return "RelationProvider";
   }
+
+  Mono<Long> count();
 }

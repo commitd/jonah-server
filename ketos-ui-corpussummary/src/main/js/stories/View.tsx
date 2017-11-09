@@ -6,34 +6,34 @@ import View from '../src/View'
 
 const documentTypes = [
     {
-        type: 'word',
+        term: 'word',
         count: 233
     },
     {
-        type: 'excel',
+        term: 'excel',
         count: 78
     },
     {
-        type: 'powerpoint',
+        term: 'powerpoint',
         count: 33
     },
 ]
 
 const entityTypes = [
     {
-        type: 'people',
+        term: 'people',
         count: 233
     },
     {
-        type: 'location',
+        term: 'location',
         count: 78
     },
     {
-        type: 'organisation',
+        term: 'organisation',
         count: 33
     },
     {
-        type: 'temporal',
+        term: 'temporal',
         count: 100
     }
 ]

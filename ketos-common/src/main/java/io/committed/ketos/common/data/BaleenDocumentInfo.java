@@ -11,7 +11,7 @@ public class BaleenDocumentInfo {
   private String type;
   private String source;
   private String language;
-  private Long ts;
+  private Long timestamp;
   private String classification;
   private List<String> caveats;
   private List<String> releasability;

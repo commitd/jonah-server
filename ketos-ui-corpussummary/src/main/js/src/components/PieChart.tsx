@@ -18,7 +18,6 @@ class SimplePieChart extends React.Component<Props> {
                 theme={VictoryTheme.material}
                 data={data}
                 colorScale="qualitative"
-                padding={100}
             />
         )
     }

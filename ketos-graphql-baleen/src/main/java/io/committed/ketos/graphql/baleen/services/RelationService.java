@@ -76,4 +76,10 @@ public class RelationService extends AbstractGraphQlService {
   // .map(this.addContext(corpus));
   // }
 
+  @GraphQLQuery(name = "relationCount")
+  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus) {
+    return getProviders(corpus, RelationProvider.class)
+        .flatMap(RelationProvider::count)
+        .reduce(0L, (a, b) -> a + b);
+  }
 }

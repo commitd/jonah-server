@@ -7,6 +7,8 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
+import io.committed.vessel.core.dto.analytic.TermBin;
+import io.committed.vessel.core.dto.analytic.TermCount;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLArgument;
@@ -89,4 +91,22 @@ public class EntityService extends AbstractGraphQlService {
         .next();
   }
 
+  @GraphQLQuery(name = "entityCount")
+  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus) {
+    return getProviders(corpus, EntityProvider.class)
+        .flatMap(EntityProvider::count)
+        .reduce(0L, (a, b) -> a + b);
+  }
+
+  @GraphQLQuery(name = "entityTypes")
+  public Mono<TermCount> getEntityTypes(@GraphQLContext final BaleenCorpus corpus) {
+    return getProviders(corpus, EntityProvider.class)
+        .flatMap(EntityProvider::countByType)
+        .groupBy(TermBin::getTerm)
+        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
+        .collectList()
+        .map(TermCount::new);
+
+
+  }
 }

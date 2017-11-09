@@ -64,4 +64,9 @@ public class MongoRelationProvider extends AbstractDataProvider implements Relat
     return DatabaseConstants.MONGO;
   }
 
+  @Override
+  public Mono<Long> count() {
+    return relations.count();
+  }
+
 }

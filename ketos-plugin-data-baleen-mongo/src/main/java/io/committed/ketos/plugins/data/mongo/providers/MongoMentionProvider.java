@@ -62,5 +62,4 @@ public class MongoMentionProvider extends AbstractDataProvider implements Mentio
   }
 
 
-
 }
