@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { VictoryPie } from 'victory'
+import { VictoryPie, VictoryTheme } from 'victory'
 
 interface Props {
     data: {
@@ -15,6 +15,7 @@ class SimplePieChart extends React.Component<Props> {
         const { data } = this.props
         return (
             <VictoryPie
+                theme={VictoryTheme.material}
                 data={data}
                 colorScale="qualitative"
                 padding={100}

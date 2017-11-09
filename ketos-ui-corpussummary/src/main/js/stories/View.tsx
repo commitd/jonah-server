@@ -38,6 +38,17 @@ const entityTypes = [
     }
 ]
 
+const documentTimeline = [
+    { ts: new Date(1982, 1, 1), count: 125 },
+    { ts: new Date(1987, 1, 1), count: 257 },
+    { ts: new Date(1993, 1, 1), count: 345 },
+    { ts: new Date(1997, 1, 1), count: 515 },
+    { ts: new Date(2001, 1, 1), count: 132 },
+    { ts: new Date(2005, 1, 1), count: 305 },
+    { ts: new Date(2011, 1, 1), count: 270 },
+    { ts: new Date(2015, 1, 1), count: 470 }
+]
+
 storiesOf('View', module)
     .add('No props', () => <View />)
     .add('All props', () => (
@@ -48,4 +59,5 @@ storiesOf('View', module)
             numRelations={12331}
             documentTypes={documentTypes}
             entityTypes={entityTypes}
+            documentTimeline={documentTimeline}
         />))

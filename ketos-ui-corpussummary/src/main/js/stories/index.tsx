@@ -1,4 +1,6 @@
-import './Counter.tsx'
-import './View.tsx'
-import './DatasetSelector.tsx'
-import './PieChart.tsx'
+import './View'
+
+import './Counter'
+import './DatasetSelector'
+import './TimelineChart'
+import './PieChart'

@@ -211,15 +211,15 @@
     "@types/node" "*"
     "@types/react" "*"
 
+"@types/react-measure@^2.0.0":
+  version "2.0.0"
+  resolved "http://localhost:4873/@types%2freact-measure/-/react-measure-2.0.0.tgz#feb96b09c848aef5e2583b63ae18c5386a85253e"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@16.0.21", "@types/react@^16.0.18", "@types/react@^16.0.21":
   version "16.0.21"
   resolved "http://localhost:4873/@types%2freact/-/react-16.0.21.tgz#1f4313594f784a477521a0795c46e7b832051ef3"
-
-"@types/recharts@^1.0.4":
-  version "1.0.4"
-  resolved "http://localhost:4873/@types%2frecharts/-/recharts-1.0.4.tgz#790179dc5e521f05901b129b1d9f6530dc7a929e"
-  dependencies:
-    "@types/react" "*"
 
 "@types/storybook__addon-actions@^3.0.1":
   version "3.0.1"
@@ -1599,6 +1599,10 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+batch-processor@^1.0.0:
+  version "1.0.0"
+  resolved "http://localhost:4873/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
+
 batch@0.6.1:
   version "0.6.1"
   resolved "http://localhost:4873/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
@@ -2004,7 +2008,7 @@ class-utils@^0.3.5:
     lazy-cache "^2.0.2"
     static-extend "^0.1.1"
 
-classnames@2.2.5, classnames@^2.2.5:
+classnames@^2.2.5:
   version "2.2.5"
   resolved "http://localhost:4873/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -2230,13 +2234,13 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "http://localhost:4873/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
-core-js@2.5.1, core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0, core-js@^2.5.1:
-  version "2.5.1"
-  resolved "http://localhost:4873/core-js/-/core-js-2.5.1.tgz#ae6874dc66937789b80754ff5428df66819ca50b"
-
 core-js@^1.0.0:
   version "1.2.7"
   resolved "http://localhost:4873/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
+
+core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0, core-js@^2.5.1:
+  version "2.5.1"
+  resolved "http://localhost:4873/core-js/-/core-js-2.5.1.tgz#ae6874dc66937789b80754ff5428df66819ca50b"
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -2494,7 +2498,7 @@ d3-format@1:
   version "1.2.0"
   resolved "http://localhost:4873/d3-format/-/d3-format-1.2.0.tgz#6b480baa886885d4651dc248a8f4ac9da16db07a"
 
-d3-interpolate@1, d3-interpolate@^1.1.1, d3-interpolate@^1.1.5:
+d3-interpolate@1, d3-interpolate@^1.1.1:
   version "1.1.5"
   resolved "http://localhost:4873/d3-interpolate/-/d3-interpolate-1.1.5.tgz#69e099ff39214716e563c9aec3ea9d1ea4b8a79f"
   dependencies:
@@ -2504,7 +2508,7 @@ d3-path@1:
   version "1.0.5"
   resolved "http://localhost:4873/d3-path/-/d3-path-1.0.5.tgz#241eb1849bd9e9e8021c0d0a799f8a0e8e441764"
 
-d3-scale@1.0.6, d3-scale@^1.0.0:
+d3-scale@^1.0.0:
   version "1.0.6"
   resolved "http://localhost:4873/d3-scale/-/d3-scale-1.0.6.tgz#bce19da80d3a0cf422c9543ae3322086220b34ed"
   dependencies:
@@ -2516,7 +2520,7 @@ d3-scale@1.0.6, d3-scale@^1.0.0:
     d3-time "1"
     d3-time-format "2"
 
-d3-shape@1.2.0, d3-shape@^1.0.0, d3-shape@^1.2.0:
+d3-shape@^1.0.0, d3-shape@^1.2.0:
   version "1.2.0"
   resolved "http://localhost:4873/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
   dependencies:
@@ -2825,6 +2829,12 @@ ee-first@1.1.1:
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.27:
   version "1.3.27"
   resolved "http://localhost:4873/electron-to-chromium/-/electron-to-chromium-1.3.27.tgz#78ecb8a399066187bb374eede35d9c70565a803d"
+
+element-resize-detector@^1.1.12:
+  version "1.1.12"
+  resolved "http://localhost:4873/element-resize-detector/-/element-resize-detector-1.1.12.tgz#8b3fd6eedda17f9c00b360a0ea2df9927ae80ba2"
+  dependencies:
+    batch-processor "^1.0.0"
 
 elliptic@^6.0.0:
   version "6.4.0"
@@ -3488,6 +3498,10 @@ gauge@~2.7.3:
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "http://localhost:4873/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"
+
+get-node-dimensions@^1.2.0:
+  version "1.2.0"
+  resolved "http://localhost:4873/get-node-dimensions/-/get-node-dimensions-1.2.0.tgz#95298e32a752a155f29eb710e069557b4a7fe98c"
 
 get-stdin@^4.0.1:
   version "4.0.1"
@@ -5020,7 +5034,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "http://localhost:4873/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@4.x.x, "lodash@>=3.5 <5", lodash@^4.0.1, lodash@^4.14.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.1, lodash@^4.3.0, lodash@~4.17.4:
+lodash@4.x.x, "lodash@>=3.5 <5", lodash@^4.0.1, lodash@^4.14.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.4"
   resolved "http://localhost:4873/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -6369,12 +6383,6 @@ radium@^0.19.0:
     inline-style-prefixer "^2.0.5"
     prop-types "^15.5.8"
 
-raf@^3.2.0:
-  version "3.4.0"
-  resolved "http://localhost:4873/raf/-/raf-3.4.0.tgz#a28876881b4bc2ca9117d4138163ddb80f781575"
-  dependencies:
-    performance-now "^2.1.0"
-
 rafl@~1.2.1:
   version "1.2.2"
   resolved "http://localhost:4873/rafl/-/rafl-1.2.2.tgz#fe930f758211020d47e38815f5196a8be4150740"
@@ -6581,6 +6589,14 @@ react-komposer@^2.0.0:
     react-stubber "^1.0.0"
     shallowequal "^0.2.2"
 
+react-measure@^2.0.2:
+  version "2.0.2"
+  resolved "http://localhost:4873/react-measure/-/react-measure-2.0.2.tgz#072a9a5fafc01dfbadc1fa5fb09fc351037f636c"
+  dependencies:
+    get-node-dimensions "^1.2.0"
+    prop-types "^15.5.10"
+    resize-observer-polyfill "^1.4.2"
+
 react-modal@^2.4.1:
   version "2.4.1"
   resolved "http://localhost:4873/react-modal/-/react-modal-2.4.1.tgz#cb09b26711b148eb9f59cb180e1b7d82980ded05"
@@ -6604,12 +6620,6 @@ react-remarkable@^1.1.2:
   resolved "http://localhost:4873/react-remarkable/-/react-remarkable-1.1.3.tgz#6ef3861812d806fbf747cc1d1e151ee3172130a6"
   dependencies:
     remarkable "^1.x"
-
-react-resize-detector@1.1.0:
-  version "1.1.0"
-  resolved "http://localhost:4873/react-resize-detector/-/react-resize-detector-1.1.0.tgz#4a9831fa3caad32230478dd0185cbd2aa91a5ebf"
-  dependencies:
-    prop-types "^15.5.10"
 
 react-scripts-ts@2.8.0:
   version "2.8.0"
@@ -6662,14 +6672,13 @@ react-simple-di@^1.2.0:
     babel-runtime "6.x.x"
     hoist-non-react-statics "1.x.x"
 
-react-smooth@1.0.0:
-  version "1.0.0"
-  resolved "http://localhost:4873/react-smooth/-/react-smooth-1.0.0.tgz#b29dbebddddb06d21b5b08962167fb9eac1897d8"
+react-sizeme@^2.3.6:
+  version "2.3.6"
+  resolved "http://localhost:4873/react-sizeme/-/react-sizeme-2.3.6.tgz#d60ea2634acc3fd827a3c7738d41eea0992fa678"
   dependencies:
-    lodash "~4.17.4"
-    prop-types "^15.6.0"
-    raf "^3.2.0"
-    react-transition-group "^2.2.1"
+    element-resize-detector "^1.1.12"
+    invariant "^2.2.2"
+    lodash "^4.17.4"
 
 react-split-pane@^0.1.68:
   version "0.1.68"
@@ -6840,26 +6849,6 @@ recast@^0.12.6:
     private "~0.1.5"
     source-map "~0.6.1"
 
-recharts-scale@0.3.2:
-  version "0.3.2"
-  resolved "http://localhost:4873/recharts-scale/-/recharts-scale-0.3.2.tgz#dac7621714a4765d152cb2adbc30c73b831208c9"
-
-recharts@^1.0.0-beta.1:
-  version "1.0.0-beta.1"
-  resolved "http://localhost:4873/recharts/-/recharts-1.0.0-beta.1.tgz#0530554b12f1c9d717887f25d529dd3724f3ecf7"
-  dependencies:
-    classnames "2.2.5"
-    core-js "2.5.1"
-    d3-interpolate "^1.1.5"
-    d3-scale "1.0.6"
-    d3-shape "1.2.0"
-    lodash "~4.17.4"
-    prop-types "^15.6.0"
-    react-resize-detector "1.1.0"
-    react-smooth "1.0.0"
-    recharts-scale "0.3.2"
-    reduce-css-calc "1.3.0"
-
 rechoir@^0.6.2:
   version "0.6.2"
   resolved "http://localhost:4873/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
@@ -6888,7 +6877,7 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-reduce-css-calc@1.3.0, reduce-css-calc@^1.2.6:
+reduce-css-calc@^1.2.6:
   version "1.3.0"
   resolved "http://localhost:4873/reduce-css-calc/-/reduce-css-calc-1.3.0.tgz#747c914e049614a4c9cfbba629871ad1d2927716"
   dependencies:
@@ -7086,6 +7075,10 @@ require-main-filename@^1.0.1:
 requires-port@1.0.x, requires-port@1.x.x, requires-port@~1.0.0:
   version "1.0.0"
   resolved "http://localhost:4873/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
+
+resize-observer-polyfill@^1.4.2:
+  version "1.4.2"
+  resolved "http://localhost:4873/resize-observer-polyfill/-/resize-observer-polyfill-1.4.2.tgz#a37198e6209e888acb1532a9968e06d38b6788e5"
 
 resolve-dir@^1.0.0:
   version "1.0.1"
