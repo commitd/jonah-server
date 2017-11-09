@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { VictoryChart, VictoryBar, VictoryTheme } from 'victory'
-import sizeMe, { SizeMeProps } from 'react-sizeme'
+import { VictoryChart, VictoryBar } from 'victory'
 
 interface OwnProps {
     data: {
@@ -9,7 +8,7 @@ interface OwnProps {
     }[]
 }
 
-type Props = OwnProps & SizeMeProps
+type Props = OwnProps
 
 // TODO: Max height... ? the component keeps growing!! by +4 pixels each time
 
@@ -18,13 +17,11 @@ class BarChart extends React.Component<Props> {
         const { data } = this.props
         return (
             <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={10}
-                standalone={true}
-                width={this.props.size.width || 1}
-                height={600}
+                width={1500}
+                height={500}
+                domainPadding={100}
             >
-                <VictoryBar data={data} horizontal={true} />
+                <VictoryBar data={data} />
             </VictoryChart>
         )
     }
@@ -32,4 +29,4 @@ class BarChart extends React.Component<Props> {
 
 // TODO: Could add brushing here. See the Victory example.
 
-export default sizeMe<OwnProps>({ monitorHeight: true })(BarChart)
+export default BarChart

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { VictoryChart, VictoryLine, VictoryTheme } from 'victory'
-import sizeMe, { SizeMeProps } from 'react-sizeme'
+import { VictoryChart, VictoryLine } from 'victory'
 
 interface OwnProps {
     data: {
@@ -9,7 +8,7 @@ interface OwnProps {
     }[]
 }
 
-type Props = OwnProps & SizeMeProps
+type Props = OwnProps
 
 // TODO: Max height... ? the component keeps growing!! by +4 pixels each time
 
@@ -18,11 +17,7 @@ class TimelineChart extends React.Component<Props> {
         const { data } = this.props
         return (
             <VictoryChart
-                theme={VictoryTheme.material}
                 scale={{ x: 'time' }}
-                standalone={true}
-                width={this.props.size.width || 1}
-                height={500}
             >
                 <VictoryLine data={data} />
             </VictoryChart>
@@ -32,4 +27,4 @@ class TimelineChart extends React.Component<Props> {
 
 // TODO: Could add brushing here. See the Victory example.
 
-export default sizeMe<OwnProps>({ monitorHeight: true })(TimelineChart)
+export default TimelineChart
