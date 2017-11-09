@@ -4,9 +4,8 @@ import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import './index.css'
 
-import 'typeface-roboto'
+import 'semantic-ui-css/semantic.min.css'
 
-import { MaterialUi } from 'vessel-components'
 import { VesselUiPlugin } from 'vessel-plugin'
 import { PluginLifecycle } from 'vessel-common'
 import { Handler } from 'vessel-rpc'
@@ -33,12 +32,9 @@ const handler: Handler<PluginLifecycle> = {
 }
 
 ReactDOM.render(
-  <MaterialUi>
-    <VesselUiPlugin handler={handler}>
-      <App />
-    </VesselUiPlugin>
-  </MaterialUi>,
-
+  <VesselUiPlugin handler={handler}>
+    <App />
+  </VesselUiPlugin>,
   document.getElementById('root') as HTMLElement
 )
 registerServiceWorker()

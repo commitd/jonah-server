@@ -1,18 +1,5 @@
 import * as React from 'react'
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
-import { withStyles, StyleRulesCallback, WithStyles, Theme } from 'material-ui/styles'
-import Select from 'material-ui/Select'
-import { MenuItem } from 'material-ui/Menu'
-import { FormControl } from 'material-ui/Form'
-import Typography from 'material-ui/Typography'
-
-const styles: StyleRulesCallback = (theme: Theme) => ({
-    root: {
-        marginTop: 0,
-        width: '100%'
-    },
-})
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 interface Dataset {
     id: string,
@@ -24,7 +11,8 @@ interface OwnProps {
     selectedDataset?: string,
     onDatasetSelected?(id: String): void
 }
-type Props = OwnProps & WithStyles
+
+type Props = OwnProps
 
 class DatasetSelector extends React.Component<Props> {
 
@@ -53,29 +41,19 @@ class DatasetSelector extends React.Component<Props> {
 
     render() {
 
-        const { classes, datasets, selectedDataset } = this.props
+        const { datasets, selectedDataset } = this.props
 
+        const dataset = selectedDataset && datasets.find(d => d.id === selectedDataset)
         return (
-            < div className={classes.root} >
-                <AppBar position="static" color="default">
-                    <Toolbar>
-                        <Typography type="subheading">Dataset:&nbsp;</Typography>
-                        <FormControl>
-                            <Select
-                                value={selectedDataset || ''}
-                                onChange={this.handleDatasetSelected}
-                                displayEmpty={true}
-                            >
-                                <MenuItem value=""><em>Select...</em></MenuItem>
-                                {datasets.map(d => <MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-
-                    </Toolbar>
-                </AppBar>
-            </  div >
+            <Menu vertical={false}>
+                <Dropdown item={true} text={dataset ? dataset.name : 'Select dataset'}>
+                    <Dropdown.Menu>
+                        {datasets.map(d => <Dropdown.Item key={d.id}>{d.name}</Dropdown.Item>)}
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Menu>
         )
     }
 }
 
-export default withStyles(styles)(DatasetSelector)
+export default DatasetSelector

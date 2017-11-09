@@ -1,18 +1,8 @@
 import * as React from 'react'
 
-import Paper from 'material-ui/Paper'
-import { withStyles, StyleRulesCallback, WithStyles, Theme } from 'material-ui/styles'
-import Typography from 'material-ui/Typography'
+import { Statistic } from 'semantic-ui-react'
 
 import * as numeral from 'numeral'
-
-const counterStyle: StyleRulesCallback = (theme: Theme) => ({
-    paper: {
-        padding: 16,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-})
 
 type CounterProps = {
     value: number,
@@ -20,19 +10,19 @@ type CounterProps = {
     plural: string
 }
 
-class Counter extends React.Component<CounterProps & WithStyles> {
+class Counter extends React.Component<CounterProps> {
 
     render() {
-        const { classes, value, singular, plural } = this.props
+        const { value, singular, plural } = this.props
 
         const title = value === 1 ? singular : plural
         return (
-            <Paper className={classes.paper}>
-                <Typography type="display2">{numeral(value).format('0,0')}</Typography>
-                <Typography type="body2">{title}</Typography>
-            </Paper>
+            <Statistic>
+                <Statistic.Value>{numeral(value).format('0,0')}</Statistic.Value>
+                <Statistic.Label>{title}</Statistic.Label>
+            </Statistic>
         )
     }
 }
 
-export default withStyles(counterStyle)(Counter)
+export default Counter

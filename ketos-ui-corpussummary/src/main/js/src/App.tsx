@@ -4,7 +4,7 @@ import { graphql, gql, QueryProps } from 'react-apollo'
 
 import View from './ViewContainer'
 import DatasetSelector from './containers/DatasetSelectorContainer'
-
+import { Container } from 'semantic-ui-react'
 interface Response {
   corpora: {
     id: string
@@ -40,10 +40,10 @@ class App extends React.Component<Props, State> {
     const { datasetId } = this.state
 
     return (
-      <div>
+      <Container fluid={false}>
         <DatasetSelector selectedDataset={datasetId} onDatasetSelected={this.handleDatasetSelected} />
         {datasetId && <View dataset={datasetId} />}
-      </div>
+      </Container>
     )
   }
 }
