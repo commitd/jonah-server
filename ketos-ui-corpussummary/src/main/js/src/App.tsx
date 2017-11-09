@@ -2,7 +2,7 @@ import * as React from 'react'
 import { ChildProps } from 'vessel-plugin'
 import { graphql, gql, QueryProps } from 'react-apollo'
 
-import View from './components/View'
+import View from './View'
 import DatasetSelector from './containers/DatasetSelectorContainer'
 
 interface Response {

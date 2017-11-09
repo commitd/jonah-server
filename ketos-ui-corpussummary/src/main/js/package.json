@@ -13,7 +13,8 @@
     "react-scripts-ts": "2.8.0",
     "redux": "^3.7.0",
     "vessel-components": "*",
-    "vessel-plugin": "*"
+    "vessel-plugin": "*",
+    "victory": "^0.24.1"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts-ts start",
@@ -44,7 +45,8 @@
     "awesome-typescript-loader": "^3.3.0",
     "raw-loader": "^0.5.1",
     "react-test-renderer": "*",
-    "storybook-readme": "^3.1.1"
+    "storybook-readme": "^3.1.1",
+    "@types/victory": "^0.9.13"
   },
   "resolutions": {
     "@types/react": "16.0.21"
