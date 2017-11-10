@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { graphql, gql, QueryProps } from 'react-apollo'
 import View from './View'
+import { Loader } from 'semantic-ui-react'
 
 interface OwnProps {
     dataset: string
@@ -56,7 +57,7 @@ const container = (props: Props) => {
     const { data } = props
 
     if (!data || data.loading || !data.corpus) {
-        return <div />
+        return <Loader active={true} />
     }
 
     return (

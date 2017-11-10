@@ -16,7 +16,6 @@ class SimplePieChart extends React.Component<Props> {
         return (
             <VictoryPie
                 data={data}
-                colorScale="qualitative"
             />
         )
     }

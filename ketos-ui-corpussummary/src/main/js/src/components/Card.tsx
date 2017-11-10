@@ -12,7 +12,8 @@ class SimpleCard extends React.Component<Props> {
         return (
             <Card fluid={true}>
                 <Card.Content>
-                    {title && <Card.Header>{title} {subTitle && `- ${subTitle}`}</Card.Header>}
+                    {title && <Card.Header>{title}</Card.Header>}
+                    {subTitle && <Card.Meta>{subTitle}</Card.Meta>}
                     {children}
                 </Card.Content>
             </Card>
