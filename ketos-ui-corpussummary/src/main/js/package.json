@@ -5,19 +5,16 @@
   "license": "Apache-2.0",
   "dependencies": {
     "graphql": "^0.11.0",
-    "numeral": "^2.0.6",
+    "ketos-components": "*",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-apollo": "^1.4.16",
     "react-dom": "^16.0.0",
-    "react-measure": "^2.0.2",
     "react-scripts-ts": "2.8.0",
-    "react-sizeme": "^2.3.6",
     "redux": "^3.7.0",
-    "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.76.0",
     "vessel-components": "*",
     "vessel-plugin": "*",
+    "vessel-types": "^0.1.0",
     "victory": "^0.24.1"
   },
   "scripts": {
@@ -27,8 +24,7 @@
     "test:maven": "CI=true react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "link:vessel": "yarn link vessel-common vessel-graphql vessel-components vessel-redux vessel-rpc vessel-types vessel-utils vessel-plugin"
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
     "@storybook/addon-info": "^3.2.14",
@@ -38,16 +34,13 @@
     "@types/jest": "^21.1.5",
     "@types/loglevel": "^1.5.3",
     "@types/node": "^8.0.48",
-    "@types/numeral": "^0.0.22",
     "@types/react": "^16.0.21",
     "@types/react-dom": "^16.0.2",
-    "@types/react-measure": "^2.0.0",
     "@types/storybook__addon-actions": "^3.0.1",
     "@types/storybook__addon-info": "^3.2.0",
     "@types/storybook__addon-knobs": "^3.2.1",
     "@types/storybook__addon-links": "^3.0.2",
     "@types/storybook__react": "^3.0.5",
-    "@types/victory": "^0.9.13",
     "awesome-typescript-loader": "^3.3.0",
     "raw-loader": "^0.5.1",
     "react-test-renderer": "*",

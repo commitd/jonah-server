@@ -3,8 +3,9 @@ import { ChildProps } from 'vessel-plugin'
 import { graphql, gql, QueryProps } from 'react-apollo'
 
 import View from './ViewContainer'
-import DatasetSelector from './containers/DatasetSelectorContainer'
+import { DatasetSelector } from 'ketos-components'
 import { Container } from 'semantic-ui-react'
+
 interface Response {
   corpora: {
     id: string
