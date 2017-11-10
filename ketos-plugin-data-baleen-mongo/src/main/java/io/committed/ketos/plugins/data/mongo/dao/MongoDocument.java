@@ -18,6 +18,7 @@ public class MongoDocument {
   @Id
   private String id;
   private String externalId;
+  // TODO: This should be a MongoDocumentInfo as it needs to deserialise to db, rather than graphql
   private BaleenDocumentInfo document;
   private List<String> publishedIds;
   private Map<String, Object> metadata = new HashMap<>();
