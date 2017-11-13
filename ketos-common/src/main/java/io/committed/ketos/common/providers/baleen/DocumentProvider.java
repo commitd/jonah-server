@@ -12,9 +12,11 @@ public interface DocumentProvider extends DataProvider {
 
   Mono<BaleenDocument> getById(String id);
 
-  Flux<BaleenDocument> search(String search, int limit);
+  Flux<BaleenDocument> search(String search, int offset, int size);
 
-  Flux<BaleenDocument> all(int limit);
+
+
+  Flux<BaleenDocument> all(int offset, int size);
 
   Mono<Long> count();
 
@@ -22,14 +24,14 @@ public interface DocumentProvider extends DataProvider {
 
   Flux<TimeBin> countByDate();
 
-
-  @Override
-  default String getProviderType() {
-    return "DocumentProvider";
-  }
+  Mono<Long> countSearchMatches(String query);
 
   Flux<TermBin> countByClassification();
 
   Flux<TermBin> countByLanguage();
 
+  @Override
+  default String getProviderType() {
+    return "DocumentProvider";
+  }
 }

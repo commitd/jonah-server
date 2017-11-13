@@ -12,5 +12,7 @@ public class BaleenDocumentSearch extends AbstractGraphQLNodeSupport<BaleenDocum
 
   private String query;
 
-  private int limit;
+  private int offset;
+
+  private int size;
 }

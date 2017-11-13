@@ -1,3 +1,4 @@
+
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -39,16 +40,23 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
   }
 
   @Override
-  public Flux<BaleenDocument> search(final String search, final int limit) {
+  public Flux<BaleenDocument> search(final String search, final int offset, final int limit) {
     return documents
         .searchDocuments(search)
+        // TODO: CF: I don't know how the implementation of Mongo Reactive works, but I assume
+        // providing offset and limit upfront in the query would be more efficient.
+        .skip(offset)
         .take(limit)
         .map(MongoDocument::toDocument);
   }
 
   @Override
-  public Flux<BaleenDocument> all(final int limit) {
-    return documents.findAll().take(limit).map(MongoDocument::toDocument);
+  public Flux<BaleenDocument> all(final int offset, final int size) {
+    return documents.findAll()
+        // CF: Move this offset&size... into the pagination
+        .skip(offset)
+        .take(size)
+        .map(MongoDocument::toDocument);
   }
 
   @Override
@@ -59,6 +67,11 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
   @Override
   public Mono<Long> count() {
     return documents.count();
+  }
+
+  @Override
+  public Mono<Long> countSearchMatches(final String query) {
+    return documents.countSearchDocuments(query);
   }
 
   @Override
@@ -82,9 +95,7 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
   @Override
   public Flux<TermBin> countByClassification() {
     return termAggregation("document.classification");
-
   }
-
 
   @Override
   public Flux<TimeBin> countByDate() {
@@ -102,3 +113,4 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
 
 
 }
+

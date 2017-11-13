@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Data
 @NoArgsConstructor
@@ -12,4 +13,5 @@ import reactor.core.publisher.Flux;
 public class BaleenDocuments extends AbstractGraphQLNodeSupport<BaleenDocuments> {
   private Flux<BaleenDocument> results;
 
+  private Mono<Long> totalCount = Mono.empty();
 }

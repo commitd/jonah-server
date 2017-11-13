@@ -36,5 +36,6 @@ public interface BaleenDocumentRepository
   @Query(value = "{ $text: { $search: ?0 } }")
   Flux<MongoDocument> searchDocuments(String terms);
 
-
+  @Query(value = "{ $text: { $search: ?0 } }", count = true)
+  Mono<Long> countSearchDocuments(String terms);
 }

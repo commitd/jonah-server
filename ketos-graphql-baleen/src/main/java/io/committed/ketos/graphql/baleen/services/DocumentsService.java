@@ -20,6 +20,7 @@ import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @VesselGraphQlService
@@ -43,26 +44,37 @@ public class DocumentsService extends AbstractGraphQlService {
   @GraphQLQuery(name = "searchDocuments")
   public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "search") final String search,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
+      @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size) {
 
-    return new BaleenDocumentSearch(search, limit)
+    return new BaleenDocumentSearch(search, offset, size)
         .addNodeContext(corpus);
   }
 
   @GraphQLQuery(name = "sampleDocuments")
   public BaleenDocuments getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
+      @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size) {
+
+    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class);
+
+    final Flux<BaleenDocument> documents = providers
+        .flatMap(p -> p.all(offset, size))
+        .map(addContext(corpus));
+
+    final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
 
     return new BaleenDocuments(
-        getProviders(corpus, DocumentProvider.class).flatMap(p -> p.all(limit))
-            .take(limit))
-                .addNodeContext(corpus);
+        documents,
+        count)
+            .addNodeContext(corpus);
   }
 
 
   @GraphQLQuery(name = "hits")
-  public BaleenDocuments getDocuments(@GraphQLContext final BaleenDocumentSearch documentSearch,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
+  public BaleenDocuments getDocuments(@GraphQLContext final BaleenDocumentSearch documentSearch) {
+
+    // TODO; Should limit be here or on the above??
 
     final Optional<BaleenCorpus> corpus =
         documentSearch.getGqlNode().findParent(BaleenCorpus.class);
@@ -71,12 +83,18 @@ public class DocumentsService extends AbstractGraphQlService {
       return null;
     }
 
-    return new BaleenDocuments(
-        getProviders(corpus.get(), DocumentProvider.class)
-            .flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getLimit())
-                .map(addContext(documentSearch)))
-            .take(limit))
-                .addNodeContext(documentSearch);
+    final Flux<DocumentProvider> providers = getProviders(corpus.get(), DocumentProvider.class);
+
+    final Flux<BaleenDocument> documents = providers
+        .flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getOffset(),
+            documentSearch.getSize()))
+        .map(addContext(corpus));
+
+    final Mono<Long> count =
+        providers.flatMap(p -> p.countSearchMatches(documentSearch.getQuery()))
+            .reduce(0L, Long::sum);
+
+    return new BaleenDocuments(documents, count).addNodeContext(documentSearch);
   }
 
   @GraphQLQuery(name = "documentCount")
