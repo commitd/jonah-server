@@ -102,5 +102,6 @@
     <module>ketos-graphql-baleen</module>
     <module>ketos-core</module>
     <module>ketos-ui-corpussummary</module>
+    <module>ketos-ui-documentsearch</module>
   </modules>
 </project>
