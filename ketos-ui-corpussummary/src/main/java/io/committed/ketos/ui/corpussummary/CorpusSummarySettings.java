@@ -3,8 +3,6 @@ package io.committed.ketos.ui.corpussummary;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.Data;
-
 /**
  * Configurable settings for the CorpusSummary plugin.
  *
@@ -41,7 +39,6 @@ import lombok.Data;
  */
 @Configuration
 @ConfigurationProperties("corpus-summary")
-@Data 
 public class CorpusSummarySettings {
 
   // TODO: Create any settings you need here

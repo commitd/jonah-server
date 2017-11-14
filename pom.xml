@@ -103,5 +103,6 @@
     <module>ketos-core</module>
     <module>ketos-ui-corpussummary</module>
     <module>ketos-ui-documentsearch</module>
+    <module>ketos-ui-documentreader</module>    
   </modules>
 </project>

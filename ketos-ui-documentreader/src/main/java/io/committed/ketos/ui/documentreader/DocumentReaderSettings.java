@@ -1,8 +1,7 @@
-package io.committed.ketos.ui.documentsearch;
+package io.committed.ketos.ui.documentreader;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -40,9 +39,8 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
-@EnableConfigurationProperties
-@ConfigurationProperties("document-summary")
-public class DocumentSearchSettings {
+@ConfigurationProperties("document-reader")
+public class DocumentReaderSettings {
 
   // TODO: Create any settings you need here
 }

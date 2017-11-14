@@ -1,7 +1,0 @@
-{
-  "extends": "../../../../../ketos-js/config/tsconfig.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "build/dist"
-  }
-}

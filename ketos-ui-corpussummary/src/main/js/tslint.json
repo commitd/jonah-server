@@ -1,5 +1,0 @@
-{
-    "extends": [
-        "../../../../../ketos-js/config/tslint.json"
-    ]
-}
