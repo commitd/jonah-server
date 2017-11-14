@@ -1,12 +1,17 @@
 package io.committed.ketos.ui.documentsearch;
 
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 import io.committed.vessel.extensions.VesselUiExtension;
 
 /**
  * Extension point for CorpusSummary.
  *
  */
+@Configuration
+@ComponentScan
 public class DocumentSearchPlugin implements VesselUiExtension {
 
   @Override

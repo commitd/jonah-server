@@ -34,14 +34,14 @@ public class JpaDocumentProvider extends AbstractDataProvider implements Documen
   }
 
   @Override
-  public Flux<BaleenDocument> search(final String search, final int limit) {
+  public Flux<BaleenDocument> search(final String search, final int offset, final int size) {
     // TODO Could implemnent this with SQL like (slow) or something DB specific
     return Flux.empty();
   }
 
   @Override
-  public Flux<BaleenDocument> all(final int limit) {
-    final Page<JpaDocument> page = documents.findAll(PageRequest.of(0, limit));
+  public Flux<BaleenDocument> all(final int offset, final int limit) {
+    final Page<JpaDocument> page = documents.findAll(PageRequest.of(offset / limit, limit));
     return Flux.fromStream(page.stream().map(this::addMetadataAndConvert));
   }
 
@@ -55,6 +55,7 @@ public class JpaDocumentProvider extends AbstractDataProvider implements Documen
   public String getDatabase() {
     return DatabaseConstants.SQL;
   }
+
 
 
 }

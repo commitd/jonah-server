@@ -5,17 +5,9 @@ import org.springframework.context.annotation.Configuration;
 
 import io.committed.vessel.extensions.VesselGraphQlExtension;
 
+@Configuration
+@ComponentScan(basePackageClasses = BaleenGraphQlPlugin.class)
 public class BaleenGraphQlPlugin implements VesselGraphQlExtension {
 
-  @Override
-  public Class<?> getConfiguration() {
-    return PluginConfiguration.class;
-  }
 
-  @Configuration
-  @ComponentScan(basePackageClasses = PluginConfiguration.class)
-  public static class PluginConfiguration {
-
-
-  }
 }

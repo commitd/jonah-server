@@ -1,12 +1,13 @@
 package io.committed.vessel.plugin.data.jpa;
 
-import io.committed.vessel.extensions.VesselGraphQlExtension;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class BaleenJpaPlugin implements VesselGraphQlExtension {
+import io.committed.vessel.extensions.VesselDataExtension;
 
-  @Override
-  public Class<?> getConfiguration() {
-    return BaleenJpaConfig.class;
-  }
+@Configuration
+@Import(BaleenJpaPlugin.class)
+public class BaleenJpaPlugin implements VesselDataExtension {
+
 
 }

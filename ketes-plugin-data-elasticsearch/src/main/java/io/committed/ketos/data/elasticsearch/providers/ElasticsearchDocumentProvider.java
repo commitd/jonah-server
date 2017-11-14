@@ -31,7 +31,7 @@ public class ElasticsearchDocumentProvider extends AbstractDataProvider
   }
 
   @Override
-  public Flux<BaleenDocument> all(final int limit) {
+  public Flux<BaleenDocument> all(final int offset, final int size) {
     // TODO: Throw error or just return nothing?
     // return Flux.error(new Exception("Not supported"));
     return Flux.empty();

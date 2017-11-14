@@ -1,12 +1,13 @@
 package io.committed.ketos.data.elasticsearch;
 
-import io.committed.vessel.extensions.VesselGraphQlExtension;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class BaleenElasticsearchPlugin implements VesselGraphQlExtension {
+import io.committed.vessel.extensions.VesselDataExtension;
 
-  @Override
-  public Class<?> getConfiguration() {
-    return BaleenElasticsearchConfig.class;
-  }
+@Configuration
+@Import(BaleenElasticsearchConfig.class)
+public class BaleenElasticsearchPlugin implements VesselDataExtension {
+
 
 }

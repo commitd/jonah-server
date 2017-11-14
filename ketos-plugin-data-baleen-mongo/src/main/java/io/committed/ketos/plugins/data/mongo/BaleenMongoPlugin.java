@@ -1,12 +1,12 @@
 package io.committed.ketos.plugins.data.mongo;
 
-import io.committed.vessel.extensions.VesselGraphQlExtension;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class BaleenMongoPlugin implements VesselGraphQlExtension {
+import io.committed.vessel.extensions.VesselDataExtension;
 
-  @Override
-  public Class<?> getConfiguration() {
-    return BaleenMongoConfig.class;
-  }
+@Configuration
+@Import(BaleenMongoConfig.class)
+public class BaleenMongoPlugin implements VesselDataExtension {
 
 }

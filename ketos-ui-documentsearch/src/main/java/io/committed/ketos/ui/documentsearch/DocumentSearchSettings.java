@@ -43,8 +43,8 @@ import lombok.Data;
  */
 @Configuration
 @EnableConfigurationProperties
-@ConfigurationProperties("DocumentSummary")
-@Data
+@ConfigurationProperties("document-summary")
+@Data 
 public class DocumentSearchSettings {
 
   // TODO: Create any settings you need here

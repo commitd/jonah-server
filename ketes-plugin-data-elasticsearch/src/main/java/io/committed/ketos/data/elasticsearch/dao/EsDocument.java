@@ -43,7 +43,7 @@ public class EsDocument {
             .language(language)
             .releasability(releasability)
             .source(sourceUri)
-            .ts(dateAccessed.getTime())
+            .timestamp(new Date(dateAccessed.getTime()))
             .type(docType)
             .build())
         .build();

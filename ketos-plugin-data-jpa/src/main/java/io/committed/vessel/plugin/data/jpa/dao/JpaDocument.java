@@ -40,7 +40,7 @@ public class JpaDocument {
             .releasability(releasability)
             .language(language)
             .source(source)
-            .ts(processed.getTime())
+            .timestamp(processed)
             .type(type)
             .build())
         .build();
