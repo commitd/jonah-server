@@ -15,6 +15,8 @@ public class KetosCoreActions {
 
   // Types
 
+  public static final String CORPUS = "corpus";
+
   public static final String DOCUMENT = "document";
 
   public static final String ENTITY = "entity";
@@ -30,6 +32,8 @@ public class KetosCoreActions {
 
 
   // Actual actions
+
+  public static final String CORPUS_VIEW = make(CORPUS, VIEW);
 
   public static final String DOCUMENT_VIEW = make(DOCUMENT, VIEW);
 

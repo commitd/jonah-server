@@ -1,8 +1,14 @@
 package io.committed.ketos.ui.corpussummary;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import io.committed.ketos.common.ui.actions.KetosCoreActions;
+import io.committed.vessel.actions.ActionDefinition;
+import io.committed.vessel.actions.SimpleActionDefinition;
 import io.committed.vessel.extensions.VesselUiExtension;
 
 /**
@@ -36,6 +42,13 @@ public class CorpusSummaryPlugin implements VesselUiExtension {
   @Override
   public String getDescription() {
     return "Overview of corpus content";
+  }
+
+  @Override
+  public Collection<ActionDefinition> getActions() {
+    return Arrays.asList(
+        SimpleActionDefinition.builder().title("Summary").description("Corpus dashboard")
+            .action(KetosCoreActions.CORPUS_VIEW).build());
   }
 
   // TODO: You should override to provide additional information such name, description and logo
