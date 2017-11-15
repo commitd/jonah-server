@@ -23,6 +23,21 @@ public class CorpusSummaryPlugin implements VesselUiExtension {
     return CorpusSummarySettings.class;
   }
 
+  @Override
+  public String getName() {
+    return "Corpus summary";
+  }
+
+  @Override
+  public String getIcon() {
+    return "line chart";
+  }
+
+  @Override
+  public String getDescription() {
+    return "Overview of corpus content";
+  }
+
   // TODO: You should override to provide additional information such name, description and logo
 
   @Override
