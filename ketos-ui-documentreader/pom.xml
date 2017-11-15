@@ -18,6 +18,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-common</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>

@@ -5,10 +5,12 @@ import java.util.Arrays;
 import com.google.common.base.Joiner;
 
 public class KetosCoreActions {
+  public static final String SEPARATOR = ".";
+
+  private static final Joiner JOINER = Joiner.on(SEPARATOR).skipNulls();
 
   //
 
-  public static final String SEPARATOR = ".";
 
 
   // Types
@@ -38,9 +40,6 @@ public class KetosCoreActions {
   public static final String EVENT_VIEW = make(EVENT, VIEW);
 
 
-  // Utilities
-
-  private static final Joiner JOINER = Joiner.on(SEPARATOR).skipNulls();
 
   public static String make(final String... parts) {
     return JOINER.join(Arrays.asList(parts));

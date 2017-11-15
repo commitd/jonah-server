@@ -1,9 +1,15 @@
 package io.committed.ketos.ui.documentreader;
 
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import io.committed.ketos.common.ui.actions.KetosCoreActions;
+import io.committed.vessel.actions.ActionDefinition;
+import io.committed.vessel.actions.SimpleActionDefinition;
 import io.committed.vessel.extensions.VesselUiExtension;
 
 /**
@@ -32,6 +38,17 @@ public class DocumentReaderPlugin implements VesselUiExtension {
   @Override
   public String getIcon() {
     return "file text outline";
+  }
+
+  @Override
+  public Collection<ActionDefinition> getActions() {
+    return Arrays.asList(
+        SimpleActionDefinition.builder()
+            .action(KetosCoreActions.DOCUMENT_VIEW)
+            .title("Read")
+            .description(getDescription())
+            .build());
+
   }
 
   @Override
