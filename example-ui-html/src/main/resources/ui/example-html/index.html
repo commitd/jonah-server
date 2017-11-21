@@ -1,0 +1,21 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/static/libs/semantic-2.2.css">
+	<script src="/static/libs/react-16.0.js"></script>
+	<script src="/static/libs/react-dom-16.0.js"></script>
+
+	<script src="/static/libs/jquery-3.2.js"></script>
+	<script src="/static/libs/semantic-2.2.js"></script>
+	<script src="/static/libs/vessel.js"></script>
+</head>
+<body>
+	<h1 class="ui header">An example plugin using Vessel and Semantic</h1>
+
+	<script>
+	var c = Vessel.connect()
+	c.query('query { vesselServer { uiPlugins { name } } } ').then(d => {
+		console.log(d.data)
+	})
+</script>
+</body>
+</html>
