@@ -7,6 +7,7 @@
   <artifactId>ketos-java</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <name>Ketos Java Parent</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -98,13 +99,14 @@
   <modules>
     <module>ketos-core</module>
     <module>ketos-common</module>
-    <module>ketos-plugin-data-baleen-mongo</module>
-    <module>ketes-plugin-data-elasticsearch</module>
-    <module>ketos-plugin-data-jpa</module>
+    <module>ketos-data-baleen-mongo</module>
+    <module>ketos-data-baleen-elasticsearch</module>
+    <module>ketos-data-baleen-jpa</module>
     <module>ketos-graphql-baleen</module>
     <module>ketos-ui-corpussummary</module>
     <module>ketos-ui-documentsearch</module>
     <module>ketos-ui-documentreader</module>
     <module>ketos-ui-corpuslist</module>
+    <module>ketos-ui-example-html</module>
   </modules>
 </project>

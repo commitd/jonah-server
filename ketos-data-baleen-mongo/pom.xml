@@ -6,7 +6,7 @@
     <artifactId>ketos-java</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>ketos-plugin-data-baleen-mongo</artifactId>
+  <artifactId>ketos-data-baleen-mongo</artifactId>
 
   <dependencies>
 
@@ -27,4 +27,5 @@
     </dependency>
 
   </dependencies>
+  <name>Ketos Data Baleen Mongo</name>
 </project>

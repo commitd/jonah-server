@@ -18,4 +18,5 @@
       <artifactId>ketos-common</artifactId>
     </dependency>
   </dependencies>
+  <name>Ketos GraphQL Baleen</name>
 </project>
