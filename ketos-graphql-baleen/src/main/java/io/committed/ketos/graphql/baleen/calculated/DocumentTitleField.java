@@ -70,9 +70,15 @@ public class DocumentTitleField {
   }
 
   private String extractFromLastPathSegment(final String source, final char seperator) {
-    final int index = source.lastIndexOf(seperator, source.length() - 1);
+    int lastIndex;
+    if (source.charAt(source.length() - 1) == seperator) {
+      lastIndex = source.length() - 2;
+    } else {
+      lastIndex = source.length() - 1;
+    }
+    final int index = source.lastIndexOf(seperator, lastIndex);
     if (index < source.length() - 1) {
-      final String filename = source.substring(index + 1);
+      final String filename = source.substring(index + 1, lastIndex + 1);
 
       final int extensionIndex = filename.indexOf('.');
       // doesn't start with it and exists
