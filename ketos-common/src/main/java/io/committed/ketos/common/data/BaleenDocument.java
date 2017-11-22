@@ -28,7 +28,7 @@ public class BaleenDocument extends AbstractGraphQLNodeSupport<BaleenDocument> {
   private Map<String, Object> metadata = new HashMap<>();
   private String content;
 
-  @GraphQLQuery(name = "length")
+  @GraphQLQuery(name = "length", description = "Length of document content in characters")
   public int length() {
     return content.length();
   }

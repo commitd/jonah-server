@@ -32,23 +32,24 @@ public class BaleenEntity extends AbstractGraphQLNodeSupport<BaleenEntity> {
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
   private List<BaleenMention> mentions;
 
-  @GraphQLQuery(name = "values")
+  @GraphQLQuery(name = "values", description = "Values associated with this entity")
   public List<String> getValues() {
     return mentions.stream().map(BaleenMention::getValue).collect(Collectors.toList());
   }
 
-  @GraphQLQuery(name = "longestValue")
+  @GraphQLQuery(name = "longestValue", description = "Longest value associated with this entity")
   public Optional<String> longestValue(@GraphQLContext final BaleenEntity entity) {
     return entity.getMentions().stream().map(BaleenMention::getValue)
         .collect(Collectors.maxBy((o1, o2) -> Integer.compare(o1.length(), o2.length())));
   }
 
-  @GraphQLQuery(name = "types")
+  @GraphQLQuery(name = "types",
+      description = "Distinct entity types assocated with mentions of this entity")
   public List<String> getTypes() {
-    return mentions.stream().map(BaleenMention::getType).collect(Collectors.toList());
+    return mentions.stream().map(BaleenMention::getType).distinct().collect(Collectors.toList());
   }
 
-  @GraphQLQuery(name = "type")
+  @GraphQLQuery(name = "type", description = "Primary types associated with this entity")
   public Optional<String> getType() {
     return mentions.stream().map(BaleenMention::getType).findFirst();
   }

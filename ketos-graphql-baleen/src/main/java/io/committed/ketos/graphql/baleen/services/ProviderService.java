@@ -16,7 +16,8 @@ public class ProviderService {
   @Autowired
   private DatasetProviders corpusProviders;
 
-  @GraphQLQuery
+  @GraphQLQuery(name = "providers",
+      description = "Access the data providesr available for this corpus")
   public Flux<DataProvider> providers(@GraphQLContext final BaleenCorpus corpus) {
     // TODO: Probably this should be a dto, just incase tehre's any sensitive information
     return corpusProviders.findForDataset(corpus.getId());

@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.committed.ketos.common.data.BaleenEntity;
-import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
 
 @Document(collection = "entities")
@@ -23,7 +22,6 @@ public class MongoEntities {
   private String docId;
 
   @JsonProperty("entities")
-  @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
   private List<MongoMention> entities;
 
   public BaleenEntity toEntity() {

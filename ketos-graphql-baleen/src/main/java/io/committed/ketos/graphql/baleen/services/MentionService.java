@@ -22,14 +22,14 @@ public class MentionService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-  @GraphQLQuery(name = "mentions")
+  @GraphQLQuery(name = "mentions", description = "Get all mentiosn in the document")
   public Flux<BaleenMention> getMentionsByDocument(@GraphQLContext final BaleenDocument document) {
     return getProvidersFromContext(document, MentionProvider.class)
         .flatMap(p -> p.getMentionsByDocument(document))
         .map(this.addContext(document));
   }
 
-  @GraphQLQuery(name = "source")
+  @GraphQLQuery(name = "source", description = "Get the source entity of this relation")
   public Mono<BaleenMention> source(@GraphQLContext final BaleenRelation relation) {
     return getProvidersFromContext(relation, MentionProvider.class)
         .flatMap(p -> p.source(relation))
@@ -38,7 +38,7 @@ public class MentionService extends AbstractGraphQlService {
         .next();
   }
 
-  @GraphQLQuery(name = "target")
+  @GraphQLQuery(name = "target", description = "Get the target entity of this relation")
   public Mono<BaleenMention> target(@GraphQLContext final BaleenRelation relation) {
     return getProvidersFromContext(relation, MentionProvider.class)
         .flatMap(p -> p.target(relation))

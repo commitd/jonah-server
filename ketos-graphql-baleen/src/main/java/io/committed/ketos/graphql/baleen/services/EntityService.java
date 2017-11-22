@@ -28,14 +28,14 @@ public class EntityService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-  @GraphQLQuery(name = "allEntities")
+  @GraphQLQuery(name = "allEntities", description = "Get all entities")
   public Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document) {
     return getProvidersFromContext(document, EntityProvider.class)
         .flatMap(p -> p.getByDocument(document))
         .map(addContext(document));
   }
 
-  @GraphQLQuery(name = "entities")
+  @GraphQLQuery(name = "entities", description = "Get entities by type")
   public Flux<BaleenEntity> getByDocumentAndType(
       @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
       @GraphQLNonNull @GraphQLArgument(name = "type",
@@ -47,7 +47,7 @@ public class EntityService extends AbstractGraphQlService {
         .map(addContext(document));
   }
 
-  @GraphQLQuery(name = "entities")
+  @GraphQLQuery(name = "entities", description = "Get entities by type and value")
   public Flux<BaleenEntity> getByDocumentAndValue(
       @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
       @GraphQLNonNull @GraphQLArgument(name = "value",
@@ -59,7 +59,7 @@ public class EntityService extends AbstractGraphQlService {
         .map(addContext(document));
   }
 
-  @GraphQLQuery(name = "entities")
+  @GraphQLQuery(name = "entities", description = "Get entities by type")
   public Flux<BaleenEntity> getByDocumentAndType(
       @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
       @GraphQLArgument(name = "type", description = "The type of the entity") final String type,
@@ -73,7 +73,7 @@ public class EntityService extends AbstractGraphQlService {
 
 
 
-  @GraphQLQuery(name = "entity")
+  @GraphQLQuery(name = "entity", description = "Get entities by id")
   public Mono<BaleenEntity> getById(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "id") @GraphQLId final String id) {
     return getProviders(corpus, EntityProvider.class)
@@ -83,7 +83,7 @@ public class EntityService extends AbstractGraphQlService {
   }
 
 
-  @GraphQLQuery(name = "of")
+  @GraphQLQuery(name = "of", description = "Get entities for a mention")
   public Mono<BaleenEntity> mentionEntity(@GraphQLContext final BaleenMention mention) {
     return getProvidersFromContext(mention, EntityProvider.class)
         .flatMap(p -> p.mentionEntity(mention))
@@ -91,14 +91,14 @@ public class EntityService extends AbstractGraphQlService {
         .next();
   }
 
-  @GraphQLQuery(name = "entityCount")
+  @GraphQLQuery(name = "entityCount", description = "Number of entities in corpus")
   public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, EntityProvider.class)
         .flatMap(EntityProvider::count)
         .reduce(0L, (a, b) -> a + b);
   }
 
-  @GraphQLQuery(name = "entityTypes")
+  @GraphQLQuery(name = "entityTypes", description = "Count of entities by entity type")
   public Mono<TermCount> getEntityTypes(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, EntityProvider.class)
         .flatMap(EntityProvider::countByType)
@@ -106,7 +106,5 @@ public class EntityService extends AbstractGraphQlService {
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
         .collectList()
         .map(TermCount::new);
-
-
   }
 }

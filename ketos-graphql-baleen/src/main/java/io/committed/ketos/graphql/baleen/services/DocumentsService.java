@@ -31,9 +31,9 @@ public class DocumentsService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-  @GraphQLQuery(name = "document")
+  @GraphQLQuery(name = "document", description = "Get document by id")
   public Mono<BaleenDocument> getDocument(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "id") final String id) {
+      @GraphQLNonNull @GraphQLArgument(name = "id", description = "Document id") final String id) {
 
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(p -> p.getById(id))
@@ -41,20 +41,29 @@ public class DocumentsService extends AbstractGraphQlService {
         .next();
   }
 
-  @GraphQLQuery(name = "searchDocuments")
+  @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
   public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "search") final String search,
-      @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "size", defaultValue = "10") final int size) {
+      @GraphQLNonNull @GraphQLArgument(name = "search",
+          description = "Search query") final String search,
+      @GraphQLArgument(name = "offset",
+          description = "Index of first document to return, for pagination",
+          defaultValue = "0") final int offset,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of documents to return, for pagination",
+          defaultValue = "10") final int size) {
 
     return new BaleenDocumentSearch(search, offset, size)
         .addNodeContext(corpus);
   }
 
-  @GraphQLQuery(name = "sampleDocuments")
+  @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
   public BaleenDocuments getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "size", defaultValue = "10") final int size) {
+      @GraphQLArgument(name = "offset",
+          description = "Index of first document to return, for pagination",
+          defaultValue = "0") final int offset,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of documents to return, for pagination",
+          defaultValue = "10") final int size) {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class);
 
@@ -71,7 +80,7 @@ public class DocumentsService extends AbstractGraphQlService {
   }
 
 
-  @GraphQLQuery(name = "hits")
+  @GraphQLQuery(name = "hits", description = "Get search hits")
   public BaleenDocuments getDocuments(@GraphQLContext final BaleenDocumentSearch documentSearch) {
 
     // TODO; Should limit be here or on the above??
@@ -97,14 +106,14 @@ public class DocumentsService extends AbstractGraphQlService {
     return new BaleenDocuments(documents, count).addNodeContext(documentSearch);
   }
 
-  @GraphQLQuery(name = "documentCount")
+  @GraphQLQuery(name = "documentCount", description = "Get the number of documents")
   public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(DocumentProvider::count)
         .reduce(0L, Long::sum);
   }
 
-  @GraphQLQuery(name = "documentTypes")
+  @GraphQLQuery(name = "documentTypes", description = "Count of documents per document type")
   public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(DocumentProvider::countByType)
@@ -114,7 +123,7 @@ public class DocumentsService extends AbstractGraphQlService {
         .map(TermCount::new);
   }
 
-  @GraphQLQuery(name = "documentLanguages")
+  @GraphQLQuery(name = "documentLanguages", description = "Count of documents per language")
   public Mono<TermCount> getDocumentLanguages(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(DocumentProvider::countByLanguage)
@@ -124,7 +133,8 @@ public class DocumentsService extends AbstractGraphQlService {
         .map(TermCount::new);
   }
 
-  @GraphQLQuery(name = "documentClassifications")
+  @GraphQLQuery(name = "documentClassifications",
+      description = "Count of documents per classification")
   public Mono<TermCount> getDocumentClassification(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(DocumentProvider::countByClassification)
@@ -134,7 +144,7 @@ public class DocumentsService extends AbstractGraphQlService {
         .map(TermCount::new);
   }
 
-  @GraphQLQuery(name = "documentTimeline")
+  @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")
   public Mono<Timeline> getDocumentTimeline(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, DocumentProvider.class)
         .flatMap(DocumentProvider::countByDate)

@@ -23,12 +23,13 @@ public class CorpusService {
 
   }
 
-  @GraphQLQuery(name = "corpus")
-  public Mono<BaleenCorpus> corpus(@GraphQLNonNull @GraphQLArgument(name = "id") final String id) {
+  @GraphQLQuery(name = "corpus", description = "Access to a particular corpus dataset")
+  public Mono<BaleenCorpus> corpus(@GraphQLNonNull @GraphQLArgument(name = "id",
+      description = "The corpus id") final String id) {
     return corpusRegistry.findById(id).map(this::toBaleenCorpus);
   }
 
-  @GraphQLQuery(name = "corpora")
+  @GraphQLQuery(name = "corpora", description = "Access to all corpora available")
   public Flux<BaleenCorpus> corpora() {
     return corpusRegistry.getDatasets().map(this::toBaleenCorpus);
   }

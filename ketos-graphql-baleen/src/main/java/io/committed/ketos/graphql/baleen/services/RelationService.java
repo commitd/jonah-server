@@ -25,7 +25,7 @@ public class RelationService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-  @GraphQLQuery(name = "relations")
+  @GraphQLQuery(name = "relations", description = "Get all relations in this document")
   public Flux<BaleenRelation> getRelations(@GraphQLContext final BaleenDocument document) {
     return getProvidersFromContext(document, RelationProvider.class)
         .flatMap(p -> p.getRelations(document))
@@ -33,21 +33,21 @@ public class RelationService extends AbstractGraphQlService {
 
   }
 
-  @GraphQLQuery(name = "sourceOf")
+  @GraphQLQuery(name = "sourceOf", description = "Find relations which have the mention as source")
   public Flux<BaleenRelation> getSourceRelations(@GraphQLContext final BaleenMention mention) {
     return getProvidersFromContext(mention, RelationProvider.class)
         .flatMap(p -> p.getSourceRelations(mention))
         .map(this.addContext(mention));
   }
 
-  @GraphQLQuery(name = "targetOf")
+  @GraphQLQuery(name = "targetOf", description = "Find relations which have the mention as target")
   public Flux<BaleenRelation> getTargetRelations(@GraphQLContext final BaleenMention mention) {
     return getProvidersFromContext(mention, RelationProvider.class)
         .flatMap(p -> p.getTargetRelations(mention))
         .map(this.addContext(mention));
   }
 
-  @GraphQLQuery(name = "relation")
+  @GraphQLQuery(name = "relation", description = "Find a relation by id")
   public Mono<BaleenRelation> getById(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "id") final String id) {
     return getProviders(corpus, RelationProvider.class)
@@ -57,7 +57,7 @@ public class RelationService extends AbstractGraphQlService {
   }
 
   // FIXME: should be relations - current bug in spqr
-  @GraphQLQuery(name = "allRelations")
+  @GraphQLQuery(name = "allRelations", description = "Get all relations in the corpus")
   public Flux<BaleenRelation> getAllRelations(
       @GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
@@ -76,7 +76,8 @@ public class RelationService extends AbstractGraphQlService {
   // .map(this.addContext(corpus));
   // }
 
-  @GraphQLQuery(name = "relationCount")
+  @GraphQLQuery(name = "relationCount",
+      description = "Count the number of relations in this corpus")
   public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus) {
     return getProviders(corpus, RelationProvider.class)
         .flatMap(RelationProvider::count)

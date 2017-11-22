@@ -10,7 +10,6 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.leangen.graphql.annotations.GraphQLArgument;
-import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -30,7 +29,6 @@ public interface BaleenDocumentRepository
 
   Flux<MongoDocument> findByDocumentSourceStartsWith(String absolutePath);
 
-  @GraphQLQuery(name = "document")
   Mono<MongoDocument> findByExternalId(@GraphQLArgument(name = "id") String id);
 
   @Query(value = "{ $text: { $search: ?0 } }")
