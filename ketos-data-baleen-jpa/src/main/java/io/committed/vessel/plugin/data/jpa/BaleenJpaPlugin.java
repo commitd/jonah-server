@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 import io.committed.vessel.extensions.VesselDataExtension;
 
 @Configuration
-@Import(BaleenJpaPlugin.class)
+@Import(BaleenJpaConfig.class)
 public class BaleenJpaPlugin implements VesselDataExtension {
 
 
