@@ -5,6 +5,8 @@ import org.springframework.data.domain.PageRequest;
 
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.vessel.core.dto.analytic.TermBin;
+import io.committed.vessel.core.dto.analytic.TimeBin;
 import io.committed.vessel.plugin.data.jpa.dao.JpaDocument;
 import io.committed.vessel.plugin.data.jpa.dao.JpaDocumentMetadata;
 import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentMetadataRepository;
@@ -54,6 +56,44 @@ public class JpaDocumentProvider extends AbstractDataProvider implements Documen
   @Override
   public String getDatabase() {
     return DatabaseConstants.SQL;
+  }
+
+
+  @Override
+  public Mono<Long> count() {
+    return Mono.just(documents.count());
+  }
+
+  // TODO: Implement these
+
+  @Override
+  public Flux<TermBin> countByType() {
+    // TODO Auto-generated method stub
+    return Flux.empty();
+  }
+
+  @Override
+  public Flux<TimeBin> countByDate() {
+    // TODO Auto-generated method stub
+    return Flux.empty();
+  }
+
+  @Override
+  public Mono<Long> countSearchMatches(final String query) {
+    // TODO Auto-generated method stub
+    return Mono.just(0L);
+  }
+
+  @Override
+  public Flux<TermBin> countByClassification() {
+    // TODO Auto-generated method stub
+    return Flux.empty();
+  }
+
+  @Override
+  public Flux<TermBin> countByLanguage() {
+    // TODO Auto-generated method stub
+    return Flux.empty();
   }
 
 

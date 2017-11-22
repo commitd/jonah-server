@@ -3,6 +3,7 @@ package io.committed.vessel.plugin.data.jpa.providers;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
+import io.committed.vessel.core.dto.analytic.TermBin;
 import io.committed.vessel.plugin.data.jpa.dao.JpaEntity;
 import io.committed.vessel.plugin.data.jpa.repository.JpaEntityRepository;
 import io.committed.vessel.server.data.providers.AbstractDataProvider;
@@ -33,6 +34,17 @@ public class JpaEntityProvider extends AbstractDataProvider implements EntityPro
   @Override
   public String getDatabase() {
     return DatabaseConstants.SQL;
+  }
+
+  @Override
+  public Mono<Long> count() {
+    return Mono.just(entities.count());
+  }
+
+  @Override
+  public Flux<TermBin> countByType() {
+    // TODO Auto-generated method stub
+    return Flux.empty();
   }
 
 

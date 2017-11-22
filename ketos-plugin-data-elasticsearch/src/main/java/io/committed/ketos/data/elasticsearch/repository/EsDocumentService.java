@@ -40,11 +40,12 @@ public class EsDocumentService {
             EsDocument.class));
   }
 
-  public Flux<EsDocument> search(final String search, final int limit) {
+  public Flux<EsDocument> search(final String search, final int offset, final int limit) {
     final ListenableActionFuture<SearchResponse> future = client.prepareSearch()
         .setIndices(DOCUMENT_INDEX)
         .setTypes(DOCUMENT_TYPE)
         .setQuery(QueryBuilders.queryStringQuery(search))
+        .setFrom(offset)
         .setSize(limit)
         .execute();
 
