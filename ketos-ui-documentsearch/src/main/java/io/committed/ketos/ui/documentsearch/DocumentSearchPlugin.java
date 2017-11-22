@@ -1,9 +1,15 @@
 package io.committed.ketos.ui.documentsearch;
 
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import io.committed.ketos.common.ui.actions.KetosCoreActions;
+import io.committed.vessel.actions.ActionDefinition;
+import io.committed.vessel.actions.SimpleActionDefinition;
 import io.committed.vessel.extensions.VesselUiExtension;
 
 /**
@@ -37,6 +43,22 @@ public class DocumentSearchPlugin implements VesselUiExtension {
   @Override
   public Class<?> getSettings() {
     return DocumentSearchSettings.class;
+  }
+
+  @Override
+  public Collection<ActionDefinition> getActions() {
+    return Arrays.asList(
+        SimpleActionDefinition.builder()
+            .action(KetosCoreActions.DOCUMENT_SEARCH)
+            .title("Search")
+            .description("Search for documents by content")
+            .build(),
+        SimpleActionDefinition.builder()
+            .action(KetosCoreActions.CORPUS_VIEW)
+            .title("Search")
+            .description("Explore corpus by search")
+            .build());
+
   }
 
   @Override
