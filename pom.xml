@@ -108,5 +108,6 @@
     <module>ketos-ui-documentreader</module>
     <module>ketos-ui-corpuslist</module>
     <module>ketos-ui-example-html</module>
+    <module>ketos-ui-map</module>
   </modules>
 </project>
