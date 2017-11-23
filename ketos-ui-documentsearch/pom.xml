@@ -8,7 +8,7 @@
   </parent>
   <artifactId>ketos-ui-documentsearch</artifactId>
   <name>Ketos UI Document Search</name>
-  
+
   <properties>
     <plugin.id>DocumentSearch</plugin.id>
     <ui.project>${project.artifactId}</ui.project>
@@ -17,7 +17,7 @@
   </properties>
 
   <dependencies>
-      <dependency>
+    <dependency>
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
     </dependency>
@@ -29,33 +29,33 @@
   </dependencies>
 
   <build>
-   <plugins>
-    <!-- Copy the UI build output to the resources area on the classpath -->
-    <plugin>
-      <artifactId>maven-resources-plugin</artifactId>
-      <version>3.0.2</version>
-      <executions>
-        <execution>
-          <id>copy-resources</id>
-          <!-- Run the copy After the compilation, but before we package 
-            the JAR up -->
-          <phase>process-classes</phase>
-          <goals>
-            <goal>copy-resources</goal>
-          </goals>
-          <configuration>
-            <outputDirectory>${project.basedir}/target/classes/ui/${plugin.id}</outputDirectory>
-            <resources>
-              <resource>
-                <directory>${uiBuild.dir}</directory>
-                <filtering>false</filtering>
-              </resource>
-            </resources>
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
+    <plugins>
+      <!-- Copy the UI build output to the resources area on the classpath -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- Run the copy After the compilation, but before we package 
+              the JAR up -->
+            <phase>process-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.basedir}/target/classes/ui/${plugin.id}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${uiBuild.dir}</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
-  </plugins>
+    </plugins>
   </build>
 </project>
