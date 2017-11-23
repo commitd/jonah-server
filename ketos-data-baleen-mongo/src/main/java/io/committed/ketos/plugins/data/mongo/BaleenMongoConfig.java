@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 import io.committed.ketos.plugins.data.mongo.factory.MongoDocumentProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoEntityProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoMentionProviderFactory;
+import io.committed.ketos.plugins.data.mongo.factory.MongoMetadataProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoRelationProviderFactory;
 
 @Configuration
@@ -35,4 +36,8 @@ public class BaleenMongoConfig {
     return new MongoMentionProviderFactory();
   }
 
+  @Bean
+  public MongoMetadataProviderFactory mongoMetadataDataProviderFactory() {
+    return new MongoMetadataProviderFactory();
+  }
 }
