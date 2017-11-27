@@ -60,9 +60,10 @@ public class RelationService extends AbstractGraphQlService {
   @GraphQLQuery(name = "allRelations", description = "Get all relations in the corpus")
   public Flux<BaleenRelation> getAllRelations(
       @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit) {
     return getProviders(corpus, RelationProvider.class)
-        .flatMap(p -> p.getAllRelations(limit))
+        .flatMap(p -> p.getAllRelations(offset, limit))
         .map(this.addContext(corpus));
   }
 

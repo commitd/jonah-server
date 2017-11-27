@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 public interface RelationProvider extends DataProvider {
 
-  Flux<BaleenRelation> getAllRelations(int limit);
+  Flux<BaleenRelation> getAllRelations(int offset, int limit);
 
   Flux<BaleenRelation> getByDocument(String id);
 

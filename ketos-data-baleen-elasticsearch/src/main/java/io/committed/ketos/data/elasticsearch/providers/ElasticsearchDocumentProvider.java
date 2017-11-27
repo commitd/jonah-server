@@ -23,63 +23,59 @@ public class ElasticsearchDocumentProvider extends AbstractDataProvider
   }
 
   @Override
+  public String getDatabase() {
+    return DatabaseConstants.ELASTICSEARCH;
+  }
+
+  @Override
   public Mono<BaleenDocument> getById(final String id) {
     return documentService.findById(id).map(EsDocument::toBaleenDocument);
   }
 
   @Override
   public Flux<BaleenDocument> all(final int offset, final int size) {
-    // TODO: Throw error or just return nothing?
-    // return Flux.error(new Exception("Not supported"));
-    return Flux.empty();
+    return search("*", offset, size);
   }
 
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.ELASTICSEARCH;
-  }
+
 
   @Override
   public Flux<BaleenDocument> search(final String search, final int offset, final int size) {
     return documentService.search(search, offset, size).map(EsDocument::toBaleenDocument);
   }
 
-  // TODO: Allt hese
-
   @Override
   public Mono<Long> count() {
-    // TODO Auto-generated method stub
-    return null;
+    return documentService.count();
   }
 
   @Override
   public Flux<TermBin> countByType() {
-    // TODO Auto-generated method stub
-    return null;
+    return documentService.countByType();
+
   }
 
   @Override
   public Flux<TimeBin> countByDate() {
-    // TODO Auto-generated method stub
-    return null;
+    return documentService.countByDate();
   }
 
   @Override
   public Mono<Long> countSearchMatches(final String query) {
-    // TODO Auto-generated method stub
-    return null;
+    return documentService.countSearchMatches(query);
+
   }
 
   @Override
   public Flux<TermBin> countByClassification() {
-    // TODO Auto-generated method stub
-    return null;
+    return documentService.countByClassification();
+
   }
 
   @Override
   public Flux<TermBin> countByLanguage() {
-    // TODO Auto-generated method stub
-    return null;
+    return documentService.countByLanguage();
+
   }
 
 

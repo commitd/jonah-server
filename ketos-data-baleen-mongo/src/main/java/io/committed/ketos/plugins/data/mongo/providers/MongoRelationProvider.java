@@ -26,8 +26,9 @@ public class MongoRelationProvider extends AbstractDataProvider implements Relat
   }
 
   @Override
-  public Flux<BaleenRelation> getAllRelations(final int limit) {
-    return toRelations(relations.findAll().take(limit));
+  public Flux<BaleenRelation> getAllRelations(final int offset, final int limit) {
+    // TODO: Move to query, not take/skip
+    return toRelations(relations.findAll().skip(offset).take(limit));
   }
 
   @Override
