@@ -43,8 +43,7 @@ public class JpaEntityProvider extends AbstractDataProvider implements EntityPro
 
   @Override
   public Flux<TermBin> countByType() {
-    // TODO Auto-generated method stub
-    return Flux.empty();
+    return Flux.fromStream(entities.countByType());
   }
 
 

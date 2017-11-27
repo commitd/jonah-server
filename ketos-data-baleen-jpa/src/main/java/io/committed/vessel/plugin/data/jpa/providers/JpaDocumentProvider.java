@@ -1,7 +1,11 @@
 package io.committed.vessel.plugin.data.jpa.providers;
 
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
@@ -13,6 +17,7 @@ import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentMetadataReposit
 import io.committed.vessel.plugin.data.jpa.repository.JpaDocumentRepository;
 import io.committed.vessel.server.data.providers.AbstractDataProvider;
 import io.committed.vessel.server.data.providers.DatabaseConstants;
+import io.committed.vessel.utils.OffsetLimitPagable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,8 +42,14 @@ public class JpaDocumentProvider extends AbstractDataProvider implements Documen
 
   @Override
   public Flux<BaleenDocument> search(final String search, final int offset, final int size) {
-    // TODO Could implemnent this with SQL like (slow) or something DB specific
-    return Flux.empty();
+    final Pageable pageable = new OffsetLimitPagable(offset, size);
+    return Flux.fromStream(
+        documents.findByContentContaining(search, pageable).map(this::addMetadataAndConvert));
+  }
+
+  @Override
+  public Mono<Long> countSearchMatches(final String query) {
+    return Mono.just(documents.countByContentContaining(query));
   }
 
   @Override
@@ -64,36 +75,31 @@ public class JpaDocumentProvider extends AbstractDataProvider implements Documen
     return Mono.just(documents.count());
   }
 
-  // TODO: Implement these
-
   @Override
   public Flux<TermBin> countByType() {
-    // TODO Auto-generated method stub
-    return Flux.empty();
+    return Flux.fromStream(documents.countByType());
   }
 
   @Override
   public Flux<TimeBin> countByDate() {
-    // TODO Auto-generated method stub
-    return Flux.empty();
+    return Flux.fromStream(documents.countByDate())
+        .map(t -> {
+          final LocalDate date = LocalDate.parse(t.getTerm());
+          return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
+        });
+
   }
 
-  @Override
-  public Mono<Long> countSearchMatches(final String query) {
-    // TODO Auto-generated method stub
-    return Mono.just(0L);
-  }
+
 
   @Override
   public Flux<TermBin> countByClassification() {
-    // TODO Auto-generated method stub
-    return Flux.empty();
+    return Flux.fromStream(documents.countByClassification());
   }
 
   @Override
   public Flux<TermBin> countByLanguage() {
-    // TODO Auto-generated method stub
-    return Flux.empty();
+    return Flux.fromStream(documents.countByLanguage());
   }
 
 
