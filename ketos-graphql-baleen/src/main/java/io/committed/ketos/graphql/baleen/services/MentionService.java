@@ -7,7 +7,9 @@ import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
+import io.committed.vessel.server.data.query.DataHints;
 import io.committed.vessel.server.data.services.DatasetProviders;
+import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
@@ -23,15 +25,19 @@ public class MentionService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "mentions", description = "Get all mentiosn in the document")
-  public Flux<BaleenMention> getMentionsByDocument(@GraphQLContext final BaleenDocument document) {
-    return getProvidersFromContext(document, MentionProvider.class)
+  public Flux<BaleenMention> getMentionsByDocument(@GraphQLContext final BaleenDocument document,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProvidersFromContext(document, MentionProvider.class, hints)
         .flatMap(p -> p.getMentionsByDocument(document))
         .map(this.addContext(document));
   }
 
   @GraphQLQuery(name = "source", description = "Get the source entity of this relation")
-  public Mono<BaleenMention> source(@GraphQLContext final BaleenRelation relation) {
-    return getProvidersFromContext(relation, MentionProvider.class)
+  public Mono<BaleenMention> source(@GraphQLContext final BaleenRelation relation,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProvidersFromContext(relation, MentionProvider.class, hints)
         .flatMap(p -> p.source(relation))
         .map(this.addContext(relation))
         // May be many but we only want one (and only should have one per db)
@@ -39,8 +45,10 @@ public class MentionService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "target", description = "Get the target entity of this relation")
-  public Mono<BaleenMention> target(@GraphQLContext final BaleenRelation relation) {
-    return getProvidersFromContext(relation, MentionProvider.class)
+  public Mono<BaleenMention> target(@GraphQLContext final BaleenRelation relation,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProvidersFromContext(relation, MentionProvider.class, hints)
         .flatMap(p -> p.target(relation))
         .map(this.addContext(relation))
         // May be many but we only want one (and only should have one)

@@ -7,6 +7,7 @@ import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.committed.ketos.common.graphql.support.GraphQLNode;
 import io.committed.vessel.server.data.providers.DataProvider;
+import io.committed.vessel.server.data.query.DataHints;
 import io.committed.vessel.server.data.services.DatasetProviders;
 import reactor.core.publisher.Flux;
 
@@ -23,18 +24,20 @@ public abstract class AbstractGraphQlService {
   }
 
   protected <T extends DataProvider> Flux<T> getProviders(final BaleenCorpus corpus,
-      final Class<T> clazz) {
-    return corpusProviders.findForDataset(corpus.getId(), clazz);
+      final Class<T> clazz,
+      final DataHints hints) {
+    return corpusProviders.findForDataset(corpus.getId(), clazz, hints);
   }
 
   protected <T extends DataProvider> Flux<T> getProvidersFromContext(
       final AbstractGraphQLNodeSupport<?> node,
-      final Class<T> clazz) {
+      final Class<T> clazz,
+      final DataHints hints) {
     if (node.getGqlNode() != null) {
       final GraphQLNode gqlNode = node.getGqlNode();
       final Optional<BaleenCorpus> corpus = gqlNode.findParent(BaleenCorpus.class);
       if (corpus.isPresent()) {
-        return corpusProviders.findForDataset(corpus.get().getId(), clazz);
+        return corpusProviders.findForDataset(corpus.get().getId(), clazz, hints);
       }
     }
     return Flux.empty();

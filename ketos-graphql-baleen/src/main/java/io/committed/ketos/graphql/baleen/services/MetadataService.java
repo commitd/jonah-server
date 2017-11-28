@@ -8,6 +8,7 @@ import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.vessel.core.dto.analytic.TermBin;
 import io.committed.vessel.core.dto.analytic.TermCount;
 import io.committed.vessel.extensions.graphql.VesselGraphQlService;
+import io.committed.vessel.server.data.query.DataHints;
 import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -33,14 +34,16 @@ public class MetadataService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "keys", description = "Get information on metadata keys")
   public Mono<TermCount> getMetadataKey(
-      @GraphQLContext final BaleenCorpusMetadata corpusMetadata) {
+      @GraphQLContext final BaleenCorpusMetadata corpusMetadata,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     final Flux<TermBin> flux;
     if (corpusMetadata.getKey().isPresent()) {
-      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class)
+      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class, hints)
           .flatMap(p -> p.countByKey(corpusMetadata.getKey().get()));
     } else {
-      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class)
+      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class, hints)
           .flatMap(MetadataProvider::countByKey);
     }
 
@@ -51,15 +54,17 @@ public class MetadataService extends AbstractGraphQlService {
   public Mono<TermCount> getValues(
       @GraphQLContext final BaleenCorpusMetadata corpusMetadata,
       @GraphQLArgument(name = "size", description = "Maximum number of values to return",
-          defaultValue = "10") final int size) {
+          defaultValue = "10") final int size,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     final Flux<TermBin> flux;
 
     if (corpusMetadata.getKey().isPresent()) {
-      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class)
+      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class, hints)
           .flatMap(p -> p.countByValue(corpusMetadata.getKey().get()));
     } else {
-      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class)
+      flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class, hints)
           .flatMap(MetadataProvider::countByValue);
     }
 
