@@ -27,6 +27,6 @@ public class FeedbackReaderPlugin implements VesselUiExtension {
 
   @Override
   public Collection<String> getRoles() {
-    return Arrays.asList("USER", "ADMIN");
+    return Arrays.asList("ADMIN");
   }
 }
