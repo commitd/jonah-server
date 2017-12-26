@@ -18,12 +18,12 @@ import org.springframework.data.mongodb.core.aggregation.AggregationExpression;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.server.data.providers.AbstractDataProvider;
+import io.committed.invest.server.data.providers.DatabaseConstants;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.server.data.providers.AbstractDataProvider;
-import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 
 public class MongoMetadataProvider extends AbstractDataProvider implements MetadataProvider {

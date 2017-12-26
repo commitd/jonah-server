@@ -2,21 +2,21 @@ package io.committed.ketos.graphql.baleen.services;
 
 import java.util.Optional;
 
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.core.dto.analytic.TermCount;
+import io.committed.invest.extensions.graphql.GraphQLService;
+import io.committed.invest.server.data.query.DataHints;
+import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenCorpusMetadata;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.core.dto.analytic.TermCount;
-import io.committed.vessel.extensions.graphql.VesselGraphQlService;
-import io.committed.vessel.server.data.query.DataHints;
-import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@VesselGraphQlService
+@GraphQLService
 public class MetadataService extends AbstractGraphQlService {
 
   protected MetadataService(final DatasetProviders corpusProviders) {

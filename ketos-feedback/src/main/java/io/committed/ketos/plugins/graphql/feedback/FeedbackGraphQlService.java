@@ -7,12 +7,12 @@ import java.util.Optional;
 
 import org.springframework.util.StringUtils;
 
+import io.committed.invest.core.graphql.Context;
+import io.committed.invest.extensions.InvestUiExtension;
+import io.committed.invest.extensions.graphql.GraphQLService;
+import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.plugins.data.feedback.data.Feedback;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
-import io.committed.vessel.core.graphql.Context;
-import io.committed.vessel.extensions.VesselUiExtension;
-import io.committed.vessel.extensions.graphql.VesselGraphQlService;
-import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLMutation;
@@ -22,15 +22,15 @@ import io.leangen.graphql.annotations.GraphQLRootContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@VesselGraphQlService
+@GraphQLService
 public class FeedbackGraphQlService {
 
   private final DatasetProviders providers;
 
-  private final List<VesselUiExtension> uiExtensions;
+  private final List<InvestUiExtension> uiExtensions;
 
   public FeedbackGraphQlService(final DatasetProviders providers,
-      final List<VesselUiExtension> uiExtensions) {
+      final List<InvestUiExtension> uiExtensions) {
     this.providers = providers;
     this.uiExtensions = uiExtensions;
   }
@@ -95,7 +95,7 @@ public class FeedbackGraphQlService {
 
       name = uiExtensions.stream()
           .filter(e -> pluginId.equalsIgnoreCase(e.getId()))
-          .map(VesselUiExtension::getName)
+          .map(InvestUiExtension::getName)
           .findFirst();
 
     }

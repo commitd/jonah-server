@@ -1,10 +1,10 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.server.data.providers.AbstractDataProvider;
+import io.committed.invest.server.data.providers.DatabaseConstants;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsMetadataService;
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.server.data.providers.AbstractDataProvider;
-import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 
 public class ElasticsearchMetadataProvider extends AbstractDataProvider

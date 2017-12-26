@@ -2,13 +2,13 @@ package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.committed.invest.extensions.graphql.GraphQLService;
+import io.committed.invest.server.data.query.DataHints;
+import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
-import io.committed.vessel.extensions.graphql.VesselGraphQlService;
-import io.committed.vessel.server.data.query.DataHints;
-import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
-@VesselGraphQlService
+@GraphQLService
 public class MentionService extends AbstractGraphQlService {
 
   @Autowired

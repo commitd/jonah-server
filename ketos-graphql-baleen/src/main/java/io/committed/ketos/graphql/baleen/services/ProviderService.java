@@ -2,15 +2,15 @@ package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.committed.invest.extensions.graphql.GraphQLService;
+import io.committed.invest.server.data.providers.DataProvider;
+import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
-import io.committed.vessel.extensions.graphql.VesselGraphQlService;
-import io.committed.vessel.server.data.providers.DataProvider;
-import io.committed.vessel.server.data.services.DatasetProviders;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
-@VesselGraphQlService
+@GraphQLService
 public class ProviderService {
 
   @Autowired

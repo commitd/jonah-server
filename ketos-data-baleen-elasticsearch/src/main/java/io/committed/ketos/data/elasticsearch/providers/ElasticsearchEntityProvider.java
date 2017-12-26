@@ -1,13 +1,13 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.server.data.providers.AbstractDataProvider;
+import io.committed.invest.server.data.providers.DatabaseConstants;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.data.elasticsearch.dao.EsEntity;
 import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.server.data.providers.AbstractDataProvider;
-import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

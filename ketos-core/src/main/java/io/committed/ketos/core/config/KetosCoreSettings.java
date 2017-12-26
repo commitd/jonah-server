@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import io.committed.vessel.server.data.dataset.Dataset;
+import io.committed.invest.server.data.dataset.Dataset;
 
 @ConfigurationProperties(prefix = "ketos.core")
 public class KetosCoreSettings {

@@ -20,12 +20,12 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.support.elasticsearch.ReactiveElasticsearchUtils;
+import io.committed.invest.support.elasticsearch.SourceUtils;
 import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.core.dto.analytic.TimeBin;
-import io.committed.vesssel.support.elasticsearch.ReactiveElasticsearchUtils;
-import io.committed.vesssel.support.elasticsearch.SourceUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

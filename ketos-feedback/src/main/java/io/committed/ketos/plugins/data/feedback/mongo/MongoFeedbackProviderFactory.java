@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.repository.support.ReactiveMongoReposito
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 
+import io.committed.invest.server.data.providers.AbstractDataProviderFactory;
+import io.committed.invest.server.data.providers.DatabaseConstants;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
-import io.committed.vessel.server.data.providers.AbstractDataProviderFactory;
-import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Mono;
 
 public class MongoFeedbackProviderFactory

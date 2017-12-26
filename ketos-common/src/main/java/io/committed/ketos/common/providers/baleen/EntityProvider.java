@@ -1,10 +1,10 @@
 package io.committed.ketos.common.providers.baleen;
 
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.server.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.server.data.providers.DataProvider;
 import io.leangen.graphql.annotations.GraphQLContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

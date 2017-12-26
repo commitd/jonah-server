@@ -4,14 +4,14 @@ import static org.springframework.util.StringUtils.isEmpty;
 
 import java.util.Map;
 
+import io.committed.invest.extensions.graphql.GraphQLService;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
-import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 
-@VesselGraphQlService
+@GraphQLService
 public class DocumentSummaryField {
 
   private static final String ELLIPSES = "...";

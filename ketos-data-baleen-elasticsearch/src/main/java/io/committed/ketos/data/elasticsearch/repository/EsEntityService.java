@@ -9,8 +9,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.ketos.data.elasticsearch.dao.EsEntity;
-import io.committed.vessel.core.dto.analytic.TermBin;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

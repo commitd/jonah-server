@@ -4,7 +4,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.committed.vessel.core.dto.analytic.TermBin;
+import io.committed.invest.core.dto.analytic.TermBin;
 import reactor.core.publisher.Flux;
 
 public class EsMetadataService extends AbstractEsService {

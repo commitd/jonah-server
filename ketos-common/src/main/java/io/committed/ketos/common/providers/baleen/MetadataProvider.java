@@ -1,7 +1,7 @@
 package io.committed.ketos.common.providers.baleen;
 
-import io.committed.vessel.core.dto.analytic.TermBin;
-import io.committed.vessel.server.data.providers.DataProvider;
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.server.data.providers.DataProvider;
 import reactor.core.publisher.Flux;
 
 public interface MetadataProvider extends DataProvider {

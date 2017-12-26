@@ -2,14 +2,14 @@ package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.committed.invest.server.data.providers.AbstractDataProvider;
+import io.committed.invest.server.data.providers.DatabaseConstants;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
-import io.committed.vessel.server.data.providers.AbstractDataProvider;
-import io.committed.vessel.server.data.providers.DatabaseConstants;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

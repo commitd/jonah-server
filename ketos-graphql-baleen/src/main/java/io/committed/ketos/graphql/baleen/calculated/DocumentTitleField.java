@@ -5,14 +5,14 @@ import static org.springframework.util.StringUtils.isEmpty;
 import java.util.List;
 import java.util.Map;
 
+import io.committed.invest.extensions.graphql.GraphQLService;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentInfo;
 import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
-import io.committed.vessel.extensions.graphql.VesselGraphQlService;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 
-@VesselGraphQlService
+@GraphQLService
 public class DocumentTitleField {
 
   @GraphQLQuery(name = "title",
