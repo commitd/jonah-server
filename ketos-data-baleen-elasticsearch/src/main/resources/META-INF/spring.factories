@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.data.elasticsearch.BaleenElasticsearchPlugin
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.data.elasticsearch.BaleenElasticsearchExtension

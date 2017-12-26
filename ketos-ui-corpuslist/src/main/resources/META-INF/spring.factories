@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.ui.corpuslist.CorpusListPlugin
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.ui.corpuslist.CorpusListExtension

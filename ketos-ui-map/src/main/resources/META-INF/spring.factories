@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.ui.map.MapPlugin
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.ui.map.MapExtension

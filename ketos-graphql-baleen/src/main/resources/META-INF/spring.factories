@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.graphql.baleen.BaleenGraphQlPlugin
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.graphql.baleen.BaleenGraphQlExtension

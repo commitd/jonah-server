@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.core.KetosCorePlugin
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.core.KetosCoreExtension

@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.ui.corpussummary.CorpusSummaryPlugin
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.ui.corpussummary.CorpusSummaryExtension
