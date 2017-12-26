@@ -15,15 +15,15 @@
     <java.version>1.8</java.version>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
-    <!-- Dependencies as per Vessel version -->
-    <vessel-java.version>1.0-SNAPSHOT</vessel-java.version>
+    <!-- Dependencies as per Invest version -->
+    <invest-java.version>1.0-SNAPSHOT</invest-java.version>
 
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>io.committed.vessel</groupId>
-      <artifactId>vessel-plugin</artifactId>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-plugin</artifactId>
     </dependency>
   </dependencies>
 
@@ -49,9 +49,9 @@
 
       <!-- Vessel -->
       <dependency>
-        <groupId>io.committed.vessel</groupId>
-        <artifactId>vessel-dependencies</artifactId>
-        <version>${vessel-java.version}</version>
+        <groupId>io.committed.invest</groupId>
+        <artifactId>invest-dependencies</artifactId>
+        <version>${invest-java.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

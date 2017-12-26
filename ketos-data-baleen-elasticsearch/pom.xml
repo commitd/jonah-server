@@ -13,9 +13,9 @@
 
     <!--  TODO: This should be the support lib for ES -->
     <dependency>
-      <groupId>io.committed.vessel</groupId>
-      <artifactId>vessel-plugins-data-elasticsearch</artifactId>
-      <version>${vessel-java.version}</version>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-plugins-data-elasticsearch</artifactId>
+      <version>${invest-java.version}</version>
       <scope>provided</scope>
     </dependency>
 
