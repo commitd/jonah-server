@@ -17,19 +17,19 @@ public interface JpaDocumentRepository extends JpaRepository<JpaDocument, Long> 
   Optional<JpaDocument> findByExternalId(String id);
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.type, COUNT(d)) from JpaDocument d GROUP BY d.type")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.type, COUNT(d)) from JpaDocument d GROUP BY d.type")
   Stream<TermBin> countByType();
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(TO_CHAR(d.processsed, 'yyyy-MM-dd'), COUNT(d)) from JpaDocument d GROUP BY TO_CHAR(d.processsed, 'yyyy-MM-dd')")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(TO_CHAR(d.processsed, 'yyyy-MM-dd'), COUNT(d)) from JpaDocument d GROUP BY TO_CHAR(d.processsed, 'yyyy-MM-dd')")
   Stream<TermBin> countByDate();
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.classification, COUNT(d)) from JpaDocument d GROUP BY d.classification")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.classification, COUNT(d)) from JpaDocument d GROUP BY d.classification")
   Stream<TermBin> countByClassification();
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.language, COUNT(d)) from JpaDocument d GROUP BY d.language")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.language, COUNT(d)) from JpaDocument d GROUP BY d.language")
   Stream<TermBin> countByLanguage();
 
 

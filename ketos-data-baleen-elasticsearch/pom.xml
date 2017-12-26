@@ -14,7 +14,7 @@
     <!--  TODO: This should be the support lib for ES -->
     <dependency>
       <groupId>io.committed.invest</groupId>
-      <artifactId>invest-plugins-data-elasticsearch</artifactId>
+      <artifactId>invest-plugin-data-elasticsearch</artifactId>
       <version>${invest-java.version}</version>
       <scope>provided</scope>
     </dependency>

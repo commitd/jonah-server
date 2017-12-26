@@ -16,19 +16,19 @@ public interface JpaDocumentMetadataRepository
   Stream<JpaDocumentMetadata> findByDocId(String externalId);
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d GROUP BY d.name")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d GROUP BY d.name")
   Stream<TermBin> countByKey();
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name")
   Stream<TermBin> countByKey(String key);
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d GROUP BY d.name")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d GROUP BY d.name")
   Stream<TermBin> countByValue();
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name")
   Stream<TermBin> countByValue(String key);
 
 }

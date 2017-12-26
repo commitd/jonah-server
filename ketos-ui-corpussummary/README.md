@@ -8,11 +8,11 @@ Write about your plugin here...
 
 ### Before you start
 
-If you are development version of `vessel-plugin`, that is you have a local clone of the repostiory you are building against, then you will want to either [link](https://yarnpkg.com/lang/en/docs/cli/link/) that so this package uses that link.
+If you are development version of `invest-plugin`, that is you have a local clone of the repostiory you are building against, then you will want to either [link](https://yarnpkg.com/lang/en/docs/cli/link/) that so this package uses that link.
 
-*Currently, as `vessel-plugin` is not within any public NPM registry this is the only way to develop a plugin*
+*Currently, as `invest-plugin` is not within any public NPM registry this is the only way to develop a plugin*
 
-In order to do this goto the `vessel-plugin` directory and run:
+In order to do this goto the `invest-plugin` directory and run:
 
 ```
 yarn link
@@ -21,12 +21,12 @@ yarn link
 then go to the `src/main/js` directory in this project and run:
 
 ```
-yarn link vessel-plugin
+yarn link invest-plugin
 ```
 
 ### Yarn operations for development
 
-Under `src/main/js` is a  Yarn project using Typescript and create-react-app. It is preconfigured dependencies for `vessel-plugin` as well as development support for [Storybook](https://storybook.js.org/).
+Under `src/main/js` is a  Yarn project using Typescript and create-react-app. It is preconfigured dependencies for `invest-plugin` as well as development support for [Storybook](https://storybook.js.org/).
 
 Our suggested approach for development is simply to ignore the Maven build system, and work within the `src/main/js` directory as you would for any other yarn application.
 
@@ -66,4 +66,4 @@ Note this will be default run `yarn build` so you don't need to do that in advan
 
 ### How this was created
 
-This project was created from a Vessel Maven archetype. This is turn is based on the the [Typescript create-react-app starter](https://github.com/Microsoft/TypeScript-React-Starter). We the [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin) to integrate the Maven and Yarn processes.
+This project was created from a Invest Maven archetype. This is turn is based on the the [Typescript create-react-app starter](https://github.com/Microsoft/TypeScript-React-Starter). We the [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin) to integrate the Maven and Yarn processes.

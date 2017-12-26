@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * <pre>
  * query {
- *  vesselServer: {
+ *  investServer: {
  *   plugin(id:"CorpusSummary") {
  *     settings
  *   }

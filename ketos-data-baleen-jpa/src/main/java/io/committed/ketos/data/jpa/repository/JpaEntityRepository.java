@@ -18,7 +18,7 @@ public interface JpaEntityRepository extends JpaRepository<JpaEntity, Long> {
   Stream<JpaEntity> findByDocId(String id);
 
   @Query(
-      value = "SELECT NEW io.committed.vessel.core.dto.analytic.TermBin(d.type, COUNT(d)) from JpaDocument d GROUP BY d.type")
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.type, COUNT(d)) from JpaDocument d GROUP BY d.type")
   Stream<TermBin> countByType();
 
 }

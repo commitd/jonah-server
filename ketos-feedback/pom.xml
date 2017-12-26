@@ -6,8 +6,8 @@
     <artifactId>ketos-java</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>vessel-plugin-feedback</artifactId>
-  <name>Vessel Feedback</name>
+  <artifactId>ketos-plugin-feedback</artifactId>
+  <name>Ketos Feedback</name>
   <description>Allows users to provide feedback</description>
 
   <properties>
