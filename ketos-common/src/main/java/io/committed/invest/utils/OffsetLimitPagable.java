@@ -1,4 +1,4 @@
-package io.committed.vessel.utils;
+package io.committed.invest.utils;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

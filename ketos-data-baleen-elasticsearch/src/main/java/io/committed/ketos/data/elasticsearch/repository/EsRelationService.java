@@ -9,8 +9,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.committed.invest.utils.OffsetLimitPagable;
 import io.committed.ketos.data.elasticsearch.dao.EsRelation;
-import io.committed.vessel.utils.OffsetLimitPagable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

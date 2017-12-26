@@ -11,13 +11,13 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.server.data.providers.AbstractDataProvider;
 import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.utils.OffsetLimitPagable;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.jpa.dao.JpaDocument;
 import io.committed.ketos.data.jpa.dao.JpaDocumentMetadata;
 import io.committed.ketos.data.jpa.repository.JpaDocumentMetadataRepository;
 import io.committed.ketos.data.jpa.repository.JpaDocumentRepository;
-import io.committed.vessel.utils.OffsetLimitPagable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

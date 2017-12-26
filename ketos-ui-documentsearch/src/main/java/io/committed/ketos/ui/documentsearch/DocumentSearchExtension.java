@@ -13,7 +13,7 @@ import io.committed.invest.extensions.InvestUiExtension;
 import io.committed.ketos.common.ui.actions.KetosCoreActions;
 
 /**
- * Extension point for CorpusSummary.
+ * Extension point for DocumentSearch.
  *
  */
 @Configuration

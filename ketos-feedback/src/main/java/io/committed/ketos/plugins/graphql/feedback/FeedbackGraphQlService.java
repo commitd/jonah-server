@@ -7,9 +7,9 @@ import java.util.Optional;
 
 import org.springframework.util.StringUtils;
 
+import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.graphql.Context;
 import io.committed.invest.extensions.InvestUiExtension;
-import io.committed.invest.extensions.graphql.GraphQLService;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.plugins.data.feedback.data.Feedback;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
