@@ -16,7 +16,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <!-- Dependencies as per Invest version -->
-    <invest-java.version>1.0-SNAPSHOT</invest-java.version>
+    <invest-java.version>0.0.1</invest-java.version>
 
   </properties>
 
@@ -27,89 +27,89 @@
     </dependency>
   </dependencies>
 
-  <dependencyManagement>
-    <dependencies>
+    <dependencyManagement>
+      <dependencies>
 
-      <!-- Ketos -->
-      <dependency>
-        <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-graphql-baleen</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+        <!-- Ketos -->
+        <dependency>
+          <groupId>io.committed.ketos</groupId>
+          <artifactId>ketos-common</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>io.committed.ketos</groupId>
+          <artifactId>ketos-core</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>io.committed.ketos</groupId>
+          <artifactId>ketos-graphql-baleen</artifactId>
+          <version>${project.version}</version>
+        </dependency>
 
-      <!-- Invest -->
-      <dependency>
-        <groupId>io.committed.invest</groupId>
-        <artifactId>invest-dependencies</artifactId>
-        <version>${invest-java.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+        <!-- Invest -->
+        <dependency>
+          <groupId>io.committed.invest</groupId>
+          <artifactId>invest-dependencies</artifactId>
+          <version>${invest-java.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+        </dependency>
+      </dependencies>
+    </dependencyManagement>
 
-  <repositories>
-    <repository>
-      <id>spring-snapshots</id>
-      <name>Spring Snapshots</name>
-      <url>https://repo.spring.io/snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>spring-milestones</id>
-      <name>Spring Milestones</name>
-      <url>https://repo.spring.io/milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+    <repositories>
+      <repository>
+        <id>spring-snapshots</id>
+        <name>Spring Snapshots</name>
+        <url>https://repo.spring.io/snapshot</url>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+      </repository>
+      <repository>
+        <id>spring-milestones</id>
+        <name>Spring Milestones</name>
+        <url>https://repo.spring.io/milestone</url>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+      </repository>
+    </repositories>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>spring-snapshots</id>
-      <name>Spring Snapshots</name>
-      <url>https://repo.spring.io/snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>spring-milestones</id>
-      <name>Spring Milestones</name>
-      <url>https://repo.spring.io/milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>spring-snapshots</id>
+        <name>Spring Snapshots</name>
+        <url>https://repo.spring.io/snapshot</url>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+      </pluginRepository>
+      <pluginRepository>
+        <id>spring-milestones</id>
+        <name>Spring Milestones</name>
+        <url>https://repo.spring.io/milestone</url>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+      </pluginRepository>
+    </pluginRepositories>
 
-  <modules>
-    <module>ketos-core</module>
-    <module>ketos-common</module>
-    <module>ketos-data-baleen-mongo</module>
-    <module>ketos-data-baleen-elasticsearch</module>
-    <module>ketos-data-baleen-jpa</module>
-    <module>ketos-graphql-baleen</module>
-    <module>ketos-ui-corpussummary</module>
-    <module>ketos-ui-documentsearch</module>
-    <module>ketos-ui-documentreader</module>
-    <module>ketos-ui-corpuslist</module>
-    <module>ketos-ui-example-html</module>
-    <module>ketos-ui-map</module>
-    <module>ketos-ui-metadataexplorer</module>
-    <module>ketos-feedback</module> 
-  </modules>
+    <modules>
+      <module>ketos-core</module>
+      <module>ketos-common</module>
+      <module>ketos-data-baleen-mongo</module>
+      <module>ketos-data-baleen-elasticsearch</module>
+      <module>ketos-data-baleen-jpa</module>
+      <module>ketos-graphql-baleen</module>
+      <module>ketos-ui-corpussummary</module>
+      <module>ketos-ui-documentsearch</module>
+      <module>ketos-ui-documentreader</module>
+      <module>ketos-ui-corpuslist</module>
+      <module>ketos-ui-example-html</module>
+      <module>ketos-ui-map</module>
+      <module>ketos-ui-metadataexplorer</module>
+      <module>ketos-feedback</module>
+    </modules>
 </project>

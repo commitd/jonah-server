@@ -9,4 +9,36 @@
   </parent>
   <artifactId>ketos-ui-example-html</artifactId>
   <name>Ketos UI Pure HTML Example</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-server-app</artifactId>
+      <version>${invest-java.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includeProjectDependencies>true</includeProjectDependencies>
+          <includePluginDependencies>false</includePluginDependencies>
+          <mainClass>io.committed.invest.server.app.Invest</mainClass>
+        </configuration>
+
+      </plugin>
+    </plugins>
+  </build>
 </project>

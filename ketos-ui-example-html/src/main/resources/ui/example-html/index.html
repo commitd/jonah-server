@@ -1,18 +1,17 @@
 <html>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="/static/libs/semantic-2.2.css">
-	<script src="/static/libs/react-16.0.js"></script>
-	<script src="/static/libs/react-dom-16.0.js"></script>
-
-	<script src="/static/libs/jquery-3.2.js"></script>
-	<script src="/static/libs/semantic-2.2.js"></script>
-	<script src="/static/libs/invest.js"></script>
+	<link rel="stylesheet" type="text/css" href="/ui/libs/semantic-2.2.css">
+	<script src="/ui/libs/react-16.0.js"></script>
+	<script src="/ui/libs/react-dom-16.0.js"></script>
+	<script src="/ui/libs/jquery-3.2.js"></script>
+	<script src="/ui/libs/semantic-2.2.js"></script>
+	<script src="/ui/libs/invest.js"></script>
 </head>
 
 <body>
 	<h1 class="ui header">An example plugin using Invest and Semantic in HTML</h1>
-
+	<p>Check the console...</p>
 	<script>
 		var c = Invest.connect()
 		c.query('query { investServer { uiPlugins { name } } } ').then(d => {
