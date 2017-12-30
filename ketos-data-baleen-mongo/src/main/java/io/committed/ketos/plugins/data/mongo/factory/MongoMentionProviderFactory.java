@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
 
+import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.plugins.data.mongo.providers.MongoMentionProvider;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
@@ -27,7 +28,7 @@ public class MongoMentionProviderFactory
     final BaleenEntitiesRepository repository =
         support.getRepository(BaleenEntitiesRepository.class);
 
-    return Mono.just(new MongoMentionProvider(dataset, datasource, repository));
+    return Mono.just(new MongoMentionProvider(dataset, datasource, mongoTemplate, repository));
   }
 
 }

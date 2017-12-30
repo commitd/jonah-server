@@ -1,7 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -11,64 +10,56 @@ import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class ElasticsearchRelationProvider extends AbstractDataProvider
+public class ElasticsearchRelationProvider
+    extends AbstractElasticsearchServiceDataProvider<EsRelationService>
     implements RelationProvider {
-
-  private final EsRelationService relationService;
 
   public ElasticsearchRelationProvider(final String dataset, final String datasource,
       final EsRelationService relationService) {
-    super(dataset, datasource);
-    this.relationService = relationService;
+    super(dataset, datasource, relationService);
   }
-
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.ELASTICSEARCH;
-  }
-
 
   @Override
   public Flux<BaleenRelation> getAllRelations(final int offset, final int limit) {
-    return relationService.findAll(offset, limit)
+    return getService().findAll(offset, limit)
         .map(EsRelation::toBaleenRelation);
 
   }
 
   @Override
   public Flux<BaleenRelation> getByDocument(final String id) {
-    return relationService.findByDocument(id)
+    return getService().findByDocument(id)
         .map(EsRelation::toBaleenRelation);
   }
 
   @Override
   public Flux<BaleenRelation> getRelations(final BaleenDocument document) {
-    return relationService.findByDocument(document.getId())
+    return getService().findByDocument(document.getId())
         .map(EsRelation::toBaleenRelation);
   }
 
   @Override
   public Flux<BaleenRelation> getSourceRelations(final BaleenMention mention) {
-    return relationService.findBySource(mention.getId())
+    return getService().findBySource(mention.getId())
         .map(EsRelation::toBaleenRelation);
 
   }
 
   @Override
   public Flux<BaleenRelation> getTargetRelations(final BaleenMention mention) {
-    return relationService.findByTarget(mention.getId())
+    return getService().findByTarget(mention.getId())
         .map(EsRelation::toBaleenRelation);
   }
 
   @Override
   public Mono<BaleenRelation> getById(final String id) {
-    return relationService.getById(id)
+    return getService().getById(id)
         .map(EsRelation::toBaleenRelation);
   }
 
   @Override
   public Mono<Long> count() {
-    return relationService.count();
+    return getService().count();
   }
 
 

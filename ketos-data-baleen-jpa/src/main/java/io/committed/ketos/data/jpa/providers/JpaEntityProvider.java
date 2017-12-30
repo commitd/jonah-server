@@ -1,8 +1,7 @@
 package io.committed.ketos.data.jpa.providers;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
@@ -11,7 +10,7 @@ import io.committed.ketos.data.jpa.repository.JpaEntityRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class JpaEntityProvider extends AbstractDataProvider implements EntityProvider {
+public class JpaEntityProvider extends AbstractJpaDataProvider implements EntityProvider {
 
   private final JpaEntityRepository entities;
 
@@ -31,10 +30,6 @@ public class JpaEntityProvider extends AbstractDataProvider implements EntityPro
     return Flux.fromStream(entities.findByDocId(document.getId())).map(JpaEntity::toBaleenEntity);
   }
 
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.SQL;
-  }
 
   @Override
   public Mono<Long> count() {

@@ -1,7 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -11,20 +10,13 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class ElasticsearchMentionProvider extends AbstractDataProvider
+public class ElasticsearchMentionProvider
+    extends AbstractElasticsearchServiceDataProvider<EsEntityService>
     implements MentionProvider {
-
-  private final EsEntityService entityService;
 
   public ElasticsearchMentionProvider(final String dataset, final String datasource,
       final EsEntityService mentionService) {
-    super(dataset, datasource);
-    this.entityService = mentionService;
-  }
-
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.ELASTICSEARCH;
+    super(dataset, datasource, mentionService);
   }
 
   @Override
@@ -40,12 +32,12 @@ public class ElasticsearchMentionProvider extends AbstractDataProvider
 
   @Override
   public Flux<BaleenMention> getMentionsByDocument(final BaleenDocument document) {
-    return entityService.findByDocumentId(document.getId())
+    return getService().findByDocumentId(document.getId())
         .map(EsEntity::toBaleenMention);
   }
 
   private Mono<BaleenMention> getMentionFromEntity(final String entityId) {
-    return entityService.getById(entityId)
+    return getService().getById(entityId)
         .map(EsEntity::toBaleenMention);
   }
 

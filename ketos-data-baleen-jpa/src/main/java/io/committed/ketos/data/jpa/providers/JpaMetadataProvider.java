@@ -1,13 +1,12 @@
 package io.committed.ketos.data.jpa.providers;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.data.jpa.repository.JpaDocumentMetadataRepository;
 import reactor.core.publisher.Flux;
 
-public class JpaMetadataProvider extends AbstractDataProvider implements MetadataProvider {
+public class JpaMetadataProvider extends AbstractJpaDataProvider implements MetadataProvider {
 
   private final JpaDocumentMetadataRepository metadata;
 
@@ -15,13 +14,6 @@ public class JpaMetadataProvider extends AbstractDataProvider implements Metadat
       final JpaDocumentMetadataRepository metadata) {
     super(dataset, datasource);
     this.metadata = metadata;
-  }
-
-
-
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.SQL;
   }
 
 

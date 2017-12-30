@@ -10,8 +10,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
@@ -20,17 +19,15 @@ import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoEntityProvider extends AbstractDataProvider implements EntityProvider {
+public class MongoEntityProvider extends AbstractMongoDataProvider implements EntityProvider {
 
   private final BaleenEntitiesRepository entities;
-  private final ReactiveMongoTemplate mongoTemplate;
 
   @Autowired
   public MongoEntityProvider(final String dataset, final String datasource,
       final ReactiveMongoTemplate mongoTemplate,
       final BaleenEntitiesRepository entities) {
-    super(dataset, datasource);
-    this.mongoTemplate = mongoTemplate;
+    super(dataset, datasource, mongoTemplate);
     this.entities = entities;
   }
 
@@ -45,10 +42,6 @@ public class MongoEntityProvider extends AbstractDataProvider implements EntityP
   }
 
 
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.MONGO;
-  }
 
   @Override
   public Mono<Long> count() {
@@ -61,7 +54,7 @@ public class MongoEntityProvider extends AbstractDataProvider implements EntityP
         unwind("entities"),
         group("entities.type").count().as("count"),
         project("count").and("_id").as("term"));
-    return mongoTemplate.aggregate(aggregation, MongoEntities.class, TermBin.class);
+    return getTemplate().aggregate(aggregation, MongoEntities.class, TermBin.class);
   }
 
 }

@@ -11,37 +11,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bson.Document;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationExpression;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
 import reactor.core.publisher.Flux;
 
-public class MongoMetadataProvider extends AbstractDataProvider implements MetadataProvider {
+public class MongoMetadataProvider extends AbstractMongoDataProvider implements MetadataProvider {
 
   private final BaleenDocumentRepository documents;
-  private final ReactiveMongoTemplate mongoTemplate;
 
   public MongoMetadataProvider(final String dataset, final String datasource,
       final ReactiveMongoTemplate mongoTemplate, final BaleenDocumentRepository documents) {
-    super(dataset, datasource);
-    this.mongoTemplate = mongoTemplate;
+    super(dataset, datasource, mongoTemplate);
     this.documents = documents;
-  }
-
-
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.MONGO;
   }
 
   @Override
@@ -73,7 +62,7 @@ public class MongoMetadataProvider extends AbstractDataProvider implements Metad
 
     final Aggregation aggregation = newAggregation(list);
 
-    return mongoTemplate.aggregate(aggregation, MongoDocument.class, TermBin.class);
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
   }
 
   @Override
@@ -112,12 +101,8 @@ public class MongoMetadataProvider extends AbstractDataProvider implements Metad
     final Aggregation aggregation = newAggregation(list);
 
 
-    return mongoTemplate.aggregate(aggregation, MongoDocument.class, TermBin.class);
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
   }
 
-  // Spring doesn't have this yet
-  private static AggregationExpression objectToArray(final String field) {
-    return context -> new Document("$objectToArray", "$" + field);
-  }
 }
 

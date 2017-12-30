@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchDocumentProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;

@@ -5,7 +5,9 @@ import java.util.Map;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 
+import io.committed.invest.support.data.jpa.AbstractJpaDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.data.jpa.dao.JpaDocument;
 import io.committed.ketos.data.jpa.providers.JpaDocumentProvider;
 import io.committed.ketos.data.jpa.repository.JpaDocumentMetadataRepository;
 import io.committed.ketos.data.jpa.repository.JpaDocumentRepository;
@@ -15,7 +17,7 @@ public class JpaDocumentProviderFactory
     extends AbstractJpaDataProviderFactory<DocumentProvider> {
 
   public JpaDocumentProviderFactory(final EntityManagerFactoryBuilder emfBuilder) {
-    super(emfBuilder, "baleen-jpa-documents", DocumentProvider.class);
+    super(emfBuilder, "baleen-jpa-documents", DocumentProvider.class, JpaDocument.class);
   }
 
 

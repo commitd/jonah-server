@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
 
+import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.plugins.data.mongo.providers.MongoMetadataProvider;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;

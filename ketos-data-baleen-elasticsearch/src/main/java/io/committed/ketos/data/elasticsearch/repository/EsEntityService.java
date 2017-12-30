@@ -10,14 +10,18 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.support.data.elasticsearch.AbstractEsService;
+import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
+import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.dao.EsEntity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class EsEntityService extends AbstractEsService {
+public class EsEntityService extends AbstractEsService<EsDocument> {
 
   public EsEntityService(final ObjectMapper mapper, final ElasticsearchTemplate elastic) {
-    super(mapper, elastic);
+    super(mapper, elastic, BaleenElasticsearchConstants.DOCUMENT_INDEX,
+        BaleenElasticsearchConstants.DOCUMENT_TYPE, EsDocument.class);
   }
 
   public Mono<EsEntity> getById(final String id) {

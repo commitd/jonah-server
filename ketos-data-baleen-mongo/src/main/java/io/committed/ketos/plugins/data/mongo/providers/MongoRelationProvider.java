@@ -1,9 +1,9 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -13,14 +13,15 @@ import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoRelationProvider extends AbstractDataProvider implements RelationProvider {
+public class MongoRelationProvider extends AbstractMongoDataProvider implements RelationProvider {
 
   private final BaleenRelationRepository relations;
 
   @Autowired
   public MongoRelationProvider(final String dataset, final String datasource,
+      final ReactiveMongoTemplate mongoTemplate,
       final BaleenRelationRepository relations) {
-    super(dataset, datasource);
+    super(dataset, datasource, mongoTemplate);
 
     this.relations = relations;
   }
@@ -58,11 +59,6 @@ public class MongoRelationProvider extends AbstractDataProvider implements Relat
 
   private Flux<BaleenRelation> toRelations(final Flux<MongoRelation> stream) {
     return stream.map(MongoRelation::toRelation);
-  }
-
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.MONGO;
   }
 
   @Override

@@ -9,15 +9,19 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.committed.invest.utils.OffsetLimitPagable;
+import io.committed.invest.support.data.elasticsearch.AbstractEsService;
+import io.committed.invest.support.data.utils.OffsetLimitPagable;
+import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
+import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.dao.EsRelation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class EsRelationService extends AbstractEsService {
+public class EsRelationService extends AbstractEsService<EsDocument> {
 
   public EsRelationService(final ObjectMapper mapper, final ElasticsearchTemplate elastic) {
-    super(mapper, elastic);
+    super(mapper, elastic, BaleenElasticsearchConstants.DOCUMENT_INDEX,
+        BaleenElasticsearchConstants.DOCUMENT_TYPE, EsDocument.class);
   }
 
   public Flux<EsRelation> findAll(final int offset, final int limit) {

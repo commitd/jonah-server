@@ -1,52 +1,39 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsMetadataService;
 import reactor.core.publisher.Flux;
 
-public class ElasticsearchMetadataProvider extends AbstractDataProvider
+public class ElasticsearchMetadataProvider
+    extends AbstractElasticsearchServiceDataProvider<EsMetadataService>
     implements MetadataProvider {
-
-  private final EsMetadataService metadataService;
 
   public ElasticsearchMetadataProvider(final String dataset, final String datasource,
       final EsMetadataService metadataService) {
-    super(dataset, datasource);
-    this.metadataService = metadataService;
+    super(dataset, datasource, metadataService);
   }
-
-
-  @Override
-  public String getDatabase() {
-    return DatabaseConstants.ELASTICSEARCH;
-  }
-
 
   @Override
   public Flux<TermBin> countByKey() {
-    return metadataService.countByKey(null);
+    return getService().countByKey(null);
   }
-
 
   @Override
   public Flux<TermBin> countByKey(final String key) {
-    return metadataService.countByKey(key);
+    return getService().countByKey(key);
   }
-
 
   @Override
   public Flux<TermBin> countByValue() {
-    return metadataService.countByKey(null);
+    return getService().countByKey(null);
 
   }
 
-
   @Override
   public Flux<TermBin> countByValue(final String key) {
-    return metadataService.countByValue(key);
+    return getService().countByValue(key);
 
   }
 

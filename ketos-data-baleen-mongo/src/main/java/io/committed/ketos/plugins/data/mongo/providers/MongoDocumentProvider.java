@@ -13,8 +13,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
@@ -22,15 +21,13 @@ import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoDocumentProvider extends AbstractDataProvider implements DocumentProvider {
+public class MongoDocumentProvider extends AbstractMongoDataProvider implements DocumentProvider {
 
   private final BaleenDocumentRepository documents;
-  private final ReactiveMongoTemplate mongoTemplate;
 
   public MongoDocumentProvider(final String dataset, final String datasource,
       final ReactiveMongoTemplate mongoTemplate, final BaleenDocumentRepository documents) {
-    super(dataset, datasource);
-    this.mongoTemplate = mongoTemplate;
+    super(dataset, datasource, mongoTemplate);
     this.documents = documents;
   }
 
@@ -60,11 +57,6 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
   }
 
   @Override
-  public String getDatabase() {
-    return DatabaseConstants.MONGO;
-  }
-
-  @Override
   public Mono<Long> count() {
     return documents.count();
   }
@@ -79,12 +71,6 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
     return termAggregation("document.type");
   }
 
-  private Flux<TermBin> termAggregation(final String field) {
-    final Aggregation aggregation = newAggregation(
-        group(field).count().as("count"),
-        project("count").and("_id").as("term"));
-    return mongoTemplate.aggregate(aggregation, MongoDocument.class, TermBin.class);
-  }
 
   @Override
   public Flux<TermBin> countByLanguage() {
@@ -103,11 +89,18 @@ public class MongoDocumentProvider extends AbstractDataProvider implements Docum
         project().and("document.timestamp").dateAsFormattedString("%Y-%m-%d").as("date"),
         group("date").count().as("count"),
         project("count").and("_id").as("term"));
-    return mongoTemplate.aggregate(aggregation, MongoDocument.class, TermBin.class)
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class)
         .map(t -> {
           final LocalDate date = LocalDate.parse(t.getTerm());
           return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
         });
+  }
+
+  protected Flux<TermBin> termAggregation(final String field) {
+    final Aggregation aggregation = newAggregation(
+        group(field).count().as("count"),
+        project("count").and("_id").as("term"));
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
   }
 
 

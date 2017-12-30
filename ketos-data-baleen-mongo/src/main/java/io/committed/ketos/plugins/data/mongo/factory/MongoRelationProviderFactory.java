@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
 
+import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.providers.MongoRelationProvider;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
@@ -18,7 +19,7 @@ public class MongoRelationProviderFactory
   }
 
   @Override
-  public Mono<RelationProvider> build(final String dataset, final String datasoruce,
+  public Mono<RelationProvider> build(final String dataset, final String datasource,
       final Map<String, Object> settings) {
     final ReactiveMongoTemplate mongoTemplate = buildMongoTemplate(settings);
     final ReactiveRepositoryFactorySupport support =
@@ -27,7 +28,7 @@ public class MongoRelationProviderFactory
     final BaleenRelationRepository repository =
         support.getRepository(BaleenRelationRepository.class);
 
-    return Mono.just(new MongoRelationProvider(dataset, datasoruce, repository));
+    return Mono.just(new MongoRelationProvider(dataset, datasource, mongoTemplate, repository));
   }
 
 }
