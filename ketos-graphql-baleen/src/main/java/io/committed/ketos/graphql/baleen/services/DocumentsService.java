@@ -14,6 +14,7 @@ import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.data.BaleenDocuments;
+import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -150,5 +151,19 @@ public class DocumentsService extends AbstractGraphQlService {
         .flatMap(DocumentProvider::countByDate).groupBy(TimeBin::getTs)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TimeBin(g.key(), l)))
         .collectList().map(l -> new Timeline(TimeInterval.DAY, l));
+  }
+
+  @GraphQLQuery(name = "document", description = "Document containing the entity")
+  public Mono<BaleenDocument> getDocumentForEntity(@GraphQLContext final BaleenEntity entity,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    final Optional<BaleenCorpus> corpus = entity.getGqlNode().findParent(BaleenCorpus.class);
+
+    if (!corpus.isPresent()) {
+      return null;
+    }
+
+    return getDocument(corpus.get(), entity.getDocId(), hints);
   }
 }
