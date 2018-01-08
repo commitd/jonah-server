@@ -19,14 +19,14 @@ public class MongoEntities {
   private String docId;
 
   @JsonProperty("entities")
-  private List<MongoMention> entities;
+  private List<org.bson.Document> entities;
 
   public BaleenEntity toEntity() {
     final BaleenEntity entity = new BaleenEntity();
     entity.setId(getId());
     entity.setDocId(getDocId());
-    entity.setMentions(
-        getEntities().stream().map(m -> m.toMention(getId())).collect(Collectors.toList()));
+    entity.setMentions(getEntities().stream().map(d -> new MongoMention(d).toMention(getId()))
+        .collect(Collectors.toList()));
     return entity;
   }
 

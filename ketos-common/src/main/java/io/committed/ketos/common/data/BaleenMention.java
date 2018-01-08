@@ -1,5 +1,7 @@
 package io.committed.ketos.common.data;
 
+import java.util.Collections;
+import java.util.Map;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BaleenMention extends AbstractGraphQLNodeSupport<BaleenMention> {
 
+
+
   @GraphQLId
   private String id;
   private double confidence;
@@ -24,5 +28,6 @@ public class BaleenMention extends AbstractGraphQLNodeSupport<BaleenMention> {
   private String value;
   private String entityId;
 
-
+  @Builder.Default
+  private Map<String, Object> properties = Collections.emptyMap();
 }
