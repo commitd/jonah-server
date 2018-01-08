@@ -1,7 +1,6 @@
 package io.committed.ketos.common.data;
 
 import java.util.Optional;
-
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BaleenCorpusMetadata
-    extends AbstractGraphQLNodeSupport<BaleenCorpusMetadata> {
+public class BaleenCorpusMetadata extends AbstractGraphQLNodeSupport<BaleenCorpusMetadata> {
 
   private Optional<String> key;
 }

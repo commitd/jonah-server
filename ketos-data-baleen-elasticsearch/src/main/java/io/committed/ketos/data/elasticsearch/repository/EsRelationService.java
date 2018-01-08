@@ -6,9 +6,7 @@ import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
 import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.committed.invest.support.data.elasticsearch.AbstractEsService;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
@@ -34,26 +32,20 @@ public class EsRelationService extends AbstractEsService<EsDocument> {
 
     return getElastic()
         .query(
-            queryBuilder()
-                .withQuery(QueryBuilders.existsQuery("relations"))
-                .withPageable(new OffsetLimitPagable(0, offset + limit))
-                .build(),
+            queryBuilder().withQuery(QueryBuilders.existsQuery("relations"))
+                .withPageable(new OffsetLimitPagable(0, offset + limit)).build(),
             resultsToDocumentExtractor())
-        .flatMap(d -> Flux.fromIterable(d.getRelations()))
-        .skip(offset)
-        .take(limit);
+        .flatMap(d -> Flux.fromIterable(d.getRelations())).skip(offset).take(limit);
   }
 
   public Flux<EsRelation> findByDocument(final String id) {
-    return getDocumentById(id)
-        .flatMapMany(d -> Flux.fromIterable(d.getRelations()));
+    return getDocumentById(id).flatMapMany(d -> Flux.fromIterable(d.getRelations()));
   }
 
   public Flux<EsRelation> findBySource(final String entityId) {
     return getElastic()
         .query(
-            queryBuilder().withQuery(QueryBuilders.termQuery("relations.target", entityId))
-                .build(),
+            queryBuilder().withQuery(QueryBuilders.termQuery("relations.target", entityId)).build(),
             resultsToDocumentExtractor())
         .flatMap(f -> Flux.fromIterable(f.getRelations()))
         .filter(e -> entityId.equals(e.getSource()));
@@ -62,8 +54,7 @@ public class EsRelationService extends AbstractEsService<EsDocument> {
   public Flux<EsRelation> findByTarget(final String entityId) {
     return getElastic()
         .query(
-            queryBuilder().withQuery(QueryBuilders.termQuery("relations.source", entityId))
-                .build(),
+            queryBuilder().withQuery(QueryBuilders.termQuery("relations.source", entityId)).build(),
             resultsToDocumentExtractor())
         .flatMap(f -> Flux.fromIterable(f.getRelations()))
         .filter(e -> entityId.equals(e.getSource()));
@@ -74,8 +65,7 @@ public class EsRelationService extends AbstractEsService<EsDocument> {
         .query(
             queryBuilder().withQuery(QueryBuilders.termQuery("relations.externalId", id)).build(),
             resultsToDocumentExtractor())
-        .flatMap(f -> Flux.fromIterable(f.getRelations()))
-        .filter(e -> id.equals(e.getExternalId()))
+        .flatMap(f -> Flux.fromIterable(f.getRelations())).filter(e -> id.equals(e.getExternalId()))
         .next();
   }
 

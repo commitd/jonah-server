@@ -1,10 +1,8 @@
 package io.committed.ketos.plugins.data.mongo.factory;
 
 import java.util.Map;
-
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
-
 import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.providers.MongoDocumentProvider;
@@ -23,8 +21,7 @@ public class MongoDocumentProviderFactory
   public Mono<DocumentProvider> build(final String dataset, final String datasource,
       final Map<String, Object> settings) {
     final ReactiveMongoTemplate mongoTemplate = buildMongoTemplate(settings);
-    final ReactiveRepositoryFactorySupport support =
-        buildRepositoryFactory(mongoTemplate);
+    final ReactiveRepositoryFactorySupport support = buildRepositoryFactory(mongoTemplate);
 
     final BaleenDocumentRepository repository =
         support.getRepository(BaleenDocumentRepository.class);

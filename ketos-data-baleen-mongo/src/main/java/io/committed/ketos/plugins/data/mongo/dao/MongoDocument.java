@@ -3,11 +3,9 @@ package io.committed.ketos.plugins.data.mongo.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import io.committed.ketos.common.data.BaleenDocumentInfo;
 import lombok.Data;
 

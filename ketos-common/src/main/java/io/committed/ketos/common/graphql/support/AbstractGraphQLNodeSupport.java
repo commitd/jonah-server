@@ -1,8 +1,6 @@
-package io.committed.ketos.common.graphql.support
-;
+package io.committed.ketos.common.graphql.support;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Data

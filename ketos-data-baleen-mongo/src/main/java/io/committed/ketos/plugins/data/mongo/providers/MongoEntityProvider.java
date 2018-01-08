@@ -4,11 +4,9 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.grou
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -25,8 +23,7 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
 
   @Autowired
   public MongoEntityProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate,
-      final BaleenEntitiesRepository entities) {
+      final ReactiveMongoTemplate mongoTemplate, final BaleenEntitiesRepository entities) {
     super(dataset, datasource, mongoTemplate);
     this.entities = entities;
   }
@@ -50,10 +47,8 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
 
   @Override
   public Flux<TermBin> countByType() {
-    final Aggregation aggregation = newAggregation(
-        unwind("entities"),
-        group("entities.type").count().as("count"),
-        project("count").and("_id").as("term"));
+    final Aggregation aggregation = newAggregation(unwind("entities"),
+        group("entities.type").count().as("count"), project("count").and("_id").as("term"));
     return getTemplate().aggregate(aggregation, MongoEntities.class, TermBin.class);
   }
 

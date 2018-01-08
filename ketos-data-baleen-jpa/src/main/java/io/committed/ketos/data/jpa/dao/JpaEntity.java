@@ -2,11 +2,9 @@ package io.committed.ketos.data.jpa.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import lombok.Data;
@@ -29,16 +27,10 @@ public class JpaEntity {
     // Do the best we can to reconstruct the mentions...
     final List<BaleenMention> mentions = new ArrayList<>();
     for (int i = 0; i < Math.min(externalId.size(), value.size()); i++) {
-      mentions.add(BaleenMention.builder()
-          .type(type)
-          .entityId(externalId.get(i))
-          .value(value.get(i))
-          .build());
+      mentions.add(BaleenMention.builder().type(type).entityId(externalId.get(i))
+          .value(value.get(i)).build());
     }
 
-    return BaleenEntity.builder()
-        .docId(docId)
-        .mentions(mentions)
-        .build();
+    return BaleenEntity.builder().docId(docId).mentions(mentions).build();
   }
 }

@@ -1,7 +1,6 @@
 package io.committed.ketos.common.ui.actions;
 
 import java.util.Arrays;
-
 import com.google.common.base.Joiner;
 
 public class KetosCoreActions {

@@ -3,11 +3,12 @@ package io.committed.ketos.data.elasticsearch.providers;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
+import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.repository.EsMetadataService;
 import reactor.core.publisher.Flux;
 
 public class ElasticsearchMetadataProvider
-    extends AbstractElasticsearchServiceDataProvider<EsMetadataService>
+    extends AbstractElasticsearchServiceDataProvider<EsDocument, EsMetadataService>
     implements MetadataProvider {
 
   public ElasticsearchMetadataProvider(final String dataset, final String datasource,

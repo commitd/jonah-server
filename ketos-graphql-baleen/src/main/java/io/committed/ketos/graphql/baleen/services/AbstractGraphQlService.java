@@ -2,7 +2,6 @@ package io.committed.ketos.graphql.baleen.services;
 
 import java.util.Optional;
 import java.util.function.Function;
-
 import io.committed.invest.server.data.providers.DataProvider;
 import io.committed.invest.server.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
@@ -24,15 +23,12 @@ public abstract class AbstractGraphQlService {
   }
 
   protected <T extends DataProvider> Flux<T> getProviders(final BaleenCorpus corpus,
-      final Class<T> clazz,
-      final DataHints hints) {
+      final Class<T> clazz, final DataHints hints) {
     return corpusProviders.findForDataset(corpus.getId(), clazz, hints);
   }
 
   protected <T extends DataProvider> Flux<T> getProvidersFromContext(
-      final AbstractGraphQLNodeSupport<?> node,
-      final Class<T> clazz,
-      final DataHints hints) {
+      final AbstractGraphQLNodeSupport<?> node, final Class<T> clazz, final DataHints hints) {
     if (node.getGqlNode() != null) {
       final GraphQLNode gqlNode = node.getGqlNode();
       final Optional<BaleenCorpus> corpus = gqlNode.findParent(BaleenCorpus.class);

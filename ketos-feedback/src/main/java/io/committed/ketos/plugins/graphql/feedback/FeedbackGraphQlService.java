@@ -4,9 +4,7 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.util.StringUtils;
-
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.graphql.Context;
 import io.committed.invest.extensions.InvestUiExtension;
@@ -45,19 +43,11 @@ public class FeedbackGraphQlService {
     final String user =
         context.getAuthentication().map(Principal::getName).defaultIfEmpty("guest").block();
 
-    final Feedback f = Feedback.builder()
-        .comment(comment)
-        .subject(subject)
-        .type(type)
-        .user(user)
-        .pluginId(pluginId)
-        .timestamp(Instant.now())
-        .build();
+    final Feedback f = Feedback.builder().comment(comment).subject(subject).type(type).user(user)
+        .pluginId(pluginId).timestamp(Instant.now()).build();
 
     // Save into every feeback provider...
-    return providers.findAll(FeedbackDataProvider.class)
-        .flatMap(d -> d.save(f))
-        .last();
+    return providers.findAll(FeedbackDataProvider.class).flatMap(d -> d.save(f)).last();
   }
 
   @GraphQLMutation(name = "deleteFeedback", description = "Save feedback")
@@ -66,15 +56,13 @@ public class FeedbackGraphQlService {
 
     // TODO: Check if we are admin or the original feedback author
 
-    providers.findAll(FeedbackDataProvider.class)
-        .subscribe(d -> d.delete(feedbackId));
+    providers.findAll(FeedbackDataProvider.class).subscribe(d -> d.delete(feedbackId));
 
     return true;
   }
 
   @GraphQLQuery(name = "feedback", description = "Save feedback")
-  public Flux<Feedback> listFeedback(
-      @GraphQLRootContext final Context context,
+  public Flux<Feedback> listFeedback(@GraphQLRootContext final Context context,
       @GraphQLArgument(name = "offset", description = "Start offset",
           defaultValue = "0") final int offset,
       @GraphQLArgument(name = "size", description = "Maximum values to return",
@@ -82,8 +70,7 @@ public class FeedbackGraphQlService {
 
     // TODO: Admin can list everything, user can only list there own. if not logged in then nothing
 
-    return providers.findAll(FeedbackDataProvider.class)
-        .flatMap(d -> d.findAll(offset, limit));
+    return providers.findAll(FeedbackDataProvider.class).flatMap(d -> d.findAll(offset, limit));
   }
 
   @GraphQLQuery(name = "pluginName", description = "Get plugin display name")
@@ -93,10 +80,8 @@ public class FeedbackGraphQlService {
 
     if (!StringUtils.isEmpty(pluginId)) {
 
-      name = uiExtensions.stream()
-          .filter(e -> pluginId.equalsIgnoreCase(e.getId()))
-          .map(InvestUiExtension::getName)
-          .findFirst();
+      name = uiExtensions.stream().filter(e -> pluginId.equalsIgnoreCase(e.getId()))
+          .map(InvestUiExtension::getName).findFirst();
 
     }
 

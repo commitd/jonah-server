@@ -2,9 +2,7 @@ package io.committed.ketos.data.elasticsearch.repository;
 
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.elasticsearch.AbstractEsService;
@@ -30,15 +28,13 @@ public class EsDocumentService extends AbstractEsService<EsDocument> {
 
 
   public Mono<Long> countSearchMatches(final String query) {
-    return Mono.just(getElastic().count(queryBuilder()
-        .withQuery(QueryBuilders.queryStringQuery(query))
-        .build()));
+    return Mono.just(getElastic()
+        .count(queryBuilder().withQuery(QueryBuilders.queryStringQuery(query)).build()));
   }
 
   public Mono<Long> count() {
-    return Mono.just(getElastic().count(queryBuilder()
-        .withQuery(QueryBuilders.matchAllQuery())
-        .build()));
+    return Mono
+        .just(getElastic().count(queryBuilder().withQuery(QueryBuilders.matchAllQuery()).build()));
   }
 
   public Flux<TermBin> countByType() {

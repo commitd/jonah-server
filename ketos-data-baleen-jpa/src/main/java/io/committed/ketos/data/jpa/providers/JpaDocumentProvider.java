@@ -2,11 +2,9 @@ package io.committed.ketos.data.jpa.providers;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
@@ -26,8 +24,7 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   private final JpaDocumentMetadataRepository metadataRepo;
 
   public JpaDocumentProvider(final String dataset, final String datasource,
-      final JpaDocumentRepository documents,
-      final JpaDocumentMetadataRepository metadata) {
+      final JpaDocumentRepository documents, final JpaDocumentMetadataRepository metadata) {
     super(dataset, datasource);
     this.documents = documents;
     this.metadataRepo = metadata;
@@ -76,11 +73,10 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
 
   @Override
   public Flux<TimeBin> countByDate() {
-    return Flux.fromStream(documents.countByDate())
-        .map(t -> {
-          final LocalDate date = LocalDate.parse(t.getTerm());
-          return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
-        });
+    return Flux.fromStream(documents.countByDate()).map(t -> {
+      final LocalDate date = LocalDate.parse(t.getTerm());
+      return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
+    });
 
   }
 

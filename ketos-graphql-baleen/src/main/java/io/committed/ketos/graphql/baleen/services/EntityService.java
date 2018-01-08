@@ -1,7 +1,6 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
@@ -34,8 +33,7 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocument(document))
-        .map(addContext(document));
+        .flatMap(p -> p.getByDocument(document)).map(addContext(document));
   }
 
   @GraphQLQuery(name = "entities", description = "Get entities by type")
@@ -48,8 +46,7 @@ public class EntityService extends AbstractGraphQlService {
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndType(document, type, limit))
-        .map(addContext(document));
+        .flatMap(p -> p.getByDocumentAndType(document, type, limit)).map(addContext(document));
   }
 
   @GraphQLQuery(name = "entities", description = "Get entities by type and value")
@@ -62,8 +59,7 @@ public class EntityService extends AbstractGraphQlService {
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndValue(document, value, limit))
-        .map(addContext(document));
+        .flatMap(p -> p.getByDocumentAndValue(document, value, limit)).map(addContext(document));
   }
 
   @GraphQLQuery(name = "entities", description = "Get entities by type")
@@ -84,13 +80,10 @@ public class EntityService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "entity", description = "Get entities by id")
   public Mono<BaleenEntity> getById(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "id") @GraphQLId final String id,
-      @GraphQLArgument(name = "hints",
+      @GraphQLArgument(name = "id") @GraphQLId final String id, @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, EntityProvider.class, hints)
-        .flatMap(p -> p.getById(id))
-        .map(addContext(corpus))
-        .next();
+    return getProviders(corpus, EntityProvider.class, hints).flatMap(p -> p.getById(id))
+        .map(addContext(corpus)).next();
   }
 
 
@@ -99,29 +92,24 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(mention, EntityProvider.class, hints)
-        .flatMap(p -> p.mentionEntity(mention))
-        .map(addContext(mention))
-        .next();
+        .flatMap(p -> p.mentionEntity(mention)).map(addContext(mention)).next();
   }
 
   @GraphQLQuery(name = "entityCount", description = "Number of entities in corpus")
-  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, EntityProvider.class, hints)
-        .flatMap(EntityProvider::count)
+  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
+      name = "hints",
+      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProviders(corpus, EntityProvider.class, hints).flatMap(EntityProvider::count)
         .reduce(0L, (a, b) -> a + b);
   }
 
   @GraphQLQuery(name = "entityTypes", description = "Count of entities by entity type")
-  public Mono<TermCount> getEntityTypes(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, EntityProvider.class, hints)
-        .flatMap(EntityProvider::countByType)
+  public Mono<TermCount> getEntityTypes(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
+      name = "hints",
+      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProviders(corpus, EntityProvider.class, hints).flatMap(EntityProvider::countByType)
         .groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList()
-        .map(TermCount::new);
+        .collectList().map(TermCount::new);
   }
 }

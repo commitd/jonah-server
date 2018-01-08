@@ -26,8 +26,7 @@ public interface EntityProvider extends DataProvider {
   }
 
   default Flux<BaleenEntity> getByDocumentAndType(final BaleenDocument document, final String type,
-      final String value,
-      final int limit) {
+      final String value, final int limit) {
     return filterEntities(getByDocument(document), type, value, limit);
   }
 
@@ -36,8 +35,7 @@ public interface EntityProvider extends DataProvider {
   }
 
   static Flux<BaleenEntity> filterEntities(final Flux<BaleenEntity> in, final String type,
-      final String value,
-      final int limit) {
+      final String value, final int limit) {
     Flux<BaleenEntity> flux = in;
     if (type != null) {
       flux = flux.filter(e -> type.equals(e.getType().get()));

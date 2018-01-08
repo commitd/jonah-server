@@ -2,11 +2,9 @@ package io.committed.ketos.data.jpa.repository;
 
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
-
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.ketos.data.jpa.dao.JpaEntity;
 

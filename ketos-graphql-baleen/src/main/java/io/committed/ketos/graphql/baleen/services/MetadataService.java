@@ -1,7 +1,6 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import java.util.Optional;
-
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
@@ -33,8 +32,7 @@ public class MetadataService extends AbstractGraphQlService {
 
 
   @GraphQLQuery(name = "keys", description = "Get information on metadata keys")
-  public Mono<TermCount> getMetadataKey(
-      @GraphQLContext final BaleenCorpusMetadata corpusMetadata,
+  public Mono<TermCount> getMetadataKey(@GraphQLContext final BaleenCorpusMetadata corpusMetadata,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -51,8 +49,7 @@ public class MetadataService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "values", description = "Get all values for metadata")
-  public Mono<TermCount> getValues(
-      @GraphQLContext final BaleenCorpusMetadata corpusMetadata,
+  public Mono<TermCount> getValues(@GraphQLContext final BaleenCorpusMetadata corpusMetadata,
       @GraphQLArgument(name = "size", description = "Maximum number of values to return",
           defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
@@ -74,7 +71,6 @@ public class MetadataService extends AbstractGraphQlService {
   private Mono<TermCount> joinTermBins(final Flux<TermBin> flux) {
     return flux.groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList()
-        .map(TermCount::new);
+        .collectList().map(TermCount::new);
   }
 }

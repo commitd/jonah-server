@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ElasticsearchDocumentProvider
-    extends AbstractElasticsearchServiceDataProvider<EsDocumentService>
+    extends AbstractElasticsearchServiceDataProvider<EsDocument, EsDocumentService>
     implements DocumentProvider {
 
   public ElasticsearchDocumentProvider(final String dataset, final String datasource,

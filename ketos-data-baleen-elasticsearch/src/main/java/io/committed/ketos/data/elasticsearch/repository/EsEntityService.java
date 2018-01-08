@@ -6,9 +6,7 @@ import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
 import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractEsService;
 import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
@@ -28,14 +26,12 @@ public class EsEntityService extends AbstractEsService<EsDocument> {
     return getElastic()
         .query(queryBuilder().withQuery(QueryBuilders.termQuery("entities.externalId", id)).build(),
             resultsToDocumentExtractor())
-        .flatMap(f -> Flux.fromIterable(f.getEntities()))
-        .filter(e -> id.equals(e.getExternalId()))
+        .flatMap(f -> Flux.fromIterable(f.getEntities())).filter(e -> id.equals(e.getExternalId()))
         .next();
   }
 
   public Flux<EsEntity> findByDocumentId(final String id) {
-    return getDocumentById(id)
-        .flatMapMany(f -> Flux.fromIterable(f.getEntities()));
+    return getDocumentById(id).flatMapMany(f -> Flux.fromIterable(f.getEntities()));
   }
 
   public Mono<Long> count() {
@@ -47,7 +43,7 @@ public class EsEntityService extends AbstractEsService<EsDocument> {
         .build();
 
     return getElastic().query(query, response -> {
-      final ParsedSum sum = (ParsedSum) response.getAggregations().get("agg");
+      final ParsedSum sum = response.getAggregations().get("agg");
       return Mono.just((long) sum.getValue());
     });
   }

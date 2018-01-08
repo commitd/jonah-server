@@ -3,7 +3,6 @@ package io.committed.ketos.common.data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -25,6 +24,7 @@ public class BaleenDocument extends AbstractGraphQLNodeSupport<BaleenDocument> {
   private String id;
   private BaleenDocumentInfo info;
   private List<String> publishedIds;
+  @Builder.Default
   private Map<String, Object> metadata = new HashMap<>();
   private String content;
 

@@ -1,7 +1,6 @@
 package io.committed.ketos.graphql.baleen.utils;
 
 import java.util.Map;
-
 import org.springframework.util.StringUtils;
 
 public final class BaleenUtils {

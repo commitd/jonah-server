@@ -2,10 +2,8 @@ package io.committed.ketos.ui.corpussummary;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
 import io.committed.invest.actions.ActionDefinition;
 import io.committed.invest.actions.SimpleActionDefinition;
 import io.committed.invest.extensions.InvestUiExtension;
@@ -46,9 +44,8 @@ public class CorpusSummaryExtension implements InvestUiExtension {
 
   @Override
   public Collection<ActionDefinition> getActions() {
-    return Arrays.asList(
-        SimpleActionDefinition.builder().title("Summary").description("Corpus dashboard")
-            .action(KetosCoreActions.CORPUS_VIEW).build());
+    return Arrays.asList(SimpleActionDefinition.builder().title("Summary")
+        .description("Corpus dashboard").action(KetosCoreActions.CORPUS_VIEW).build());
   }
 
   // TODO: You should override to provide additional information such name, description and logo

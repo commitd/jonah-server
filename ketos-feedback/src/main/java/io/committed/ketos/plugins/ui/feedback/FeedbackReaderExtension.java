@@ -2,9 +2,7 @@ package io.committed.ketos.plugins.ui.feedback;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.springframework.context.annotation.Configuration;
-
 import io.committed.invest.extensions.InvestUiExtension;
 
 @Configuration

@@ -2,9 +2,7 @@ package io.committed.ketos.data.elasticsearch.dao;
 
 import java.util.Collections;
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import lombok.Data;
@@ -36,23 +34,13 @@ public class EsEntity {
   private transient String documentId;
 
   public BaleenEntity toBaleenEntity() {
-    return BaleenEntity.builder()
-        .docId(documentId)
-        .id(externalId)
-        .mentions(Collections.singletonList(toBaleenMention()))
-        .build();
+    return BaleenEntity.builder().docId(documentId).id(externalId)
+        .mentions(Collections.singletonList(toBaleenMention())).build();
   }
 
   public BaleenMention toBaleenMention() {
-    return BaleenMention.builder()
-        .begin(begin)
-        .end(end)
-        .confidence(confidence)
-        .entityId(externalId)
-        .id(externalId)
-        .type(type)
-        .value(value)
-        .build();
+    return BaleenMention.builder().begin(begin).end(end).confidence(confidence).entityId(externalId)
+        .id(externalId).type(type).value(value).build();
   }
 
 }

@@ -1,7 +1,6 @@
 package io.committed.ketos.common.graphql.support;
 
 import java.util.Optional;
-
 import io.leangen.graphql.annotations.GraphQLIgnore;
 import lombok.Data;
 
@@ -32,8 +31,7 @@ public class GraphQLNode {
   }
 
   public boolean hasParent() {
-    return context != null
-        && context instanceof AbstractGraphQLNodeSupport
+    return context != null && context instanceof AbstractGraphQLNodeSupport
         && ((AbstractGraphQLNodeSupport<?>) context).getGqlNode() != null;
   }
 

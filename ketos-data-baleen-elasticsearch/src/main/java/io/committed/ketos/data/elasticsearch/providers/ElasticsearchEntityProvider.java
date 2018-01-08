@@ -11,8 +11,7 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class ElasticsearchEntityProvider extends AbstractDataProvider
-    implements EntityProvider {
+public class ElasticsearchEntityProvider extends AbstractDataProvider implements EntityProvider {
 
   private final EsEntityService entityService;
 
@@ -29,15 +28,13 @@ public class ElasticsearchEntityProvider extends AbstractDataProvider
 
   @Override
   public Mono<BaleenEntity> getById(final String id) {
-    return entityService.getById(id)
-        .map(EsEntity::toBaleenEntity);
+    return entityService.getById(id).map(EsEntity::toBaleenEntity);
 
   }
 
   @Override
   public Flux<BaleenEntity> getByDocument(final BaleenDocument document) {
-    return entityService.findByDocumentId(document.getId())
-        .map(EsEntity::toBaleenEntity);
+    return entityService.findByDocumentId(document.getId()).map(EsEntity::toBaleenEntity);
   }
 
   @Override

@@ -1,9 +1,7 @@
 package io.committed.ketos.data.elasticsearch.repository;
 
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractEsService;
 import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;

@@ -3,10 +3,8 @@ package io.committed.ketos.ui.documentsearch;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
 import io.committed.invest.actions.ActionDefinition;
 import io.committed.invest.actions.SimpleActionDefinition;
 import io.committed.invest.extensions.InvestUiExtension;
@@ -48,16 +46,10 @@ public class DocumentSearchExtension implements InvestUiExtension {
   @Override
   public Collection<ActionDefinition> getActions() {
     return Arrays.asList(
-        SimpleActionDefinition.builder()
-            .action(KetosCoreActions.DOCUMENT_SEARCH)
-            .title("Search")
-            .description("Search for documents by content")
-            .build(),
-        SimpleActionDefinition.builder()
-            .action(KetosCoreActions.CORPUS_VIEW)
-            .title("Search")
-            .description("Explore corpus by search")
-            .build());
+        SimpleActionDefinition.builder().action(KetosCoreActions.DOCUMENT_SEARCH).title("Search")
+            .description("Search for documents by content").build(),
+        SimpleActionDefinition.builder().action(KetosCoreActions.CORPUS_VIEW).title("Search")
+            .description("Explore corpus by search").build());
 
   }
 

@@ -1,13 +1,10 @@
 package io.committed.ketos.plugins.data.feedback.mongo;
 
 import java.util.Map;
-
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.repository.support.ReactiveMongoRepositoryFactory;
-
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
-
 import io.committed.invest.server.data.providers.AbstractDataProviderFactory;
 import io.committed.invest.server.data.providers.DatabaseConstants;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;

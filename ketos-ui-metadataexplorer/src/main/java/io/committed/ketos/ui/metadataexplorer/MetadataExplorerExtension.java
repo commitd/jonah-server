@@ -3,10 +3,8 @@ package io.committed.ketos.ui.metadataexplorer;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
 import io.committed.invest.actions.ActionDefinition;
 import io.committed.invest.actions.SimpleActionDefinition;
 import io.committed.invest.extensions.InvestUiExtension;
@@ -47,9 +45,8 @@ public class MetadataExplorerExtension implements InvestUiExtension {
 
   @Override
   public Collection<ActionDefinition> getActions() {
-    return Arrays.asList(
-        SimpleActionDefinition.builder().title("Metadata").description("Explore metadata")
-            .action(KetosCoreActions.CORPUS_VIEW).build());
+    return Arrays.asList(SimpleActionDefinition.builder().title("Metadata")
+        .description("Explore metadata").action(KetosCoreActions.CORPUS_VIEW).build());
   }
 
   @Override

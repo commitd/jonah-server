@@ -1,7 +1,6 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.server.data.dataset.Dataset;
 import io.committed.invest.server.data.services.DatasetRegistry;

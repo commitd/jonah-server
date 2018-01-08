@@ -1,10 +1,8 @@
 package io.committed.ketos.graphql.baleen.calculated;
 
 import static org.springframework.util.StringUtils.isEmpty;
-
 import java.util.List;
 import java.util.Map;
-
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentInfo;

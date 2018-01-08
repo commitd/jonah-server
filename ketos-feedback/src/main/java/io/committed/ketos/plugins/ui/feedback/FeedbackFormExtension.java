@@ -1,7 +1,6 @@
 package io.committed.ketos.plugins.ui.feedback;
 
 import org.springframework.context.annotation.Configuration;
-
 import io.committed.invest.extensions.InvestUiExtension;
 
 @Configuration

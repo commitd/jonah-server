@@ -3,7 +3,6 @@ package io.committed.ketos.common.data;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;

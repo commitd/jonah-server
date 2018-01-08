@@ -3,10 +3,8 @@ package io.committed.ketos.ui.documentreader;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
 import io.committed.invest.actions.ActionDefinition;
 import io.committed.invest.actions.SimpleActionDefinition;
 import io.committed.invest.extensions.InvestUiExtension;
@@ -42,12 +40,8 @@ public class DocumentReaderExtension implements InvestUiExtension {
 
   @Override
   public Collection<ActionDefinition> getActions() {
-    return Arrays.asList(
-        SimpleActionDefinition.builder()
-            .action(KetosCoreActions.DOCUMENT_VIEW)
-            .title("Read")
-            .description(getDescription())
-            .build());
+    return Arrays.asList(SimpleActionDefinition.builder().action(KetosCoreActions.DOCUMENT_VIEW)
+        .title("Read").description(getDescription()).build());
 
   }
 

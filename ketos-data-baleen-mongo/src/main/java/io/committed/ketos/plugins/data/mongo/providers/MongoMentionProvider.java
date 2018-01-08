@@ -2,7 +2,6 @@ package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
@@ -21,8 +20,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
   @Autowired
   public MongoMentionProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate,
-      final BaleenEntitiesRepository entities) {
+      final ReactiveMongoTemplate mongoTemplate, final BaleenEntitiesRepository entities) {
     super(dataset, datasource, mongoTemplate);
 
     this.entities = entities;

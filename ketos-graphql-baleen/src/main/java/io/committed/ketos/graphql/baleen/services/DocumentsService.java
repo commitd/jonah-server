@@ -1,9 +1,7 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
@@ -38,10 +36,8 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.getById(id))
-        .map(this.addContext(corpus))
-        .next();
+    return getProviders(corpus, DocumentProvider.class, hints).flatMap(p -> p.getById(id))
+        .map(this.addContext(corpus)).next();
   }
 
   @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
@@ -55,8 +51,7 @@ public class DocumentsService extends AbstractGraphQlService {
           description = "Maximum number of documents to return, for pagination",
           defaultValue = "10") final int size) {
 
-    return new BaleenDocumentSearch(search, offset, size)
-        .addNodeContext(corpus);
+    return new BaleenDocumentSearch(search, offset, size).addNodeContext(corpus);
   }
 
   @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
@@ -72,16 +67,12 @@ public class DocumentsService extends AbstractGraphQlService {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
 
-    final Flux<BaleenDocument> documents = providers
-        .flatMap(p -> p.all(offset, size))
-        .map(addContext(corpus));
+    final Flux<BaleenDocument> documents =
+        providers.flatMap(p -> p.all(offset, size)).map(addContext(corpus));
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
 
-    return new BaleenDocuments(
-        documents,
-        count)
-            .addNodeContext(corpus);
+    return new BaleenDocuments(documents, count).addNodeContext(corpus);
   }
 
 
@@ -102,24 +93,21 @@ public class DocumentsService extends AbstractGraphQlService {
     final Flux<DocumentProvider> providers =
         getProviders(corpus.get(), DocumentProvider.class, hints);
 
-    final Flux<BaleenDocument> documents = providers
-        .flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getOffset(),
-            documentSearch.getSize()))
-        .map(addContext(corpus));
+    final Flux<BaleenDocument> documents =
+        providers.flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getOffset(),
+            documentSearch.getSize())).map(addContext(corpus));
 
-    final Mono<Long> count =
-        providers.flatMap(p -> p.countSearchMatches(documentSearch.getQuery()))
-            .reduce(0L, Long::sum);
+    final Mono<Long> count = providers.flatMap(p -> p.countSearchMatches(documentSearch.getQuery()))
+        .reduce(0L, Long::sum);
 
     return new BaleenDocuments(documents, count).addNodeContext(documentSearch);
   }
 
   @GraphQLQuery(name = "documentCount", description = "Get the number of documents")
-  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::count)
+  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
+      name = "hints",
+      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProviders(corpus, DocumentProvider.class, hints).flatMap(DocumentProvider::count)
         .reduce(0L, Long::sum);
   }
 
@@ -128,11 +116,9 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByType)
-        .groupBy(TermBin::getTerm)
+        .flatMap(DocumentProvider::countByType).groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList()
-        .map(TermCount::new);
+        .collectList().map(TermCount::new);
   }
 
   @GraphQLQuery(name = "documentLanguages", description = "Count of documents per language")
@@ -140,11 +126,9 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByLanguage)
-        .groupBy(TermBin::getTerm)
+        .flatMap(DocumentProvider::countByLanguage).groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList()
-        .map(TermCount::new);
+        .collectList().map(TermCount::new);
   }
 
   @GraphQLQuery(name = "documentClassifications",
@@ -153,11 +137,9 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByClassification)
-        .groupBy(TermBin::getTerm)
+        .flatMap(DocumentProvider::countByClassification).groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList()
-        .map(TermCount::new);
+        .collectList().map(TermCount::new);
   }
 
   @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")
@@ -165,10 +147,8 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByDate)
-        .groupBy(TimeBin::getTs)
+        .flatMap(DocumentProvider::countByDate).groupBy(TimeBin::getTs)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TimeBin(g.key(), l)))
-        .collectList()
-        .map(l -> new Timeline(TimeInterval.DAY, l));
+        .collectList().map(l -> new Timeline(TimeInterval.DAY, l));
   }
 }

@@ -3,6 +3,7 @@ package io.committed.ketos.common.data;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -10,6 +11,7 @@ import reactor.core.publisher.Mono;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class BaleenDocuments extends AbstractGraphQLNodeSupport<BaleenDocuments> {
   private Flux<BaleenDocument> results;
 
