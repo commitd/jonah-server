@@ -110,6 +110,7 @@
       <module>ketos-ui-example-html</module>
       <module>ketos-ui-map</module>
       <module>ketos-ui-metadataexplorer</module>
+      <module>ketos-ui-entitydetails</module>
       <module>ketos-feedback</module>
     </modules>
 </project>
