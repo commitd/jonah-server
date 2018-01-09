@@ -48,6 +48,8 @@ public class GraphQLNode {
         return Optional.of((T) parent);
       } else if (parent instanceof GraphQLNode) {
         return ((GraphQLNode) parent).findParent(clazz);
+      } else if (parent instanceof AbstractGraphQLNodeSupport) {
+        return ((AbstractGraphQLNodeSupport<?>) parent).getGqlNode().findParent(clazz);
       }
     }
 

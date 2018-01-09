@@ -33,7 +33,8 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocument(document)).map(addContext(document));
+        .flatMap(p -> p.getByDocument(document)).map(addContext(document))
+        .doOnNext(BaleenEntity::addContextToMentions);
   }
 
   @GraphQLQuery(name = "entities", description = "Get entities by type")
@@ -46,7 +47,8 @@ public class EntityService extends AbstractGraphQlService {
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndType(document, type, limit)).map(addContext(document));
+        .flatMap(p -> p.getByDocumentAndType(document, type, limit)).map(addContext(document))
+        .doOnNext(BaleenEntity::addContextToMentions);
   }
 
   @GraphQLQuery(name = "entities", description = "Get entities by type and value")
@@ -59,7 +61,8 @@ public class EntityService extends AbstractGraphQlService {
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndValue(document, value, limit)).map(addContext(document));
+        .flatMap(p -> p.getByDocumentAndValue(document, value, limit)).map(addContext(document))
+        .doOnNext(BaleenEntity::addContextToMentions);
   }
 
   @GraphQLQuery(name = "entities", description = "Get entities by type")
@@ -73,7 +76,7 @@ public class EntityService extends AbstractGraphQlService {
 
     return getProvidersFromContext(document, EntityProvider.class, hints)
         .flatMap(p -> p.getByDocumentAndType(document, type, value, limit))
-        .map(addContext(document));
+        .map(addContext(document)).doOnNext(BaleenEntity::addContextToMentions);
   }
 
 
@@ -83,7 +86,7 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "id") @GraphQLId final String id, @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, EntityProvider.class, hints).flatMap(p -> p.getById(id))
-        .map(addContext(corpus)).next();
+        .map(addContext(corpus)).next().doOnNext(BaleenEntity::addContextToMentions);
   }
 
 
@@ -92,7 +95,8 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(mention, EntityProvider.class, hints)
-        .flatMap(p -> p.mentionEntity(mention)).map(addContext(mention)).next();
+        .flatMap(p -> p.mentionEntity(mention)).map(addContext(mention)).next()
+        .doOnNext(BaleenEntity::addContextToMentions);
   }
 
   @GraphQLQuery(name = "entityCount", description = "Number of entities in corpus")
@@ -112,4 +116,6 @@ public class EntityService extends AbstractGraphQlService {
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
         .collectList().map(TermCount::new);
   }
+
 }
+

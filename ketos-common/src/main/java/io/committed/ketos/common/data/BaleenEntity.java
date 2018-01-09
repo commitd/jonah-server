@@ -3,6 +3,7 @@ package io.committed.ketos.common.data;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
@@ -14,9 +15,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class BaleenEntity extends AbstractGraphQLNodeSupport<BaleenEntity> {
 
@@ -30,6 +31,7 @@ public class BaleenEntity extends AbstractGraphQLNodeSupport<BaleenEntity> {
 
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
   private List<BaleenMention> mentions;
+
 
   @GraphQLQuery(name = "values", description = "Values associated with this entity")
   public List<String> getValues() {
@@ -53,6 +55,12 @@ public class BaleenEntity extends AbstractGraphQLNodeSupport<BaleenEntity> {
     return mentions.stream().map(BaleenMention::getType).findFirst();
   }
 
+  @JsonIgnore
+  public void addContextToMentions() {
+    if (mentions != null) {
+      mentions.stream().forEach(m -> m.addNodeContext(this));
+    }
+  }
 
 
 }
