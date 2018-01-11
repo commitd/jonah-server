@@ -14,6 +14,11 @@ public interface EntityProvider extends DataProvider {
 
   Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document);
 
+  default Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document,
+      final int limit) {
+    return getByDocument(document).take(limit);
+  }
+
   default Flux<BaleenEntity> getByDocumentAndType(final BaleenDocument document, final String type,
       final int limit) {
     return filterEntities(getByDocument(document), type, null, limit);
@@ -28,6 +33,27 @@ public interface EntityProvider extends DataProvider {
   default Flux<BaleenEntity> getByDocumentAndType(final BaleenDocument document, final String type,
       final String value, final int limit) {
     return filterEntities(getByDocument(document), type, value, limit);
+  }
+
+  Flux<BaleenEntity> getAll(final int offset, final int limit);
+
+  default Flux<BaleenEntity> getAll(final int limit) {
+    return getAll(0, limit);
+
+  }
+
+  default Flux<BaleenEntity> getByType(final String type, final int limit) {
+    return filterEntities(getAll(limit), type, null, limit);
+  }
+
+  default Flux<BaleenEntity> getByValue(final String value, final int limit) {
+    return filterEntities(getAll(limit), null, value, limit);
+
+  }
+
+  default Flux<BaleenEntity> getByTypeAndValue(final String type, final String value,
+      final int limit) {
+    return filterEntities(getAll(limit), type, value, limit);
   }
 
   default Mono<BaleenEntity> mentionEntity(final BaleenMention mention) {

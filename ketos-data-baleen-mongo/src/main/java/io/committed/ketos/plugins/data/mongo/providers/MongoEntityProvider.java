@@ -39,8 +39,6 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
     return entities.findByDocId(document.getId()).map(MongoEntities::toEntity);
   }
 
-
-
   @Override
   public Mono<Long> count() {
     return entities.count();
@@ -57,4 +55,9 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
     return getTemplate().aggregate(aggregation, FakeMongoEntities.class, TermBin.class);
   }
 
+
+  @Override
+  public Flux<BaleenEntity> getAll(final int offset, final int limit) {
+    return entities.findAll().skip(offset).take(limit).map(MongoEntities::toEntity);
+  }
 }

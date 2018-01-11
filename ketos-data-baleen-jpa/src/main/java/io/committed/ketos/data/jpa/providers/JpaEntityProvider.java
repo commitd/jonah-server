@@ -1,5 +1,6 @@
 package io.committed.ketos.data.jpa.providers;
 
+import org.springframework.data.domain.PageRequest;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -30,6 +31,13 @@ public class JpaEntityProvider extends AbstractJpaDataProvider implements Entity
     return Flux.fromStream(entities.findByDocId(document.getId())).map(JpaEntity::toBaleenEntity);
   }
 
+
+  @Override
+  public Flux<BaleenEntity> getAll(final int offset, final int limit) {
+    return Flux.fromIterable(entities.findAll(PageRequest.of(0, limit)))
+        .map(JpaEntity::toBaleenEntity);
+
+  }
 
   @Override
   public Mono<Long> count() {

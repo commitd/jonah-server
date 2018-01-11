@@ -14,7 +14,6 @@ import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
-import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,58 +27,69 @@ public class EntityService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-  @GraphQLQuery(name = "allEntities", description = "Get all entities")
+  // Extend document
+
+  @GraphQLQuery(name = "entities", description = "Get all entities")
   public Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocument(document)).map(addContext(document))
-        .doOnNext(BaleenEntity::addContextToMentions);
-  }
-
-  @GraphQLQuery(name = "entities", description = "Get entities by type")
-  public Flux<BaleenEntity> getByDocumentAndType(
-      @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
-      @GraphQLNonNull @GraphQLArgument(name = "type",
-          description = "The type of the entity") final String type,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-
-    return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndType(document, type, limit)).map(addContext(document))
-        .doOnNext(BaleenEntity::addContextToMentions);
-  }
-
-  @GraphQLQuery(name = "entities", description = "Get entities by type and value")
-  public Flux<BaleenEntity> getByDocumentAndValue(
-      @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
-      @GraphQLNonNull @GraphQLArgument(name = "value",
-          description = "A value of the entity") final String value,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-
-    return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndValue(document, value, limit)).map(addContext(document))
-        .doOnNext(BaleenEntity::addContextToMentions);
-  }
-
-  @GraphQLQuery(name = "entities", description = "Get entities by type")
-  public Flux<BaleenEntity> getByDocumentAndType(
-      @GraphQLArgument(name = "document") @GraphQLContext final BaleenDocument document,
       @GraphQLArgument(name = "type", description = "The type of the entity") final String type,
       @GraphQLArgument(name = "value", description = "A value of the entity") final String value,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    return getProvidersFromContext(document, EntityProvider.class, hints)
-        .flatMap(p -> p.getByDocumentAndType(document, type, value, limit))
-        .map(addContext(document)).doOnNext(BaleenEntity::addContextToMentions);
+    if (type != null && value != null) {
+      return getProvidersFromContext(document, EntityProvider.class, hints)
+          .flatMap(p -> p.getByDocumentAndType(document, type, value, limit))
+          .map(addContext(document)).doOnNext(BaleenEntity::addContextToMentions);
+    } else if (value != null) {
+      return getProvidersFromContext(document, EntityProvider.class, hints)
+          .flatMap(p -> p.getByDocumentAndValue(document, value, limit)).map(addContext(document))
+          .doOnNext(BaleenEntity::addContextToMentions);
+    } else if (type != null) {
+      return getProvidersFromContext(document, EntityProvider.class, hints)
+          .flatMap(p -> p.getByDocumentAndType(document, type, limit)).map(addContext(document))
+          .doOnNext(BaleenEntity::addContextToMentions);
+    } else {
+      // Both are null
+      return getProvidersFromContext(document, EntityProvider.class, hints)
+          .flatMap(p -> p.getByDocument(document).take(limit)).map(addContext(document))
+          .doOnNext(BaleenEntity::addContextToMentions);
+    }
+
   }
 
 
+
+  // Extend corpus
+
+
+  @GraphQLQuery(name = "entities", description = "Get all entities")
+  public Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "type", description = "The type of the entity") final String type,
+      @GraphQLArgument(name = "value", description = "A value of the entity") final String value,
+      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    if (type != null && value != null) {
+      return getProviders(corpus, EntityProvider.class, hints)
+          .flatMap(p -> p.getByTypeAndValue(type, value, limit)).map(addContext(corpus))
+          .doOnNext(BaleenEntity::addContextToMentions);
+    } else if (value != null) {
+      return getProviders(corpus, EntityProvider.class, hints)
+          .flatMap(p -> p.getByValue(value, limit)).map(addContext(corpus))
+          .doOnNext(BaleenEntity::addContextToMentions);
+    } else if (type != null) {
+      return getProviders(corpus, EntityProvider.class, hints)
+          .flatMap(p -> p.getByType(type, limit)).map(addContext(corpus))
+          .doOnNext(BaleenEntity::addContextToMentions);
+    } else {
+      // Both are null
+      return getProviders(corpus, EntityProvider.class, hints).flatMap(p -> p.getAll(0, limit))
+          .map(addContext(corpus)).doOnNext(BaleenEntity::addContextToMentions);
+    }
+
+  }
 
   @GraphQLQuery(name = "entity", description = "Get entities by id")
   public Mono<BaleenEntity> getById(@GraphQLContext final BaleenCorpus corpus,
@@ -89,15 +99,6 @@ public class EntityService extends AbstractGraphQlService {
         .map(addContext(corpus)).next().doOnNext(BaleenEntity::addContextToMentions);
   }
 
-
-  @GraphQLQuery(name = "of", description = "Get entities for a mention")
-  public Mono<BaleenEntity> mentionEntity(@GraphQLContext final BaleenMention mention,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProvidersFromContext(mention, EntityProvider.class, hints)
-        .flatMap(p -> p.mentionEntity(mention)).map(addContext(mention)).next()
-        .doOnNext(BaleenEntity::addContextToMentions);
-  }
 
   @GraphQLQuery(name = "entityCount", description = "Number of entities in corpus")
   public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
@@ -116,6 +117,18 @@ public class EntityService extends AbstractGraphQlService {
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
         .collectList().map(TermCount::new);
   }
+
+  // Extend mentions
+
+  @GraphQLQuery(name = "entity", description = "Get entities for a mention")
+  public Mono<BaleenEntity> mentionEntity(@GraphQLContext final BaleenMention mention,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProvidersFromContext(mention, EntityProvider.class, hints)
+        .flatMap(p -> p.mentionEntity(mention)).map(addContext(mention)).next()
+        .doOnNext(BaleenEntity::addContextToMentions);
+  }
+
 
 }
 

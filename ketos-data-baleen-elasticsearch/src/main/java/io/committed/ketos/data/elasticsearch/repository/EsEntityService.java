@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractEsService;
+import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.dao.EsEntity;
@@ -32,6 +33,22 @@ public class EsEntityService extends AbstractEsService<EsDocument> {
 
   public Flux<EsEntity> findByDocumentId(final String id) {
     return getDocumentById(id).flatMapMany(f -> Flux.fromIterable(f.getEntities()));
+  }
+
+  public Flux<EsEntity> findAll(final int offset, final int limit) {
+    // The offset and limit calculations here are very rough...
+    // we are search against documents which have at least 1 relation
+    // and so we just need to do a worst case coarse pagable here
+    // and then skip/take when we've mapped into relations
+    // TODO: It might be possible to do something with nested objects, but the whole ES
+    // consumer needs to be redone.
+
+    return getElastic()
+        .query(
+            queryBuilder().withQuery(QueryBuilders.existsQuery("entities"))
+                .withPageable(new OffsetLimitPagable(0, offset + limit)).build(),
+            resultsToDocumentExtractor())
+        .flatMap(d -> Flux.fromIterable(d.getEntities())).skip(offset).take(limit);
   }
 
   public Mono<Long> count() {
