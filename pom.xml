@@ -111,6 +111,7 @@
       <module>ketos-ui-map</module>
       <module>ketos-ui-metadataexplorer</module>
       <module>ketos-ui-entitydetails</module>
+      <module>ketos-ui-relationexplorer</module>
       <module>ketos-feedback</module>
     </modules>
 </project>
