@@ -12,6 +12,7 @@ import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
+import io.committed.ketos.plugins.data.mongo.dao.FakeMongoEntities;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
 import reactor.core.publisher.Flux;
@@ -49,7 +50,11 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
   public Flux<TermBin> countByType() {
     final Aggregation aggregation = newAggregation(unwind("entities"),
         group("entities.type").count().as("count"), project("count").and("_id").as("term"));
-    return getTemplate().aggregate(aggregation, MongoEntities.class, TermBin.class);
+    // TODO: FIXME HEre I use FakeMongoEntities which enables Spring to know that the type existings
+    // inside entities (by knowing that entities is a list of BaleenMention)
+    // however in the rest I use MongoEntities since that allows us to grab anything in the Baleen
+    // properties. Maybe there's a hybrid (exist BaleenMention from Document)...
+    return getTemplate().aggregate(aggregation, FakeMongoEntities.class, TermBin.class);
   }
 
 }
