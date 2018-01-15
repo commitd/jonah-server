@@ -21,10 +21,16 @@ public interface RelationProvider extends DataProvider {
 
   Mono<BaleenRelation> getById(String id);
 
+  Flux<BaleenRelation> getRelationsByMention(String sourceValue, String sourceType,
+      String relationshipType, String relationshipSubType, String targetValue, String targetType,
+      int offset, int limit);
+
   @Override
   default String getProviderType() {
     return "RelationProvider";
   }
 
   Mono<Long> count();
+
+
 }

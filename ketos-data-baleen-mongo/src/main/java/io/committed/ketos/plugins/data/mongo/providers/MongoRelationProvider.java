@@ -1,6 +1,8 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -62,6 +64,26 @@ public class MongoRelationProvider extends AbstractMongoDataProvider implements 
   @Override
   public Mono<Long> count() {
     return relations.count();
+  }
+
+  // TODO: Should the query by example a proper interface here... it's much more sensible from a
+  // provider use angle. We could still keep the other stuff to.
+  @Override
+  public Flux<BaleenRelation> getRelationsByMention(final String sourceValue,
+      final String sourceType, final String relationshipType, final String relationshipSubType,
+      final String targetValue, final String targetType, final int offset, final int limit) {
+    final MongoRelation r = new MongoRelation();
+    r.setSourceType(sourceType);
+    r.setSourceValue(sourceValue);
+    r.setTargetType(targetType);
+    r.setTargetValue(targetValue);
+    r.setRelationshipType(relationshipType);
+    r.setRelationSubtype(relationshipSubType);
+
+    // WE don't have the _class in db
+    final ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnorePaths("_class");
+    return relations.findAll(Example.of(r, exampleMatcher)).skip(offset).take(limit)
+        .map(MongoRelation::toRelation);
   }
 
 }

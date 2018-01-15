@@ -57,5 +57,13 @@ public class ElasticsearchRelationProvider
     return getService().count();
   }
 
+  @Override
+  public Flux<BaleenRelation> getRelationsByMention(final String sourceValue,
+      final String sourceType, final String relationshipType, final String relationshipSubType,
+      final String targetValue, final String targetType, final int offset, final int limit) {
+    // TODO Change the Baleen ES output to allow this as a query
+    return Flux.empty();
+  }
+
 
 }

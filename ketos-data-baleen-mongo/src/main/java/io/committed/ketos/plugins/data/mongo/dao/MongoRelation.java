@@ -22,9 +22,9 @@ public class MongoRelation {
   @Indexed
   private String target;
 
-  private int begin;
+  private Integer begin;
 
-  private int end;
+  private Integer end;
 
   private String type;
 
@@ -34,7 +34,15 @@ public class MongoRelation {
 
   private String value;
 
-  private double confidence;
+  private Double confidence;
+
+
+  private String targetValue;
+  private String targetType;
+
+  private String sourceValue;
+  private String sourceType;
+
 
   public BaleenRelation toRelation() {
     final BaleenRelation r = new BaleenRelation();

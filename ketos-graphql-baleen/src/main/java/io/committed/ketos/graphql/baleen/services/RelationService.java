@@ -1,6 +1,7 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.server.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
@@ -59,14 +60,37 @@ public class RelationService extends AbstractGraphQlService {
         .map(this.addContext(corpus)).next();
   }
 
+  // Relations on corpus
+
   @GraphQLQuery(name = "relations", description = "Get all relations in the corpus")
   public Flux<BaleenRelation> getAllRelations(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "sourceType") final String sourceType,
+      @GraphQLArgument(name = "targetType") final String targetType,
+      @GraphQLArgument(name = "relationshipType") final String relationshipType,
+      @GraphQLArgument(name = "relationshipSubType") final String relationshipSubType,
+      @GraphQLArgument(name = "sourceValue") final String sourceValue,
+      @GraphQLArgument(name = "targetValue") final String targetValue,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, RelationProvider.class, hints)
-        .flatMap(p -> p.getAllRelations(offset, limit)).map(this.addContext(corpus));
+
+    // Two distinct types of query here really.. one for everything (simple really, listing the db)
+    // and one which is really a find query
+
+    if (StringUtils.isEmpty(sourceType) && StringUtils.isEmpty(sourceValue)
+        && StringUtils.isEmpty(targetType) && StringUtils.isEmpty(targetValue)
+        && StringUtils.isEmpty(relationshipType) && StringUtils.isEmpty(relationshipSubType)) {
+      return getProviders(corpus, RelationProvider.class, hints)
+          .flatMap(p -> p.getAllRelations(offset, limit)).map(this.addContext(corpus));
+
+    } else {
+      return getProviders(corpus, RelationProvider.class, hints)
+          .flatMap(p -> p.getRelationsByMention(sourceValue, sourceType, relationshipType,
+              relationshipSubType, targetValue, targetType, offset, limit))
+          .map(this.addContext(corpus));
+    }
+
   }
 
   @GraphQLQuery(name = "relationCount",

@@ -4,15 +4,15 @@ import java.util.Collection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @NoRepositoryBean
-public interface BaleenDocumentRepository extends ReactiveCrudRepository<MongoDocument, String> {
+public interface BaleenDocumentRepository extends ReactiveMongoRepository<MongoDocument, String> {
 
   Mono<MongoDocument> findByDocumentSource(String path);
 
