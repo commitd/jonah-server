@@ -59,8 +59,7 @@ public class RelationService extends AbstractGraphQlService {
         .map(this.addContext(corpus)).next();
   }
 
-  // FIXME: should be relations - current bug in spqr
-  @GraphQLQuery(name = "allRelations", description = "Get all relations in the corpus")
+  @GraphQLQuery(name = "relations", description = "Get all relations in the corpus")
   public Flux<BaleenRelation> getAllRelations(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
@@ -69,16 +68,6 @@ public class RelationService extends AbstractGraphQlService {
     return getProviders(corpus, RelationProvider.class, hints)
         .flatMap(p -> p.getAllRelations(offset, limit)).map(this.addContext(corpus));
   }
-
-  // request this via document bean)
-  // @GraphQLQuery(name = "allRelations")
-  // public Flux<BaleenRelation> getByDocument(
-  // @GraphQLContext final BaleenCorpus corpus,
-  // @GraphQLNonNull @GraphQLArgument(name = "documentId") @GraphQLId final String id) {
-  // return getProviders(corpus, RelationProvider.class)
-  // .flatMap(p -> p.getByDocument(id))
-  // .map(this.addContext(corpus));
-  // }
 
   @GraphQLQuery(name = "relationCount",
       description = "Count the number of relations in this corpus")

@@ -1,6 +1,7 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
@@ -71,15 +72,15 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    if (type != null && value != null) {
+    if (!StringUtils.isEmpty(type) && !StringUtils.isEmpty(type)) {
       return getProviders(corpus, EntityProvider.class, hints)
           .flatMap(p -> p.getByTypeAndValue(type, value, limit)).map(addContext(corpus))
           .doOnNext(BaleenEntity::addContextToMentions);
-    } else if (value != null) {
+    } else if (!StringUtils.isEmpty(value)) {
       return getProviders(corpus, EntityProvider.class, hints)
           .flatMap(p -> p.getByValue(value, limit)).map(addContext(corpus))
           .doOnNext(BaleenEntity::addContextToMentions);
-    } else if (type != null) {
+    } else if (!StringUtils.isEmpty(type)) {
       return getProviders(corpus, EntityProvider.class, hints)
           .flatMap(p -> p.getByType(type, limit)).map(addContext(corpus))
           .doOnNext(BaleenEntity::addContextToMentions);
