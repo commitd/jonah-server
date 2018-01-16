@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import io.committed.ketos.common.data.BaleenRelation;
 import lombok.Data;
 
-@Document(collection = "relations")
+@Document(collection = "full_relations")
 @Data
 public class MongoRelation {
   @Id
