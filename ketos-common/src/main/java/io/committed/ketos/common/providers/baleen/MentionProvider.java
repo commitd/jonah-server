@@ -15,8 +15,14 @@ public interface MentionProvider extends DataProvider {
 
   Flux<BaleenMention> getMentionsByDocument(BaleenDocument document);
 
+  Flux<BaleenMention> getByDocumentWithinArea(BaleenDocument document, Double left, Double right,
+      Double top, Double bottom, int offset, int limit);
+
+
   @Override
   default String getProviderType() {
     return "MentionProvider";
   }
+
+
 }

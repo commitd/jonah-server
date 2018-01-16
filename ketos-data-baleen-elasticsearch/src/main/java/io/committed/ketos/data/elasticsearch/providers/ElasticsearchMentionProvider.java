@@ -40,4 +40,12 @@ public class ElasticsearchMentionProvider
     return getService().getById(entityId).map(EsEntity::toBaleenMention);
   }
 
+
+  @Override
+  public Flux<BaleenMention> getByDocumentWithinArea(final BaleenDocument document,
+      final Double left, final Double right, final Double top, final Double bottom,
+      final int offset, final int limit) {
+    // TODO
+    return Flux.empty();
+  }
 }

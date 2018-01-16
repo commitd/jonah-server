@@ -54,4 +54,12 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     return getMentionsByDocumentId(relation.getDocId()).filter(m -> sourceId.equals(m.getId()))
         .next();
   }
+
+  @Override
+  public Flux<BaleenMention> getByDocumentWithinArea(final BaleenDocument document,
+      final Double left, final Double right, final Double top, final Double bottom,
+      final int offset, final int limit) {
+    // TODO Auto-generated method stub
+    return getMentionsByDocument(document);
+  }
 }

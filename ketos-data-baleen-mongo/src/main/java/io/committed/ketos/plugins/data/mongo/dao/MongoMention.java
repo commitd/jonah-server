@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class MongoMention {
 
   private static final Set<String> NON_PROPERTIES = Collections.unmodifiableSet(
-      Sets.newHashSet("confidence", "externalId", "begin", "end", "type", "value"));
+      Sets.newHashSet("confidence", "externalId", "begin", "end", "type", "value", "geoJson"));
 
   private double confidence;
   private String externalId;
@@ -37,6 +37,18 @@ public class MongoMention {
     end = m.getInteger("end", 0);
     type = m.getString("type");
     value = m.get("value").toString();
+
+    // Baleen's output of GeoJson a hack really, without it begin a string it'll be deserialsed as a
+    // bson.Document.
+    final Object geoJson = m.get("geoJson");
+    if (geoJson != null) {
+      if (geoJson instanceof String) {
+        properties.put("geoJson", geoJson);
+      } else if (geoJson instanceof Document) {
+        properties.put("geoJson", ((Document) geoJson).toJson());
+      }
+
+    }
 
     readProperties(m);
 

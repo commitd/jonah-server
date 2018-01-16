@@ -28,6 +28,7 @@ public class BaleenMention extends AbstractGraphQLNodeSupport<BaleenMention> {
   private String value;
   private String entityId;
 
+
   @Builder.Default
   private Map<String, Object> properties = Collections.emptyMap();
 }

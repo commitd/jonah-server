@@ -84,15 +84,16 @@ public class DocumentsService extends AbstractGraphQlService {
 
     // TODO; Should limit be here or on the above??
 
-    final Optional<BaleenCorpus> corpus =
+    final Optional<BaleenCorpus> optionalCorpus =
         documentSearch.getGqlNode().findParent(BaleenCorpus.class);
 
-    if (!corpus.isPresent()) {
+    if (!optionalCorpus.isPresent()) {
       return null;
     }
 
-    final Flux<DocumentProvider> providers =
-        getProviders(corpus.get(), DocumentProvider.class, hints);
+    final BaleenCorpus corpus = optionalCorpus.get();
+
+    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
 
     final Flux<BaleenDocument> documents =
         providers.flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getOffset(),
