@@ -19,4 +19,19 @@ public class NamedGeoLocation extends GeoLocation {
   public NamedGeoLocation(final double lat, final double lon) {
     super(lat, lon);
   }
+
+
+  // Redeclare this so that they are noticed by GraphQl.
+
+  @Override
+  public double getLat() {
+    return super.getLat();
+  }
+
+  @Override
+  public double getLon() {
+    return super.getLon();
+  }
+
+
 }

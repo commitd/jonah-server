@@ -12,7 +12,9 @@ import org.geojson.Point;
 import org.geojson.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.davidmoten.geo.GeoHash;
 import io.committed.invest.annotations.GraphQLService;
+import io.committed.invest.core.dto.analytic.GeoLocation;
 import io.committed.invest.server.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -155,6 +157,19 @@ public class GeoService extends AbstractGraphQlService {
     return Optional.of(new NamedGeoLocation(coordinates.getLatitude(), coordinates.getLongitude()));
   }
 
+
+  @GraphQLQuery(name = "geohash")
+  public String getGeohash(@GraphQLContext final GeoLocation location,
+      @GraphQLArgument(name = "precision", defaultValue = "9") final int precision) {
+    final double lat = location.getLat();
+    final double lon = location.getLon();
+
+    if (Double.isFinite(lon) && Double.isFinite(lat)) {
+      return GeoHash.encodeHash(lat, lon, precision);
+    }
+
+    return null;
+  }
 
 }
 
