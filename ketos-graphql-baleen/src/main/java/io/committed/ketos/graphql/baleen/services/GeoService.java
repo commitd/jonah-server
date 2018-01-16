@@ -13,10 +13,10 @@ import org.geojson.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.annotations.GraphQLService;
-import io.committed.invest.core.dto.analytic.GeoLocation;
 import io.committed.invest.server.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -39,7 +39,7 @@ public class GeoService extends AbstractGraphQlService {
 
 
   @GraphQLQuery(name = "locations", description = "Get locations in a document")
-  public Flux<GeoLocation> getByDocument(@GraphQLContext final BaleenDocument document,
+  public Flux<NamedGeoLocation> getByDocument(@GraphQLContext final BaleenDocument document,
       @GraphQLArgument(name = "left", description = "Left bound (west)") final Double left,
       @GraphQLArgument(name = "right", description = "Right bound (east)") final Double right,
       @GraphQLArgument(name = "top", description = "Top bound (north)") final Double top,
@@ -66,7 +66,13 @@ public class GeoService extends AbstractGraphQlService {
 
           // TODO: Add location name to GeoLocation (being the mention value to this)
 
-          return convertToPoint(geoJson);
+          final Optional<NamedGeoLocation> l = convertToPoint(geoJson);
+
+          if (l.isPresent()) {
+            l.get().setName(m.getValue());
+          }
+
+          return l;
         }).filter(Optional::isPresent).map(Optional::get)
         // TODO: Distinct on location... (for when we add name above... that shouldn't be part of
         // it... we should consolidate)
@@ -76,7 +82,7 @@ public class GeoService extends AbstractGraphQlService {
   }
 
 
-  private Optional<GeoLocation> convertToPoint(final String geoJson) {
+  private Optional<NamedGeoLocation> convertToPoint(final String geoJson) {
     GeoJsonObject object;
     try {
       object = MAPPER.readValue(geoJson, GeoJsonObject.class);
@@ -102,10 +108,10 @@ public class GeoService extends AbstractGraphQlService {
       // TODO: Could implement others here but I think Baleen only outputs the above too..
     }
 
-    return null;
+    return Optional.empty();
   }
 
-  private Optional<GeoLocation> toGeoLocation(final MultiPolygon mp) {
+  private Optional<NamedGeoLocation> toGeoLocation(final MultiPolygon mp) {
 
     final List<List<List<LngLatAlt>>> coordinates = mp.getCoordinates();
     // We'll just take the first... there's no good way here
@@ -127,7 +133,7 @@ public class GeoService extends AbstractGraphQlService {
     return toGeoLocation(best);
   }
 
-  private Optional<GeoLocation> toGeoLocation(final List<LngLatAlt> coordinates) {
+  private Optional<NamedGeoLocation> toGeoLocation(final List<LngLatAlt> coordinates) {
     // Simply average the positions
 
     if (coordinates == null || coordinates.isEmpty()) {
@@ -141,12 +147,12 @@ public class GeoService extends AbstractGraphQlService {
         lon += c.getLongitude();
       } ;
       final int len = coordinates.size();
-      return Optional.of(new GeoLocation(lat / len, lon / len));
+      return Optional.of(new NamedGeoLocation(lat / len, lon / len));
     }
   }
 
-  private Optional<GeoLocation> toGeoLocation(final LngLatAlt coordinates) {
-    return Optional.of(new GeoLocation(coordinates.getLatitude(), coordinates.getLongitude()));
+  private Optional<NamedGeoLocation> toGeoLocation(final LngLatAlt coordinates) {
+    return Optional.of(new NamedGeoLocation(coordinates.getLatitude(), coordinates.getLongitude()));
   }
 
 
