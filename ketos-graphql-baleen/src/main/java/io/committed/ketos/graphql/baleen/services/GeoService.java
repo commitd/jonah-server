@@ -15,8 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.davidmoten.geo.GeoHash;
 import io.committed.invest.core.dto.analytic.GeoLocation;
 import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
-import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
@@ -33,7 +33,7 @@ public class GeoService extends AbstractGraphQlService {
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   @Autowired
-  public GeoService(final DatasetProviders corpusProviders) {
+  public GeoService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 
@@ -80,7 +80,6 @@ public class GeoService extends AbstractGraphQlService {
         // it... we should consolidate)
         .distinct().filter(Objects::nonNull);
 
-
   }
 
 
@@ -125,7 +124,7 @@ public class GeoService extends AbstractGraphQlService {
 
     List<LngLatAlt> best = null;
 
-    for (final List<List<LngLatAlt>> polygon : mp.getCoordinates()) {
+    for (final List<List<LngLatAlt>> polygon : coordinates) {
       final List<LngLatAlt> exteriorRing = polygon.get(0);
       if (best == null || exteriorRing.size() > best.size()) {
         best = exteriorRing;

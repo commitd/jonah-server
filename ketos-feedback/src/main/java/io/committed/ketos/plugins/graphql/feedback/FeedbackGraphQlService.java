@@ -8,7 +8,7 @@ import org.springframework.util.StringUtils;
 import io.committed.invest.core.graphql.Context;
 import io.committed.invest.extensions.InvestUiExtension;
 import io.committed.invest.extensions.annotations.GraphQLService;
-import io.committed.invest.server.data.services.DatasetProviders;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.plugins.data.feedback.data.Feedback;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
 import io.leangen.graphql.annotations.GraphQLArgument;
@@ -23,11 +23,11 @@ import reactor.core.publisher.Mono;
 @GraphQLService
 public class FeedbackGraphQlService {
 
-  private final DatasetProviders providers;
+  private final DataProviders providers;
 
   private final List<InvestUiExtension> uiExtensions;
 
-  public FeedbackGraphQlService(final DatasetProviders providers,
+  public FeedbackGraphQlService(final DataProviders providers,
       final List<InvestUiExtension> uiExtensions) {
     this.providers = providers;
     this.uiExtensions = uiExtensions;
@@ -56,7 +56,8 @@ public class FeedbackGraphQlService {
 
     // TODO: Check if we are admin or the original feedback author
 
-    providers.findAll(FeedbackDataProvider.class).subscribe(d -> d.delete(feedbackId));
+    providers.findAll(FeedbackDataProvider.class)
+        .subscribe(d -> d.delete(feedbackId));
 
     return true;
   }

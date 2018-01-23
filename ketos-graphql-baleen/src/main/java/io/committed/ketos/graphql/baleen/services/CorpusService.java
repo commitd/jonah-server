@@ -3,7 +3,7 @@ package io.committed.ketos.graphql.baleen.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.dataset.Dataset;
-import io.committed.invest.server.data.services.DatasetRegistry;
+import io.committed.invest.extensions.data.dataset.DatasetRegistry;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLNonNull;

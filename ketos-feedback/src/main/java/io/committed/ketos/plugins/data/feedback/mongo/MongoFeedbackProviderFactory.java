@@ -20,8 +20,6 @@ public class MongoFeedbackProviderFactory
   @Override
   public Mono<FeedbackDataProvider> build(final String dataset, final String datasource,
       final Map<String, Object> settings) {
-    // TODO move the functionality from the ketos abstract mongo factories to invest-data-mongo
-
     final MongoClient mongoClient = MongoClients.create();
     final ReactiveMongoTemplate mongoTemplate = new ReactiveMongoTemplate(mongoClient, "feedback");
     final ReactiveMongoRepositoryFactory factory =

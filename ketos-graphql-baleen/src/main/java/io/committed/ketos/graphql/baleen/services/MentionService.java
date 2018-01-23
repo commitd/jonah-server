@@ -2,8 +2,8 @@ package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
-import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 public class MentionService extends AbstractGraphQlService {
 
   @Autowired
-  public MentionService(final DatasetProviders corpusProviders) {
+  public MentionService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

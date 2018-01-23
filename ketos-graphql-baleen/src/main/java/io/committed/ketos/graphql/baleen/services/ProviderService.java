@@ -3,7 +3,7 @@ package io.committed.ketos.graphql.baleen.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProvider;
-import io.committed.invest.server.data.services.DatasetProviders;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 public class ProviderService {
 
   @Autowired
-  private DatasetProviders corpusProviders;
+  private DataProviders corpusProviders;
 
   @GraphQLQuery(name = "providers",
       description = "Access the data providesr available for this corpus")

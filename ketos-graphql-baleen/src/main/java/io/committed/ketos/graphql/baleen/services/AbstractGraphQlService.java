@@ -3,17 +3,17 @@ package io.committed.ketos.graphql.baleen.services;
 import java.util.Optional;
 import java.util.function.Function;
 import io.committed.invest.extensions.data.providers.DataProvider;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
-import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
 import io.committed.ketos.common.graphql.support.GraphQLNode;
 import reactor.core.publisher.Flux;
 
 public abstract class AbstractGraphQlService {
-  private final DatasetProviders corpusProviders;
+  private final DataProviders corpusProviders;
 
-  protected AbstractGraphQlService(final DatasetProviders corpusProviders) {
+  protected AbstractGraphQlService(final DataProviders corpusProviders) {
     this.corpusProviders = corpusProviders;
   }
 

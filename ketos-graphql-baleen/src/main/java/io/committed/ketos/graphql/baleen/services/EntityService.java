@@ -5,8 +5,8 @@ import org.springframework.util.StringUtils;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
-import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
@@ -24,7 +24,7 @@ import reactor.core.publisher.Mono;
 public class EntityService extends AbstractGraphQlService {
 
   @Autowired
-  public EntityService(final DatasetProviders corpusProviders) {
+  public EntityService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

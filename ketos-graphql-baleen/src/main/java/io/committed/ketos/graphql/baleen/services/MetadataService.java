@@ -4,8 +4,8 @@ import java.util.Optional;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
-import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenCorpusMetadata;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 @GraphQLService
 public class MetadataService extends AbstractGraphQlService {
 
-  protected MetadataService(final DatasetProviders corpusProviders) {
+  protected MetadataService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 
