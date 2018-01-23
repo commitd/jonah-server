@@ -1,8 +1,8 @@
 package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import io.committed.invest.annotations.GraphQLService;
-import io.committed.invest.server.data.providers.DataProvider;
+import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.leangen.graphql.annotations.GraphQLContext;

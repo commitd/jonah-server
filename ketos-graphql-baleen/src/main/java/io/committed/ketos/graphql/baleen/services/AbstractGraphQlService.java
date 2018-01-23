@@ -2,8 +2,8 @@ package io.committed.ketos.graphql.baleen.services;
 
 import java.util.Optional;
 import java.util.function.Function;
-import io.committed.invest.server.data.providers.DataProvider;
-import io.committed.invest.server.data.query.DataHints;
+import io.committed.invest.extensions.data.providers.DataProvider;
+import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;

@@ -2,8 +2,8 @@ package io.committed.ketos.graphql.baleen.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import io.committed.invest.annotations.GraphQLService;
-import io.committed.invest.server.data.query.DataHints;
+import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;

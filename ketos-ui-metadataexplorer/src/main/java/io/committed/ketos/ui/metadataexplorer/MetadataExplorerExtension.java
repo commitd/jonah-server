@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import io.committed.invest.actions.ActionDefinition;
-import io.committed.invest.actions.SimpleActionDefinition;
 import io.committed.invest.extensions.InvestUiExtension;
+import io.committed.invest.extensions.actions.ActionDefinition;
+import io.committed.invest.extensions.actions.SimpleActionDefinition;
 import io.committed.ketos.common.ui.actions.KetosCoreActions;
 
 /**

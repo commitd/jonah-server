@@ -2,13 +2,13 @@ package io.committed.ketos.graphql.baleen.services;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import io.committed.invest.annotations.GraphQLService;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.Timeline;
 import io.committed.invest.core.dto.constants.TimeInterval;
-import io.committed.invest.server.data.query.DataHints;
+import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.invest.server.data.services.DatasetProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;

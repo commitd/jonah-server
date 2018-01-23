@@ -3,7 +3,7 @@ package io.committed.ketos.common.providers.baleen;
 
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
-import io.committed.invest.server.data.providers.DataProvider;
+import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

@@ -1,7 +1,7 @@
 package io.committed.ketos.plugins.data.feedback.mongo;
 
-import io.committed.invest.server.data.providers.AbstractDataProvider;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.extensions.data.providers.AbstractDataProvider;
+import io.committed.invest.extensions.data.providers.DatabaseConstants;
 import io.committed.ketos.plugins.data.feedback.data.Feedback;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
 import reactor.core.publisher.Flux;

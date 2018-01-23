@@ -1,7 +1,7 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.providers.DatabaseConstants;
+import io.committed.invest.extensions.data.providers.DatabaseConstants;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;

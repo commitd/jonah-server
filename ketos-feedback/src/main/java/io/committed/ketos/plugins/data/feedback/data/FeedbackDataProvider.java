@@ -1,6 +1,6 @@
 package io.committed.ketos.plugins.data.feedback.data;
 
-import io.committed.invest.server.data.providers.DataProvider;
+import io.committed.invest.extensions.data.providers.DataProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
