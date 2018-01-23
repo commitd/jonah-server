@@ -17,7 +17,6 @@
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-support-data</artifactId>
-      <version>${invest-java.version}</version>
       <scope>provided</scope>
     </dependency>
 

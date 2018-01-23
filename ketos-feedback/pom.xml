@@ -28,52 +28,52 @@
       <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
     </dependency>
   </dependencies>
-  
-    <build>
-   <plugins>
-    <!-- Copy the UI build output to the resources area on the classpath -->
-    <plugin>
-      <artifactId>maven-resources-plugin</artifactId>
-      <version>3.0.2</version>
-      <executions>
-        <execution>
-          <id>copy-resources-form</id>
-          <!-- Run the copy After the compilation, but before we package 
-            the JAR up -->
-          <phase>process-classes</phase>
-          <goals>
-            <goal>copy-resources</goal>
-          </goals>
-          <configuration>
-            <outputDirectory>${project.basedir}/target/classes/ui/feedback-form</outputDirectory>
-            <resources>
-              <resource>
-                <directory>${ui.dir}ketos-feedback-form${uiBuild.dir}</directory>
-                <filtering>false</filtering>
-              </resource>
-            </resources>
-          </configuration>
-        </execution>
-        <execution>
-          <id>copy-resources-reader</id>
-          <!-- Run the copy After the compilation, but before we package 
-            the JAR up -->
-          <phase>process-classes</phase>
-          <goals>
-            <goal>copy-resources</goal>
-          </goals>
-          <configuration>
-            <outputDirectory>${project.basedir}/target/classes/ui/feedback-reader</outputDirectory>
-            <resources>
-              <resource>
-                <directory>${ui.dir}ketos-feedback-reader${uiBuild.dir}</directory>
-                <filtering>false</filtering>
-              </resource>
-            </resources>
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
-  </plugins>
+
+  <build>
+    <plugins>
+      <!-- Copy the UI build output to the resources area on the classpath -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>copy-resources-form</id>
+            <!-- Run the copy After the compilation, but before we package 
+              the JAR up -->
+            <phase>process-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.basedir}/target/classes/ui/feedback-form</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${ui.dir}ketos-feedback-form${uiBuild.dir}</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-resources-reader</id>
+            <!-- Run the copy After the compilation, but before we package 
+              the JAR up -->
+            <phase>process-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.basedir}/target/classes/ui/feedback-reader</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${ui.dir}ketos-feedback-reader${uiBuild.dir}</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>

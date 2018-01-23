@@ -8,7 +8,7 @@
   </parent>
   <artifactId>ketos-core</artifactId>
   <name>Ketos Core</name>
-  
+
   <dependencies>
     <dependency>
       <groupId>io.committed.ketos</groupId>

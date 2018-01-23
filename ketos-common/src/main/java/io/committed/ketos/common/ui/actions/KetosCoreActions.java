@@ -4,12 +4,14 @@ import java.util.Arrays;
 import com.google.common.base.Joiner;
 
 public class KetosCoreActions {
+
+  private KetosCoreActions() {
+    // Singleton
+  }
+
   public static final String SEPARATOR = ".";
 
   private static final Joiner JOINER = Joiner.on(SEPARATOR).skipNulls();
-
-  //
-
 
 
   // Types

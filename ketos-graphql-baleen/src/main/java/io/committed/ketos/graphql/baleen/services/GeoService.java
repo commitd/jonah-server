@@ -146,7 +146,7 @@ public class GeoService extends AbstractGraphQlService {
       for (final LngLatAlt c : coordinates) {
         lat += c.getLatitude();
         lon += c.getLongitude();
-      } ;
+      }
       final int len = coordinates.size();
       return Optional.of(new NamedGeoLocation(lat / len, lon / len));
     }

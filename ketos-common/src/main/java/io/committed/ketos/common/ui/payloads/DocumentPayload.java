@@ -1,5 +1,8 @@
 package io.committed.ketos.common.ui.payloads;
 
+import lombok.Data;
+
+@Data
 public class DocumentPayload {
-  public String id;
+  private String id;
 }

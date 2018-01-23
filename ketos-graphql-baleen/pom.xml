@@ -19,7 +19,8 @@
       <artifactId>ketos-common</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!--  TODO: I only want to include this JAR via shade... we seem to include a lot more? -->
+    <!-- TODO: I only want to include this JAR via shade... we seem to include 
+      a lot more? -->
     <dependency>
       <groupId>de.grundid.opendatalab</groupId>
       <artifactId>geojson-jackson</artifactId>
