@@ -20,10 +20,10 @@ import reactor.core.publisher.Mono;
 
 
 @GraphQLService
-public class EntityService extends AbstractGraphQlService {
+public class CorpusEntityService extends AbstractGraphQlService {
 
   @Autowired
-  public EntityService(final DataProviders corpusProviders) {
+  public CorpusEntityService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

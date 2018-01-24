@@ -28,13 +28,13 @@ import reactor.core.publisher.Flux;
 
 
 @GraphQLService
-public class GeoField extends AbstractGraphQlService {
+public class DocumentLocationField extends AbstractGraphQlService {
 
   // Use out own object mapper, rather than Spring's since we don't need any configuration
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   @Autowired
-  public GeoField(final DataProviders corpusProviders) {
+  public DocumentLocationField(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

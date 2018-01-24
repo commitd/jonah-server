@@ -15,10 +15,10 @@ import reactor.core.publisher.Flux;
 
 
 @GraphQLService
-public class RelationService extends AbstractGraphQlService {
+public class DocumentRelationService extends AbstractGraphQlService {
 
   @Autowired
-  public RelationService(final DataProviders corpusProviders) {
+  public DocumentRelationService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

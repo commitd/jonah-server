@@ -18,9 +18,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @GraphQLService
-public class MetadataService extends AbstractGraphQlService {
+public class CorpusMetadataService extends AbstractGraphQlService {
 
-  protected MetadataService(final DataProviders corpusProviders) {
+  protected CorpusMetadataService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

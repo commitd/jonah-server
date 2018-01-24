@@ -29,10 +29,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @GraphQLService
-public class DocumentsService extends AbstractGraphQlService {
+public class CorpusDocumentsService extends AbstractGraphQlService {
 
   @Autowired
-  public DocumentsService(final DataProviders corpusProviders) {
+  public CorpusDocumentsService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 

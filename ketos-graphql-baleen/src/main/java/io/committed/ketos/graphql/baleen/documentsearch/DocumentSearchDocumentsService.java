@@ -18,13 +18,13 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
 @GraphQLService
-public class DocumentsService extends AbstractGraphQlService {
+public class DocumentSearchDocumentsService extends AbstractGraphQlService {
 
-  private final io.committed.ketos.graphql.baleen.corpus.DocumentsService corpusDocumentService;
+  private final io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService corpusDocumentService;
 
   @Autowired
-  public DocumentsService(final DataProviders corpusProviders,
-      final io.committed.ketos.graphql.baleen.corpus.DocumentsService corpusDocumentService) {
+  public DocumentSearchDocumentsService(final DataProviders corpusProviders,
+      final io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService corpusDocumentService) {
     super(corpusProviders);
     this.corpusDocumentService = corpusDocumentService;
   }

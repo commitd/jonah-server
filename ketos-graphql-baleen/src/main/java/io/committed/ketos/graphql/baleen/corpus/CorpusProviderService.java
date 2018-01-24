@@ -10,7 +10,7 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
 @GraphQLService
-public class ProviderService {
+public class CorpusProviderService {
 
   @Autowired
   private DataProviders corpusProviders;
