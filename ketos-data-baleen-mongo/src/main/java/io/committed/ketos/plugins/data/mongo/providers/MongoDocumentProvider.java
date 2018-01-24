@@ -65,7 +65,6 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   @Override
   public Flux<BaleenDocument> all(final int offset, final int size) {
     return documents.findAll()
-        // CF: Move this offset&size... into the pagination
         .skip(offset)
         .take(size)
         .map(MongoDocument::toDocument);
@@ -114,11 +113,13 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public Flux<BaleenDocument> getByExample(final DocumentProbe probe) {
+  public Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int limit) {
     // TODO: Might need to review other matchers here
     final ExampleMatcher matcher = ExampleMatcher.matching()
         .withMatcher("content", match -> match.contains());
     return documents.findAll(Example.of(new MongoDocument(probe), matcher))
+        .skip(offset)
+        .take(limit)
         .map(MongoDocument::toDocument);
   }
 

@@ -83,11 +83,15 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   }
 
   @Override
-  public Flux<BaleenDocument> getByExample(final DocumentProbe probe) {
+  public Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int limit) {
     // TODO: Review matchers for each field
     final ExampleMatcher matcher = ExampleMatcher.matching()
         .withMatcher("content", GenericPropertyMatcher::contains);
     return Flux.fromIterable(documents.findAll(Example.of(new JpaDocument(probe), matcher)))
+        // This is inefficent, we'd be better with a pagination on the query... but there isn't any in
+        // Spring Data...!
+        .skip(offset)
+        .take(limit)
         .map(this::addMetadataAndConvert);
   }
 

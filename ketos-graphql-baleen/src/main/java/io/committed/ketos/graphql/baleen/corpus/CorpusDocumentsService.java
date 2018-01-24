@@ -51,11 +51,17 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   @GraphQLQuery(name = "documentByExample", description = "Get document by example")
   public Flux<BaleenDocument> getDocumentByExample(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "probe", description = "Document by example") final DocumentProbe probe,
+      @GraphQLArgument(name = "offset",
+          description = "Index of first document to return, for pagination",
+          defaultValue = "0") final int offset,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of documents to return, for pagination",
+          defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.getByExample(probe))
+        .flatMap(p -> p.getByExample(probe, offset, size))
         .doOnNext(eachAddParent(corpus));
   }
 
