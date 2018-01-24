@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.services;
+package io.committed.ketos.graphql.baleen.corpus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.extensions.annotations.GraphQLService;

@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.services;
+package io.committed.ketos.graphql.baleen.corpus;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +21,7 @@ import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -108,6 +109,8 @@ public class DocumentsService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "countDocuments", description = "Count of documents by value")
   public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
       @GraphQLNonNull @GraphQLArgument(name = "field",
           description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
       @GraphQLArgument(name = "hints",
@@ -120,7 +123,7 @@ public class DocumentsService extends AbstractGraphQlService {
     }
 
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByField(path))
+        .flatMap(p -> p.countByField(documentFilter, path))
         .groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
         .collectList().map(TermCount::new);
@@ -128,10 +131,12 @@ public class DocumentsService extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")
   public Mono<Timeline> getDocumentTimeline(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByDate).groupBy(TimeBin::getTs)
+        .flatMap(p -> p.countByDate(documentFilter)).groupBy(TimeBin::getTs)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TimeBin(g.key(), l)))
         .collectList().map(l -> new Timeline(TimeInterval.DAY, l));
   }
@@ -144,7 +149,7 @@ public class DocumentsService extends AbstractGraphQlService {
     final Optional<BaleenCorpus> corpus = entity.findParent(BaleenCorpus.class);
 
     if (!corpus.isPresent()) {
-      return null;
+      return Mono.empty();
     }
 
     return getDocument(corpus.get(), entity.getDocId(), hints)

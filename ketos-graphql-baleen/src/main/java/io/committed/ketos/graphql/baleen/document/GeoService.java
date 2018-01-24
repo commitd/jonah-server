@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.services;
+package io.committed.ketos.graphql.baleen.document;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +20,7 @@ import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
+import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;

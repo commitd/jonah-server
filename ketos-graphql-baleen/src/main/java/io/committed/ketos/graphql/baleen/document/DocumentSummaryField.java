@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.calculated;
+package io.committed.ketos.graphql.baleen.document;
 
 import static org.springframework.util.StringUtils.isEmpty;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.services;
+package io.committed.ketos.graphql.baleen.corpus;
 
 import java.util.Optional;
 import io.committed.invest.core.dto.analytic.TermBin;
@@ -9,6 +9,8 @@ import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenCorpusMetadata;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
+import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
+import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -45,7 +47,7 @@ public class MetadataService extends AbstractGraphQlService {
           .flatMap(MetadataProvider::countByKey);
     }
 
-    return joinTermBins(flux);
+    return BaleenUtils.joinTermBins(flux);
   }
 
   @GraphQLQuery(name = "values", description = "Get all values for metadata")
@@ -65,12 +67,8 @@ public class MetadataService extends AbstractGraphQlService {
           .flatMap(MetadataProvider::countByValue);
     }
 
-    return joinTermBins(flux);
+    return BaleenUtils.joinTermBins(flux);
   }
 
-  private Mono<TermCount> joinTermBins(final Flux<TermBin> flux) {
-    return flux.groupBy(TermBin::getTerm)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList().map(TermCount::new);
-  }
+
 }

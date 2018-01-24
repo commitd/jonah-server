@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.services;
+package io.committed.ketos.graphql.baleen.utils;
 
 import java.util.Optional;
 import java.util.function.Consumer;

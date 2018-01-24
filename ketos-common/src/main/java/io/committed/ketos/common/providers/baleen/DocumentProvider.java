@@ -7,6 +7,7 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
+import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.DocumentSearchResult;
 import reactor.core.publisher.Flux;
@@ -30,10 +31,10 @@ public interface DocumentProvider extends DataProvider {
 
   DocumentSearchResult search(BaleenDocumentSearch documentSearch, int offset, int size);
 
-  Flux<TermBin> countByField(List<String> path);
+  Flux<TermBin> countByField(DocumentFilter documentFilter, List<String> path);
 
   // TODO: Special case, becasuse of the return type... but seems wrong
-  Flux<TimeBin> countByDate();
+  Flux<TimeBin> countByDate(DocumentFilter documentFilter);
 
 
   // TODO: Delete these

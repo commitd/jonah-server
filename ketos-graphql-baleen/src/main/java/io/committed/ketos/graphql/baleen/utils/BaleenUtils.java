@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.util.StringUtils;
 import com.google.common.base.Splitter;
+import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.core.dto.analytic.TermCount;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public final class BaleenUtils {
 
@@ -29,5 +33,11 @@ public final class BaleenUtils {
       return Collections.emptyList();
     }
     return FIELD_SPLITTER.splitToList(field);
+  }
+
+  public static Mono<TermCount> joinTermBins(final Flux<TermBin> flux) {
+    return flux.groupBy(TermBin::getTerm)
+        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
+        .collectList().map(TermCount::new);
   }
 }
