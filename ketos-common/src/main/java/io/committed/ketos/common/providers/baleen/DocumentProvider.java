@@ -2,6 +2,7 @@ package io.committed.ketos.common.providers.baleen;
 
 
 import java.util.List;
+import java.util.Optional;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
@@ -31,10 +32,11 @@ public interface DocumentProvider extends DataProvider {
 
   DocumentSearchResult search(BaleenDocumentSearch documentSearch, int offset, int size);
 
-  Flux<TermBin> countByField(DocumentFilter documentFilter, List<String> path);
+  Flux<TermBin> countByField(Optional<DocumentFilter> documentFilter, List<String> path);
 
-  // TODO: Special case, becasuse of the return type... but seems wrong
-  Flux<TimeBin> countByDate(DocumentFilter documentFilter);
+  // TODO: Special case, because of the return type... but seems wrong to have this different to
+  // above.
+  Flux<TimeBin> countByDate(Optional<DocumentFilter> documentFilter);
 
 
   // TODO: Delete these

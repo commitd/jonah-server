@@ -3,7 +3,6 @@ package io.committed.ketos.graphql.baleen.corpus;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.Timeline;
@@ -15,7 +14,6 @@ import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.data.BaleenDocuments;
-import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
@@ -122,11 +120,8 @@ public class DocumentsService extends AbstractGraphQlService {
       return Mono.empty();
     }
 
-    return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByField(documentFilter, path))
-        .groupBy(TermBin::getTerm)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList().map(TermCount::new);
+    return BaleenUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
+        .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path)));
   }
 
   @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")
@@ -136,24 +131,10 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByDate(documentFilter)).groupBy(TimeBin::getTs)
+        .flatMap(p -> p.countByDate(Optional.ofNullable(documentFilter))).groupBy(TimeBin::getTs)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TimeBin(g.key(), l)))
         .collectList().map(l -> new Timeline(TimeInterval.DAY, l));
   }
 
-  @GraphQLQuery(name = "document", description = "Document containing the entity")
-  public Mono<BaleenDocument> getDocumentForEntity(@GraphQLContext final BaleenEntity entity,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-
-    final Optional<BaleenCorpus> corpus = entity.findParent(BaleenCorpus.class);
-
-    if (!corpus.isPresent()) {
-      return Mono.empty();
-    }
-
-    return getDocument(corpus.get(), entity.getDocId(), hints)
-        .doOnNext(eachAddParent(entity));
-  }
 
 }

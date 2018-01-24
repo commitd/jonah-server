@@ -1,5 +1,6 @@
 package io.committed.ketos.common.data;
 
+import java.util.Collections;
 import java.util.List;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.MentionFilter;
@@ -24,7 +25,7 @@ public class BaleenDocumentSearch extends AbstractGraphQLNode {
       final List<MentionFilter> mentionFilters, final List<RelationFilter> relationFilters) {
     super(parent);
     this.documentFilter = documentFilter;
-    this.mentionFilters = mentionFilters;
-    this.relationFilters = relationFilters;
+    this.mentionFilters = mentionFilters == null ? Collections.emptyList() : mentionFilters;
+    this.relationFilters = relationFilters == null ? Collections.emptyList() : relationFilters;
   }
 }
