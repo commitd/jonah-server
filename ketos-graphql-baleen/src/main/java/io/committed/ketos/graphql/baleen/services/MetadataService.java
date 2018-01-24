@@ -26,7 +26,7 @@ public class MetadataService extends AbstractGraphQlService {
   @GraphQLQuery(name = "metadata", description = "Get summary of metadata in corpus")
   public BaleenCorpusMetadata getMetadata(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "key", description = "Filter to just this key") final String key) {
-    return new BaleenCorpusMetadata(Optional.ofNullable(key)).addNodeContext(corpus);
+    return new BaleenCorpusMetadata(corpus, Optional.ofNullable(key));
   }
 
 

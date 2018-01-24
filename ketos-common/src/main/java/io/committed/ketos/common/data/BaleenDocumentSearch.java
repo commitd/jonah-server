@@ -1,20 +1,26 @@
 package io.committed.ketos.common.data;
 
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
-import lombok.AllArgsConstructor;
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
+import io.committed.ketos.common.graphql.support.GraphQLNode;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BaleenDocumentSearch extends AbstractGraphQLNodeSupport<BaleenDocumentSearch> {
+public class BaleenDocumentSearch extends AbstractGraphQLNode {
 
-  private String query;
+  private final String query;
 
-  private int offset;
+  private final int offset;
 
-  private int size;
+  private final int size;
+
+  @Builder
+  public BaleenDocumentSearch(final GraphQLNode parent, final String query, final int offset, final int size) {
+    super(parent);
+    this.query = query;
+    this.offset = offset;
+    this.size = size;
+  }
 }

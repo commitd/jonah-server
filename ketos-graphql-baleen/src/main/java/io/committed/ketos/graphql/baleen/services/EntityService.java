@@ -41,20 +41,20 @@ public class EntityService extends AbstractGraphQlService {
     if (type != null && value != null) {
       return getProvidersFromContext(document, EntityProvider.class, hints)
           .flatMap(p -> p.getByDocumentAndType(document, type, value, limit))
-          .map(addContext(document)).doOnNext(BaleenEntity::addContextToMentions);
+          .doOnNext(eachAddParent(document));
     } else if (value != null) {
       return getProvidersFromContext(document, EntityProvider.class, hints)
-          .flatMap(p -> p.getByDocumentAndValue(document, value, limit)).map(addContext(document))
-          .doOnNext(BaleenEntity::addContextToMentions);
+          .flatMap(p -> p.getByDocumentAndValue(document, value, limit))
+          .doOnNext(eachAddParent(document));
     } else if (type != null) {
       return getProvidersFromContext(document, EntityProvider.class, hints)
-          .flatMap(p -> p.getByDocumentAndType(document, type, limit)).map(addContext(document))
-          .doOnNext(BaleenEntity::addContextToMentions);
+          .flatMap(p -> p.getByDocumentAndType(document, type, limit))
+          .doOnNext(eachAddParent(document));
     } else {
       // Both are null
       return getProvidersFromContext(document, EntityProvider.class, hints)
-          .flatMap(p -> p.getByDocument(document).take(limit)).map(addContext(document))
-          .doOnNext(BaleenEntity::addContextToMentions);
+          .flatMap(p -> p.getByDocument(document).take(limit))
+          .doOnNext(eachAddParent(document));
     }
 
   }
@@ -74,20 +74,21 @@ public class EntityService extends AbstractGraphQlService {
 
     if (!StringUtils.isEmpty(type) && !StringUtils.isEmpty(value)) {
       return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByTypeAndValue(type, value, limit)).map(addContext(corpus))
-          .doOnNext(BaleenEntity::addContextToMentions);
+          .flatMap(p -> p.getByTypeAndValue(type, value, limit))
+          .doOnNext(eachAddParent(corpus));
     } else if (!StringUtils.isEmpty(value)) {
       return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByValue(value, limit)).map(addContext(corpus))
-          .doOnNext(BaleenEntity::addContextToMentions);
+          .flatMap(p -> p.getByValue(value, limit))
+          .doOnNext(eachAddParent(corpus));
     } else if (!StringUtils.isEmpty(type)) {
       return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByType(type, limit)).map(addContext(corpus))
-          .doOnNext(BaleenEntity::addContextToMentions);
+          .flatMap(p -> p.getByType(type, limit))
+          .doOnNext(eachAddParent(corpus));
     } else {
       // Both are null
-      return getProviders(corpus, EntityProvider.class, hints).flatMap(p -> p.getAll(0, limit))
-          .map(addContext(corpus)).doOnNext(BaleenEntity::addContextToMentions);
+      return getProviders(corpus, EntityProvider.class, hints)
+          .flatMap(p -> p.getAll(0, limit))
+          .doOnNext(eachAddParent(corpus));
     }
 
   }
@@ -96,8 +97,10 @@ public class EntityService extends AbstractGraphQlService {
   public Mono<BaleenEntity> getById(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "id") @GraphQLId final String id, @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, EntityProvider.class, hints).flatMap(p -> p.getById(id))
-        .map(addContext(corpus)).next().doOnNext(BaleenEntity::addContextToMentions);
+    return getProviders(corpus, EntityProvider.class, hints)
+        .flatMap(p -> p.getById(id))
+        .next()
+        .doOnNext(eachAddParent(corpus));
   }
 
 
@@ -126,8 +129,9 @@ public class EntityService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(mention, EntityProvider.class, hints)
-        .flatMap(p -> p.mentionEntity(mention)).map(addContext(mention)).next()
-        .doOnNext(BaleenEntity::addContextToMentions);
+        .flatMap(p -> p.mentionEntity(mention))
+        .next()
+        .doOnNext(eachAddParent(mention));
   }
 
 

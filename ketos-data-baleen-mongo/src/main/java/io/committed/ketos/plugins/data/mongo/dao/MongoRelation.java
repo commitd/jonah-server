@@ -45,19 +45,19 @@ public class MongoRelation {
 
 
   public BaleenRelation toRelation() {
-    final BaleenRelation r = new BaleenRelation();
-    r.setId(getExternalId());
-    r.setDocId(getDocId());
-    r.setBegin(getBegin());
-    r.setEnd(getEnd());
-    r.setType(getType());
-    r.setRelationshipType(getRelationshipType());
-    r.setRelationSubtype(getRelationSubtype());
-    r.setValue(getValue());
-    r.setConfidence(getConfidence());
-    r.setSourceId(getSource());
-    r.setTargetId(getTarget());
-    return r;
+    return BaleenRelation.builder()
+        .id(getExternalId())
+        .docId(getDocId())
+        .begin(getBegin())
+        .end(getEnd())
+        .type(getType())
+        .relationshipType(getRelationshipType())
+        .relationSubtype(getRelationSubtype())
+        .value(getValue())
+        .confidence(getConfidence())
+        .sourceId(getSource())
+        .targetId(getTarget())
+        .build();
   }
 
 }

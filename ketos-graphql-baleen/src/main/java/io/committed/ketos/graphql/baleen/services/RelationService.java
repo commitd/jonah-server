@@ -31,7 +31,8 @@ public class RelationService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(document, RelationProvider.class, hints)
-        .flatMap(p -> p.getRelations(document)).map(this.addContext(document));
+        .flatMap(p -> p.getRelations(document))
+        .doOnNext(eachAddParent(document));
 
   }
 
@@ -40,7 +41,8 @@ public class RelationService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(mention, RelationProvider.class, hints)
-        .flatMap(p -> p.getSourceRelations(mention)).map(this.addContext(mention));
+        .flatMap(p -> p.getSourceRelations(mention))
+        .doOnNext(eachAddParent(mention));
   }
 
   @GraphQLQuery(name = "targetOf", description = "Find relations which have the mention as target")
@@ -48,7 +50,8 @@ public class RelationService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(mention, RelationProvider.class, hints)
-        .flatMap(p -> p.getTargetRelations(mention)).map(this.addContext(mention));
+        .flatMap(p -> p.getTargetRelations(mention))
+        .doOnNext(eachAddParent(mention));
   }
 
   @GraphQLQuery(name = "relation", description = "Find a relation by id")
@@ -56,8 +59,10 @@ public class RelationService extends AbstractGraphQlService {
       @GraphQLNonNull @GraphQLArgument(name = "id") final String id,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, RelationProvider.class, hints).flatMap(p -> p.getById(id))
-        .map(this.addContext(corpus)).next();
+    return getProviders(corpus, RelationProvider.class, hints)
+        .flatMap(p -> p.getById(id))
+        .next()
+        .doOnNext(eachAddParent(corpus));
   }
 
   // Relations on corpus
@@ -82,13 +87,14 @@ public class RelationService extends AbstractGraphQlService {
         && StringUtils.isEmpty(targetType) && StringUtils.isEmpty(targetValue)
         && StringUtils.isEmpty(relationshipType) && StringUtils.isEmpty(relationshipSubType)) {
       return getProviders(corpus, RelationProvider.class, hints)
-          .flatMap(p -> p.getAllRelations(offset, limit)).map(this.addContext(corpus));
+          .flatMap(p -> p.getAllRelations(offset, limit))
+          .doOnNext(eachAddParent(corpus));
 
     } else {
       return getProviders(corpus, RelationProvider.class, hints)
           .flatMap(p -> p.getRelationsByMention(sourceValue, sourceType, relationshipType,
               relationshipSubType, targetValue, targetType, offset, limit))
-          .map(this.addContext(corpus));
+          .doOnNext(eachAddParent(corpus));
     }
 
   }

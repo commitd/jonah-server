@@ -60,16 +60,16 @@ public class MongoMention {
   }
 
   public BaleenMention toMention(final String entityId) {
-    final BaleenMention m = new BaleenMention();
-    m.setEntityId(entityId);
-    m.setId(getExternalId());
-    m.setConfidence(getConfidence());
-    m.setBegin(getBegin());
-    m.setEnd(getEnd());
-    m.setType(getType());
-    m.setValue(getValue());
-    m.setProperties(getProperties());
-    return m;
+    return BaleenMention.builder()
+        .entityId(entityId)
+        .id(getExternalId())
+        .confidence(getConfidence())
+        .begin(getBegin())
+        .end(getEnd())
+        .type(getType())
+        .value(getValue())
+        .properties(getProperties())
+        .build();
   }
 
 

@@ -46,12 +46,14 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
   }
 
   private Flux<BaleenMention> getMentionsByDocumentId(final String documentId) {
-    return getByDocumentId(documentId).flatMap(e -> Flux.fromIterable(e.getMentions()));
+    return getByDocumentId(documentId)
+        .flatMap(e -> e.getMentions());
   }
 
   private Mono<BaleenMention> relationMentionById(final BaleenRelation relation,
       final String sourceId) {
-    return getMentionsByDocumentId(relation.getDocId()).filter(m -> sourceId.equals(m.getId()))
+    return getMentionsByDocumentId(relation.getDocId())
+        .filter(m -> sourceId.equals(m.getId()))
         .next();
   }
 

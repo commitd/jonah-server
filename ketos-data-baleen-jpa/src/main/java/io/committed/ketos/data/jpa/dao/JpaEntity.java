@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import lombok.Data;
+import reactor.core.publisher.Flux;
 
 // TODO: Also geojson entity table.
 @Entity
@@ -31,6 +32,9 @@ public class JpaEntity {
           .value(value.get(i)).build());
     }
 
-    return BaleenEntity.builder().docId(docId).mentions(mentions).build();
+    return BaleenEntity.builder()
+        .docId(docId)
+        .mentions(Flux.fromStream(mentions.stream()))
+        .build();
   }
 }

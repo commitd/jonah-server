@@ -37,8 +37,10 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    return getProviders(corpus, DocumentProvider.class, hints).flatMap(p -> p.getById(id))
-        .map(this.addContext(corpus)).next();
+    return getProviders(corpus, DocumentProvider.class, hints)
+        .flatMap(p -> p.getById(id))
+        .next()
+        .doOnNext(eachAddParent(corpus));
   }
 
   @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
@@ -52,7 +54,12 @@ public class DocumentsService extends AbstractGraphQlService {
           description = "Maximum number of documents to return, for pagination",
           defaultValue = "10") final int size) {
 
-    return new BaleenDocumentSearch(search, offset, size).addNodeContext(corpus);
+    return BaleenDocumentSearch.builder()
+        .parent(corpus)
+        .query(search)
+        .offset(offset)
+        .size(size)
+        .build();
   }
 
   @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
@@ -69,11 +76,11 @@ public class DocumentsService extends AbstractGraphQlService {
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
 
     final Flux<BaleenDocument> documents =
-        providers.flatMap(p -> p.all(offset, size)).map(addContext(corpus));
+        providers.flatMap(p -> p.all(offset, size));
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
 
-    return new BaleenDocuments(documents, count).addNodeContext(corpus);
+    return BaleenDocuments.builder().parent(corpus).results(documents).totalCount(count).build();
   }
 
 
@@ -85,7 +92,7 @@ public class DocumentsService extends AbstractGraphQlService {
     // TODO; Should limit be here or on the above??
 
     final Optional<BaleenCorpus> optionalCorpus =
-        documentSearch.getGqlNode().findParent(BaleenCorpus.class);
+        documentSearch.findParent(BaleenCorpus.class);
 
     if (!optionalCorpus.isPresent()) {
       return null;
@@ -97,12 +104,12 @@ public class DocumentsService extends AbstractGraphQlService {
 
     final Flux<BaleenDocument> documents =
         providers.flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getOffset(),
-            documentSearch.getSize())).map(addContext(corpus));
+            documentSearch.getSize()));
 
     final Mono<Long> count = providers.flatMap(p -> p.countSearchMatches(documentSearch.getQuery()))
         .reduce(0L, Long::sum);
 
-    return new BaleenDocuments(documents, count).addNodeContext(documentSearch);
+    return BaleenDocuments.builder().parent(documentSearch).results(documents).totalCount(count).build();
   }
 
   @GraphQLQuery(name = "documentCount", description = "Get the number of documents")
@@ -159,12 +166,13 @@ public class DocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    final Optional<BaleenCorpus> corpus = entity.getGqlNode().findParent(BaleenCorpus.class);
+    final Optional<BaleenCorpus> corpus = entity.findParent(BaleenCorpus.class);
 
     if (!corpus.isPresent()) {
       return null;
     }
 
-    return getDocument(corpus.get(), entity.getDocId(), hints);
+    return getDocument(corpus.get(), entity.getDocId(), hints)
+        .doOnNext(eachAddParent(entity));
   }
 }

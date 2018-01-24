@@ -64,10 +64,10 @@ public interface EntityProvider extends DataProvider {
       final String value, final int limit) {
     Flux<BaleenEntity> flux = in;
     if (type != null) {
-      flux = flux.filter(e -> type.equals(e.getType().get()));
+      flux = flux.filterWhen(e -> e.getTypes().any(type::equals));
     }
     if (value != null) {
-      flux = flux.filter(e -> e.getValues().contains(value));
+      flux = flux.filterWhen(e -> e.getValues().any(value::equals));
     }
     if (limit > 0) {
       flux = flux.take(limit);

@@ -1,11 +1,11 @@
 package io.committed.ketos.data.elasticsearch.dao;
 
-import java.util.Collections;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import lombok.Data;
+import reactor.core.publisher.Mono;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -35,7 +35,7 @@ public class EsEntity {
 
   public BaleenEntity toBaleenEntity() {
     return BaleenEntity.builder().docId(documentId).id(externalId)
-        .mentions(Collections.singletonList(toBaleenMention())).build();
+        .mentions(Mono.just(toBaleenMention()).flux()).build();
   }
 
   public BaleenMention toBaleenMention() {

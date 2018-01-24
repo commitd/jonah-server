@@ -1,66 +1,62 @@
 package io.committed.ketos.common.data;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNodeSupport;
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class BaleenEntity extends AbstractGraphQLNodeSupport<BaleenEntity> {
+public class BaleenEntity extends AbstractGraphQLNode {
 
   @GraphQLId
   @GraphQLQuery(name = "id", description = "The id for this entity")
-  private String id;
+  private final String id;
 
   @GraphQLQuery(name = "docId",
       description = "The id of the document that this entity mentions of this entity")
-  private String docId;
+  private final String docId;
 
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
-  private List<BaleenMention> mentions;
+  private final Flux<BaleenMention> mentions;
 
+
+  public BaleenEntity(final String id, final String docId, final Flux<BaleenMention> mentions) {
+    this.id = id;
+    this.docId = docId;
+    this.mentions = mentions.doOnNext(m -> m.setParent(this)).cache();
+
+  }
 
   @GraphQLQuery(name = "values", description = "Values associated with this entity")
-  public List<String> getValues() {
-    return mentions.stream().map(BaleenMention::getValue).collect(Collectors.toList());
+  public Flux<String> getValues() {
+    return mentions.map(BaleenMention::getValue);
   }
 
   @GraphQLQuery(name = "longestValue", description = "Longest value associated with this entity")
-  public Optional<String> longestValue(@GraphQLContext final BaleenEntity entity) {
-    return entity.getMentions().stream().map(BaleenMention::getValue)
-        .collect(Collectors.maxBy((o1, o2) -> Integer.compare(o1.length(), o2.length())));
+  public Mono<String> longestValue(@GraphQLContext final BaleenEntity entity) {
+    return entity.getMentions()
+        .map(BaleenMention::getValue)
+        .reduce("", (a, b) -> a.length() > b.length() ? a : b);
   }
 
   @GraphQLQuery(name = "types",
       description = "Distinct entity types assocated with mentions of this entity")
-  public List<String> getTypes() {
-    return mentions.stream().map(BaleenMention::getType).distinct().collect(Collectors.toList());
+  public Flux<String> getTypes() {
+    return mentions.map(BaleenMention::getType).distinct();
   }
 
   @GraphQLQuery(name = "type", description = "Primary types associated with this entity")
-  public Optional<String> getType() {
-    return mentions.stream().map(BaleenMention::getType).findFirst();
+  public Mono<String> getType() {
+    // Whilst this could find the most popular or some other metric its rather meaningless to guess here
+    // what is best for the caller.
+    return getTypes().next();
   }
-
-  @JsonIgnore
-  public void addContextToMentions() {
-    if (mentions != null) {
-      mentions.stream().forEach(m -> m.addNodeContext(this));
-    }
-  }
-
 
 }

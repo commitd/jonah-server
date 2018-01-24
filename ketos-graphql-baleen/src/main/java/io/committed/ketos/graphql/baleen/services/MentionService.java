@@ -28,7 +28,8 @@ public class MentionService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(document, MentionProvider.class, hints)
-        .flatMap(p -> p.getMentionsByDocument(document)).map(this.addContext(document));
+        .flatMap(p -> p.getMentionsByDocument(document))
+        .doOnNext(eachAddParent(document));
   }
 
   @GraphQLQuery(name = "source", description = "Get the source entity of this relation")
@@ -36,9 +37,10 @@ public class MentionService extends AbstractGraphQlService {
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(relation, MentionProvider.class, hints)
-        .flatMap(p -> p.source(relation)).map(this.addContext(relation))
+        .flatMap(p -> p.source(relation))
         // May be many but we only want one (and only should have one per db)
-        .next();
+        .next()
+        .doOnNext(eachAddParent(relation));
   }
 
   @GraphQLQuery(name = "target", description = "Get the target entity of this relation")
@@ -46,9 +48,10 @@ public class MentionService extends AbstractGraphQlService {
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(relation, MentionProvider.class, hints)
-        .flatMap(p -> p.target(relation)).map(this.addContext(relation))
+        .flatMap(p -> p.target(relation))
         // May be many but we only want one (and only should have one)
-        .next();
+        .next()
+        .doOnNext(eachAddParent(relation));
   }
 
 }
