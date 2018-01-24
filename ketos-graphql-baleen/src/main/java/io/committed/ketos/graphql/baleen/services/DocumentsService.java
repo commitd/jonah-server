@@ -1,5 +1,6 @@
 package io.committed.ketos.graphql.baleen.services;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.core.dto.analytic.TermBin;
@@ -15,7 +16,12 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.data.BaleenDocuments;
 import io.committed.ketos.common.data.BaleenEntity;
+import io.committed.ketos.common.graphql.input.DocumentFilter;
+import io.committed.ketos.common.graphql.input.DocumentProbe;
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -43,23 +49,15 @@ public class DocumentsService extends AbstractGraphQlService {
         .doOnNext(eachAddParent(corpus));
   }
 
-  @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
-  public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "search",
-          description = "Search query") final String search,
-      @GraphQLArgument(name = "offset",
-          description = "Index of first document to return, for pagination",
-          defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "size",
-          description = "Maximum number of documents to return, for pagination",
-          defaultValue = "10") final int size) {
+  @GraphQLQuery(name = "documentByExample", description = "Get document by example")
+  public Flux<BaleenDocument> getDocumentByExample(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLNonNull @GraphQLArgument(name = "probe", description = "Document by example") final DocumentProbe probe,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    return BaleenDocumentSearch.builder()
-        .parent(corpus)
-        .query(search)
-        .offset(offset)
-        .size(size)
-        .build();
+    return getProviders(corpus, DocumentProvider.class, hints)
+        .flatMap(p -> p.getByExample(probe))
+        .doOnNext(eachAddParent(corpus));
   }
 
   @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
@@ -80,36 +78,7 @@ public class DocumentsService extends AbstractGraphQlService {
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
 
-    return BaleenDocuments.builder().parent(corpus).results(documents).totalCount(count).build();
-  }
-
-
-  @GraphQLQuery(name = "hits", description = "Get search hits")
-  public BaleenDocuments getDocuments(@GraphQLContext final BaleenDocumentSearch documentSearch,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-
-    // TODO; Should limit be here or on the above??
-
-    final Optional<BaleenCorpus> optionalCorpus =
-        documentSearch.findParent(BaleenCorpus.class);
-
-    if (!optionalCorpus.isPresent()) {
-      return null;
-    }
-
-    final BaleenCorpus corpus = optionalCorpus.get();
-
-    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
-
-    final Flux<BaleenDocument> documents =
-        providers.flatMap(p -> p.search(documentSearch.getQuery(), documentSearch.getOffset(),
-            documentSearch.getSize()));
-
-    final Mono<Long> count = providers.flatMap(p -> p.countSearchMatches(documentSearch.getQuery()))
-        .reduce(0L, Long::sum);
-
-    return BaleenDocuments.builder().parent(documentSearch).results(documents).totalCount(count).build();
+    return BaleenDocuments.builder().parent(corpus).results(documents).total(count).build();
   }
 
   @GraphQLQuery(name = "documentCount", description = "Get the number of documents")
@@ -120,33 +89,39 @@ public class DocumentsService extends AbstractGraphQlService {
         .reduce(0L, Long::sum);
   }
 
-  @GraphQLQuery(name = "documentTypes", description = "Count of documents per document type")
+  @GraphQLQuery(name = "documents", description = "Search for documents by query")
+  public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLNonNull @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLNonNull @GraphQLArgument(name = "mentions",
+          description = "Including mentions") final List<MentionFilter> mentionFilters,
+      @GraphQLNonNull @GraphQLArgument(name = "relations",
+          description = "Include relations") final List<RelationFilter> relationFilters) {
+
+    return BaleenDocumentSearch.builder()
+        .parent(corpus)
+        .documentFilter(documentFilter)
+        .mentionFilters(mentionFilters)
+        .relationFilters(relationFilters)
+        .build();
+  }
+
+  @GraphQLQuery(name = "countDocuments", description = "Count of documents by value")
   public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLNonNull @GraphQLArgument(name = "field",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByType).groupBy(TermBin::getTerm)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList().map(TermCount::new);
-  }
 
-  @GraphQLQuery(name = "documentLanguages", description = "Count of documents per language")
-  public Mono<TermCount> getDocumentLanguages(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByLanguage).groupBy(TermBin::getTerm)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList().map(TermCount::new);
-  }
+    final List<String> path = BaleenUtils.fieldSplitter(field);
 
-  @GraphQLQuery(name = "documentClassifications",
-      description = "Count of documents per classification")
-  public Mono<TermCount> getDocumentClassification(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    if (path.isEmpty()) {
+      return Mono.empty();
+    }
+
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(DocumentProvider::countByClassification).groupBy(TermBin::getTerm)
+        .flatMap(p -> p.countByField(path))
+        .groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
         .collectList().map(TermCount::new);
   }
@@ -175,4 +150,5 @@ public class DocumentsService extends AbstractGraphQlService {
     return getDocument(corpus.get(), entity.getDocId(), hints)
         .doOnNext(eachAddParent(entity));
   }
+
 }

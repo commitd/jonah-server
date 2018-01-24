@@ -15,12 +15,12 @@ import reactor.core.publisher.Mono;
 public class BaleenDocuments extends AbstractGraphQLNode {
   private final Flux<BaleenDocument> results;
 
-  private final Mono<Long> totalCount;
+  private final Mono<Long> total;
 
   @Builder
-  public BaleenDocuments(final GraphQLNode parent, final Mono<Long> totalCount, final Flux<BaleenDocument> results) {
+  public BaleenDocuments(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenDocument> results) {
     super(parent);
     this.results = results.doOnNext(r -> r.setParent(this)).cache();
-    this.totalCount = totalCount;
+    this.total = total;
   }
 }
