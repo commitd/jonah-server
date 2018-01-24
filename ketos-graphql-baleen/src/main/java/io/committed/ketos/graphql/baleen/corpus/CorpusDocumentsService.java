@@ -19,8 +19,8 @@ import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.common.utils.FieldUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
-import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -114,13 +114,13 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    final List<String> path = BaleenUtils.fieldSplitter(field);
+    final List<String> path = FieldUtils.fieldSplitter(field);
 
     if (path.isEmpty()) {
       return Mono.empty();
     }
 
-    return BaleenUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
+    return FieldUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
         .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path)));
   }
 

@@ -3,6 +3,7 @@ package io.committed.ketos.plugins.data.mongo.dao;
 import java.util.Date;
 import java.util.List;
 import io.committed.ketos.common.data.BaleenDocumentInfo;
+import io.committed.ketos.common.graphql.input.DocumentProbe.DocumentInfoProbe;
 import lombok.Data;
 
 @Data
@@ -26,6 +27,10 @@ public class MongoDocumentInfo {
         .caveats(caveats)
         .releasability(releasability)
         .build();
+  }
+
+  public MongoDocumentInfo(final DocumentInfoProbe info) {
+    // TODO Auto-generated constructor stub
   }
 
 }

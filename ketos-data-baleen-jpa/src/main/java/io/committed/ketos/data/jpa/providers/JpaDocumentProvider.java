@@ -2,6 +2,11 @@ package io.committed.ketos.data.jpa.providers;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +15,10 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.BaleenDocumentSearch;
+import io.committed.ketos.common.graphql.input.DocumentFilter;
+import io.committed.ketos.common.graphql.input.DocumentProbe;
+import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.jpa.dao.JpaDocument;
 import io.committed.ketos.data.jpa.dao.JpaDocumentMetadata;
@@ -37,15 +46,20 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   }
 
   @Override
-  public Flux<BaleenDocument> search(final String search, final int offset, final int size) {
-    final Pageable pageable = new OffsetLimitPagable(offset, size);
-    return Flux.fromStream(
-        documents.findByContentContaining(search, pageable).map(this::addMetadataAndConvert));
-  }
+  public DocumentSearchResult search(final BaleenDocumentSearch documentSearch, final int offset, final int size) {
+    // TODO: Ignores most of the query!
+    final String query = documentSearch.getDocumentFilter().getContent();
 
-  @Override
-  public Mono<Long> countSearchMatches(final String query) {
-    return Mono.just(documents.countByContentContaining(query));
+    final Mono<Long> count = Mono.just(documents.countByContentContaining(query));
+
+    final Pageable pageable = new OffsetLimitPagable(offset, size);
+    final Flux<BaleenDocument> fromStream = Flux.fromStream(
+        documents.findByContentContaining(query, pageable).map(this::addMetadataAndConvert));
+
+    return DocumentSearchResult.builder()
+        .results(fromStream)
+        .total(count)
+        .build();
   }
 
   @Override
@@ -54,25 +68,13 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
     return Flux.fromStream(page.stream().map(this::addMetadataAndConvert));
   }
 
-  private BaleenDocument addMetadataAndConvert(final JpaDocument document) {
-    final Flux<JpaDocumentMetadata> metadata =
-        Flux.fromStream(metadataRepo.findByDocId(document.getExternalId()));
-    return document.toBaleenDocument(metadata);
-  }
-
-
   @Override
   public Mono<Long> count() {
     return Mono.just(documents.count());
   }
 
   @Override
-  public Flux<TermBin> countByType() {
-    return Flux.fromStream(documents.countByType());
-  }
-
-  @Override
-  public Flux<TimeBin> countByDate() {
+  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter) {
     return Flux.fromStream(documents.countByDate()).map(t -> {
       final LocalDate date = LocalDate.parse(t.getTerm());
       return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
@@ -80,18 +82,46 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
 
   }
 
-
-
   @Override
-  public Flux<TermBin> countByClassification() {
-    return Flux.fromStream(documents.countByClassification());
+  public Flux<BaleenDocument> getByExample(final DocumentProbe probe) {
+    // TODO: Review matchers for each field
+    final ExampleMatcher matcher = ExampleMatcher.matching()
+        .withMatcher("content", GenericPropertyMatcher::contains);
+    return Flux.fromIterable(documents.findAll(Example.of(new JpaDocument(probe), matcher)))
+        .map(this::addMetadataAndConvert);
   }
 
   @Override
-  public Flux<TermBin> countByLanguage() {
-    return Flux.fromStream(documents.countByLanguage());
+  public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path) {
+    // TODO Ignores the documentFilter
+    // TODO Doesn't support metadata, that would require join (not an issue but more complexity
+    // considering how little use this has)
+    // TODO: Only limited types when it is supported
+
+    if (path.size() < 2 && !path.get(0).equals("info")) {
+      return Flux.empty();
+    }
+
+    switch (path.get(1)) {
+      case "type":
+        return Flux.fromStream(documents.countByType());
+      case "classification":
+        return Flux.fromStream(documents.countByClassification());
+      case "language":
+        return Flux.fromStream(documents.countByLanguage());
+
+    }
+
+    return Flux.empty();
   }
 
+
+
+  private BaleenDocument addMetadataAndConvert(final JpaDocument document) {
+    final Flux<JpaDocumentMetadata> metadata =
+        Flux.fromStream(metadataRepo.findByDocId(document.getExternalId()));
+    return document.toBaleenDocument(metadata);
+  }
 
 
 }

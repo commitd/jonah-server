@@ -9,7 +9,7 @@ import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.data.BaleenDocuments;
-import io.committed.ketos.common.graphql.input.DocumentSearchResult;
+import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
@@ -50,7 +50,7 @@ public class DocumentSearchService extends AbstractGraphQlService {
     final Flux<DocumentSearchResult> results =
         providers.map(p -> p.search(documentSearch, offset, size));
 
-    final Mono<Long> count = results.reduce(0L, (a, r) -> a + r.getTotal());
+    final Mono<Long> count = results.flatMap(DocumentSearchResult::getTotal).reduce(0L, Long::sum);
     final Flux<BaleenDocument> documents = Flux.concat(results.map(DocumentSearchResult::getResults));
 
     return BaleenDocuments.builder()

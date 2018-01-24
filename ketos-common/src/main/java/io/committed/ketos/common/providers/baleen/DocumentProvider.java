@@ -10,7 +10,7 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
-import io.committed.ketos.common.graphql.input.DocumentSearchResult;
+import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

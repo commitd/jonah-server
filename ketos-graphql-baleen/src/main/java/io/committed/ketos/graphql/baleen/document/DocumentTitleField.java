@@ -6,7 +6,7 @@ import java.util.Map;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentInfo;
-import io.committed.ketos.graphql.baleen.utils.BaleenUtils;
+import io.committed.ketos.common.utils.FieldUtils;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 
@@ -101,12 +101,12 @@ public class DocumentTitleField {
   private String lookInMetadata(final Map<String, Object> metadata) {
     String title = null;
 
-    title = BaleenUtils.getAsMetadataKey(metadata, "title");
+    title = FieldUtils.getAsMetadataKey(metadata, "title");
     if (!isEmpty(title)) {
       return title;
     }
 
-    title = BaleenUtils.getAsMetadataKey(metadata, "DC.Title");
+    title = FieldUtils.getAsMetadataKey(metadata, "DC.Title");
     if (!isEmpty(title)) {
       return title;
     }

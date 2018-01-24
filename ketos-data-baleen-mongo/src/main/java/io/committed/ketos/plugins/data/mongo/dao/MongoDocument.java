@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.graphql.input.DocumentProbe;
 import lombok.Data;
 
 @Data
@@ -30,5 +31,15 @@ public class MongoDocument {
         .metadata(metadata)
         .content(content)
         .build();
+  }
+
+  public MongoDocument(final DocumentProbe probe) {
+    this.externalId = probe.getId();
+    this.content = probe.getContent();
+    if (probe.getInfo() != null) {
+      this.document = new MongoDocumentInfo(probe.getInfo());
+    }
+    this.publishedIds = probe.getPublishedIds();
+    this.metadata = probe.getMetadata();
   }
 }

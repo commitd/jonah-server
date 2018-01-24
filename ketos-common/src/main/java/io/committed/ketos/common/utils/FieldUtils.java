@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.utils;
+package io.committed.ketos.common.utils;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +10,12 @@ import io.committed.invest.core.dto.analytic.TermCount;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public final class BaleenUtils {
+public final class FieldUtils {
 
   // Fixed limit here to avoid some crazy depth, when in reality it'll be 2.
   private static final Splitter FIELD_SPLITTER = Splitter.on(".").trimResults().omitEmptyStrings().limit(5);
 
-  private BaleenUtils() {
+  private FieldUtils() {
     // Singleton
   }
 
