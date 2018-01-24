@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.document;
+package io.committed.ketos.graphql.baleen.entity;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,12 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
 @GraphQLService
-public class DocumentsService extends AbstractGraphQlService {
+public class EntityDocumentsService extends AbstractGraphQlService {
 
   private final io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService corpusDocumentService;
 
   @Autowired
-  public DocumentsService(final DataProviders corpusProviders,
+  public EntityDocumentsService(final DataProviders corpusProviders,
       final io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService corpusDocumentService) {
     super(corpusProviders);
     this.corpusDocumentService = corpusDocumentService;
