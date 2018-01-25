@@ -1,12 +1,15 @@
 package io.committed.ketos.plugins.data.mongo.dao;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import io.committed.ketos.common.data.BaleenDocumentInfo;
 import io.committed.ketos.common.graphql.input.DocumentProbe.DocumentInfoProbe;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class MongoDocumentInfo {
 
   private String type;
@@ -30,7 +33,15 @@ public class MongoDocumentInfo {
   }
 
   public MongoDocumentInfo(final DocumentInfoProbe info) {
-    // TODO Auto-generated constructor stub
+    if (info != null) {
+      type = info.getType();
+      source = info.getSource();
+      language = info.getLanguage();
+      timestamp = info.getTimestamp();
+      classification = info.getClassification();
+      caveats = Collections.singletonList(info.getCaveats());
+      releasability = Collections.singletonList(info.getReleasability());
+    }
   }
 
 }

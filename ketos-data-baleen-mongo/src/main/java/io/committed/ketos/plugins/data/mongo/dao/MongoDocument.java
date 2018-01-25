@@ -9,9 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Document(collection = "documents")
+@NoArgsConstructor
 public class MongoDocument {
 
   @Id

@@ -98,9 +98,9 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLNonNull @GraphQLArgument(name = "mentions",
+      @GraphQLArgument(name = "mentions",
           description = "Including mentions") final List<MentionFilter> mentionFilters,
-      @GraphQLNonNull @GraphQLArgument(name = "relations",
+      @GraphQLArgument(name = "relations",
           description = "Include relations") final List<RelationFilter> relationFilters) {
 
     return BaleenDocumentSearch.builder()
