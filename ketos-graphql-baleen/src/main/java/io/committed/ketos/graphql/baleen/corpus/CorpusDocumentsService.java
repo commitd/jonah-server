@@ -86,7 +86,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     return BaleenDocuments.builder().parent(corpus).results(documents).total(count).build();
   }
 
-  @GraphQLQuery(name = "documentCount", description = "Get the number of documents")
+  @GraphQLQuery(name = "countDocuments", description = "Get the number of documents")
   public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
@@ -111,7 +111,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
         .build();
   }
 
-  @GraphQLQuery(name = "countDocuments", description = "Count of documents by value")
+  @GraphQLQuery(name = "countByDocumentField", description = "Count of documents by value")
   public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,

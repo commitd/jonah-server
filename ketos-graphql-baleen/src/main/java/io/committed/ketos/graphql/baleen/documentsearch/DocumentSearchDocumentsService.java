@@ -30,7 +30,7 @@ public class DocumentSearchDocumentsService extends AbstractGraphQlService {
   }
 
 
-  @GraphQLQuery(name = "countDocuments", description = "Count of documents by value")
+  @GraphQLQuery(name = "countByField", description = "Count of documents by value")
   public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenDocumentSearch search,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
@@ -47,7 +47,7 @@ public class DocumentSearchDocumentsService extends AbstractGraphQlService {
     return corpusDocumentService.getDocumentTypes(corpus.get(), documentFilter, field, hints);
   }
 
-  @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")
+  @GraphQLQuery(name = "timeline", description = "Timeline of documents per day")
   public Mono<Timeline> getDocumentTimeline(@GraphQLContext final BaleenDocumentSearch search,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
