@@ -112,7 +112,7 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
 
     if (entitySearch.getMentionFilters() != null) {
       for (final MentionFilter f : entitySearch.getMentionFilters()) {
-        criteria.add(MentionFilters.createCriteria(f));
+        criteria.add(MentionFilters.createCriteria(f, "", "entities"));
       }
     }
 

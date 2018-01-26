@@ -118,7 +118,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     final String field = path.get(path.size() - 1);
 
     return aggregateOverMentions(TermBin.class,
-        filter.isPresent() ? Aggregation.match(MentionFilters.createCriteria(filter.get())) : null,
+        filter.isPresent() ? Aggregation.match(MentionFilters.createCriteria(filter.get(), "", "")) : null,
         group(field).count().as("count"),
         Aggregation.project("count").and("_id").as("term"));
   }
@@ -128,7 +128,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
     Flux<BaleenMention> results;
     if (search.getMentionFilter() != null) {
-      final Criteria criteria = MentionFilters.createCriteria(search.getMentionFilter());
+      final Criteria criteria = MentionFilters.createCriteria(search.getMentionFilter(), "", "");
       results = aggregateOverMentions(MongoMention.class,
           Aggregation.match(criteria))
               .map(MongoMention::toMention);

@@ -18,19 +18,17 @@ public final class MentionFilters {
   }
 
   public static List<Criteria> createCriteria(final Collection<MentionFilter> mentionFilters,
-      final String prefix) {
+      final String entityPrefix, final String mentionsPrefix) {
     final List<Criteria> list = new LinkedList<>();
     for (final MentionFilter f : mentionFilters) {
-      list.add(createCriteria(f, prefix));
+      list.add(createCriteria(f, entityPrefix, mentionsPrefix));
     }
     return list;
   }
 
-  public static Criteria createCriteria(final MentionFilter mentionFilter) {
-    return createCriteria(mentionFilter, "");
-  }
 
-  public static Criteria createCriteria(@Nullable final MentionFilter mentionFilter, final String prefix) {
+  public static Criteria createCriteria(@Nullable final MentionFilter mentionFilter, final String entityPrefix,
+      final String mentionsPrefix) {
     Criteria criteria = new Criteria();
 
     if (mentionFilter == null) {
@@ -46,36 +44,36 @@ public final class MentionFilters {
     // Entity stuff
 
     if (mentionFilter.getDocId() != null) {
-      criteria = criteria.and(prefix + "docId").is(mentionFilter.getDocId());
+      criteria = criteria.and(entityPrefix + "docId").is(mentionFilter.getDocId());
     }
 
     if (mentionFilter.getEntityId() != null) {
-      criteria = criteria.and(prefix + "id").is(mentionFilter.getEntityId());
+      criteria = criteria.and(entityPrefix + "id").is(mentionFilter.getEntityId());
     }
 
     // Now mention
 
     if (mentionFilter.getType() != null) {
-      criteria = criteria.and(prefix + "entities.type").is(mentionFilter.getType());
+      criteria = criteria.and(mentionsPrefix + "type").is(mentionFilter.getType());
     }
 
     if (mentionFilter.getValue() != null) {
-      criteria = criteria.and(prefix + "entities.value").is(mentionFilter.getValue());
+      criteria = criteria.and(mentionsPrefix + "value").is(mentionFilter.getValue());
     }
 
     if (mentionFilter.getProperties() != null) {
       for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
-        criteria = criteria.and(prefix + "entities." + e.getKey()).is(e.getValue());
+        criteria = criteria.and(mentionsPrefix + e.getKey()).is(e.getValue());
       }
     }
 
     if (mentionFilter.getStartTimestamp() != null) {
-      criteria = criteria.and(prefix + "entities.value").gte(mentionFilter.getStartTimestamp());
+      criteria = criteria.and(mentionsPrefix + "value").gte(mentionFilter.getStartTimestamp());
     }
 
 
     if (mentionFilter.getEndTimestamp() != null) {
-      criteria = criteria.and(prefix + "entities.value").lte(mentionFilter.getEndTimestamp());
+      criteria = criteria.and(mentionsPrefix + "value").lte(mentionFilter.getEndTimestamp());
     }
 
     if (mentionFilter.getWithin() != null) {
@@ -83,7 +81,7 @@ public final class MentionFilters {
       final Box box = new Box(
           new Point(within.getSafeE(), within.getN()),
           new Point(within.getSafeW(), within.getS()));
-      criteria = criteria.and(prefix + "entities.geoJson").within(box);
+      criteria = criteria.and(mentionsPrefix + "geoJson").within(box);
     }
 
 

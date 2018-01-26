@@ -219,7 +219,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
         final String key = QUERY_PREIX + i;
 
         final Cond cond = ConditionalOperators
-            .when(MentionFilters.createCriteria(f))
+            .when(MentionFilters.createCriteria(f, "", "entities"))
             .then(true)
             .otherwise(false);
 

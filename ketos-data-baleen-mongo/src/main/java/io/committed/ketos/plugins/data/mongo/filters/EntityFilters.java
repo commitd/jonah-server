@@ -41,6 +41,6 @@ public final class EntityFilters {
       mentionFilter.setEntityId(entityFilter.getId());
     }
 
-    return MentionFilters.createCriteria(mentionFilter);
+    return MentionFilters.createCriteria(mentionFilter, "", "entities.");
   }
 }
