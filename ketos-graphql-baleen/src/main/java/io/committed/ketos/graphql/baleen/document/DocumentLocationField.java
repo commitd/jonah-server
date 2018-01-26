@@ -13,12 +13,15 @@ import org.geojson.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.davidmoten.geo.GeoHash;
+import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.invest.core.dto.analytic.GeoLocation;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.general.NamedGeoLocation;
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
@@ -53,9 +56,14 @@ public class DocumentLocationField extends AbstractGraphQlService {
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
 
+    // Create a fake search
+    final MentionFilter filter = new MentionFilter();
+    filter.setDocId(document.getId());
+    filter.setWithin(new GeoBox(top, right, bottom, left));
+    final MentionSearch search = new MentionSearch(document, filter);
 
     return getProvidersFromContext(document, MentionProvider.class, hints)
-        .flatMap(p -> p.getByDocumentWithinArea(document, left, right, top, bottom, offset, limit))
+        .flatMap(p -> p.search(search, offset, limit).getResults())
         // Require geo
         .filter(m -> {
           final Object geoJson = m.getProperties().get("geoJson");
