@@ -27,7 +27,7 @@ public class DocumentMentionService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProvidersFromContext(document, MentionProvider.class, hints)
-        .flatMap(p -> p.getMentionsByDocument(document))
+        .flatMap(p -> p.getByDocument(document))
         .doOnNext(eachAddParent(document));
   }
 

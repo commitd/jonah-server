@@ -1,28 +1,51 @@
 package io.committed.ketos.common.providers.baleen;
 
+import java.util.List;
+import java.util.Optional;
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.input.MentionProbe;
+import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
+import io.committed.ketos.common.graphql.output.MentionSearch;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface MentionProvider extends DataProvider {
-
-  Mono<BaleenMention> target(BaleenRelation relation);
-
-  Mono<BaleenMention> source(BaleenRelation relation);
-
-  Flux<BaleenMention> getMentionsByDocument(BaleenDocument document);
-
-  Flux<BaleenMention> getByDocumentWithinArea(BaleenDocument document, Double left, Double right,
-      Double top, Double bottom, int offset, int limit);
-
 
   @Override
   default String getProviderType() {
     return "MentionProvider";
   }
 
+
+
+  Flux<BaleenMention> getByDocument(final BaleenDocument document);
+
+  Mono<BaleenMention> getById(final String id);
+
+  Flux<BaleenMention> getAll(final int offset, final int limit);
+
+  Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int limit);
+
+  Flux<TermBin> countByField(Optional<MentionFilter> filter, List<String> path, final int limit);
+
+
+  MentionSearchResult search(final MentionSearch search,
+      final int offset,
+      final int limit);
+
+  Mono<Long> count();
+
+  default Mono<BaleenMention> target(final BaleenRelation relation) {
+    return getById(relation.getTargetId());
+  }
+
+  default Mono<BaleenMention> source(final BaleenRelation relation) {
+    return getById(relation.getSourceId());
+  }
 
 }

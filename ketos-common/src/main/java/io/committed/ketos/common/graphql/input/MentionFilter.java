@@ -22,9 +22,6 @@ public class MentionFilter {
   // private int begin;
   // private int end;
 
-  // TODO: Add type specific ... timestamp, geobounds... this what will make it more useful than just
-  // the query by example stuff as above
-
   private Date startTimestamp;
   private Date endTimestamp;
 
