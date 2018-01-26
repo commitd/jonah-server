@@ -16,7 +16,6 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationExpression;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Cond;
@@ -214,7 +213,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
 
       // Entity filter
-      final Map<String, AggregationExpression> filterConditional = new HashMap<>();
+      final Map<String, Object> filterConditional = new HashMap<>();
       for (int i = 0; i < numFilters; i++) {
         final MentionFilter f = mentionFilters.get(i);
         final String key = QUERY_PREIX + i;
@@ -260,7 +259,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
       operations.add(Aggregation.replaceRoot("joined_relations"));
 
       // relation filter
-      final Map<String, AggregationExpression> filterConditional = new HashMap<>();
+      final Map<String, Object> filterConditional = new HashMap<>();
       for (int i = 0; i < numFilters; i++) {
         final RelationFilter f = relationFilters.get(i);
         final String key = QUERY_PREIX + i;

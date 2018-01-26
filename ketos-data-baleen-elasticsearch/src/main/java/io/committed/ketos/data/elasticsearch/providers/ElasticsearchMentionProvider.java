@@ -32,7 +32,7 @@ public class ElasticsearchMentionProvider
   }
 
   @Override
-  public Flux<BaleenMention> getMentionsByDocument(final BaleenDocument document) {
+  public Flux<BaleenMention> getByDocument(final BaleenDocument document) {
     return getService().findByDocumentId(document.getId()).map(EsEntity::toBaleenMention);
   }
 

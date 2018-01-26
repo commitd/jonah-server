@@ -1,20 +1,42 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.input.MentionProbe;
+import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
+import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
+import io.committed.ketos.plugins.data.mongo.dao.FakeMongoEntities;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
+import io.committed.ketos.plugins.data.mongo.dao.MongoMention;
+import io.committed.ketos.plugins.data.mongo.data.CountOutcome;
+import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class MongoMentionProvider extends AbstractMongoDataProvider implements MentionProvider {
-
 
   private final BaleenEntitiesRepository entities;
 
@@ -27,7 +49,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
   }
 
   @Override
-  public Flux<BaleenMention> getMentionsByDocument(final BaleenDocument document) {
+  public Flux<BaleenMention> getByDocument(final BaleenDocument document) {
     return getMentionsByDocumentId(document.getId());
   }
 
@@ -58,10 +80,93 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
   }
 
   @Override
-  public Flux<BaleenMention> getByDocumentWithinArea(final BaleenDocument document,
-      final Double left, final Double right, final Double top, final Double bottom,
-      final int offset, final int limit) {
-    // TODO Auto-generated method stub
-    return getMentionsByDocument(document);
+  public Mono<BaleenMention> getById(final String id) {
+    return aggregateOverMentions(MongoMention.class,
+        Aggregation.match(Criteria.where("externalId").is(id)))
+            .next()
+            .map(MongoMention::toMention);
   }
+
+  @Override
+  public Flux<BaleenMention> getAll(final int offset, final int limit) {
+    return aggregateOverMentions(MongoMention.class)
+        .skip(offset)
+        .take(limit)
+        .map(MongoMention::toMention);
+  }
+
+  @Override
+  public Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int limit) {
+    return aggregateOverMentions(MongoMention.class,
+        Aggregation
+            .match(Criteria.byExample(Example.of(MongoMention.fromProbe(probe), ExampleUtils.classlessMatcher()))))
+                .map(MongoMention::toMention);
+  }
+
+  @Override
+  public Mono<Long> count() {
+    return aggregateOverMentions(CountOutcome.class,
+        Aggregation.count().as("total"))
+            .next()
+            .map(CountOutcome::getTotal);
+  }
+
+  @Override
+  public Flux<TermBin> countByField(final Optional<MentionFilter> filter, final List<String> path, final int limit) {
+
+    // There's no nesting mention properties (sadly!)... so the field is just the last path segment
+    final String field = path.get(path.size() - 1);
+
+    return aggregateOverMentions(TermBin.class,
+        filter.isPresent() ? Aggregation.match(MentionFilters.createCriteria(filter.get())) : null,
+        group(field).count().as("count"),
+        Aggregation.project("count").and("_id").as("term"));
+  }
+
+  @Override
+  public MentionSearchResult search(final MentionSearch search, final int offset, final int limit) {
+
+    Flux<BaleenMention> results;
+    if (search.getMentionFilter() != null) {
+      final Criteria criteria = MentionFilters.createCriteria(search.getMentionFilter());
+      results = aggregateOverMentions(MongoMention.class,
+          Aggregation.match(criteria))
+              .map(MongoMention::toMention);
+    } else {
+      results = getAll(offset, limit);
+    }
+
+    return new MentionSearchResult(results, Mono.empty());
+  }
+
+
+
+  private <T> Flux<T> aggregateOverMentions(final Class<T> clazz, final AggregationOperation... operations) {
+    final List<AggregationOperation> list = extractMention();
+    Arrays.stream(operations).filter(Objects::nonNull).forEach(list::add);
+    final Aggregation aggregation = Aggregation.newAggregation(operations);
+    return getTemplate().aggregate(aggregation, FakeMongoEntities.class, clazz);
+  }
+
+
+  /**
+   * Convert the entities collection into a mentions-collections-like via aggregation
+   *
+   * @return
+   */
+  private List<AggregationOperation> extractMention() {
+    final List<AggregationOperation> operations = new LinkedList<>();
+
+    final Map<String, Object> map = new HashMap<>();
+    map.put("entities.entityId", "$_id");
+    map.put("entities.docId", "$docId");
+    map.put("entities._id", "$entities.externalId");
+
+    operations.add(Aggregation.unwind("entities"));
+    operations.add(new AddFieldsOperation(map));
+    operations.add(Aggregation.replaceRoot("entities"));
+
+    return operations;
+  }
+
 }

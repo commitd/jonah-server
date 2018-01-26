@@ -16,12 +16,13 @@ import reactor.core.publisher.Mono;
 
 public interface MentionProvider extends DataProvider {
 
+  // TODO: Need to consider if mentions are globally unique of not by id? Do these mentions need to be
+  // scoped to a document (eg getId(doc, mentionId)
+
   @Override
   default String getProviderType() {
     return "MentionProvider";
   }
-
-
 
   Flux<BaleenMention> getByDocument(final BaleenDocument document);
 

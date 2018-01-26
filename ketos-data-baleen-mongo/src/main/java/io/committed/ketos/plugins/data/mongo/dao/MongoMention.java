@@ -7,6 +7,7 @@ import java.util.Set;
 import org.bson.Document;
 import com.google.common.collect.Sets;
 import io.committed.ketos.common.data.BaleenMention;
+import io.committed.ketos.common.graphql.input.MentionProbe;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,9 @@ public class MongoMention {
   private int end;
   private String type;
   private String value;
+
+  // Though not part of the Mongo schema from Baleen some aggregations create this
+  private String entityId;
 
   private Map<String, Object> properties = new HashMap<>();
 
@@ -72,6 +76,33 @@ public class MongoMention {
         .build();
   }
 
+  public BaleenMention toMention() {
+    // This will only work for aggregation outputs... which ave the entityId specifically added to them
+    // deserialising from the entities collection does not have entityId per mention.
+    return toMention(getEntityId());
+  }
 
+  public static Document fromProbe(final MentionProbe probe) {
+    final Document document = new Document();
+
+    document.put("begin", probe.getBegin());
+    document.put("confidence", probe.getConfidence());
+    document.put("end", probe.getEnd());
+    document.put("externalId", probe.getId());
+    if (probe.getProperties() != null) {
+      probe.getProperties()
+          .entrySet()
+          .forEach(e -> document.put(e.getKey(), e.getValue()));
+    }
+    document.put("type", probe.getType());
+    document.put("value", probe.getValue());
+
+    // This doesn't exist within the mongo schema... but it does exist with the aggregation to create
+    // mentiosn we need is extractMentions in MongoMentionProvider
+    document.put("entityId", probe.getEntityId());
+    document.put("docId", probe.getDocId());
+
+    return document;
+  }
 
 }
