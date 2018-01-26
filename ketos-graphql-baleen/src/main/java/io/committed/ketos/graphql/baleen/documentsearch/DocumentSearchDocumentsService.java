@@ -8,8 +8,8 @@ import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
-import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
+import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -31,11 +31,14 @@ public class DocumentSearchDocumentsService extends AbstractGraphQlService {
 
 
   @GraphQLQuery(name = "countByField", description = "Count of documents by value")
-  public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenDocumentSearch search,
+  public Mono<TermCount> getDocumentTypes(@GraphQLContext final DocumentSearch search,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLNonNull @GraphQLArgument(name = "field",
           description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of documents to return, for pagination",
+          defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -44,11 +47,11 @@ public class DocumentSearchDocumentsService extends AbstractGraphQlService {
       return Mono.empty();
     }
 
-    return corpusDocumentService.getDocumentTypes(corpus.get(), documentFilter, field, hints);
+    return corpusDocumentService.getDocumentTypes(corpus.get(), documentFilter, field, size, hints);
   }
 
   @GraphQLQuery(name = "timeline", description = "Timeline of documents per day")
-  public Mono<Timeline> getDocumentTimeline(@GraphQLContext final BaleenDocumentSearch search,
+  public Mono<Timeline> getDocumentTimeline(@GraphQLContext final DocumentSearch search,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "hints",

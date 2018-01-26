@@ -12,12 +12,12 @@ import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.data.BaleenDocuments;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
+import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.common.utils.FieldUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
@@ -95,7 +95,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "documents", description = "Search for documents by query")
-  public BaleenDocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
+  public DocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "mentions",
@@ -103,7 +103,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "relations",
           description = "Include relations") final List<RelationFilter> relationFilters) {
 
-    return BaleenDocumentSearch.builder()
+    return DocumentSearch.builder()
         .parent(corpus)
         .documentFilter(documentFilter)
         .mentionFilters(mentionFilters)
@@ -117,6 +117,9 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLNonNull @GraphQLArgument(name = "field",
           description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of documents to return, for pagination",
+          defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -127,7 +130,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     }
 
     return FieldUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path)));
+        .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path, size)));
   }
 
   @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")

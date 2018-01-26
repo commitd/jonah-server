@@ -15,10 +15,10 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
+import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.jpa.dao.JpaDocument;
 import io.committed.ketos.data.jpa.dao.JpaDocumentMetadata;
@@ -46,7 +46,7 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   }
 
   @Override
-  public DocumentSearchResult search(final BaleenDocumentSearch documentSearch, final int offset, final int size) {
+  public DocumentSearchResult search(final DocumentSearch documentSearch, final int offset, final int size) {
     // TODO: Ignores most of the query!
     final String query = documentSearch.getDocumentFilter().getContent();
 
@@ -96,7 +96,8 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   }
 
   @Override
-  public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path) {
+  public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path,
+      final int size) {
     // TODO Ignores the documentFilter
     // TODO Doesn't support metadata, that would require join (not an issue but more complexity
     // considering how little use this has)
@@ -108,11 +109,11 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
 
     switch (path.get(1)) {
       case "type":
-        return Flux.fromStream(documents.countByType());
+        return Flux.fromStream(documents.countByType(size));
       case "classification":
-        return Flux.fromStream(documents.countByClassification());
+        return Flux.fromStream(documents.countByClassification(size));
       case "language":
-        return Flux.fromStream(documents.countByLanguage());
+        return Flux.fromStream(documents.countByLanguage(size));
 
     }
 

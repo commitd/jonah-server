@@ -1,4 +1,4 @@
-package io.committed.ketos.common.data;
+package io.committed.ketos.common.graphql.output;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BaleenDocumentSearch extends AbstractGraphQLNode {
+public class DocumentSearch extends AbstractGraphQLNode {
 
   private final DocumentFilter documentFilter;
   private final List<MentionFilter> mentionFilters;
@@ -22,7 +22,7 @@ public class BaleenDocumentSearch extends AbstractGraphQLNode {
 
 
   @Builder
-  public BaleenDocumentSearch(final GraphQLNode parent, final DocumentFilter documentFilter,
+  public DocumentSearch(final GraphQLNode parent, final DocumentFilter documentFilter,
       final List<MentionFilter> mentionFilters, final List<RelationFilter> relationFilters) {
     super(parent);
     this.documentFilter = documentFilter;

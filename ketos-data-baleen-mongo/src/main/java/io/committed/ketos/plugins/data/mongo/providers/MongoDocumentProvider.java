@@ -27,12 +27,12 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
+import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.BooleanOperator;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
@@ -61,7 +61,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public DocumentSearchResult search(final BaleenDocumentSearch documentSearch, final int offset, final int size) {
+  public DocumentSearchResult search(final DocumentSearch documentSearch, final int offset, final int size) {
     if (documentSearch.hasMentions() || documentSearch.hasRelations()) {
       // IF we have relations / mentions we have to do an aggregation in order to do a join ($lookup).
 
@@ -354,7 +354,8 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path) {
+  public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path,
+      final int size) {
     if (path.size() < 2) {
       return Flux.empty();
     }
@@ -367,7 +368,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
     final String field = MongoUtils.joinField(mongoPath);
 
-    return termAggregation(documentFilter, field);
+    return termAggregation(documentFilter, field).take(size);
   }
 
   protected Flux<TermBin> termAggregation(final Optional<DocumentFilter> documentFilter, final String field) {
