@@ -12,11 +12,11 @@ import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.data.BaleenDocuments;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
+import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.common.utils.FieldUtils;
@@ -74,7 +74,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
-  public BaleenDocuments getDocuments(@GraphQLContext final BaleenCorpus corpus,
+  public Documents getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "offset",
           description = "Index of first document to return, for pagination",
           defaultValue = "0") final int offset,
@@ -91,7 +91,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
 
-    return BaleenDocuments.builder().parent(corpus).results(documents).total(count).build();
+    return Documents.builder().parent(corpus).results(documents).total(count).build();
   }
 
   @GraphQLQuery(name = "countDocuments", description = "Get the number of documents")

@@ -1,19 +1,25 @@
 package io.committed.ketos.graphql.baleen.corpus;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenEntity;
+import io.committed.ketos.common.graphql.input.EntityFilter;
+import io.committed.ketos.common.graphql.input.EntityProbe;
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
+import io.committed.ketos.common.utils.FieldUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLId;
+import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -27,34 +33,34 @@ public class CorpusEntityService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-
-  @GraphQLQuery(name = "entities", description = "Get all entities")
-  public Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "type", description = "The type of the entity") final String type,
-      @GraphQLArgument(name = "value", description = "A value of the entity") final String value,
+  @GraphQLQuery(name = "entities", description = "Get entities")
+  public Flux<BaleenEntity> getEntities(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "probe", description = "The type of the entity") final EntityProbe probe,
+      @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
       @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    if (!StringUtils.isEmpty(type) && !StringUtils.isEmpty(value)) {
-      return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByTypeAndValue(type, value, limit))
-          .doOnNext(eachAddParent(corpus));
-    } else if (!StringUtils.isEmpty(value)) {
-      return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByValue(value, limit))
-          .doOnNext(eachAddParent(corpus));
-    } else if (!StringUtils.isEmpty(type)) {
-      return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByType(type, limit))
+    if (probe != null) {
+      return getProvidersFromContext(corpus, EntityProvider.class, hints)
+          .flatMap(p -> p.getByExample(probe, offset, limit))
           .doOnNext(eachAddParent(corpus));
     } else {
-      // Both are null
       return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getAll(0, limit))
+          .flatMap(p -> p.getAll(offset, limit))
           .doOnNext(eachAddParent(corpus));
     }
+  }
 
+  @GraphQLQuery(name = "searchEntities", description = "Search all entities")
+  public EntitySearch searchForEntities(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLNonNull @GraphQLArgument(name = "query",
+          description = "The filter to entity") final EntityFilter entityFilter,
+      @GraphQLArgument(name = "mentions",
+          description = "Filter to mentions") final List<MentionFilter> mentionFilters,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return new EntitySearch(corpus, entityFilter, mentionFilters);
   }
 
   @GraphQLQuery(name = "entity", description = "Get entities by id")
@@ -67,25 +73,33 @@ public class CorpusEntityService extends AbstractGraphQlService {
         .doOnNext(eachAddParent(corpus));
   }
 
-
-  @GraphQLQuery(name = "entityCount", description = "Number of entities in corpus")
-  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
+  @GraphQLQuery(name = "countEntities", description = "Number of entities in corpus")
+  public Mono<Long> countEntities(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, EntityProvider.class, hints).flatMap(EntityProvider::count)
         .reduce(0L, (a, b) -> a + b);
   }
 
-  @GraphQLQuery(name = "entityTypes", description = "Count of entities by entity type")
-  public Mono<TermCount> getEntityTypes(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
-      name = "hints",
-      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, EntityProvider.class, hints).flatMap(EntityProvider::countByType)
-        .groupBy(TermBin::getTerm)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList().map(TermCount::new);
+
+  @GraphQLQuery(name = "countByEntityField", description = "Count of entities by value")
+  public Mono<TermCount> countByField(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final EntityFilter entityFilter,
+      @GraphQLNonNull @GraphQLArgument(name = "field",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
+      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    final List<String> path = FieldUtils.fieldSplitter(field);
+
+    if (path.isEmpty()) {
+      return Mono.empty();
+    }
+
+    return FieldUtils.joinTermBins(getProviders(corpus, EntityProvider.class, hints)
+        .flatMap(p -> p.countByField(Optional.ofNullable(entityFilter), path, limit)));
   }
-
-
 }
 

@@ -1,4 +1,4 @@
-package io.committed.ketos.graphql.baleen.documentsearch;
+package io.committed.ketos.graphql.baleen.entitysearch;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,11 +6,11 @@ import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
-import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
-import io.committed.ketos.common.graphql.output.Documents;
-import io.committed.ketos.common.graphql.output.DocumentSearch;
-import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.common.data.BaleenEntity;
+import io.committed.ketos.common.graphql.intermediate.EntitySearchResult;
+import io.committed.ketos.common.graphql.output.Entities;
+import io.committed.ketos.common.graphql.output.EntitySearch;
+import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -19,14 +19,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @GraphQLService
-public class DocumentSearchService extends AbstractGraphQlService {
+public class EntitySearchService extends AbstractGraphQlService {
   @Autowired
-  public DocumentSearchService(final DataProviders corpusProviders) {
+  public EntitySearchService(final DataProviders corpusProviders) {
     super(corpusProviders);
   }
 
   @GraphQLQuery(name = "hits", description = "Get search hits")
-  public Documents getDocuments(@GraphQLContext final DocumentSearch documentSearch,
+  public Entities getDocuments(@GraphQLContext final EntitySearch search,
       @GraphQLArgument(name = "offset",
           description = "Index of first document to return, for pagination",
           defaultValue = "0") final int offset,
@@ -37,7 +37,7 @@ public class DocumentSearchService extends AbstractGraphQlService {
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     final Optional<BaleenCorpus> optionalCorpus =
-        documentSearch.findParent(BaleenCorpus.class);
+        search.findParent(BaleenCorpus.class);
 
     if (!optionalCorpus.isPresent()) {
       return null;
@@ -45,17 +45,17 @@ public class DocumentSearchService extends AbstractGraphQlService {
 
     final BaleenCorpus corpus = optionalCorpus.get();
 
-    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
+    final Flux<EntityProvider> providers = getProviders(corpus, EntityProvider.class, hints);
 
-    final Flux<DocumentSearchResult> results =
-        providers.map(p -> p.search(documentSearch, offset, size));
+    final Flux<EntitySearchResult> results =
+        providers.map(p -> p.search(search, offset, size));
 
-    final Mono<Long> count = results.flatMap(DocumentSearchResult::getTotal).reduce(Long::sum);
-    final Flux<BaleenDocument> documents = Flux.concat(results.map(DocumentSearchResult::getResults));
+    final Mono<Long> count = results.flatMap(EntitySearchResult::getTotal).reduce(Long::sum);
+    final Flux<BaleenEntity> entities = Flux.concat(results.map(EntitySearchResult::getResults));
 
-    return Documents.builder()
-        .parent(documentSearch)
-        .results(documents)
+    return Entities.builder()
+        .parent(search)
+        .results(entities)
         .total(count)
         .build();
   }
