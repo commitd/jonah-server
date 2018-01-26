@@ -23,9 +23,12 @@ import org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Co
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import io.committed.invest.core.constants.BooleanOperator;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.utils.CriteriaUtils;
+import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
@@ -34,13 +37,11 @@ import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
-import io.committed.ketos.plugins.data.mongo.BooleanOperator;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.filters.DocumentFilters;
 import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
 import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
-import io.committed.ketos.plugins.data.mongo.utils.CriteriaUtils;
 import io.committed.ketos.plugins.data.mongo.utils.MongoUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -384,7 +385,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   @Override
   public Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int limit) {
     // TODO: Might need to review other matchers here
-    final ExampleMatcher matcher = MongoUtils.exampleMatcher()
+    final ExampleMatcher matcher = ExampleUtils.classlessMatcher()
         // NOTE: This uses a regex match under the hood, which may not make use of the $text index on the
         // content field (and hence be slower).
         .withMatcher("content", match -> match.contains());

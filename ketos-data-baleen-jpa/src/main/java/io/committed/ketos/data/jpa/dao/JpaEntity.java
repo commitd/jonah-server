@@ -53,7 +53,5 @@ public class JpaEntity {
 
     this.docId = probe.getDocId();
     this.externalId = probe.getId() != null ? Collections.singletonList(probe.getId()) : null;
-    this.type = probe.getType();
-    this.value = probe.getValue() != null ? Collections.singletonList(probe.getValue()) : null;
   }
 }

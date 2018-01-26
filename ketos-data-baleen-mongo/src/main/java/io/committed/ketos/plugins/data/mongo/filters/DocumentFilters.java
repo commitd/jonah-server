@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
+import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
-import io.committed.ketos.plugins.data.mongo.utils.CriteriaUtils;
 
 public final class DocumentFilters {
 
