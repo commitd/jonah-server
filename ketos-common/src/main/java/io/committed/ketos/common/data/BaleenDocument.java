@@ -44,4 +44,21 @@ public class BaleenDocument extends AbstractGraphQLNode {
   }
 
 
+  // TODO: This would be nice, but it causes an isssue in Javakson in ObjectScalarAdapter.
+  // regading conversion to a LinkedHashMap when its a list.
+  // need to review Baleen... ie metdata best as a key:value[] or [ {key,value} ]
+  // we could then change the return type here to reflect that...
+  // @GraphQLQuery(name = "metadataByKey")
+  // public Collection<Object> getMetadataByKey(@GraphQLArgument(name = "key") @GraphQLNonNull final
+  // String key) {
+  // final Object o = getMetadata().get(key);
+  // if (o == null) {
+  // return null;
+  // } else if (o instanceof Collection) {
+  // return (Collection<Object>) o;
+  // } else {
+  // return Collections.singletonList(o);
+  // }
+  // }
+
 }
