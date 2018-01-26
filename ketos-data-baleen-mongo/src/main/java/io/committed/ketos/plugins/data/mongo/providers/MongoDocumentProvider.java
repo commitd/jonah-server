@@ -7,13 +7,20 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationExpression;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Cond;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import io.committed.invest.core.dto.analytic.TermBin;
@@ -71,50 +78,238 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   private DocumentSearchResult search(final DocumentFilter documentFilter, final List<MentionFilter> mentionFilters,
       final List<RelationFilter> relationFilters, final int offset, final int size) {
 
+
+    // In order to join in Mongo you need to do an aggregation, and then use $lookup.
+    // Lookup as two opiotns one to so a simple join (id in one collection -> docId to another),
+    // and one to do a join where you can preprocess (through a pipeline) the collection to join.
+    // That would be great, because we could apply filtering to entities before join,
+    // but is very slow (100x slower in our implementation)
+
+    // If you use the Mongo aggregation id-id lookup to do: document filter, then join entities onto
+    // document you create a Mongo Document which is easily over the 16 mb limit.
+    // So that doesn't work at all, Mongo will just stop..
+
+    // Instead we need to need to use the pipeline optimisation to do lookup-then-unwind which basically
+    // will join the documents-entities and immediately spilt them again (so you have document-single
+    // entity).
+    // At that point you have something that will fit into 16mb (assuming the entity did originallu!)
+
+    // So our approach here is:
+    // - doucmentFilter
+    // - extact just the docIds (the rest is useless for filtering with)
+    // - join entities - via the lookup-unwind approach
+    // - for each entity we've joined:
+    // - since technically an entityFilter is a mentionFilter we actually need to unwind again... this
+    // is a bit silly in that both times we have multiple copies of the same mention within an entity,
+    // bu
+    // - For each entityFilter: add a flag which says we amtched this query (named e1...eN for entities
+    // and r1... rN for
+    // relations)
+    // -
+    // - Group on document Id... such that we have e1: true, e2; false, where that is that docId has
+    // mention which makes e1 but not e2.
+    // - MAatch the boolean operator we want AND = e1 & e2 & .. , OR = e1 | e2
+    // - So you are left with jsut the docId which have documents or entities which match
+
+    // Repeat the above for relations - join on extenralId with lookup-unwind, etc
+
+    // At this stage you have docId which match doc, entity and relation filters.
+
+    // Rejoin document collection with docId, so we lookup documents again to basically join the full
+    // documents back on.
+
+    // @formatter:off
+
+    /* In Mongo this looks like:...
+
+      db.documents.aggregate(
+    // Document search
+    { "$match" : { "$text" : { "$search" : "Iraq" } } },
+    { "$match" : { "document.type" : "re3d" } },
+    // Just retain the document id
+    { $project : { "externalId": 1} },
+    // Join on the entities
+    { "$lookup" : {
+        "from" : "entities",
+        localField: "externalId",
+        foreignField: "docId",
+        "as": "entities"
+      }
+    },
+    // Unwind to mentions (we need to need to do this in order to make the queries work in $cond
+    { $unwind: {path: "$entities" }},
+    { $replaceRoot: {newRoot: "$entities" }},
+    { $unwind: {path: "$entities" } },
+    // For each query run it and if it matches 'flag the match'
+    {
+        $addFields: {
+            q1: { $cond: [ {$and: [{$eq: ["$entities.type", "Temporal"]}]}, true, false] },
+            q2: { $cond: [{"entities": {"type": "Buzzword"}}, true, false] }
+        }
+      },
+     { $group: { _id: "$docId", q1:{ $max: '$q1'}, q2:{ $max: '$q2'}  } },
+     // And query:
+     { $match: { $and: [{'q1':true}, {'q2':true}]} },
+//    Or query:  { $match: { $or: [{'q1':true}, {'q2':true}]} },
+     { $project: { "externalId": "$_id" }},
+
+    // Relations
+      { "$lookup" : {
+        "from" : "full_relations",
+        localField: "externalId",
+        foreignField: "docId",
+        "as": "relations"
+      }
+    },
+    { $unwind: {path: "$relations" }},
+    { $replaceRoot: {newRoot: "$relations" }},
+    {
+        $addFields: {
+            q1: { $cond: [ {$and: [{$eq: ["$value", "released"]}]}, true, false] },
+            q2: { $cond: [{"sourceType": "Buzzword"}, true, false] }
+        }
+      },
+     { $group: { _id: "$docId", q1:{ $max: '$q1'}, q2:{ $max: '$q2'}  } },
+     // And vs Or:
+     { $match: { $and: [{'q1':true}, {'q2':true}]} },
+
+    // Find the document again:
+    { "$lookup" : {
+        "from" : "documents",
+        localField: "_id",
+        foreignField: "externalId",
+        "as": "documents"
+      }
+    },
+    { $unwind: {path: "$documents" }},
+    { $replaceRoot: { newRoot: "$documents" } }
+
+)
+     */
+
+ // @formatter:on
+
+
     final List<AggregationOperation> operations = new ArrayList<>();
 
     // Add the document matches
     DocumentFilters.createCriteria(documentFilter).stream().map(Aggregation::match).forEach(operations::add);
 
+    // Just keep the id:
+    operations.add(project("externalId"));
+
+    final String QUERY_PREIX = "q";
+
     if (!mentionFilters.isEmpty()) {
-      // NOTE: This pipeline puts all the entities into the document and then all the relations. THere is
-      // a chance this will cause hit the 16mn document limit of Mongo.
+      final int numFilters = mentionFilters.size();
 
-      // Join entities to document
-      // NOTE: This has a chance of going over the 16mb
-      operations.add(Aggregation.lookup("entities", "externalId", "docId", "entities"));
+      // Join on entities with a lookup then immediately unwind to use pipeline optimisation
+      operations.add(Aggregation.lookup("entities", "externalId", "docId", "joined_entities"));
+      operations.add(Aggregation.unwind("joined_entities"));
+      // Move into the entities 'field' as our root (so that mentionFilter works)
+      operations.add(Aggregation.replaceRoot("joined_entities"));
+      // Unwind each entities to mention
+      operations.add(Aggregation.unwind("entities"));
 
 
-      // Execute that match
-      final List<Criteria> list = MentionFilters.createCriteria(mentionFilters, "entities.");
-      operations.add(Aggregation.match(CriteriaUtils.combineCriteria(list, BooleanOperator.AND)));
+      // Entity filter
+      final Map<String, AggregationExpression> filterConditional = new HashMap<>();
+      for (int i = 0; i < numFilters; i++) {
+        final MentionFilter f = mentionFilters.get(i);
+        final String key = QUERY_PREIX + i;
 
-      // Drop the entities, we don't need them any more
-      operations.add(Aggregation.project().andExclude("entities"));
+        final Cond cond = ConditionalOperators
+            .when(MentionFilters.createCriteria(f))
+            .then(true)
+            .otherwise(false);
+
+        filterConditional.put(key, cond);
+      }
+      operations.add(new AddFieldsOperation(filterConditional));
+
+      // Group back to document level
+      GroupOperation groupToDocument = Aggregation.group("docId");
+      for (int i = 0; i < numFilters; i++) {
+        final String key = QUERY_PREIX + i;
+        groupToDocument = groupToDocument.max(key).as(key);
+      }
+      operations.add(groupToDocument);
+
+      // Apply the and/or filter
+      final BooleanOperator operator = BooleanOperator.AND;
+      final List<Criteria> queryMatched = new ArrayList<>(numFilters);
+      for (int i = 0; i < numFilters; i++) {
+        final String key = QUERY_PREIX + i;
+        queryMatched.add(Criteria.where(key).is(true));
+      }
+      operations.add(Aggregation.match(CriteriaUtils.combineCriteria(queryMatched, operator)));
+
+      // Project back to being jsut like document with externalId
+      operations.add(project().and("_id").as("externalId"));
     }
 
 
-    if (relationFilters.isEmpty()) {
-      // NOTE: This pipeline puts all the relations into the document. THere is
-      // a chance this will cause hit the 16mn document limit of Mongo.
+    if (!relationFilters.isEmpty()) {
+      final int numFilters = relationFilters.size();
 
-      // Join entities to document
-      // NOTE: This has a chance of going over the 16mb
-      operations.add(Aggregation.lookup("full_relations", "externalId", "docId", "relations"));
+      // Join relations (lookup and unwind)
+      operations.add(Aggregation.lookup("full_relations", "externalId", "docId", "joined_relations"));
+      operations.add(Aggregation.unwind("joined_relations"));
+      // Move into the relations 'field' as our root (so that relationFilter works)
+      operations.add(Aggregation.replaceRoot("joined_relations"));
 
+      // relation filter
+      final Map<String, AggregationExpression> filterConditional = new HashMap<>();
+      for (int i = 0; i < numFilters; i++) {
+        final RelationFilter f = relationFilters.get(i);
+        final String key = QUERY_PREIX + i;
 
-      // Execute that match
-      final List<Criteria> list = RelationFilters.createCriteria(relationFilters, "relations.");
-      operations.add(Aggregation.match(CriteriaUtils.combineCriteria(list, BooleanOperator.AND)));
+        final Cond cond = ConditionalOperators
+            .when(RelationFilters.createCriteria(f))
+            .then(true)
+            .otherwise(false);
 
-      // Drop the entities, we don't need them any more
-      operations.add(Aggregation.project().andExclude("relations"));
+        filterConditional.put(key, cond);
+      }
+      operations.add(new AddFieldsOperation(filterConditional));
+
+      // Group back to document level
+      GroupOperation groupToDocument = Aggregation.group("docId");
+      for (int i = 0; i < numFilters; i++) {
+        final String key = QUERY_PREIX + i;
+        groupToDocument = groupToDocument.max(key).as(key);
+      }
+      operations.add(groupToDocument);
+
+      // Apply the and/or filter
+      final BooleanOperator operator = BooleanOperator.AND;
+      final List<Criteria> queryMatched = new ArrayList<>(numFilters);
+      for (int i = 0; i < numFilters; i++) {
+        final String key = QUERY_PREIX + i;
+        queryMatched.add(Criteria.where(key).is(true));
+      }
+      operations.add(Aggregation.match(CriteriaUtils.combineCriteria(queryMatched, operator)));
+
+      // Project back to being jsut like document with externalId
+      operations.add(project().and("_id").as("externalId"));
+
     }
 
+
+    // Now join the document on again
+
+    operations.add(Aggregation.lookup("documents", "externalId", "externalId", "joined_document"));
+    operations.add(Aggregation.unwind("joined_document"));
+    operations.add(Aggregation.replaceRoot("joined_document"));
+
+
+    // Finally actually do the aggregation!
 
     final Aggregation aggregation = newAggregation(operations);
     final Flux<MongoDocument> documents =
-        getTemplate().aggregate(aggregation, MongoDocument.class, MongoDocument.class);
+        getTemplate().aggregate(aggregation, MongoDocument.class, MongoDocument.class)
+            .skip(offset)
+            .take(size);
 
     // TODO: Count or is that asking too much (will require another aggregation)?
 

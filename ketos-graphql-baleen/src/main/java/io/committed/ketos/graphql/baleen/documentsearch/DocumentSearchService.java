@@ -50,7 +50,7 @@ public class DocumentSearchService extends AbstractGraphQlService {
     final Flux<DocumentSearchResult> results =
         providers.map(p -> p.search(documentSearch, offset, size));
 
-    final Mono<Long> count = results.flatMap(DocumentSearchResult::getTotal).reduce(0L, Long::sum);
+    final Mono<Long> count = results.flatMap(DocumentSearchResult::getTotal).reduce(Long::sum);
     final Flux<BaleenDocument> documents = Flux.concat(results.map(DocumentSearchResult::getResults));
 
     return BaleenDocuments.builder()
