@@ -9,6 +9,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -28,13 +29,17 @@ public class MongoMetadataProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public Flux<TermBin> countByKey() {
-    return countByKey(null);
+  public Flux<TermBin> countByKey(final Optional<String> key, final int size) {
+    return countByKey(key.orElse(null), size);
+
   }
 
-
   @Override
-  public Flux<TermBin> countByKey(final String key) {
+  public Flux<TermBin> countByValue(final Optional<String> key, final int size) {
+    return countByValue(key.orElse(null), size);
+  }
+
+  private Flux<TermBin> countByKey(final String key, final int size) {
     // db.documents.aggregate([
     // {$project: {m: {$objectToArray: "$metadata"}}},
     // {$group: {_id:"$m.k" , count:{ $sum: 1}}},
@@ -52,16 +57,11 @@ public class MongoMetadataProvider extends AbstractMongoDataProvider implements 
 
     final Aggregation aggregation = newAggregation(list);
 
-    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class)
+        .take(size);
   }
 
-  @Override
-  public Flux<TermBin> countByValue() {
-    return countByValue(null);
-  }
-
-  @Override
-  public Flux<TermBin> countByValue(final String key) {
+  private Flux<TermBin> countByValue(final String key, final int size) {
 
     // db.documents.aggregate([
     // {$project: {m: {$objectToArray: "$metadata"}}},
@@ -86,7 +86,8 @@ public class MongoMetadataProvider extends AbstractMongoDataProvider implements 
     final Aggregation aggregation = newAggregation(list);
 
 
-    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class)
+        .take(size);
   }
 
 }

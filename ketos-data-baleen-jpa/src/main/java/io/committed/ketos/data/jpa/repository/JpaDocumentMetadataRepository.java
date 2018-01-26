@@ -13,19 +13,19 @@ public interface JpaDocumentMetadataRepository extends JpaRepository<JpaDocument
   Stream<JpaDocumentMetadata> findByDocId(String externalId);
 
   @Query(
-      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d GROUP BY d.name")
-  Stream<TermBin> countByKey();
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d GROUP BY d.name LIMIT ?2")
+  Stream<TermBin> countByKey(int limit);
 
   @Query(
-      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name")
-  Stream<TermBin> countByKey(String key);
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.name, COUNT(d.docId)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name LIMIT ?2")
+  Stream<TermBin> countByKey(String key, int limit);
 
   @Query(
-      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d GROUP BY d.name")
-  Stream<TermBin> countByValue();
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d GROUP BY d.name LIMIT ?2")
+  Stream<TermBin> countByValue(int limit);
 
   @Query(
-      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name")
-  Stream<TermBin> countByValue(String key);
+      value = "SELECT NEW io.committed.invest.core.dto.analytic.TermBin(d.value, COUNT(d)) from JpaDocumentMetadata d WHERE d.name = ?1 GROUP BY d.name LIMIT ?2")
+  Stream<TermBin> countByValue(String key, int limit);
 
 }

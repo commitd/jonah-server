@@ -1,5 +1,6 @@
 package io.committed.ketos.data.jpa.providers;
 
+import java.util.Optional;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
@@ -17,33 +18,22 @@ public class JpaMetadataProvider extends AbstractJpaDataProvider implements Meta
   }
 
 
-
   @Override
-  public Flux<TermBin> countByKey() {
-    return Flux.fromStream(metadata.countByKey());
+  public Flux<TermBin> countByKey(final Optional<String> key, final int size) {
+    if (key.isPresent()) {
+      return Flux.fromStream(metadata.countByKey(key.get(), size));
+    } else {
+      return Flux.fromStream(metadata.countByKey(size));
+    }
   }
 
-
-
   @Override
-  public Flux<TermBin> countByKey(final String key) {
-    return Flux.fromStream(metadata.countByKey(key));
+  public Flux<TermBin> countByValue(final Optional<String> key, final int size) {
+    if (key.isPresent()) {
+      return Flux.fromStream(metadata.countByValue(key.get(), size));
+    } else {
+      return Flux.fromStream(metadata.countByValue(size));
+    }
   }
-
-
-
-  @Override
-  public Flux<TermBin> countByValue() {
-    return Flux.fromStream(metadata.countByValue());
-  }
-
-
-
-  @Override
-  public Flux<TermBin> countByValue(final String key) {
-    return Flux.fromStream(metadata.countByValue(key));
-  }
-
-
 
 }

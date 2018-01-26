@@ -38,17 +38,4 @@ public interface DocumentProvider extends DataProvider {
   // above.
   Flux<TimeBin> countByDate(Optional<DocumentFilter> documentFilter);
 
-
-  // TODO: Delete these
-
-  // Mono<Long> countSearchMatches(String query);
-  //
-  // Flux<TermBin> countByType();
-  //
-  // Flux<TermBin> countByClassification();
-  //
-  // Flux<TermBin> countByLanguage();
-
-
-
 }
