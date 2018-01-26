@@ -31,13 +31,6 @@ public interface EntityProvider extends DataProvider {
       final int offset,
       final int limit);
 
-  default Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document,
-      final int offset,
-      final int limit) {
-    final EntityProbe probe = new EntityProbe();
-    probe.setDocId(document.getId());
-    return getByExample(probe, offset, limit);
-  }
 
   Mono<Long> count();
 
