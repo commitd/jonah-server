@@ -48,9 +48,9 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
         .doOnNext(eachAddParent(corpus));
   }
 
-  @GraphQLQuery(name = "documentByExample", description = "Get document by example")
+  @GraphQLQuery(name = "documents", description = "Get document by example")
   public Flux<BaleenDocument> getDocumentByExample(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "probe", description = "Document by example") final DocumentProbe probe,
+      @GraphQLArgument(name = "probe", description = "Document by example") final DocumentProbe probe,
       @GraphQLArgument(name = "offset",
           description = "Index of first document to return, for pagination",
           defaultValue = "0") final int offset,
@@ -60,9 +60,17 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.getByExample(probe, offset, size))
-        .doOnNext(eachAddParent(corpus));
+    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
+
+    Flux<BaleenDocument> documents;
+    if (probe != null) {
+      documents = providers.flatMap(p -> p.getByExample(probe, offset, size));
+    } else {
+      documents = providers.flatMap(p -> p.all(offset, size));
+
+    }
+
+    return documents.doOnNext(eachAddParent(corpus));
   }
 
   @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
@@ -94,7 +102,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
         .reduce(0L, Long::sum);
   }
 
-  @GraphQLQuery(name = "documents", description = "Search for documents by query")
+  @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
   public DocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
