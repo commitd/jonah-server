@@ -7,9 +7,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -17,21 +15,25 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentSearch;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
-import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.plugins.data.mongo.BooleanOperator;
 import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
+import io.committed.ketos.plugins.data.mongo.filters.DocumentFilters;
+import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
+import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
+import io.committed.ketos.plugins.data.mongo.utils.CriteriaUtils;
 import io.committed.ketos.plugins.data.mongo.utils.MongoUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -53,13 +55,77 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
   @Override
   public DocumentSearchResult search(final BaleenDocumentSearch documentSearch, final int offset, final int size) {
-    // TODO: apply filter(s) / vs aggregation if have entity/relations
+    if (documentSearch.hasMentions() || documentSearch.hasRelations()) {
+      // IF we have relations / mentions we have to do an aggregation in order to do a join ($lookup).
 
-    final Query query = createQuery(documentSearch);
+      return search(documentSearch.getDocumentFilter(), documentSearch.getMentionFilters(),
+          documentSearch.getRelationFilters(), offset, size);
 
+    } else {
+      // Otherwise life is easier and we can just query on the document
+
+      return search(documentSearch.getDocumentFilter(), offset, size);
+    }
+  }
+
+  private DocumentSearchResult search(final DocumentFilter documentFilter, final List<MentionFilter> mentionFilters,
+      final List<RelationFilter> relationFilters, final int offset, final int size) {
+
+    final List<AggregationOperation> operations = new ArrayList<>();
+
+    // Add the document matches
+    DocumentFilters.createCriteria(documentFilter).stream().map(Aggregation::match).forEach(operations::add);
+
+    if (!mentionFilters.isEmpty()) {
+      // NOTE: This pipeline puts all the entities into the document and then all the relations. THere is
+      // a chance this will cause hit the 16mn document limit of Mongo.
+
+      // Join entities to document
+      // NOTE: This has a chance of going over the 16mb
+      operations.add(Aggregation.lookup("entities", "externalId", "docId", "entities"));
+
+
+      // Execute that match
+      final List<Criteria> list = MentionFilters.createCriteria(mentionFilters, "entities.");
+      operations.add(Aggregation.match(CriteriaUtils.combineCriteria(list, BooleanOperator.AND)));
+
+      // Drop the entities, we don't need them any more
+      operations.add(Aggregation.project().andExclude("entities"));
+    }
+
+
+    if (relationFilters.isEmpty()) {
+      // NOTE: This pipeline puts all the relations into the document. THere is
+      // a chance this will cause hit the 16mn document limit of Mongo.
+
+      // Join entities to document
+      // NOTE: This has a chance of going over the 16mb
+      operations.add(Aggregation.lookup("full_relations", "externalId", "docId", "relations"));
+
+
+      // Execute that match
+      final List<Criteria> list = RelationFilters.createCriteria(relationFilters, "relations.");
+      operations.add(Aggregation.match(CriteriaUtils.combineCriteria(list, BooleanOperator.AND)));
+
+      // Drop the entities, we don't need them any more
+      operations.add(Aggregation.project().andExclude("relations"));
+    }
+
+
+    final Aggregation aggregation = newAggregation(operations);
+    final Flux<MongoDocument> documents =
+        getTemplate().aggregate(aggregation, MongoDocument.class, MongoDocument.class);
+
+    // TODO: Count or is that asking too much (will require another aggregation)?
+
+    return new DocumentSearchResult(documents.map(MongoDocument::toDocument),
+        Mono.empty());
+  }
+
+
+  private DocumentSearchResult search(final DocumentFilter documentFilter, final int offset, final int size) {
+    final Query query = DocumentFilters.createQuery(documentFilter);
     final Mono<Long> total = getTemplate().count(query, MongoDocument.class);
-
-
     final Flux<BaleenDocument> flux = getTemplate().find(query, MongoDocument.class)
         .skip(offset)
         .take(size)
@@ -67,7 +133,6 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
     return new DocumentSearchResult(flux, total);
   }
-
 
   @Override
   public Flux<BaleenDocument> all(final int offset, final int size) {
@@ -95,14 +160,11 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
   @Override
   public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path) {
-    // TODO Apply the filter, if present
-
     if (path.size() < 2) {
       return Flux.empty();
     }
 
     // Copy the list and modify to match out naming...
-
     final List<String> mongoPath = new ArrayList<>(path);
     if ("info".equals(mongoPath.get(0))) {
       mongoPath.set(0, "document");
@@ -114,19 +176,14 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   }
 
   protected Flux<TermBin> termAggregation(final Optional<DocumentFilter> documentFilter, final String field) {
-    final List<AggregationOperation> aggregations = new ArrayList<>();
-
-    if (documentFilter.isPresent()) {
-      final List<CriteriaDefinition> criteria = createQuery(documentFilter.get());
-      criteria.forEach(Aggregation::match);
-    }
-
-    aggregations.add(group(field).count().as("count"));
-    aggregations.add(project("count").and("_id").as("term"));
-    final Aggregation aggregation = newAggregation(aggregations);
+    final Aggregation aggregation =
+        CriteriaUtils.createAggregation(DocumentFilters.createCriteria(documentFilter.orElse(null)),
+            group(field).count().as("count"),
+            project("count").and("_id").as("term"));
 
     return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
   }
+
 
   @Override
   public Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int limit) {
@@ -142,75 +199,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
         .map(MongoDocument::toDocument);
   }
 
-  private List<CriteriaDefinition> createQuery(final DocumentFilter documentFilter) {
-    final List<CriteriaDefinition> list = new LinkedList<>();
 
-    Criteria criteria = new Criteria();
-
-    if (documentFilter.getInfo() != null) {
-      final DocumentInfoFilter info = documentFilter.getInfo();
-      if (info.getCaveats() != null) {
-        criteria = criteria.and("document.caveats").in(info.getCaveats());
-      }
-
-      if (info.getReleasability() != null) {
-        criteria = criteria.and("document.releasability").in(info.getReleasability());
-      }
-
-      if (info.getEndTimestamp() != null) {
-        criteria = criteria.and("document.timestamp").lte(info.getEndTimestamp());
-      }
-
-      if (info.getStartTimestamp() != null) {
-        criteria = criteria.and("document.timestamp").gte(info.getStartTimestamp());
-      }
-
-      if (info.getLanguage() != null) {
-        criteria = criteria.and("document.language").is(info.getLanguage());
-      }
-
-      if (info.getSource() != null) {
-        criteria = criteria.and("document.source").is(info.getSource());
-      }
-
-      if (info.getType() != null) {
-        criteria = criteria.and("document.type").is(info.getType());
-      }
-    }
-
-    if (documentFilter.getMetadata() != null) {
-      for (final Map.Entry<String, Object> e : documentFilter.getMetadata().entrySet()) {
-        criteria = criteria.and("metadata." + e.getKey()).is(e.getValue());
-      }
-    }
-
-    // TOOD other stuff: publishedIds
-    if (documentFilter.getPublishedIds() != null) {
-      criteria = criteria.and("publishedIds").in(documentFilter.getPublishedIds());
-    }
-
-    list.add(criteria);
-
-    if (documentFilter.getContent() != null) {
-      list.add(TextCriteria.forDefaultLanguage().matching(documentFilter.getContent()));
-    }
-
-
-    return list;
-  }
-
-  private Query createQuery(final BaleenDocumentSearch request) {
-    final Query query = new Query();
-
-    if (request.getDocumentFilter() != null) {
-      createQuery(request.getDocumentFilter()).forEach(query::addCriteria);
-    }
-
-    // TODO: Entity and relations... they would require an aggregation which wouldn't be a query here so
-    // not here!
-
-    return query;
-  }
 
 }
 

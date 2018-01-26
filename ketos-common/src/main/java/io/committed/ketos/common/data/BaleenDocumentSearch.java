@@ -2,6 +2,7 @@ package io.committed.ketos.common.data;
 
 import java.util.Collections;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
@@ -27,5 +28,15 @@ public class BaleenDocumentSearch extends AbstractGraphQLNode {
     this.documentFilter = documentFilter;
     this.mentionFilters = mentionFilters == null ? Collections.emptyList() : mentionFilters;
     this.relationFilters = relationFilters == null ? Collections.emptyList() : relationFilters;
+  }
+
+  @JsonIgnore
+  public boolean hasMentions() {
+    return mentionFilters.isEmpty();
+  }
+
+  @JsonIgnore
+  public boolean hasRelations() {
+    return relationFilters.isEmpty();
   }
 }
