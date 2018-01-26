@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import io.committed.ketos.common.data.BaleenRelation;
+import io.committed.ketos.common.graphql.input.RelationProbe;
 import lombok.Data;
 
 @Document(collection = "full_relations")
@@ -59,7 +60,29 @@ public class MongoRelation {
         .targetId(getTarget())
         .sourceType(sourceType)
         .targetType(targetType)
+        .sourceValue(sourceValue)
+        .targetValue(targetValue)
         .build();
+  }
+
+
+  public MongoRelation(final RelationProbe probe) {
+    this.begin = probe.getBegin();
+    this.confidence = probe.getConfidence();
+    this.docId = probe.getDocId();
+    this.end = probe.getEnd();
+    this.externalId = probe.getId();
+    this.relationshipType = probe.getRelationshipType();
+    this.relationSubtype = probe.getRelationSubtype();
+    this.source = probe.getSourceId();
+    this.sourceType = probe.getSourceType();
+    this.sourceValue = probe.getSourceValue();
+    this.target = probe.getTargetId();
+    this.targetType = probe.getTargetType();
+    this.targetValue = probe.getTargetType();
+    this.type = probe.getType();
+    this.value = probe.getValue();
+
   }
 
 }

@@ -17,6 +17,10 @@ public class RelationProbe {
 
   private String targetType;
 
+  private String sourceValue;
+
+  private String targetValue;
+
   private int begin;
 
   private int end;

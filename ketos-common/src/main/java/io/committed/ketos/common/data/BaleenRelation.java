@@ -26,6 +26,10 @@ public class BaleenRelation extends AbstractGraphQLNode {
 
   private final String targetType;
 
+  private String sourceValue;
+
+  private String targetValue;
+
   private final int begin;
 
   private final int end;

@@ -1,16 +1,32 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.utils.CriteriaUtils;
+import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
+import io.committed.ketos.common.graphql.input.RelationFilter;
+import io.committed.ketos.common.graphql.input.RelationProbe;
+import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
+import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
+import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
+import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
+import io.committed.ketos.plugins.data.mongo.utils.MongoUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -64,24 +80,39 @@ public class MongoRelationProvider extends AbstractMongoDataProvider implements 
     return relations.count();
   }
 
-  // TODO: Should the query by example a proper interface here... it's much more sensible from a
-  // provider use angle. We could still keep the other stuff to.
   @Override
-  public Flux<BaleenRelation> getRelationsByMention(final String sourceValue,
-      final String sourceType, final String relationshipType, final String relationshipSubType,
-      final String targetValue, final String targetType, final int offset, final int limit) {
-    final MongoRelation r = new MongoRelation();
-    r.setSourceType(sourceType);
-    r.setSourceValue(sourceValue);
-    r.setTargetType(targetType);
-    r.setTargetValue(targetValue);
-    r.setRelationshipType(relationshipType);
-    r.setRelationSubtype(relationshipSubType);
-
-    // WE don't have the _class in db
-    final ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnorePaths("_class");
-    return relations.findAll(Example.of(r, exampleMatcher)).skip(offset).take(limit)
+  public Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int limit) {
+    return relations.findAll(Example.of(new MongoRelation(probe), ExampleUtils.classlessMatcher())).skip(offset)
+        .take(limit)
         .map(MongoRelation::toRelation);
+  }
+
+  @Override
+  public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path, final int limit) {
+    final String field = MongoUtils.joinField(path);
+    final Aggregation aggregation =
+        CriteriaUtils.createAggregation(RelationFilters.createCriteria(filter.orElse(null)),
+            group(field).count().as("count"),
+            project("count").and("_id").as("term"));
+
+    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
+  }
+
+  @Override
+  public RelationSearchResult search(final RelationSearch search, final int offset, final int limit) {
+    Flux<BaleenRelation> results;
+    if (search.getRelationFilter() != null) {
+      final Criteria criteria = RelationFilters.createCriteria(search.getRelationFilter());
+      results = getTemplate().find(new Query(criteria), MongoRelation.class)
+          .skip(offset)
+          .take(limit)
+          .map(MongoRelation::toRelation);
+
+    } else {
+      results = getAll(offset, limit);
+    }
+
+    return new RelationSearchResult(results, Mono.empty());
   }
 
 }
