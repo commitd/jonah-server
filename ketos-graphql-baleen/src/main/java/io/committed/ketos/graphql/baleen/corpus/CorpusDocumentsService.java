@@ -66,7 +66,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     if (probe != null) {
       documents = providers.flatMap(p -> p.getByExample(probe, offset, size));
     } else {
-      documents = providers.flatMap(p -> p.all(offset, size));
+      documents = providers.flatMap(p -> p.getAll(offset, size));
 
     }
 
@@ -87,7 +87,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
 
     final Flux<BaleenDocument> documents =
-        providers.flatMap(p -> p.all(offset, size));
+        providers.flatMap(p -> p.getAll(offset, size));
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
 

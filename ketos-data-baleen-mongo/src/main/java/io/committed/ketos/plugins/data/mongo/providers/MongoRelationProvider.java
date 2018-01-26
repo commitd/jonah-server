@@ -27,12 +27,10 @@ public class MongoRelationProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public Flux<BaleenRelation> getAllRelations(final int offset, final int limit) {
-    // TODO: Move to query, not take/skip
+  public Flux<BaleenRelation> getAll(final int offset, final int limit) {
     return toRelations(relations.findAll().skip(offset).take(limit));
   }
 
-  @Override
   public Flux<BaleenRelation> getByDocument(final String id) {
     return toRelations(relations.findByDocId(id));
   }

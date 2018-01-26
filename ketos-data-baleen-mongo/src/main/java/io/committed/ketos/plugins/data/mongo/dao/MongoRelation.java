@@ -57,6 +57,8 @@ public class MongoRelation {
         .confidence(getConfidence())
         .sourceId(getSource())
         .targetId(getTarget())
+        .sourceType(sourceType)
+        .targetType(targetType)
         .build();
   }
 

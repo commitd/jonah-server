@@ -26,7 +26,7 @@ public class ElasticsearchDocumentProvider
   }
 
   @Override
-  public Flux<BaleenDocument> all(final int offset, final int size) {
+  public Flux<BaleenDocument> getAll(final int offset, final int size) {
     return search("*", offset, size);
   }
 

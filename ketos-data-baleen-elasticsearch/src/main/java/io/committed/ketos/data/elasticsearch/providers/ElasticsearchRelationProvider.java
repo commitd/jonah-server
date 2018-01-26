@@ -21,7 +21,7 @@ public class ElasticsearchRelationProvider
   }
 
   @Override
-  public Flux<BaleenRelation> getAllRelations(final int offset, final int limit) {
+  public Flux<BaleenRelation> getAll(final int offset, final int limit) {
     return getService().findAll(offset, limit).map(EsRelation::toBaleenRelation);
 
   }

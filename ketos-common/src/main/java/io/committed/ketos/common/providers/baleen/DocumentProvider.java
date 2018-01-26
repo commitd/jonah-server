@@ -28,7 +28,7 @@ public interface DocumentProvider extends DataProvider {
 
   Mono<Long> count();
 
-  Flux<BaleenDocument> all(int offset, int size);
+  Flux<BaleenDocument> getAll(int offset, int size);
 
   DocumentSearchResult search(DocumentSearch documentSearch, int offset, int size);
 

@@ -330,7 +330,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public Flux<BaleenDocument> all(final int offset, final int size) {
+  public Flux<BaleenDocument> getAll(final int offset, final int size) {
     return documents.findAll()
         .skip(offset)
         .take(size)

@@ -13,6 +13,10 @@ public class RelationProbe {
 
   private String targetId;
 
+  private String sourceType;
+
+  private String targetType;
+
   private int begin;
 
   private int end;

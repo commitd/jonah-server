@@ -63,7 +63,7 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   }
 
   @Override
-  public Flux<BaleenDocument> all(final int offset, final int limit) {
+  public Flux<BaleenDocument> getAll(final int offset, final int limit) {
     final Page<JpaDocument> page = documents.findAll(PageRequest.of(offset / limit, limit));
     return Flux.fromStream(page.stream().map(this::addMetadataAndConvert));
   }

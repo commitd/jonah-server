@@ -1,29 +1,30 @@
 package io.committed.ketos.common.providers.baleen;
 
+import java.util.List;
+import java.util.Optional;
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
+import io.committed.ketos.common.graphql.input.RelationFilter;
+import io.committed.ketos.common.graphql.input.RelationProbe;
+import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
+import io.committed.ketos.common.graphql.output.RelationSearch;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface RelationProvider extends DataProvider {
 
-  Flux<BaleenRelation> getAllRelations(int offset, int limit);
-
-  Flux<BaleenRelation> getByDocument(String id);
+  Flux<BaleenRelation> getAll(int offset, int limit);
 
   Flux<BaleenRelation> getRelations(BaleenDocument document);
 
-  Flux<BaleenRelation> getSourceRelations(BaleenMention mention);
+  Flux<BaleenRelation> getSourceRelations(final BaleenMention mention);
 
   Flux<BaleenRelation> getTargetRelations(BaleenMention mention);
 
   Mono<BaleenRelation> getById(String id);
-
-  Flux<BaleenRelation> getRelationsByMention(String sourceValue, String sourceType,
-      String relationshipType, String relationshipSubType, String targetValue, String targetType,
-      int offset, int limit);
 
   @Override
   default String getProviderType() {
@@ -32,5 +33,11 @@ public interface RelationProvider extends DataProvider {
 
   Mono<Long> count();
 
+  Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int limit);
 
+  Flux<TermBin> countByField(Optional<RelationFilter> filter, List<String> path, final int limit);
+
+  RelationSearchResult search(final RelationSearch search,
+      final int offset,
+      final int limit);
 }
