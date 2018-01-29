@@ -27,8 +27,7 @@ public class EsMention {
 
   private Date timestampStop;
 
-  // TOOO: Verify that string works ok here
-  private String geoJson;
+  private Object geoJson;
 
   // Used to carry through flux, etc
   private transient String documentId;

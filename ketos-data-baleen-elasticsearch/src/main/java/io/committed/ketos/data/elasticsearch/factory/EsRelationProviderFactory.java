@@ -33,7 +33,7 @@ public class EsRelationProviderFactory
 
       final EsDocumentService service = new EsDocumentService(mapper, elastic);
 
-      return Mono.just(new ElasticsearchRelationProvider(dataset, datasource, service));
+      return Mono.just(new ElasticsearchRelationProvider(dataset, datasource, service, mapper));
     } catch (final Exception e) {
       log.error("Unable to create ES Document Provider", e);
       return Mono.empty();

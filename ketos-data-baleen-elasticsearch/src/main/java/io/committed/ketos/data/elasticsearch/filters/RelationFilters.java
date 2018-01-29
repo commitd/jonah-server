@@ -28,11 +28,11 @@ public final class RelationFilters {
     }
 
     if (filter.getRelationshipType() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "relationshipType", filter.getRelationshipType()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + "relationshipType", filter.getRelationshipType()));
     }
 
     if (filter.getRelationSubtype() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "relationSubtype", filter.getRelationSubtype()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + "relationSubtype", filter.getRelationSubtype()));
     }
 
     if (filter.getSourceId() != null) {
@@ -44,11 +44,11 @@ public final class RelationFilters {
     }
 
     if (filter.getType() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "type", filter.getSourceId()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + "type", filter.getType()));
     }
 
     if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "value", filter.getSourceId()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + "value", filter.getValue()));
     }
 
 

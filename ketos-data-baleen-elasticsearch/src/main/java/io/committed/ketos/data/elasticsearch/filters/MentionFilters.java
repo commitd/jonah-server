@@ -26,7 +26,7 @@ public final class MentionFilters {
 
     if (filter.getEndTimestamp() != null) {
       // TODO: verify this is the right name (and then change getStartTimestamp if not)
-      queryBuilder.must(QueryBuilders.rangeQuery("timestamp").lte(filter.getEndTimestamp()));
+      queryBuilder.must(QueryBuilders.rangeQuery("timestampEnd").lte(filter.getEndTimestamp()));
     }
 
     if (filter.getEntityId() != null) {
@@ -42,21 +42,21 @@ public final class MentionFilters {
 
     if (filter.getProperties() != null) {
       filter.getProperties().entrySet()
-          .forEach(e -> queryBuilder.must(QueryBuilders.termQuery(prefix + e.getKey(), e.getValue())));
+          .forEach(e -> queryBuilder.must(QueryBuilders.matchQuery(prefix + e.getKey(), e.getValue())));
     }
 
     if (filter.getStartTimestamp() != null) {
-      queryBuilder.must(QueryBuilders.rangeQuery("timestamp").gte(filter.getStartTimestamp()));
+      queryBuilder.must(QueryBuilders.rangeQuery("timestampStart").gte(filter.getStartTimestamp()));
 
     }
 
     if (filter.getType() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "type", filter.getType()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + "type", filter.getType()));
 
     }
 
     if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "value", filter.getValue()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + "value", filter.getValue()));
 
     }
 

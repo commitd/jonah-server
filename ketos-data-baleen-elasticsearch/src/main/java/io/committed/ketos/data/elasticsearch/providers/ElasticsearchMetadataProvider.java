@@ -49,9 +49,12 @@ public class ElasticsearchMetadataProvider
   }
 
   private Flux<TermBin> aggregateByMetadata(final Optional<QueryBuilder> query, final String field) {
+
+    final String fieldkeyword = "metadata." + field + ".keyword";
+
     NativeSearchQueryBuilder searchQueryBuilder = getService().queryBuilder()
         .addAggregation(AggregationBuilders.nested("agg", "metadata")
-            .subAggregation(AggregationBuilders.terms("count").field("metadata." + field)));
+            .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword)));
 
     if (query.isPresent()) {
       searchQueryBuilder = searchQueryBuilder.withQuery(query.get());

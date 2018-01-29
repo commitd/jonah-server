@@ -34,19 +34,19 @@ public final class DocumentFilters {
       final DocumentInfoFilter info = filter.getInfo();
 
       if (info.getCaveats() != null) {
-        queryBuilder.must(QueryBuilders.termQuery("caveats", info.getCaveats()));
+        queryBuilder.must(QueryBuilders.matchQuery("caveats", info.getCaveats()));
       }
 
       if (info.getClassification() != null) {
-        queryBuilder.must(QueryBuilders.termQuery("classification", info.getClassification()));
+        queryBuilder.must(QueryBuilders.matchQuery("classification", info.getClassification()));
       }
 
       if (info.getLanguage() != null) {
-        queryBuilder.must(QueryBuilders.termQuery("language", info.getLanguage()));
+        queryBuilder.must(QueryBuilders.matchQuery("language", info.getLanguage()));
       }
 
       if (info.getReleasability() != null) {
-        queryBuilder.must(QueryBuilders.termQuery("releasability", info.getReleasability()));
+        queryBuilder.must(QueryBuilders.matchQuery("releasability", info.getReleasability()));
       }
 
       if (info.getSource() != null) {
@@ -62,13 +62,13 @@ public final class DocumentFilters {
       }
 
       if (info.getType() != null) {
-        queryBuilder.must(QueryBuilders.termQuery("docType", info.getSource()));
+        queryBuilder.must(QueryBuilders.matchQuery("docType", info.getSource()));
       }
     }
 
     if (filter.getMetadata() != null) {
       filter.getMetadata().entrySet().forEach(e -> {
-        queryBuilder.must(QueryBuilders.termQuery("metadata" + e.getKey(), e.getValue()));
+        queryBuilder.must(QueryBuilders.matchQuery("metadata" + e.getKey(), e.getValue()));
       });
     }
 

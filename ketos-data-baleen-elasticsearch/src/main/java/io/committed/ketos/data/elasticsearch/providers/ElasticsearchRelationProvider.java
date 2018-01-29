@@ -1,15 +1,19 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import org.apache.lucene.search.join.ScoreMode;
+import org.elasticsearch.index.query.InnerHitBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.script.Script;
-import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
-import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.elasticsearch.utils.SourceUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -30,10 +34,12 @@ public class ElasticsearchRelationProvider
 
   // WE have to give some form of limit in ES...
   private static final int MAX_RELATIONS = 1000;
+  private final ObjectMapper mapper;
 
   public ElasticsearchRelationProvider(final String dataset, final String datasource,
-      final EsDocumentService relationService) {
+      final EsDocumentService relationService, final ObjectMapper mapper) {
     super(dataset, datasource, relationService);
+    this.mapper = mapper;
   }
 
 
@@ -83,14 +89,16 @@ public class ElasticsearchRelationProvider
     // We need a script here in order to calculate the answer...
     // TODO: ideally we'd change the consumer to produce the number as part of the output!
 
-    final NativeSearchQueryBuilder qb = getService().queryBuilder()
-        .addAggregation(
-            new SumAggregationBuilder("agg").script(new Script("doc." + EsDocument.RELATIONS + ".length")));
+    // final NativeSearchQueryBuilder qb = getService().queryBuilder()
+    // .addAggregation(
+    // new SumAggregationBuilder("agg").script(new Script("doc." + EsDocument.RELATIONS + ".length")));
+    //
+    // return getService().query(qb, response -> {
+    // final ParsedSum sum = response.getAggregations().get("agg");
+    // return Mono.just((long) sum.getValue());
+    // });
 
-    return getService().query(qb, response -> {
-      final ParsedSum sum = response.getAggregations().get("agg");
-      return Mono.just((long) sum.getValue());
-    });
+    return Mono.empty();
   }
 
 
@@ -120,20 +128,51 @@ public class ElasticsearchRelationProvider
     // that way we know we have at least limit number of relations.
 
 
-    final QueryBuilder hasRelations = QueryBuilders.existsQuery(EsDocument.RELATIONS);
-    final QueryBuilder qb;
-
     if (query.isPresent()) {
-      qb = QueryBuilders.boolQuery().must(hasRelations).must(query.get());
+
+      final QueryBuilder qb = QueryBuilders.nestedQuery(EsDocument.RELATIONS,
+          query.get(), ScoreMode.None)
+          .innerHit(new InnerHitBuilder().setSize(limit));
+
+
+      final NativeSearchQueryBuilder nqb = getService().queryBuilder()
+          .withQuery(qb)
+          .withPageable(org.springframework.data.domain.PageRequest.of(0, offset + limit));
+
+      return getService().query(nqb, response -> {
+
+        final SearchHit[] searchHits = response.getHits().getHits();
+
+        if (searchHits.length > 0) {
+
+          return Flux.fromArray(searchHits).flatMap(h -> {
+            final Map<String, SearchHits> innerHits = h.getInnerHits();
+            if (innerHits != null) {
+              final SearchHits inner = innerHits.get(EsDocument.RELATIONS);
+              return Flux.fromArray(inner.getHits());
+            } else {
+              return Flux.empty();
+            }
+          }).flatMap(h -> {
+            final String source = h.getSourceAsString();
+            return SourceUtils.convertSource(mapper, source, EsRelation.class);
+          }).map(EsRelation::toBaleenRelation);
+        } else {
+          return Flux.empty();
+        }
+      });
+
     } else {
-      qb = hasRelations;
+      return getService()
+          .search(QueryBuilders.nestedQuery(EsDocument.RELATIONS, QueryBuilders.matchAllQuery(), ScoreMode.None), 0,
+              offset + limit)
+          .flatMap(d -> Flux.fromIterable(d.getRelations()))
+          .skip(offset)
+          .take(limit)
+          .map(EsRelation::toBaleenRelation);
     }
 
-    return getService().search(qb, 0, offset + limit)
-        .flatMap(d -> Flux.fromIterable(d.getRelations()))
-        .skip(offset)
-        .take(limit)
-        .map(EsRelation::toBaleenRelation);
+
   }
 
 
