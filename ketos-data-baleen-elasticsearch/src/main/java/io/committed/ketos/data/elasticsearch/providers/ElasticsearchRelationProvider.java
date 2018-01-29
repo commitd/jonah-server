@@ -56,6 +56,7 @@ public class ElasticsearchRelationProvider
   public Flux<BaleenRelation> getSourceRelations(final BaleenMention mention) {
     return getService().search(QueryBuilders.termQuery("relations.source", mention.getId()), 0, MAX_RELATIONS)
         .flatMap(d -> Flux.fromIterable(d.getRelations()))
+        .filter(r -> r.getSource() != null && r.getSource().equals(mention.getId()))
         .map(EsRelation::toBaleenRelation);
   }
 
@@ -63,6 +64,7 @@ public class ElasticsearchRelationProvider
   public Flux<BaleenRelation> getTargetRelations(final BaleenMention mention) {
     return getService().search(QueryBuilders.termQuery("relations.target", mention.getId()), 0, MAX_RELATIONS)
         .flatMap(d -> Flux.fromIterable(d.getRelations()))
+        .filter(r -> r.getTarget() != null && r.getTarget().equals(mention.getId()))
         .map(EsRelation::toBaleenRelation);
   }
 
@@ -83,7 +85,7 @@ public class ElasticsearchRelationProvider
 
     final NativeSearchQueryBuilder qb = getService().queryBuilder()
         .addAggregation(
-            new SumAggregationBuilder("agg").script(new Script("doc." + EsDocument.RELATIONS_PREFIX + ".length")));
+            new SumAggregationBuilder("agg").script(new Script("doc." + EsDocument.RELATIONS + ".length")));
 
     return getService().query(qb, response -> {
       final ParsedSum sum = response.getAggregations().get("agg");
@@ -118,7 +120,7 @@ public class ElasticsearchRelationProvider
     // that way we know we have at least limit number of relations.
 
 
-    final QueryBuilder hasRelations = QueryBuilders.existsQuery(EsDocument.RELATIONS_PREFIX);
+    final QueryBuilder hasRelations = QueryBuilders.existsQuery(EsDocument.RELATIONS);
     final QueryBuilder qb;
 
     if (query.isPresent()) {

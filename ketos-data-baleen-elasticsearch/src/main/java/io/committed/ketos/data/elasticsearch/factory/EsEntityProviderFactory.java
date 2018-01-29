@@ -2,6 +2,7 @@ package io.committed.ketos.data.elasticsearch.factory;
 
 import java.util.Map;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@Service
 public class EsEntityProviderFactory
     extends AbstractElasticsearchDataProviderFactory<EntityProvider> {
 
@@ -31,7 +33,7 @@ public class EsEntityProviderFactory
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
       final EsDocumentService documents = new EsDocumentService(mapper, elastic);
-      final EsMentionService mentions = new EsMentionService(documents);
+      final EsMentionService mentions = new EsMentionService(documents, mapper);
 
       return Mono.just(new ElasticsearchEntityProvider(dataset, datasource, mentions));
     } catch (final Exception e) {

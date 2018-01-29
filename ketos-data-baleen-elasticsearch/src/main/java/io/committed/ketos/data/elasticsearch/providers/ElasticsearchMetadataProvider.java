@@ -43,10 +43,15 @@ public class ElasticsearchMetadataProvider
     }
   }
 
+  @Override
+  public Flux<TermBin> countByValue(final Optional<String> key, final int size) {
+    return aggregateByMetadata(key.map(this::queryByKey), "value");
+  }
+
   private Flux<TermBin> aggregateByMetadata(final Optional<QueryBuilder> query, final String field) {
     NativeSearchQueryBuilder searchQueryBuilder = getService().queryBuilder()
         .addAggregation(AggregationBuilders.nested("agg", "metadata")
-            .subAggregation(AggregationBuilders.terms("count").field("key")));
+            .subAggregation(AggregationBuilders.terms("count").field("metadata." + field)));
 
     if (query.isPresent()) {
       searchQueryBuilder = searchQueryBuilder.withQuery(query.get());
@@ -63,13 +68,7 @@ public class ElasticsearchMetadataProvider
   }
 
   private NestedQueryBuilder queryByKey(final String key) {
-    return QueryBuilders.nestedQuery("metadata", QueryBuilders.existsQuery(key), ScoreMode.None);
-  }
-
-
-  @Override
-  public Flux<TermBin> countByValue(final Optional<String> key, final int size) {
-    return aggregateByMetadata(key.map(this::queryByKey), "value");
+    return QueryBuilders.nestedQuery("metadata", QueryBuilders.termQuery("metadata.key", key), ScoreMode.None);
   }
 
 }

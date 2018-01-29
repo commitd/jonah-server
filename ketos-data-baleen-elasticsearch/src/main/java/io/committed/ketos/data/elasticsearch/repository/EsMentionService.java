@@ -3,14 +3,21 @@ package io.committed.ketos.data.elasticsearch.repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.script.Script;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
 import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.support.elasticsearch.utils.SourceUtils;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.dao.EsMention;
@@ -21,13 +28,36 @@ import reactor.core.publisher.Mono;
 public class EsMentionService {
 
   private final EsDocumentService documents;
+  private final ObjectMapper mapper;
 
-  public EsMentionService(final EsDocumentService documents) {
+  public EsMentionService(final EsDocumentService documents, final ObjectMapper mapper) {
     this.documents = documents;
+    this.mapper = mapper;
   }
 
   public Mono<EsMention> getById(final String id) {
-    return null;
+    // As we are going to unwind this... we need to use a nested - top hits aggregation
+
+    final NativeSearchQueryBuilder query = documents.queryBuilder()
+        .addAggregation(AggregationBuilders.nested("agg", EsDocument.MENTIONS)
+            .subAggregation(AggregationBuilders.topHits("hits")
+                .fetchSource(true)
+                .size(1)))
+        .withQuery(QueryBuilders.nestedQuery(EsDocument.MENTIONS,
+            QueryBuilders.termQuery(EsDocument.MENTIONS_PREFIX + "externalId", id), ScoreMode.None));
+
+    return documents.query(query, response -> {
+      final Nested nested = response.getAggregations().get("agg");
+
+      final TopHits hits = nested.getAggregations().get("hits");
+      final SearchHit[] searchHits = hits.getHits().getHits();
+
+      if (searchHits.length > 0) {
+        return SourceUtils.convertSource(mapper, searchHits[0].getSourceAsString(), EsMention.class);
+      } else {
+        return Mono.empty();
+      }
+    });
   }
 
   public Flux<EsMention> getAll(final int offset, final int limit) {
@@ -40,7 +70,7 @@ public class EsMentionService {
 
     final NativeSearchQueryBuilder qb = documents.queryBuilder()
         .addAggregation(
-            new SumAggregationBuilder("agg").script(new Script("doc." + EsDocument.MENTIONS_PREFIX + ".length")));
+            new SumAggregationBuilder("agg").script(new Script("doc." + EsDocument.MENTIONS + ".length")));
 
     return documents.query(qb, response -> {
       final ParsedSum sum = response.getAggregations().get("agg");
@@ -71,6 +101,7 @@ public class EsMentionService {
 
 
   public Flux<TermBin> countByField(final Optional<MentionFilter> filter, final List<String> path, final int limit) {
+
     final Optional<QueryBuilder> query = MentionFilters.toQuery(filter, EsDocument.MENTIONS_PREFIX);
 
     final String field = path.get(path.size() - 1);
@@ -90,7 +121,7 @@ public class EsMentionService {
     // that way we know we have at least limit number of mentions.
 
 
-    final QueryBuilder hasMentions = QueryBuilders.existsQuery(EsDocument.MENTIONS_PREFIX);
+    final QueryBuilder hasMentions = QueryBuilders.existsQuery(EsDocument.MENTIONS);
     final QueryBuilder qb;
 
     if (query.isPresent()) {

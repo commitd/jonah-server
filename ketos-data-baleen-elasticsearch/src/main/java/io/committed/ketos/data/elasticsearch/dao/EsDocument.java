@@ -12,10 +12,13 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EsDocument {
 
-  public static final String MENTIONS_PREFIX = "entities.";
+  public static final String MENTIONS = "entities";
 
-  public static final String RELATIONS_PREFIX = "relations.";
+  public static final String MENTIONS_PREFIX = MENTIONS + ".";
 
+  public static final String RELATIONS = "relations";
+
+  public static final String RELATIONS_PREFIX = RELATIONS + ".";
 
   private String content;
   private String language;

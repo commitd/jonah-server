@@ -2,6 +2,7 @@ package io.committed.ketos.data.elasticsearch.factory;
 
 import java.util.Map;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@Service
 public class EsDocumentProviderFactory
     extends AbstractElasticsearchDataProviderFactory<DocumentProvider> {
 
