@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class RelationFilter {
+  private String id;
+
   private String docId;
 
   private String sourceId;

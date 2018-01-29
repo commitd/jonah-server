@@ -14,5 +14,13 @@ public class EntityProbe {
   // private String value;
   // private Map<String, Object> properties;
 
+  public EntityFilter toFilter() {
+    final EntityFilter filter = new EntityFilter();
+
+    filter.setDocId(docId);
+    filter.setId(id);
+
+    return filter;
+  }
 
 }

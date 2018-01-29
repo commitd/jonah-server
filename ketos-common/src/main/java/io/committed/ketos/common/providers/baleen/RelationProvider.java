@@ -33,7 +33,10 @@ public interface RelationProvider extends DataProvider {
 
   Mono<Long> count();
 
-  Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int limit);
+  default Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int limit) {
+    return search(RelationSearch.builder().relationFilter(probe.toFilter()).build(), offset, limit)
+        .getResults();
+  }
 
   Flux<TermBin> countByField(Optional<RelationFilter> filter, List<String> path, final int limit);
 

@@ -30,7 +30,10 @@ public interface MentionProvider extends DataProvider {
 
   Flux<BaleenMention> getAll(final int offset, final int limit);
 
-  Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int limit);
+  default Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int limit) {
+    return search(MentionSearch.builder().mentionFilter(probe.toFilter()).build(), offset, limit)
+        .getResults();
+  }
 
   Flux<TermBin> countByField(Optional<MentionFilter> filter, List<String> path, final int limit);
 

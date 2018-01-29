@@ -22,8 +22,12 @@ public class DocumentFilter {
 
   }
 
+  private String id;
   private DocumentInfoFilter info;
   private List<String> publishedIds;
   private Map<String, Object> metadata;
   private String content;
+
+
+
 }

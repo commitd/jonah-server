@@ -35,5 +35,27 @@ public class RelationProbe {
 
   private double confidence;
 
+  public RelationFilter toFilter() {
+    final RelationFilter filter = new RelationFilter();
+
+    filter.setDocId(docId);
+    filter.setId(id);
+    filter.setRelationshipType(relationshipType);
+    filter.setRelationSubtype(relationSubtype);
+    filter.setSourceId(sourceId);
+    filter.setSourceType(sourceType);
+    filter.setSourceValue(sourceValue);
+    filter.setTargetId(targetId);
+    filter.setTargetType(targetType);
+    filter.setTargetValue(targetValue);
+    filter.setType(type);
+    filter.setValue(value);
+
+    // TODO: confidence, begin, end
+
+
+    return filter;
+  }
+
 
 }

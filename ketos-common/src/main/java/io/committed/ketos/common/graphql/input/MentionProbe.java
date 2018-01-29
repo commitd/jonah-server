@@ -16,5 +16,24 @@ public class MentionProbe {
   private String entityId;
   private Map<String, Object> properties;
 
+  public MentionFilter toFilter() {
+    final MentionFilter filter = new MentionFilter();
+
+    filter.setDocId(docId);
+    filter.setId(id);
+    filter.setType(type);
+    filter.setValue(value);
+    filter.setProperties(properties);
+    filter.setEntityId(entityId);
+
+    // TODO have this as after / before / below / above
+    // filter.setConfidence;
+    // filter.setBeing
+    // filter.setEnd(end);
+
+    return filter;
+
+  }
+
 
 }

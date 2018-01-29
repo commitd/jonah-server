@@ -3,6 +3,7 @@ package io.committed.ketos.common.graphql.input;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import lombok.Data;
 
 
@@ -19,6 +20,21 @@ public class DocumentProbe {
     private String releasability;
 
     private Date timestamp;
+
+    public DocumentInfoFilter toFilter() {
+      final DocumentInfoFilter filter = new DocumentInfoFilter();
+
+      filter.setCaveats(caveats);
+      filter.setClassification(classification);
+      filter.setReleasability(releasability);
+      filter.setLanguage(language);
+      filter.setSource(source);
+      filter.setEndTimestamp(timestamp);
+      filter.setStartTimestamp(timestamp);
+      filter.setType(type);
+
+      return filter;
+    }
   }
 
   private String id;
@@ -27,4 +43,16 @@ public class DocumentProbe {
   private Map<String, Object> metadata;
   private String content;
 
+  public DocumentFilter toDocumentFilter() {
+    final DocumentFilter filter = new DocumentFilter();
+
+
+    filter.setId(id);
+    filter.setContent(content);
+    filter.setPublishedIds(publishedIds);
+    filter.setMetadata(metadata);
+    filter.setInfo(info != null ? info.toFilter() : null);
+
+    return filter;
+  }
 }

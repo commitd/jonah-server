@@ -24,7 +24,10 @@ public interface DocumentProvider extends DataProvider {
 
   Mono<BaleenDocument> getById(String id);
 
-  Flux<BaleenDocument> getByExample(DocumentProbe probe, int offset, int limit);
+  default Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int limit) {
+    return search(DocumentSearch.builder().documentFilter(probe.toDocumentFilter()).build(), offset, limit)
+        .getResults();
+  }
 
   Mono<Long> count();
 

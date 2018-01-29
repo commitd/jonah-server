@@ -24,7 +24,10 @@ public interface EntityProvider extends DataProvider {
 
   Flux<BaleenEntity> getAll(final int offset, final int limit);
 
-  Flux<BaleenEntity> getByExample(final EntityProbe probe, final int offset, final int limit);
+  default Flux<BaleenEntity> getByExample(final EntityProbe probe, final int offset, final int limit) {
+    return search(EntitySearch.builder().entityFilter(probe.toFilter()).build(), offset, limit)
+        .getResults();
+  }
 
 
   EntitySearchResult search(final EntitySearch entitySearch,
