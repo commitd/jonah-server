@@ -28,6 +28,7 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.ExampleUtils;
+import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
@@ -41,7 +42,6 @@ import io.committed.ketos.plugins.data.mongo.filters.DocumentFilters;
 import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
 import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
-import io.committed.ketos.plugins.data.mongo.utils.MongoUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -366,7 +366,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
       mongoPath.set(0, "document");
     }
 
-    final String field = MongoUtils.joinField(mongoPath);
+    final String field = FieldUtils.joinField(mongoPath);
 
     return termAggregation(documentFilter, field).take(size);
   }

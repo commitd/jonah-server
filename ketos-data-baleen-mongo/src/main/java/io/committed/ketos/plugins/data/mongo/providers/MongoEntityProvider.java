@@ -17,6 +17,7 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.ExampleUtils;
+import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.graphql.input.EntityFilter;
@@ -30,7 +31,6 @@ import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.filters.EntityFilters;
 import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
-import io.committed.ketos.plugins.data.mongo.utils.MongoUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -67,7 +67,7 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
 
   @Override
   public Flux<TermBin> countByField(final Optional<EntityFilter> filter, final List<String> path, final int limit) {
-    final String field = MongoUtils.joinField(path);
+    final String field = FieldUtils.joinField(path);
     return termAggregation(filter, field).take(limit);
   }
 

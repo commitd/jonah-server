@@ -14,6 +14,7 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.ExampleUtils;
+import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -26,7 +27,6 @@ import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
 import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
-import io.committed.ketos.plugins.data.mongo.utils.MongoUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -89,7 +89,7 @@ public class MongoRelationProvider extends AbstractMongoDataProvider implements 
 
   @Override
   public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path, final int limit) {
-    final String field = MongoUtils.joinField(path);
+    final String field = FieldUtils.joinField(path);
     final Aggregation aggregation =
         CriteriaUtils.createAggregation(RelationFilters.createCriteria(filter.orElse(null)),
             group(field).count().as("count"),
