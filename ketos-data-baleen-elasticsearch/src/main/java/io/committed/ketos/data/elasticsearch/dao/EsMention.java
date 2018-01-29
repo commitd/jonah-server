@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EsEntity {
+public class EsMention {
 
   private String externalId;
 
@@ -43,4 +43,11 @@ public class EsEntity {
         .id(externalId).type(type).value(value).build();
   }
 
+  public static BaleenEntity toBaleenEntity(final String documentId, final BaleenMention mention) {
+    return BaleenEntity.builder()
+        .docId(documentId)
+        .id(mention.getId())
+        .mentions(Mono.just(mention).flux())
+        .build();
+  }
 }

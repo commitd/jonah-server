@@ -12,6 +12,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EsDocument {
 
+  public static final String MENTIONS_PREFIX = "entities.";
+
+  public static final String RELATIONS_PREFIX = "relations.";
+
+
   private String content;
   private String language;
   private String externalId;
@@ -25,16 +30,23 @@ public class EsDocument {
 
   private Map<String, Object> metadata;
 
-  private List<EsEntity> entities;
+  // As the class suggest, though these are called entities they are actually mentions
+  private List<EsMention> entities;
 
   private List<EsRelation> relations;
 
   public BaleenDocument toBaleenDocument() {
     return BaleenDocument.builder().content(content).id(externalId).metadata(metadata)
         .publishedIds(publishedId)
-        .info(BaleenDocumentInfo.builder().caveats(caveats).classification(classification)
-            .language(language).releasability(releasability).source(sourceUri)
-            .timestamp(new Date(dateAccessed.getTime())).type(docType).build())
+        .info(BaleenDocumentInfo.builder()
+            .caveats(caveats)
+            .classification(classification)
+            .language(language)
+            .releasability(releasability)
+            .source(sourceUri)
+            .timestamp(new Date(dateAccessed.getTime()))
+            .type(docType)
+            .build())
         .build();
   }
 }
