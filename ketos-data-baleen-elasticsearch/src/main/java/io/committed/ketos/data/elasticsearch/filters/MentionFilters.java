@@ -25,7 +25,6 @@ public final class MentionFilters {
     }
 
     if (filter.getEndTimestamp() != null) {
-      // TODO: verify this is the right name (and then change getStartTimestamp if not)
       queryBuilder.must(QueryBuilders.rangeQuery("timestampEnd").lte(filter.getEndTimestamp()));
     }
 
@@ -56,7 +55,7 @@ public final class MentionFilters {
     }
 
     if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + "value", filter.getValue()));
+      queryBuilder.must(QueryBuilders.matchPhraseQuery(prefix + "value", filter.getValue()));
 
     }
 

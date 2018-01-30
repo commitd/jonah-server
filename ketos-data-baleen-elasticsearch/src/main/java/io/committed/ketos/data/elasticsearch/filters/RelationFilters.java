@@ -48,7 +48,7 @@ public final class RelationFilters {
     }
 
     if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + "value", filter.getValue()));
+      queryBuilder.must(QueryBuilders.matchPhraseQuery(prefix + "value", filter.getValue()));
     }
 
 
