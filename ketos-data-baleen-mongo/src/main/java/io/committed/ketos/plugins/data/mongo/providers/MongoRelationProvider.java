@@ -5,7 +5,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,13 +12,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
-import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.input.RelationFilter;
-import io.committed.ketos.common.graphql.input.RelationProbe;
 import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
@@ -80,12 +77,6 @@ public class MongoRelationProvider extends AbstractMongoDataProvider implements 
     return relations.count();
   }
 
-  @Override
-  public Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int limit) {
-    return relations.findAll(Example.of(new MongoRelation(probe), ExampleUtils.classlessMatcher())).skip(offset)
-        .take(limit)
-        .map(MongoRelation::toRelation);
-  }
 
   @Override
   public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path, final int limit) {

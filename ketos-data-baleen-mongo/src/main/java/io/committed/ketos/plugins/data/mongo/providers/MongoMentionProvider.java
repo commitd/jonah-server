@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -17,13 +16,11 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
-import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.input.MentionFilter;
-import io.committed.ketos.common.graphql.input.MentionProbe;
 import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
@@ -94,13 +91,6 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
         .map(MongoMention::toMention);
   }
 
-  @Override
-  public Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int limit) {
-    return aggregateOverMentions(MongoMention.class,
-        Aggregation
-            .match(Criteria.byExample(Example.of(MongoMention.fromProbe(probe), ExampleUtils.classlessMatcher()))))
-                .map(MongoMention::toMention);
-  }
 
   @Override
   public Mono<Long> count() {

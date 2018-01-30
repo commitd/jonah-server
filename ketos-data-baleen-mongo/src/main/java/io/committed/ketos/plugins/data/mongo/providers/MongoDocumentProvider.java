@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -28,11 +26,9 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
-import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
-import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -382,22 +378,6 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
     return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
   }
-
-
-  @Override
-  public Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int limit) {
-    // TODO: Might need to review other matchers here
-    final ExampleMatcher matcher = ExampleUtils.classlessMatcher()
-        // NOTE: This uses a regex match under the hood, which may not make use of the $text index on the
-        // content field (and hence be slower).
-        .withMatcher("content", match -> match.contains());
-    final Example<MongoDocument> example = Example.of(new MongoDocument(probe), matcher);
-    return documents.findAll(example)
-        .skip(offset)
-        .take(limit)
-        .map(MongoDocument::toDocument);
-  }
-
 
 
 }

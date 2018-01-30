@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
@@ -16,12 +14,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
-import io.committed.invest.support.data.utils.ExampleUtils;
 import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.graphql.input.EntityFilter;
-import io.committed.ketos.common.graphql.input.EntityProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.intermediate.EntitySearchResult;
 import io.committed.ketos.common.graphql.output.EntitySearch;
@@ -91,14 +87,6 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
     // however in the rest I use MongoEntities since that allows us to grab anything in the Baleen
     // properties. Maybe there's a hybrid (exist BaleenMention from Document)...
     return getTemplate().aggregate(aggregation, FakeMongoEntities.class, TermBin.class);
-  }
-
-  @Override
-  public Flux<BaleenEntity> getByExample(final EntityProbe probe, final int offset, final int limit) {
-    final ExampleMatcher matcher = ExampleUtils.classlessMatcher();
-    return entities.findAll(Example.of(new MongoEntities(probe), matcher))
-        .skip(offset).take(limit)
-        .map(MongoEntities::toEntity);
   }
 
   @Override
