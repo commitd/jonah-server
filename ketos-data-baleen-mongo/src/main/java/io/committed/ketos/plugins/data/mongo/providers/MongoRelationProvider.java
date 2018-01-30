@@ -91,7 +91,8 @@ public class MongoRelationProvider extends AbstractMongoDataProvider implements 
   public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path, final int limit) {
     final String field = FieldUtils.joinField(path);
     final Aggregation aggregation =
-        CriteriaUtils.createAggregation(RelationFilters.createCriteria(filter.orElse(null)),
+        CriteriaUtils.createAggregation(
+            filter.map(RelationFilters::createCriteria),
             group(field).count().as("count"),
             project("count").and("_id").as("term"));
 

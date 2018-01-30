@@ -27,7 +27,6 @@ import io.committed.ketos.common.graphql.input.MentionProbe;
 import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
-import io.committed.ketos.plugins.data.mongo.dao.FakeMongoEntities;
 import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.dao.MongoMention;
 import io.committed.ketos.plugins.data.mongo.data.CountOutcome;
@@ -69,7 +68,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
   private Flux<BaleenMention> getMentionsByDocumentId(final String documentId) {
     return getByDocumentId(documentId)
-        .flatMap(e -> e.getMentions());
+        .flatMap(BaleenEntity::getMentions);
   }
 
   private Mono<BaleenMention> relationMentionById(final BaleenRelation relation,
@@ -118,7 +117,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     final String field = path.get(path.size() - 1);
 
     return aggregateOverMentions(TermBin.class,
-        filter.isPresent() ? Aggregation.match(MentionFilters.createCriteria(filter.get(), "", "")) : null,
+        filter.map(f -> Aggregation.match(MentionFilters.createCriteria(filter.get(), "", ""))).orElse(null),
         group(field).count().as("count"),
         Aggregation.project("count").and("_id").as("term"));
   }
@@ -144,8 +143,8 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
   private <T> Flux<T> aggregateOverMentions(final Class<T> clazz, final AggregationOperation... operations) {
     final List<AggregationOperation> list = extractMention();
     Arrays.stream(operations).filter(Objects::nonNull).forEach(list::add);
-    final Aggregation aggregation = Aggregation.newAggregation(operations);
-    return getTemplate().aggregate(aggregation, FakeMongoEntities.class, clazz);
+    final Aggregation aggregation = Aggregation.newAggregation(list);
+    return getTemplate().aggregate(aggregation, MongoEntities.class, clazz);
   }
 
 

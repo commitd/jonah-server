@@ -80,7 +80,7 @@ public class MongoEntityProvider extends AbstractMongoDataProvider implements En
 
     final Aggregation aggregation =
         CriteriaUtils.createAggregation(
-            EntityFilters.createCriteria(filter.get()),
+            filter.map(EntityFilters::createCriteria),
             unwind("entities"),
             group(field).count().as("count"),
             project("count").and("_id").as("term"));

@@ -21,6 +21,7 @@ import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.common.utils.FieldUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
+import io.committed.ketos.graphql.defaultvalueproviders.TimeIntervalDefault;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -146,7 +147,8 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "interval",
-          description = "Time interval to group by") final TimeInterval interval,
+          description = "Time interval to group by",
+          defaultValueProvider = TimeIntervalDefault.class) final TimeInterval interval,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
