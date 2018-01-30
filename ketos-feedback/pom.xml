@@ -20,57 +20,13 @@
 
     <dependency>
       <groupId>io.committed.invest</groupId>
-      <artifactId>invest-server-data</artifactId>
+      <artifactId>invest-core</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-    </dependency>
+    </dependency> 
   </dependencies>
-
-      <!-- Copy the UI build output to the resources area on the classpath -->
-  <!-- <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-          <execution>
-            <id>copy-resources-form</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.basedir}/target/classes/ui/feedback-form</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${ui.dir}ketos-feedback-form${uiBuild.dir}</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-resources-reader</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.basedir}/target/classes/ui/feedback-reader</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${ui.dir}ketos-feedback-reader${uiBuild.dir}</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build> -->
 
 </project>
