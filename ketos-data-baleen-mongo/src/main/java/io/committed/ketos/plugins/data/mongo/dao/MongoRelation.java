@@ -6,9 +6,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.input.RelationProbe;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document(collection = "full_relations")
 @Data
+@NoArgsConstructor
 public class MongoRelation {
   @Id
   private String id;
