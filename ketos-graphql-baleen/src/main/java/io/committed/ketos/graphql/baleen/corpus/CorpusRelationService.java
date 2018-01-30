@@ -76,6 +76,6 @@ public class CorpusRelationService extends AbstractGraphQlService {
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, RelationProvider.class, hints).flatMap(RelationProvider::count)
-        .reduce(0L, (a, b) -> a + b);
+        .reduce(Long::sum);
   }
 }

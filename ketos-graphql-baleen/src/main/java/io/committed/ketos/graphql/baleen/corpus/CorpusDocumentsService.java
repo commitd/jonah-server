@@ -16,8 +16,8 @@ import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
-import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
+import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.common.utils.FieldUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
@@ -89,7 +89,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     final Flux<BaleenDocument> documents =
         providers.flatMap(p -> p.getAll(offset, size));
 
-    final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(0L, Long::sum);
+    final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(Long::sum);
 
     return Documents.builder().parent(corpus).results(documents).total(count).build();
   }
@@ -99,7 +99,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints).flatMap(DocumentProvider::count)
-        .reduce(0L, Long::sum);
+        .reduce(Long::sum);
   }
 
   @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
