@@ -66,7 +66,7 @@
     <module>ketos-data-baleen-elasticsearch</module>
     <module>ketos-data-baleen-jpa</module>
     <module>ketos-graphql-baleen</module>
-    <module>ketos-ui-corpussummary</module>
+    <!-- <module>ketos-ui-corpussummary</module>
     <module>ketos-ui-documentsearch</module>
     <module>ketos-ui-documentreader</module>
     <module>ketos-ui-corpuslist</module>
@@ -74,7 +74,7 @@
     <module>ketos-ui-map</module>
     <module>ketos-ui-metadataexplorer</module>
     <module>ketos-ui-entitydetails</module>
-    <module>ketos-ui-relationexplorer</module>
+    <module>ketos-ui-relationexplorer</module> -->
     <module>ketos-feedback</module>
   </modules>
 </project>

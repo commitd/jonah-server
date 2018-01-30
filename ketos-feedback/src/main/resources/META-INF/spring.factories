@@ -1,5 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 io.committed.ketos.plugins.data.feedback.FeedbackDataExtension,\
-io.committed.ketos.plugins.graphql.feedback.FeedbackGraphQlExtension,\
-io.committed.ketos.plugins.ui.feedback.FeedbackFormExtension,\
-io.committed.ketos.plugins.ui.feedback.FeedbackReaderExtension
+io.committed.ketos.plugins.graphql.feedback.FeedbackGraphQlExtension

@@ -29,17 +29,15 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
       <!-- Copy the UI build output to the resources area on the classpath -->
+  <!-- <build>
+    <plugins>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>3.0.2</version>
         <executions>
           <execution>
             <id>copy-resources-form</id>
-            <!-- Run the copy After the compilation, but before we package 
-              the JAR up -->
             <phase>process-classes</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -56,8 +54,6 @@
           </execution>
           <execution>
             <id>copy-resources-reader</id>
-            <!-- Run the copy After the compilation, but before we package 
-              the JAR up -->
             <phase>process-classes</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -75,5 +71,6 @@
         </executions>
       </plugin>
     </plugins>
-  </build>
+  </build> -->
+
 </project>
