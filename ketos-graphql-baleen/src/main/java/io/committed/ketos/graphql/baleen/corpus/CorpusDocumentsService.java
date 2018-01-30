@@ -145,12 +145,17 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   public Mono<Timeline> getDocumentTimeline(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLArgument(name = "interval",
+          description = "Time interval to group by") final TimeInterval interval,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByDate(Optional.ofNullable(documentFilter))).groupBy(TimeBin::getTs)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TimeBin(g.key(), l)))
-        .collectList().map(l -> new Timeline(TimeInterval.DAY, l));
+        .flatMap(p -> p.countByDate(Optional.ofNullable(documentFilter), interval))
+        .groupBy(TimeBin::getTs)
+        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount())
+            .map(l -> new TimeBin(g.key(), l)))
+        .collectList()
+        .map(l -> new Timeline(interval, l));
   }
 
 

@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import io.committed.invest.core.constants.BooleanOperator;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.ExampleUtils;
@@ -343,7 +344,9 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
   }
 
   @Override
-  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter) {
+  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
+    // TODO: This only supports day based query, but we could use a string builder to extend that...
+
     final Aggregation aggregation = newAggregation(
         project().and("document.timestamp").dateAsFormattedString("%Y-%m-%d").as("date"),
         group("date").count().as("count"), project("count").and("_id").as("term"));

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
@@ -39,6 +40,6 @@ public interface DocumentProvider extends DataProvider {
 
   // TODO: Special case, because of the return type... but seems wrong to have this different to
   // above.
-  Flux<TimeBin> countByDate(Optional<DocumentFilter> documentFilter);
+  Flux<TimeBin> countByDate(Optional<DocumentFilter> documentFilter, final TimeInterval interval);
 
 }

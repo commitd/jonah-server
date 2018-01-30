@@ -7,6 +7,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -104,11 +105,11 @@ public class ElasticsearchDocumentProvider
   }
 
   @Override
-  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter) {
+  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
 
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
 
-    return getService().timelineAggregation(query, "dateAccessed");
+    return getService().timelineAggregation(query, "dateAccessed", interval);
   }
 
 }

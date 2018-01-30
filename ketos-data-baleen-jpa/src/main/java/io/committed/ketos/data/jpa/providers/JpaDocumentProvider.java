@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -74,7 +75,9 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   }
 
   @Override
-  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter) {
+  public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
+    // TODO: Only group by day
+
     return Flux.fromStream(documents.countByDate()).map(t -> {
       final LocalDate date = LocalDate.parse(t.getTerm());
       return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
