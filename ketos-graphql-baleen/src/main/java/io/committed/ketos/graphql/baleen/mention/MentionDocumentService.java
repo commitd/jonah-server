@@ -35,6 +35,7 @@ public class MentionDocumentService extends AbstractGraphQlService {
 
     return getProvidersFromContext(mention, EntityProvider.class, hints)
         .flatMap(p -> p.getById(mention.getEntityId()))
+        .doOnNext(eachAddParent(mention))
         .flatMap(e -> edService.getDocumentForEntity(e, hints))
         .next()
         .doOnNext(eachAddParent(mention));
