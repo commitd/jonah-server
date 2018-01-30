@@ -79,8 +79,8 @@ public final class MentionFilters {
     if (mentionFilter.getWithin() != null) {
       final GeoBox within = mentionFilter.getWithin();
       final Box box = new Box(
-          new Point(within.getSafeE(), within.getN()),
-          new Point(within.getSafeW(), within.getS()));
+          new Point(within.getSafeE(), within.getSafeN()),
+          new Point(within.getSafeW(), within.getSafeS()));
       criteria = criteria.and(mentionsPrefix + "geoJson").within(box);
     }
 
