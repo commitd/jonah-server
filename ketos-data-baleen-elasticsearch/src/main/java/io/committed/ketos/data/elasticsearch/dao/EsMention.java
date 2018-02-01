@@ -1,15 +1,24 @@
 package io.committed.ketos.data.elasticsearch.dao;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
+import io.committed.ketos.common.data.BaleenMention.BaleenMentionBuilder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Slf4j
 public class EsMention {
+
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   private String externalId;
 
@@ -38,8 +47,38 @@ public class EsMention {
   }
 
   public BaleenMention toBaleenMention() {
-    return BaleenMention.builder().begin(begin).end(end).confidence(confidence).entityId(externalId)
-        .id(externalId).type(type).value(value).build();
+
+
+    final BaleenMentionBuilder builder = BaleenMention.builder()
+        .begin(begin)
+        .end(end)
+        .confidence(confidence)
+        .entityId(externalId)
+        .id(externalId)
+        .type(type)
+        .value(value);
+
+
+    final Map<String, Object> properties = new HashMap<>();
+
+    if (geoJson instanceof Map) {
+      try {
+        final String geoJsonString = MAPPER.writeValueAsString(geoJson);
+        properties.put("geoJson", geoJsonString);
+
+      } catch (final JsonProcessingException e) {
+        // Ignore really..
+        log.warn("Unable to serialise geoJson, because {}", e.getMessage());
+      }
+    }
+
+    properties.put("timestampStart", timestampStart);
+    properties.put("timestampStop", timestampStop);
+
+
+    builder.properties(properties);
+
+    return builder.build();
   }
 
   public static BaleenEntity toBaleenEntity(final String documentId, final BaleenMention mention) {

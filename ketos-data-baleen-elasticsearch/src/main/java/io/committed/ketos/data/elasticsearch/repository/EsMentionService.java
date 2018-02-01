@@ -38,12 +38,13 @@ public class EsMentionService {
   }
 
   public Mono<EsMention> getById(final String id) {
-    return findMentions(Optional.of(QueryBuilders.termQuery(EsDocument.MENTIONS_PREFIX + "externalId", id)), 0, 1)
-        .next();
+    return findMentions(Optional.empty(),
+        Optional.of(QueryBuilders.termQuery(EsDocument.MENTIONS_PREFIX + "externalId", id)), 0, 1)
+            .next();
   }
 
   public Flux<EsMention> getAll(final int offset, final int limit) {
-    return findMentions(Optional.empty(), offset, limit);
+    return findMentions(Optional.empty(), Optional.empty(), offset, limit);
   }
 
   public Mono<Long> count() {
@@ -78,17 +79,33 @@ public class EsMentionService {
     // between AND / OR.
     // mustMention would always be and.
 
-    final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    final BoolQueryBuilder documentQuery = QueryBuilders.boolQuery();
 
-    mustMentionFilter.flatMap(f -> MentionFilters.toQuery(f, EsDocument.MENTIONS_PREFIX)).ifPresent(boolQuery::must);
+
+
+    mustMentionFilter.flatMap(f -> MentionFilters.toDocumentQuery(f))
+        .ifPresent(documentQuery::must);
 
     additionalMentionFilters.stream()
-        .map(f -> MentionFilters.toQuery(f, EsDocument.MENTIONS_PREFIX))
+        .map(f -> MentionFilters.toDocumentQuery(f))
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .forEach(boolQuery::must);
+        .forEach(documentQuery::must);
 
-    return findMentions(Optional.ofNullable(boolQuery), offset, limit);
+
+    final BoolQueryBuilder entitiesQuery = QueryBuilders.boolQuery();
+
+
+    mustMentionFilter.flatMap(f -> MentionFilters.toMentionsQuery(f, EsDocument.MENTIONS_PREFIX))
+        .ifPresent(entitiesQuery::must);
+
+    additionalMentionFilters.stream()
+        .map(f -> MentionFilters.toMentionsQuery(f, EsDocument.MENTIONS_PREFIX))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(entitiesQuery::must);
+
+    return findMentions(Optional.ofNullable(documentQuery), Optional.ofNullable(entitiesQuery), offset, limit);
   }
 
 
@@ -103,11 +120,19 @@ public class EsMentionService {
                 .subAggregation(new TermsAggregationBuilder("terms", ValueType.STRING)
                     .field(EsDocument.MENTIONS_PREFIX + field).size(limit)));
 
-    final Optional<QueryBuilder> query = MentionFilters.toQuery(filter, EsDocument.MENTIONS_PREFIX);
+    final Optional<QueryBuilder> documentQuery = MentionFilters.toDocumentQuery(filter);
+    final Optional<QueryBuilder> mentionQuery = MentionFilters.toMentionsQuery(filter, EsDocument.MENTIONS_PREFIX);
 
-    if (query.isPresent()) {
-      qb.withQuery(QueryBuilders.nestedQuery(EsDocument.MENTIONS,
-          query.get(), ScoreMode.None));
+    if (documentQuery.isPresent() || mentionQuery.isPresent()) {
+      final BoolQueryBuilder query = QueryBuilders.boolQuery();
+
+      documentQuery.ifPresent(q -> query.must(q));
+
+      mentionQuery.ifPresent(q -> query.must(QueryBuilders.nestedQuery(EsDocument.MENTIONS,
+          q, ScoreMode.None)));
+
+
+      qb.withQuery(query);
     }
 
     return documents.query(qb, response -> {
@@ -120,55 +145,85 @@ public class EsMentionService {
   }
 
   public Flux<EsMention> getByDocument(final String id) {
-    return documents.getById(id).flatMapMany(d -> Flux.fromIterable(d.getEntities()));
+    return documents.getById(id)
+        .flatMapMany(d -> Flux.fromIterable(d.getEntities()))
+        .doOnNext(m -> m.setDocumentId(id));
+
   }
 
-  private Flux<EsMention> findMentions(final Optional<QueryBuilder> query, final int mentionOffset,
+  private Flux<EsMention> findMentions(final Optional<QueryBuilder> documentQuery,
+      final Optional<QueryBuilder> entitiesQuery, final int mentionOffset,
       final int mentionLimit) {
     // We get all the documents which have a mentions from 0 to offset + limit
     // that way we know we have at least limit number of mentions.
 
 
+    if (entitiesQuery.isPresent()) {
 
-    if (query.isPresent()) {
-      final QueryBuilder qb = QueryBuilders.nestedQuery(EsDocument.MENTIONS,
-          query.get(), ScoreMode.None)
-          .innerHit(new InnerHitBuilder().setSize(mentionLimit));
+      final BoolQueryBuilder qb = QueryBuilders.boolQuery();
+
+      documentQuery.ifPresent(qb::must);
+
+      qb.must(QueryBuilders.nestedQuery(EsDocument.MENTIONS,
+          entitiesQuery.get(), ScoreMode.None)
+          .innerHit(new InnerHitBuilder().setSize(mentionLimit)));
 
 
       return documents.query(documents.queryBuilder()
           .withQuery(qb)
           .withPageable(org.springframework.data.domain.PageRequest.of(0, mentionOffset + mentionLimit)), response -> {
-
             final SearchHit[] searchHits = response.getHits().getHits();
-
             if (searchHits.length > 0) {
-
-              return Flux.fromArray(searchHits).flatMap(h -> {
-                final Map<String, SearchHits> innerHits = h.getInnerHits();
-                if (innerHits != null) {
-                  final SearchHits inner = innerHits.get(EsDocument.MENTIONS);
-                  return Flux.fromArray(inner.getHits());
-                } else {
-                  return Flux.empty();
-                }
-              }).flatMap(h -> {
-                final String source = h.getSourceAsString();
-                return SourceUtils.convertSource(mapper, source, EsMention.class);
-              });
+              return mapInnerSearchHitsToMentions(searchHits);
             } else {
               return Flux.empty();
             }
           });
     } else {
-      // If we have no query.. then its just the exists
+      // If we have no query.. then its just the 'exists'
+
+      final BoolQueryBuilder qb = QueryBuilders.boolQuery()
+          .must(QueryBuilders.nestedQuery(EsDocument.MENTIONS, QueryBuilders.matchAllQuery(), ScoreMode.None));
+
+      documentQuery.ifPresent(qb::must);
+
       return documents
-          .search(QueryBuilders.nestedQuery(EsDocument.MENTIONS, QueryBuilders.matchAllQuery(), ScoreMode.None), 0,
+          .search(qb, 0,
               mentionOffset + mentionLimit)
-          .flatMap(d -> Flux.fromIterable(d.getEntities()))
+          .flatMap(d -> Flux.fromIterable(d.getEntities())
+              .doOnNext(m -> m.setDocumentId(d.getExternalId())))
           .skip(mentionOffset)
           .take(mentionLimit);
     }
 
   }
+
+  private Flux<EsMention> mapInnerSearchHitsToMentions(final SearchHit[] searchHits) {
+    return Flux.fromArray(searchHits)
+        .flatMap(h -> {
+          final Map<String, SearchHits> innerHitsMap = h.getInnerHits();
+
+          if (innerHitsMap == null) {
+            return Flux.empty();
+          }
+
+          final SearchHits innerHits = innerHitsMap.get(EsDocument.MENTIONS);
+
+          if (innerHits == null) {
+            return Flux.empty();
+          }
+
+          return SourceUtils.convertSource(mapper, h.getSourceAsString(), EsDocument.class)
+              .flatMapMany(d -> {
+                return Flux.fromArray(innerHits.getHits())
+                    .flatMap(i -> {
+                      return SourceUtils.convertSource(mapper, i.getSourceAsString(), EsMention.class)
+                          .doOnNext(m -> m.setDocumentId(d.getExternalId()));
+                    });
+              });
+        });
+
+
+  }
+
 }

@@ -52,4 +52,5 @@ public class EsDocument {
             .build())
         .build();
   }
+
 }

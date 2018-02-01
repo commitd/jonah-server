@@ -12,17 +12,29 @@ public final class MentionFilters {
     // Singleton
   }
 
-  public static Optional<QueryBuilder> toQuery(final Optional<MentionFilter> filter, final String prefix) {
-    return filter.flatMap(f -> toQuery(f, prefix));
+  public static Optional<QueryBuilder> toDocumentQuery(final Optional<MentionFilter> filter) {
+    return filter.flatMap(f -> toDocumentQuery(f));
   }
 
-  public static Optional<QueryBuilder> toQuery(final MentionFilter filter, final String prefix) {
-    final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+  public static Optional<QueryBuilder> toMentionsQuery(final Optional<MentionFilter> filter, final String prefix) {
+    return filter.flatMap(f -> toMentionsQuery(f, prefix));
+  }
+
+  public static Optional<QueryBuilder> toDocumentQuery(final MentionFilter filter) {
 
     if (filter.getDocId() != null) {
       // This is on the .externalId not entities.docId, so no prefix
-      queryBuilder.must(QueryBuilders.termQuery("docId", filter.getDocId()));
+      return Optional.of(QueryBuilders.matchQuery("externalId", filter.getDocId()));
+    } else {
+
+      return Optional.empty();
     }
+  }
+
+  public static Optional<QueryBuilder> toMentionsQuery(final MentionFilter filter, final String prefix) {
+    final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+
+
 
     if (filter.getEndTimestamp() != null) {
       queryBuilder.must(QueryBuilders.rangeQuery("timestampEnd").lte(filter.getEndTimestamp()));

@@ -60,7 +60,8 @@ public class ElasticsearchDocumentProvider
 
     if (documentSearch.getMentionFilters() != null) {
       documentSearch.getMentionFilters().stream()
-          .map(f -> MentionFilters.toQuery(f, EsDocument.MENTIONS_PREFIX))
+          // Note this use toEntities, which ignores the docId
+          .map(f -> MentionFilters.toMentionsQuery(f, EsDocument.MENTIONS_PREFIX))
           .filter(Optional::isPresent)
           .map(Optional::get)
           .forEach(queryBuilder::must);
