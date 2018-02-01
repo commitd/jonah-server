@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.springframework.data.geo.Box;
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.data.mongodb.core.query.Criteria;
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.ketos.common.graphql.input.MentionFilter;
@@ -68,20 +68,39 @@ public final class MentionFilters {
     }
 
     if (mentionFilter.getStartTimestamp() != null) {
-      criteria = criteria.and(mentionsPrefix + "value").gte(mentionFilter.getStartTimestamp());
+      criteria = criteria.and(mentionsPrefix + "timestampStart").gte(mentionFilter.getStartTimestamp());
     }
 
 
     if (mentionFilter.getEndTimestamp() != null) {
-      criteria = criteria.and(mentionsPrefix + "value").lte(mentionFilter.getEndTimestamp());
+      criteria = criteria.and(mentionsPrefix + "timestampEnd").lte(mentionFilter.getEndTimestamp());
     }
 
     if (mentionFilter.getWithin() != null) {
       final GeoBox within = mentionFilter.getWithin();
-      final Box box = new Box(
-          new Point(within.getSafeE(), within.getSafeN()),
-          new Point(within.getSafeW(), within.getSafeS()));
-      criteria = criteria.and(mentionsPrefix + "geoJson").within(box);
+
+      // TODO Ideally we'd use a box and within as that's nice and easy...
+      // but then we have lots of country stuff which is global (is colonies) so
+      // so we need to us an intersection.
+      // final Box box = new Box(
+      // new Point(within.getSafeW(), within.getSafeS(),
+      // new Point(within.getSafeE(), within.getSafeN());
+
+
+      final Point bl = new Point(within.getSafeW(), within.getSafeS());
+      final Point br = new Point(within.getSafeE(), within.getSafeS());
+      final Point tr = new Point(within.getSafeE(), within.getSafeN());
+      final Point tl = new Point(within.getSafeW(), within.getSafeN());
+
+      final GeoJsonPolygon geoJson = new GeoJsonPolygon(bl, br, tr, tl, bl);
+
+      // TODO: In either within on intersection, this won't actually find anything if the search is bigger
+      // than a hemisphere!
+      // there's a fix
+      // https://docs.mongodb.com/manual/reference/operator/query/geoIntersects/#intersects-a-big-polygon
+      // but you cant set the CRS in Sprign Data Mongo.
+
+      criteria = criteria.and(mentionsPrefix + "geoJson").intersects(geoJson);
     }
 
 

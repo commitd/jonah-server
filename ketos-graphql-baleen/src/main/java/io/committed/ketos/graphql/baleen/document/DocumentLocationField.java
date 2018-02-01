@@ -18,6 +18,7 @@ import io.committed.invest.core.dto.analytic.GeoLocation;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
+import io.committed.ketos.common.constants.BaleenTypes;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.MentionFilter;
@@ -59,7 +60,10 @@ public class DocumentLocationField extends AbstractGraphQlService {
     // Create a fake search
     final MentionFilter filter = new MentionFilter();
     filter.setDocId(document.getId());
-    filter.setWithin(new GeoBox(top, right, bottom, left));
+    filter.setType(BaleenTypes.LOCATION);
+    if (left != null && right != null && top != null && bottom != null) {
+      filter.setWithin(new GeoBox(top, right, bottom, left));
+    }
     final MentionSearch search = new MentionSearch(document, filter);
 
     return getProvidersFromContext(document, MentionProvider.class, hints)

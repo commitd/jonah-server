@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.NonFieldExposingReplaceRootOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
@@ -118,8 +120,9 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     Flux<BaleenMention> results;
     if (search.getMentionFilter() != null) {
       final Criteria criteria = MentionFilters.createCriteria(search.getMentionFilter(), "", "");
-      results = aggregateOverMentions(MongoMention.class,
+      results = aggregateOverMentions(Document.class,
           Aggregation.match(criteria))
+              .map(d -> new MongoMention(d))
               .map(MongoMention::toMention);
     } else {
       results = getAll(offset, limit);
@@ -153,9 +156,10 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
     operations.add(Aggregation.unwind("entities"));
     operations.add(new AddFieldsOperation(map));
-    operations.add(Aggregation.replaceRoot("entities"));
+    // Ideally this would be: operations.add(Aggregation.replaceRoot("entities"));
+    // See NonFieldExposingReplaceRootOperation for reasons why it.
+    operations.add(new NonFieldExposingReplaceRootOperation("entities"));
 
     return operations;
   }
-
 }
