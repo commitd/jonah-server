@@ -42,6 +42,12 @@ public class MongoMention {
     type = m.getString("type");
     value = m.get("value").toString();
 
+    // Carried through by some aggregations, could be string / objectid / etc
+    final Object entity = m.get("entityId");
+    if (entity != null) {
+      entityId = entity.toString();
+    }
+
     // Baleen's output of GeoJson a hack really, without it begin a string it'll be deserialsed as a
     // bson.Document.
     final Object geoJson = m.get("geoJson");

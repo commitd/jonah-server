@@ -17,7 +17,7 @@ public class FakeMongoEntities {
   @JsonProperty("docId")
   private String docId;
 
-  @JsonProperty("entities")
+  @JsonProperty(MongoEntities.MENTIONS)
   private List<BaleenMention> entities;
 
 }

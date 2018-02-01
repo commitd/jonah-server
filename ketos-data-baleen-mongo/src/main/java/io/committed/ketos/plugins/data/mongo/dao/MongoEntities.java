@@ -15,13 +15,17 @@ import reactor.core.publisher.Flux;
 @NoArgsConstructor
 public class MongoEntities {
 
+  public static final String MENTIONS = "entities";
+
+  public static final String MENTIONS_PREFIX = MENTIONS + ".";
+
   @Id
   private String id;
 
   @JsonProperty("docId")
   private String docId;
 
-  @JsonProperty("entities")
+  @JsonProperty(MENTIONS)
   private List<org.bson.Document> entities;
 
   public BaleenEntity toEntity() {

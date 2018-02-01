@@ -14,8 +14,8 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.NonFieldExposingReplaceRootOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -79,24 +79,21 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
   @Override
   public Mono<BaleenMention> getById(final String id) {
-    return aggregateOverMentions(MongoMention.class,
-        Aggregation.match(Criteria.where("externalId").is(id)))
-            .next()
-            .map(MongoMention::toMention);
+    final MentionFilter filter = new MentionFilter();
+    filter.setId(id);
+    final MentionSearch search = MentionSearch.builder().mentionFilter(filter).build();
+    return search(search, 0, 1).getResults().next();
   }
 
   @Override
   public Flux<BaleenMention> getAll(final int offset, final int limit) {
-    return aggregateOverMentions(MongoMention.class)
-        .skip(offset)
-        .take(limit)
-        .map(MongoMention::toMention);
+    return search(MentionSearch.builder().build(), offset, limit).getResults();
   }
 
 
   @Override
   public Mono<Long> count() {
-    return aggregateOverMentions(CountOutcome.class,
+    return aggregateOverMentions(CountOutcome.class, Optional.empty(),
         Aggregation.count().as("total"))
             .next()
             .map(CountOutcome::getTotal);
@@ -109,7 +106,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     final String field = path.get(path.size() - 1);
 
     return aggregateOverMentions(TermBin.class,
-        filter.map(f -> Aggregation.match(MentionFilters.createCriteria(filter.get(), "", ""))).orElse(null),
+        filter,
         group(field).count().as("count"),
         Aggregation.project("count").and("_id").as("term"));
   }
@@ -117,25 +114,37 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
   @Override
   public MentionSearchResult search(final MentionSearch search, final int offset, final int limit) {
 
-    Flux<BaleenMention> results;
-    if (search.getMentionFilter() != null) {
-      final Criteria criteria = MentionFilters.createCriteria(search.getMentionFilter(), "", "");
-      results = aggregateOverMentions(Document.class,
-          Aggregation.match(criteria))
-              .map(d -> new MongoMention(d))
-              .map(MongoMention::toMention);
-    } else {
-      results = getAll(offset, limit);
-    }
+    final Flux<BaleenMention> results = aggregateOverMentions(Document.class,
+        Optional.ofNullable(search.getMentionFilter()))
+            .map(MongoMention::new)
+            .map(MongoMention::toMention);
 
     return new MentionSearchResult(results, Mono.empty());
   }
 
 
 
-  private <T> Flux<T> aggregateOverMentions(final Class<T> clazz, final AggregationOperation... operations) {
-    final List<AggregationOperation> list = extractMention();
+  private <T> Flux<T> aggregateOverMentions(final Class<T> clazz, final Optional<MentionFilter> filter,
+      final AggregationOperation... operations) {
+    final List<AggregationOperation> list = new LinkedList<>();
+
+    // WE apply the same filter as a pre and post match... which is a bit strange but
+    // - pre match will filter down the entities
+    // - post match will filter down the mentions
+
+    final Optional<MatchOperation> preAggregation =
+        filter.map(
+            f -> Aggregation.match(MentionFilters.createCriteria(filter.get(), "", MongoEntities.MENTIONS_PREFIX)));
+    final Optional<MatchOperation> postAggregation =
+        filter.map(f -> Aggregation.match(MentionFilters.createCriteria(filter.get(), "", "")));
+
+
+    preAggregation.ifPresent(list::add);
+    extractMention(list);
     Arrays.stream(operations).filter(Objects::nonNull).forEach(list::add);
+    postAggregation.ifPresent(list::add);
+
+
     final Aggregation aggregation = Aggregation.newAggregation(list);
     return getTemplate().aggregate(aggregation, MongoEntities.class, clazz);
   }
@@ -146,8 +155,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
    *
    * @return
    */
-  private List<AggregationOperation> extractMention() {
-    final List<AggregationOperation> operations = new LinkedList<>();
+  private void extractMention(final List<AggregationOperation> operations) {
 
     final Map<String, Object> map = new HashMap<>();
     map.put("entities.entityId", "$_id");
@@ -160,6 +168,5 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     // See NonFieldExposingReplaceRootOperation for reasons why it.
     operations.add(new NonFieldExposingReplaceRootOperation("entities"));
 
-    return operations;
   }
 }
