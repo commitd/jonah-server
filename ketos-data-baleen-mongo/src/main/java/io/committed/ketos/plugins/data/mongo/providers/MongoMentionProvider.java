@@ -146,7 +146,7 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
 
     final Aggregation aggregation = Aggregation.newAggregation(list);
-    return getTemplate().aggregate(aggregation, MongoEntities.class, clazz);
+    return getTemplate().aggregate(aggregation, "entities", clazz);
   }
 
 

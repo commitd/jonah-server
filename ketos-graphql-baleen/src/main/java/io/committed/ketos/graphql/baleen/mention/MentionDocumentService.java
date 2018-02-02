@@ -33,6 +33,5 @@ public class MentionDocumentService extends AbstractGraphQlService {
         .doOnNext(eachAddParent(mention));
   }
 
-
 }
 

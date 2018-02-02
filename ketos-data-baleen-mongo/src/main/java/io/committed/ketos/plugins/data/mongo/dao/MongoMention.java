@@ -79,6 +79,7 @@ public class MongoMention {
     return BaleenMention.builder()
         .entityId(entityId)
         .id(getExternalId())
+        .docId(documentId)
         .confidence(getConfidence())
         .begin(getBegin())
         .end(getEnd())
