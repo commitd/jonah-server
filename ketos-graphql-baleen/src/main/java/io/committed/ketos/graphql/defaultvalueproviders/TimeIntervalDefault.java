@@ -12,7 +12,7 @@ public class TimeIntervalDefault implements DefaultValueProvider {
   @Override
   public OperationArgumentDefaultValue getDefaultValue(final Parameter parameter, final AnnotatedType parameterType,
       final OperationArgumentDefaultValue initialValue) {
-    return new OperationArgumentDefaultValue(TimeInterval.YEAR);
+    return new OperationArgumentDefaultValue(TimeInterval.MONTH);
   }
 
 }
