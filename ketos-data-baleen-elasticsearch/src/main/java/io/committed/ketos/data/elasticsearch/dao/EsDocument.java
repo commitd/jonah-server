@@ -20,6 +20,11 @@ public class EsDocument {
 
   public static final String RELATIONS_PREFIX = RELATIONS + ".";
 
+  public static final String METADATA = "metadata";
+
+  public static final String METADATA_PREFIX = METADATA + ".";
+
+
   private String content;
   private String language;
   private String externalId;

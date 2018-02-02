@@ -14,6 +14,4 @@ public class EsDocumentService extends ElasticsearchSupportService<EsDocument> {
         BaleenElasticsearchConstants.DOCUMENT_TYPE, EsDocument.class);
   }
 
-
-
 }
