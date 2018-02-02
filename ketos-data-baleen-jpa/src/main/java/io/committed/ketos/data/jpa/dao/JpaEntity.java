@@ -35,7 +35,7 @@ public class JpaEntity {
     final List<BaleenMention> mentions = new ArrayList<>();
     for (int i = 0; i < Math.min(externalId.size(), value.size()); i++) {
       mentions.add(BaleenMention.builder().type(type).entityId(externalId.get(i))
-          .value(value.get(i)).build());
+          .docId(docId).value(value.get(i)).build());
     }
 
     return BaleenEntity.builder()

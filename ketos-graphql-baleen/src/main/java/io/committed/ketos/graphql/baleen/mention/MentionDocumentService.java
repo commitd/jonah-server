@@ -6,8 +6,7 @@ import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
-import io.committed.ketos.common.providers.baleen.EntityProvider;
-import io.committed.ketos.graphql.baleen.entity.EntityDocumentsService;
+import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -18,12 +17,9 @@ import reactor.core.publisher.Mono;
 @GraphQLService
 public class MentionDocumentService extends AbstractGraphQlService {
 
-  private final EntityDocumentsService edService;
-
   @Autowired
-  public MentionDocumentService(final DataProviders corpusProviders, final EntityDocumentsService edService) {
+  public MentionDocumentService(final DataProviders corpusProviders) {
     super(corpusProviders);
-    this.edService = edService;
   }
 
   @GraphQLQuery(name = "document", description = "Get document for a mention")
@@ -31,12 +27,8 @@ public class MentionDocumentService extends AbstractGraphQlService {
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    // Mention -> Entity -> Document !
-
-    return getProvidersFromContext(mention, EntityProvider.class, hints)
-        .flatMap(p -> p.getById(mention.getEntityId()))
-        .doOnNext(eachAddParent(mention))
-        .flatMap(e -> edService.getDocumentForEntity(e, hints))
+    return getProvidersFromContext(mention, DocumentProvider.class, hints)
+        .flatMap(p -> p.getById(mention.getDocId()))
         .next()
         .doOnNext(eachAddParent(mention));
   }

@@ -29,6 +29,7 @@ public class MongoMention {
 
   // Though not part of the Mongo schema from Baleen some aggregations create this
   private String entityId;
+  private String docId;
 
   private Map<String, Object> properties = new HashMap<>();
 
@@ -46,6 +47,11 @@ public class MongoMention {
     final Object entity = m.get("entityId");
     if (entity != null) {
       entityId = entity.toString();
+    }
+
+    final Object docId = m.get("docId");
+    if (docId != null) {
+      this.docId = docId.toString();
     }
 
     // Baleen's output of GeoJson a hack really, without it begin a string it'll be deserialsed as a
@@ -69,7 +75,7 @@ public class MongoMention {
         .forEach(e -> properties.put(e.getKey(), e.getValue()));
   }
 
-  public BaleenMention toMention(final String entityId) {
+  public BaleenMention toMention(final String entityId, final String documentId) {
     return BaleenMention.builder()
         .entityId(entityId)
         .id(getExternalId())
@@ -85,7 +91,7 @@ public class MongoMention {
   public BaleenMention toMention() {
     // This will only work for aggregation outputs... which ave the entityId specifically added to them
     // deserialising from the entities collection does not have entityId per mention.
-    return toMention(getEntityId());
+    return toMention(getEntityId(), getDocId());
   }
 
   public static Document fromProbe(final MentionProbe probe) {

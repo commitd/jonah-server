@@ -21,11 +21,12 @@ public class BaleenMention extends AbstractGraphQLNode {
   private final String type;
   private final String value;
   private final String entityId;
+  private final String docId;
   private final Map<String, Object> properties;
 
   public BaleenMention(@GraphQLId final String id, final double confidence, final int begin, final int end,
       final String type, final String value,
-      final String entityId, final Map<String, Object> properties) {
+      final String entityId, final String docId, final Map<String, Object> properties) {
     super();
     this.id = id;
     this.confidence = confidence;
@@ -34,6 +35,7 @@ public class BaleenMention extends AbstractGraphQLNode {
     this.type = type;
     this.value = value;
     this.entityId = entityId;
+    this.docId = docId;
     this.properties = properties == null ? Collections.emptyMap() : properties;
   }
 

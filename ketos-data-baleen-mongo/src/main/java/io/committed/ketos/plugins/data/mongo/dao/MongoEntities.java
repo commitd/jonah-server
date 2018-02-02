@@ -32,7 +32,7 @@ public class MongoEntities {
     return BaleenEntity.builder()
         .id(getId())
         .docId(getDocId())
-        .mentions(Flux.fromStream(getEntities().stream()).map(d -> new MongoMention(d).toMention(getId())))
+        .mentions(Flux.fromStream(getEntities().stream()).map(d -> new MongoMention(d).toMention(getId(), getDocId())))
         .build();
   }
 

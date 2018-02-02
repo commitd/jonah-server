@@ -43,15 +43,21 @@ public class EsMention {
 
   public BaleenEntity toBaleenEntity() {
     return BaleenEntity.builder().docId(documentId).id(externalId)
-        .mentions(Mono.just(toBaleenMention()).flux()).build();
+        .mentions(Mono.just(toBaleenMention(documentId)).flux()).build();
   }
 
   public BaleenMention toBaleenMention() {
+    // This should only be used with documentId is non-null
+    return toBaleenMention(documentId);
+  }
+
+  public BaleenMention toBaleenMention(final String documentId) {
 
 
     final BaleenMentionBuilder builder = BaleenMention.builder()
         .begin(begin)
         .end(end)
+        .docId(documentId)
         .confidence(confidence)
         .entityId(externalId)
         .id(externalId)
