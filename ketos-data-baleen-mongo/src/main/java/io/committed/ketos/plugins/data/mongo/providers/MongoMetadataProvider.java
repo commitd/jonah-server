@@ -63,14 +63,23 @@ public class MongoMetadataProvider extends AbstractMongoDataProvider implements 
 
   private Flux<TermBin> countByValue(final String key, final int size) {
 
-    // db.documents.aggregate([
-    // {$project: {m: {$objectToArray: "$metadata"}}},
-    // {$project: {v: "$m.v"}},
-    // {$unwind: "$v"},
-    // {$unwind: "$v"},
-    // {$group: {_id:"$v" , count:{ $sum: 1}}},
-    // {$project: {term: "$_id", count: "$count"}}
-    // ])
+    // @formatter:off
+
+    /**
+    db.documents.aggregate(
+       // If key { "$match" : { "metadata.Application-Version" : { "$exists" : true } } },
+        { "$project" : { "m" : { "$objectToArray" : "$metadata" } } },
+        { "$unwind" : "$m" },
+        // if key { "$match" : { "m.k" : "Application-Version" } },
+        { "$project" : { "v" : "$m.v" } },
+        { "$unwind" : "$v" },
+        { "$unwind" : "$v" },
+        { "$group" : { "_id" : "$v", "count" : { "$sum" : 1 } } },
+        { "$project" : { "count" : 1, "term" : "$_id" } }
+        )
+    */
+
+ // @formatter:on
 
 
     final List<AggregationOperation> list = new ArrayList<>();
@@ -79,8 +88,19 @@ public class MongoMetadataProvider extends AbstractMongoDataProvider implements 
       list.add(match(Criteria.where(String.format("metadata.%s", key)).exists(true)));
     }
 
-    list.addAll(Arrays.asList(project().and(objectToArray("metadata")).as("m"),
-        project().and("m.v").as("v"), unwind("v"), unwind("v"), group("v").count().as("count"),
+    list.add(project().and(objectToArray("metadata")).as("m"));
+    list.add(unwind("m"));
+
+    if (key != null) {
+      list.add(match(Criteria.where("m.k").is(key)));
+    }
+
+
+    list.addAll(Arrays.asList(
+        project().and("m.v").as("v"),
+        unwind("v"),
+        unwind("v"),
+        group("v").count().as("count"),
         project("count").and("_id").as("term")));
 
     final Aggregation aggregation = newAggregation(list);
