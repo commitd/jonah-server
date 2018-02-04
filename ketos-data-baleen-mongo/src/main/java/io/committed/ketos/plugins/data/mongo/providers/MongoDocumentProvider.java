@@ -341,10 +341,20 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
 
   @Override
   public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
-    // TODO: This only supports day based query, but we could use a string builder to extend that...
+    String dateString;
+    switch (interval) {
+      case YEAR:
+        dateString = "%Y-01-01";
+        break;
+      case MONTH:
+        dateString = "%Y-%m-01";
+        break;
+      default: // TODO: Everything else we drop to day resolution (could do hour, min, sec
+        dateString = "%Y-%m-%d";
+    }
 
     final Aggregation aggregation = newAggregation(
-        project().and("document.timestamp").dateAsFormattedString("%Y-%m-%d").as("date"),
+        project().and("document.timestamp").dateAsFormattedString(dateString).as("date"),
         group("date").count().as("count"), project("count").and("_id").as("term"));
     return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class).map(t -> {
       final LocalDate date = LocalDate.parse(t.getTerm());
