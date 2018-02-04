@@ -13,10 +13,14 @@ import io.committed.ketos.common.graphql.support.GraphQLNode;
 import reactor.core.publisher.Flux;
 
 public abstract class AbstractGraphQlService {
-  private final DataProviders corpusProviders;
+  private final DataProviders dataProviders;
 
   protected AbstractGraphQlService(final DataProviders corpusProviders) {
-    this.corpusProviders = corpusProviders;
+    this.dataProviders = corpusProviders;
+  }
+
+  public DataProviders getDataProviders() {
+    return dataProviders;
   }
 
   protected <T extends AbstractGraphQLNode> Function<T, T> mapAddParent(
@@ -36,7 +40,7 @@ public abstract class AbstractGraphQlService {
 
   protected <T extends DataProvider> Flux<T> getProviders(final BaleenCorpus corpus,
       final Class<T> clazz, final DataHints hints) {
-    return corpusProviders.findForDataset(corpus.getId(), clazz, hints);
+    return dataProviders.findForDataset(corpus.getId(), clazz, hints);
   }
 
   protected <T extends DataProvider> Flux<T> getProvidersFromContext(
