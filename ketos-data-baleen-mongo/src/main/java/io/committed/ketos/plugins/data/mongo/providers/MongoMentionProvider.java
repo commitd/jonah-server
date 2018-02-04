@@ -116,6 +116,8 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
 
     final Flux<BaleenMention> results = aggregateOverMentions(Document.class,
         Optional.ofNullable(search.getMentionFilter()))
+            .skip(offset)
+            .take(limit)
             .map(MongoMention::new)
             .map(MongoMention::toMention);
 
