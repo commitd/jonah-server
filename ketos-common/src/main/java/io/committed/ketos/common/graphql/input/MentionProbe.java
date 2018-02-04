@@ -8,9 +8,9 @@ public class MentionProbe {
 
   private String docId;
   private String id;
-  private double confidence;
-  private int begin;
-  private int end;
+  private Double confidence;
+  private Integer begin;
+  private Integer end;
   private String type;
   private String value;
   private String entityId;

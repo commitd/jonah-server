@@ -21,9 +21,9 @@ public class RelationProbe {
 
   private String targetValue;
 
-  private int begin;
+  private Integer begin;
 
-  private int end;
+  private Integer end;
 
   private String type;
 
@@ -33,7 +33,7 @@ public class RelationProbe {
 
   private String value;
 
-  private double confidence;
+  private Double confidence;
 
   public RelationFilter toFilter() {
     final RelationFilter filter = new RelationFilter();
