@@ -20,7 +20,7 @@ public class EsMetadataProviderFactory
 
 
   public EsMetadataProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-metadata", MetadataProvider.class);
+    super("baleen-es-metadata", MetadataProvider.class, "documents", "document");
     this.mapper = mapper;
   }
 
@@ -31,11 +31,12 @@ public class EsMetadataProviderFactory
     try {
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
-      final EsDocumentService service = new EsDocumentService(mapper, elastic);
+      final EsDocumentService service =
+          new EsDocumentService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
       return Mono.just(new ElasticsearchMetadataProvider(dataset, datasource, service));
     } catch (final Exception e) {
-      log.error("Unable to create ES Document Provider", e);
+      log.error("Unable to create ES Metadata Provider", e);
       return Mono.empty();
     }
   }

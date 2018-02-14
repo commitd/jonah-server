@@ -10,12 +10,13 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.invest.support.data.utils.FieldUtils;
+import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
-import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.filters.DocumentFilters;
 import io.committed.ketos.data.elasticsearch.filters.MentionFilters;
 import io.committed.ketos.data.elasticsearch.filters.RelationFilters;
@@ -24,7 +25,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ElasticsearchDocumentProvider
-    extends AbstractElasticsearchServiceDataProvider<EsDocument, EsDocumentService>
+    extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements DocumentProvider {
 
   public ElasticsearchDocumentProvider(final String dataset, final String datasource,
@@ -35,7 +36,7 @@ public class ElasticsearchDocumentProvider
   @Override
   public Mono<BaleenDocument> getById(final String id) {
     return getService().getById(id)
-        .map(EsDocument::toBaleenDocument);
+        .map(Converters::toBaleenDocument);
   }
 
   @Override
@@ -46,7 +47,7 @@ public class ElasticsearchDocumentProvider
 
   @Override
   public Flux<BaleenDocument> getAll(final int offset, final int size) {
-    return getService().getAll(offset, size).map(EsDocument::toBaleenDocument);
+    return getService().getAll(offset, size).map(Converters::toBaleenDocument);
   }
 
   @Override
@@ -76,7 +77,7 @@ public class ElasticsearchDocumentProvider
     }
 
     final Flux<BaleenDocument> results =
-        getService().search(queryBuilder, offset, limit).map(EsDocument::toBaleenDocument);
+        getService().search(queryBuilder, offset, limit).map(Converters::toBaleenDocument);
 
     // TODO: count is available from ES, but we can't get it via search() which just returns a flux
 

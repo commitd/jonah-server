@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchRelationProvider;
-import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
+import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -20,7 +20,7 @@ public class EsRelationProviderFactory
 
 
   public EsRelationProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-relations", RelationProvider.class);
+    super("baleen-es-relations", RelationProvider.class, "relations", "relation");
     this.mapper = mapper;
   }
 
@@ -31,11 +31,12 @@ public class EsRelationProviderFactory
     try {
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
-      final EsDocumentService service = new EsDocumentService(mapper, elastic);
+      final EsRelationService service =
+          new EsRelationService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
-      return Mono.just(new ElasticsearchRelationProvider(dataset, datasource, service, mapper));
+      return Mono.just(new ElasticsearchRelationProvider(dataset, datasource, service));
     } catch (final Exception e) {
-      log.error("Unable to create ES Document Provider", e);
+      log.error("Unable to create ES Relation Provider", e);
       return Mono.empty();
     }
   }

@@ -20,7 +20,7 @@ public class EsDocumentProviderFactory
 
 
   public EsDocumentProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-documents", DocumentProvider.class);
+    super("baleen-es-documents", DocumentProvider.class, "documents", "document");
     this.mapper = mapper;
   }
 
@@ -31,7 +31,8 @@ public class EsDocumentProviderFactory
     try {
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
-      final EsDocumentService service = new EsDocumentService(mapper, elastic);
+      final EsDocumentService service =
+          new EsDocumentService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
       return Mono.just(new ElasticsearchDocumentProvider(dataset, datasource, service));
     } catch (final Exception e) {

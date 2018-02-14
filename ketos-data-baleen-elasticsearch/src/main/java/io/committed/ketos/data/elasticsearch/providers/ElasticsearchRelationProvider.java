@@ -10,10 +10,11 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.invest.support.elasticsearch.utils.SourceUtils;
+import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.baleenconsumer.OutputRelation;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -21,25 +22,21 @@ import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
-import io.committed.ketos.data.elasticsearch.dao.EsDocument;
-import io.committed.ketos.data.elasticsearch.dao.EsRelation;
 import io.committed.ketos.data.elasticsearch.filters.RelationFilters;
-import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
+import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ElasticsearchRelationProvider
-    extends AbstractElasticsearchServiceDataProvider<EsDocument, EsDocumentService>
+    extends AbstractElasticsearchServiceDataProvider<OutputRelation, EsRelationService>
     implements RelationProvider {
 
   // WE have to give some form of limit in ES...
   private static final int MAX_RELATIONS = 1000;
-  private final ObjectMapper mapper;
 
   public ElasticsearchRelationProvider(final String dataset, final String datasource,
-      final EsDocumentService relationService, final ObjectMapper mapper) {
-    super(dataset, datasource, relationService);
-    this.mapper = mapper;
+      final EsRelationService service) {
+    super(dataset, datasource, service);
   }
 
 
@@ -48,7 +45,7 @@ public class ElasticsearchRelationProvider
     return getService()
         .getById(document.getId())
         .flatMapMany(d -> Flux.fromIterable(d.getRelations()))
-        .map(EsRelation::toBaleenRelation);
+        .map(Converters::toBaleenRelation);
   }
 
 
@@ -63,7 +60,7 @@ public class ElasticsearchRelationProvider
     return getService().search(QueryBuilders.termQuery("relations.source", mention.getId()), 0, MAX_RELATIONS)
         .flatMap(d -> Flux.fromIterable(d.getRelations()))
         .filter(r -> r.getSource() != null && r.getSource().equals(mention.getId()))
-        .map(EsRelation::toBaleenRelation);
+        .map(Converters::toBaleenRelation);
   }
 
   @Override
@@ -71,7 +68,7 @@ public class ElasticsearchRelationProvider
     return getService().search(QueryBuilders.termQuery("relations.target", mention.getId()), 0, MAX_RELATIONS)
         .flatMap(d -> Flux.fromIterable(d.getRelations()))
         .filter(r -> r.getTarget() != null && r.getTarget().equals(mention.getId()))
-        .map(EsRelation::toBaleenRelation);
+        .map(Converters::toBaleenRelation);
   }
 
   @Override
@@ -81,7 +78,7 @@ public class ElasticsearchRelationProvider
         // We have a document which contains the right value ... but it has lots of relations
         .filter(r -> r.getId() != null && r.getId().equals("id"))
         .next()
-        .map(EsRelation::toBaleenRelation);
+        .map(Converters::toBaleenRelation);
   }
 
   @Override
@@ -169,7 +166,7 @@ public class ElasticsearchRelationProvider
           .flatMap(d -> Flux.fromIterable(d.getRelations()))
           .skip(offset)
           .take(limit)
-          .map(EsRelation::toBaleenRelation);
+          .map(Converters::toBaleenRelation);
     }
 
 

@@ -13,6 +13,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.data.elasticsearch.dao.EsDocument;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
@@ -20,7 +21,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class ElasticsearchMetadataProvider
-    extends AbstractElasticsearchServiceDataProvider<EsDocument, EsDocumentService>
+    extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements MetadataProvider {
 
 

@@ -7,8 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchEntityProvider;
-import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
-import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
+import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -21,7 +20,7 @@ public class EsEntityProviderFactory
 
 
   public EsEntityProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-entities", EntityProvider.class);
+    super("baleen-es-entities", EntityProvider.class, "entities", "entity");
     this.mapper = mapper;
   }
 
@@ -32,12 +31,12 @@ public class EsEntityProviderFactory
     try {
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
-      final EsDocumentService documents = new EsDocumentService(mapper, elastic);
-      final EsMentionService mentions = new EsMentionService(documents, mapper);
+      final EsEntityService service =
+          new EsEntityService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
-      return Mono.just(new ElasticsearchEntityProvider(dataset, datasource, mentions));
+      return Mono.just(new ElasticsearchEntityProvider(dataset, datasource, service));
     } catch (final Exception e) {
-      log.error("Unable to create ES Document Provider", e);
+      log.error("Unable to create ES Entity Provider", e);
       return Mono.empty();
     }
   }
