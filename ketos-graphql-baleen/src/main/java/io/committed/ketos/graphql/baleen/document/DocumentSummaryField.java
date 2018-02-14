@@ -1,15 +1,14 @@
 package io.committed.ketos.graphql.baleen.document;
 
 import static org.springframework.util.StringUtils.isEmpty;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.data.BaleenDocumentMetadata;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
+import reactor.core.publisher.Mono;
 
 @GraphQLService
 public class DocumentSummaryField {
@@ -24,10 +23,7 @@ public class DocumentSummaryField {
 
     String summary = null;
 
-    final List<BaleenDocumentMetadata> metadata = document.getMetadata();
-    if (metadata != null) {
-      summary = lookInMetadata(document).orElse(null);
-    }
+    summary = lookInMetadata(document).orElse(null);
 
     if (isEmpty(summary)) {
       summary = document.getContent();
@@ -45,15 +41,20 @@ public class DocumentSummaryField {
 
   private Optional<String> lookInMetadata(final BaleenDocument document) {
 
-    final Optional<String> optional = document.findSingleFromMetadata("summary");
+    final Mono<String> mono = document.findSingleFromMetadata("summary");
+    // TODO: Rewrite with mono throughout
+
+    final Optional<String> optional = mono.blockOptional();
     if (optional.isPresent() && !isEmpty(optional.get())) {
       return optional;
     }
 
-    final String keywords = document.findAllFromMetadata("keywords")
+    final Mono<String> keywords = document.findAllFromMetadata("keywords")
         .collect(Collectors.joining("; "));
-    if (!isEmpty(keywords)) {
-      return Optional.of(keywords);
+    final Optional<String> joinedKeywords = keywords.blockOptional();
+
+    if (joinedKeywords.isPresent() && !isEmpty(joinedKeywords.get())) {
+      return joinedKeywords;
     }
 
     return Optional.empty();
