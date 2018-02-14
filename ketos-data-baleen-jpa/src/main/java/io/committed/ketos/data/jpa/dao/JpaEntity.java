@@ -11,7 +11,6 @@ import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.graphql.input.EntityProbe;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Flux;
 
 @Entity
 @Data
@@ -40,7 +39,9 @@ public class JpaEntity {
 
     return BaleenEntity.builder()
         .docId(docId)
-        .mentions(Flux.fromStream(mentions.stream()))
+        .id(Long.toString(key))
+        .type(type)
+        .value(value.isEmpty() ? null : value.get(0))
         .build();
   }
 

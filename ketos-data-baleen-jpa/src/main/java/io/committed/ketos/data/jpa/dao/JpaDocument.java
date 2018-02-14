@@ -1,11 +1,14 @@
 package io.committed.ketos.data.jpa.dao;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.data.BaleenDocumentInfo;
+import io.committed.ketos.common.data.BaleenDocumentMetadata;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import lombok.Data;
 import reactor.core.publisher.Flux;
@@ -28,12 +31,24 @@ public class JpaDocument {
   private List<String> releasability;
 
   public BaleenDocument toBaleenDocument(final Flux<JpaDocumentMetadata> metadata) {
-    return BaleenDocument.builder().id(externalId).content(content)
+
+    final Map<String, Object> properties = new HashMap<>();
+
+    properties.put(BaleenProperties.DOCUMENT_TYPE, type);
+    properties.put(BaleenProperties.SOURCE, source);
+    properties.put(BaleenProperties.LANGUAGE, language);
+    properties.put(BaleenProperties.DOCUMENT_DATE, processed);
+    properties.put(BaleenProperties.TIMESTAMP, processed);
+    properties.put(BaleenProperties.CLASSIFICATION, classification);
+    properties.put(BaleenProperties.CAVEATS, caveats);
+    properties.put(BaleenProperties.RELEASABILITY, releasability);
+
+    return BaleenDocument.builder()
+        .id(externalId)
+        .content(content)
         .metadata(
-            metadata.collectMap(JpaDocumentMetadata::getName, m -> (Object) m.getValue()).block())
-        .info(BaleenDocumentInfo.builder().caveats(caveats).classification(classification)
-            .releasability(releasability).language(language).source(source).timestamp(processed)
-            .type(type).build())
+            metadata.map(m -> new BaleenDocumentMetadata(m.getName(), m.getValue())))
+        .properties(properties)
         .build();
   }
 
