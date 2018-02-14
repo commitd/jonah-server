@@ -18,10 +18,12 @@ public class BaleenDocument extends AbstractGraphQLNode {
 
   @GraphQLId
   private final String id;
-  private final BaleenDocumentInfo info;
-  private final List<String> publishedIds;
-  private final Map<String, Object> metadata;
+
+  private final List<BaleenDocumentMetadata> metadata;
+
   private final String content;
+
+  private final Map<String, Object> properties;
 
   @GraphQLQuery(name = "length", description = "Length of document content in characters")
   public int length() {
@@ -29,18 +31,12 @@ public class BaleenDocument extends AbstractGraphQLNode {
   }
 
   // THis all args constructor is required for the Builder
-  public BaleenDocument(final String id, final BaleenDocumentInfo documentInfo, final List<String> publishedIds,
-      final Map<String, Object> metadata, final String content) {
+  public BaleenDocument(final String id,
+      final List<BaleenDocumentMetadata> metadata, final String content, final Map<String, Object> properties) {
     this.id = id;
-    this.info = documentInfo;
-    this.publishedIds = publishedIds;
-    this.metadata = metadata == null ? Collections.emptyMap() : metadata;
+    this.metadata = metadata == null ? Collections.emptyList() : metadata;
     this.content = content;
-
-    // Ensure the setParent is correct on documentinfo
-    if (this.info != null) {
-      this.info.setParent(this);
-    }
+    this.properties = properties == null ? Collections.emptyMap() : properties;
   }
 
 }

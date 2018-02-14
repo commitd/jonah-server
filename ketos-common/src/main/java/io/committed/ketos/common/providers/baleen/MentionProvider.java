@@ -6,7 +6,6 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
-import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.MentionProbe;
 import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
@@ -43,13 +42,5 @@ public interface MentionProvider extends DataProvider {
       final int limit);
 
   Mono<Long> count();
-
-  default Mono<BaleenMention> target(final BaleenRelation relation) {
-    return getById(relation.getTargetId());
-  }
-
-  default Mono<BaleenMention> source(final BaleenRelation relation) {
-    return getById(relation.getSourceId());
-  }
 
 }

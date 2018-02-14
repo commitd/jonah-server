@@ -11,6 +11,8 @@ import lombok.EqualsAndHashCode;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 public class BaleenDocumentInfo extends AbstractGraphQLNode {
+  private final String title;
+  private final Date date;
   private final String type;
   private final String source;
   private final String language;
@@ -18,4 +20,6 @@ public class BaleenDocumentInfo extends AbstractGraphQLNode {
   private final String classification;
   private final List<String> caveats;
   private final List<String> releasability;
+  private final List<String> publishedIds;
+
 }
