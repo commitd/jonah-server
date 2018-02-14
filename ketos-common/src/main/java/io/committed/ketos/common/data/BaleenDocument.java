@@ -3,6 +3,8 @@ package io.committed.ketos.common.data;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -37,6 +39,16 @@ public class BaleenDocument extends AbstractGraphQLNode {
     this.metadata = metadata == null ? Collections.emptyList() : metadata;
     this.content = content;
     this.properties = properties == null ? Collections.emptyMap() : properties;
+  }
+
+  public Optional<String> findSingleFromMetadata(final String key) {
+    return findAllFromMetadata(key).findFirst();
+  }
+
+  public Stream<String> findAllFromMetadata(final String key) {
+    return metadata.stream()
+        .filter(m -> key.equalsIgnoreCase(m.getKey()))
+        .map(BaleenDocumentMetadata::getValue);
   }
 
 }

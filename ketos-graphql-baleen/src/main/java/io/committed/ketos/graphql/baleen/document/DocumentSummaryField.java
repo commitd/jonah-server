@@ -1,10 +1,12 @@
 package io.committed.ketos.graphql.baleen.document;
 
 import static org.springframework.util.StringUtils.isEmpty;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.common.utils.FieldUtils;
+import io.committed.ketos.common.data.BaleenDocumentMetadata;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -22,9 +24,9 @@ public class DocumentSummaryField {
 
     String summary = null;
 
-    final Map<String, Object> metadata = document.getMetadata();
+    final List<BaleenDocumentMetadata> metadata = document.getMetadata();
     if (metadata != null) {
-      summary = lookInMetadata(metadata);
+      summary = lookInMetadata(document).orElse(null);
     }
 
     if (isEmpty(summary)) {
@@ -41,20 +43,20 @@ public class DocumentSummaryField {
   }
 
 
-  private String lookInMetadata(final Map<String, Object> metadata) {
-    String title = null;
+  private Optional<String> lookInMetadata(final BaleenDocument document) {
 
-    title = FieldUtils.getAsMetadataKey(metadata, "title");
-    if (!isEmpty(title)) {
-      return title;
+    final Optional<String> optional = document.findSingleFromMetadata("summary");
+    if (optional.isPresent() && !isEmpty(optional.get())) {
+      return optional;
     }
 
-    title = FieldUtils.getAsMetadataKey(metadata, "DC.Title");
-    if (!isEmpty(title)) {
-      return title;
+    final String keywords = document.findAllFromMetadata("keywords")
+        .collect(Collectors.joining("; "));
+    if (!isEmpty(keywords)) {
+      return Optional.of(keywords);
     }
 
-    return null;
+    return Optional.empty();
   }
 
 }

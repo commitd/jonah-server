@@ -1,7 +1,7 @@
 package io.committed.ketos.common.data;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +18,8 @@ public class BaleenDocumentInfo extends AbstractGraphQLNode {
   private final String language;
   private final Date timestamp;
   private final String classification;
-  private final List<String> caveats;
-  private final List<String> releasability;
-  private final List<String> publishedIds;
+  private final Collection<String> caveats;
+  private final Collection<String> releasability;
+  private final Collection<String> publishedIds;
 
 }

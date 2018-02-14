@@ -2,8 +2,6 @@ package io.committed.ketos.common.utils;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import org.springframework.util.StringUtils;
 import com.google.common.base.Splitter;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
@@ -17,15 +15,6 @@ public final class FieldUtils {
 
   private FieldUtils() {
     // Singleton
-  }
-
-  public static String getAsMetadataKey(final Map<String, Object> metadata, final String key) {
-    final Object v = metadata.get(key);
-    if (v != null && v instanceof String && !StringUtils.isEmpty(v)) {
-      return (String) v;
-    } else {
-      return null;
-    }
   }
 
   public static List<String> fieldSplitter(final String field) {
