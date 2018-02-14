@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -20,13 +19,15 @@ import org.springframework.data.mongodb.core.aggregation.ConditionalOperators.Co
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.constants.BooleanOperator;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
-import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.mongo.AbstractMongoCollectionDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.FieldUtils;
+import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.MentionFilter;
@@ -34,22 +35,18 @@ import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
-import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
 import io.committed.ketos.plugins.data.mongo.filters.DocumentFilters;
 import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
 import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
-import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoDocumentProvider extends AbstractMongoDataProvider implements DocumentProvider {
-
-  private final BaleenDocumentRepository documents;
+public class MongoDocumentProvider extends AbstractMongoCollectionDataProvider<OutputDocument>
+    implements DocumentProvider {
 
   public MongoDocumentProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate, final BaleenDocumentRepository documents) {
-    super(dataset, datasource, mongoTemplate);
-    this.documents = documents;
+      final MongoDatabase database, final String collectionName) {
+    super(dataset, datasource, database, collectionName, OutputDocument.class);
   }
 
   @Override
@@ -386,7 +383,7 @@ public class MongoDocumentProvider extends AbstractMongoDataProvider implements 
             group(field).count().as("count"),
             project("count").and("_id").as("term"));
 
-    return getTemplate().aggregate(aggregation, MongoDocument.class, TermBin.class);
+    return getCollection().aggregate(aggregation, MongoDocument.class, TermBin.class);
   }
 
 

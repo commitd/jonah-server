@@ -10,28 +10,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.mongo.AbstractMongoCollectionDataProvider;
+import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
-import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
-import io.committed.ketos.plugins.data.mongo.repository.BaleenDocumentRepository;
 import reactor.core.publisher.Flux;
 
-public class MongoMetadataProvider extends AbstractMongoDataProvider implements MetadataProvider {
+public class MongoMetadataProvider extends AbstractMongoCollectionDataProvider<OutputDocument>
+    implements MetadataProvider {
 
   public MongoMetadataProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate, final BaleenDocumentRepository documents) {
-    super(dataset, datasource, mongoTemplate);
+      final MongoDatabase database, final String collectionName) {
+    super(dataset, datasource, database, collectionName, OutputDocument.class);
   }
 
   @Override
   public Flux<TermBin> countByKey(final Optional<String> key, final int size) {
     return countByKey(key.orElse(null), size);
-
   }
 
   @Override

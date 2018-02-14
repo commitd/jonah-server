@@ -7,14 +7,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
+import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.mongo.AbstractMongoCollectionDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.FieldUtils;
+import io.committed.ketos.common.baleenconsumer.OutputEntity;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.graphql.input.EntityFilter;
@@ -22,23 +23,17 @@ import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.intermediate.EntitySearchResult;
 import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
-import io.committed.ketos.plugins.data.mongo.dao.FakeMongoEntities;
-import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
 import io.committed.ketos.plugins.data.mongo.filters.EntityFilters;
 import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
-import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoEntityProvider extends AbstractMongoDataProvider implements EntityProvider {
-
-  private final BaleenEntitiesRepository entities;
+public class MongoEntityProvider extends AbstractMongoCollectionDataProvider<OutputEntity> implements EntityProvider {
 
   @Autowired
   public MongoEntityProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate, final BaleenEntitiesRepository entities) {
-    super(dataset, datasource, mongoTemplate);
-    this.entities = entities;
+      final MongoDatabase mongoDatabase, final String collectionName) {
+    super(dataset, datasource, mongoDatabase, collectionName, OutputEntity.class);
   }
 
   @Override

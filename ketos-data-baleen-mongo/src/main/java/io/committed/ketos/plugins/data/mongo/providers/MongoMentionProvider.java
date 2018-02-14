@@ -10,14 +10,15 @@ import java.util.Objects;
 import java.util.Optional;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.AddFieldsOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.NonFieldExposingReplaceRootOperation;
+import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.mongo.AbstractMongoCollectionDataProvider;
+import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
@@ -26,24 +27,18 @@ import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
-import io.committed.ketos.plugins.data.mongo.dao.MongoEntities;
-import io.committed.ketos.plugins.data.mongo.dao.MongoMention;
 import io.committed.ketos.plugins.data.mongo.data.CountOutcome;
 import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
-import io.committed.ketos.plugins.data.mongo.repository.BaleenEntitiesRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoMentionProvider extends AbstractMongoDataProvider implements MentionProvider {
-
-  private final BaleenEntitiesRepository entities;
+public class MongoMentionProvider extends AbstractMongoCollectionDataProvider<OutputMention>
+    implements MentionProvider {
 
   @Autowired
   public MongoMentionProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate, final BaleenEntitiesRepository entities) {
-    super(dataset, datasource, mongoTemplate);
-
-    this.entities = entities;
+      final MongoDatabase mongoDatabase, final String collection) {
+    super(dataset, datasource, mongoDatabase, collection, OutputMention.class);
   }
 
   @Override
@@ -51,23 +46,12 @@ public class MongoMentionProvider extends AbstractMongoDataProvider implements M
     return getMentionsByDocumentId(document.getId());
   }
 
-  @Override
-  public Mono<BaleenMention> source(final BaleenRelation relation) {
-    return relationMentionById(relation, relation.getSourceId());
-  }
-
-  @Override
-  public Mono<BaleenMention> target(final BaleenRelation relation) {
-    return relationMentionById(relation, relation.getTargetId());
-  }
-
   private Flux<BaleenEntity> getByDocumentId(final String id) {
     return entities.findByDocId(id).map(MongoEntities::toEntity);
   }
 
   private Flux<BaleenMention> getMentionsByDocumentId(final String documentId) {
-    return getByDocumentId(documentId)
-        .flatMap(BaleenEntity::getMentions);
+    return getByDocumentId(documentId);;
   }
 
   private Mono<BaleenMention> relationMentionById(final BaleenRelation relation,

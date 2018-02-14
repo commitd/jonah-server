@@ -5,14 +5,15 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.support.data.mongo.AbstractMongoDataProvider;
+import io.committed.invest.support.data.mongo.AbstractMongoCollectionDataProvider;
 import io.committed.invest.support.data.utils.CriteriaUtils;
 import io.committed.invest.support.data.utils.FieldUtils;
+import io.committed.ketos.common.baleenconsumer.OutputRelation;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -20,23 +21,17 @@ import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
-import io.committed.ketos.plugins.data.mongo.dao.MongoDocument;
-import io.committed.ketos.plugins.data.mongo.dao.MongoRelation;
 import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
-import io.committed.ketos.plugins.data.mongo.repository.BaleenRelationRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class MongoRelationProvider extends AbstractMongoDataProvider implements RelationProvider {
-
-  private final BaleenRelationRepository relations;
+public class MongoRelationProvider extends AbstractMongoCollectionDataProvider<OutputRelation>
+    implements RelationProvider {
 
   @Autowired
   public MongoRelationProvider(final String dataset, final String datasource,
-      final ReactiveMongoTemplate mongoTemplate, final BaleenRelationRepository relations) {
-    super(dataset, datasource, mongoTemplate);
-
-    this.relations = relations;
+      final MongoDatabase mongoDatabase, final String collectionName) {
+    super(dataset, datasource, mongoDatabase, collectionName, OutputRelation.class);
   }
 
   @Override
