@@ -2,9 +2,11 @@ package io.committed.ketos.data.elasticsearch.providers;
 
 import java.util.List;
 import java.util.Optional;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.join.query.JoinQueryBuilders;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
@@ -28,9 +30,17 @@ public class ElasticsearchDocumentProvider
     extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements DocumentProvider {
 
+  private String mentionType;
+  private String entityType;
+  private String relationType;
+
   public ElasticsearchDocumentProvider(final String dataset, final String datasource,
-      final EsDocumentService documentService) {
+      final EsDocumentService documentService, final String mentionType, final String entityType,
+      final String relationType) {
     super(dataset, datasource, documentService);
+    this.mentionType = mentionType;
+    this.entityType = entityType;
+    this.relationType = relationType;
   }
 
   @Override
@@ -61,19 +71,24 @@ public class ElasticsearchDocumentProvider
 
     if (documentSearch.getMentionFilters() != null) {
       documentSearch.getMentionFilters().stream()
-          // Note this use toEntities, which ignores the docId
-          .map(f -> MentionFilters.toMentionsQuery(f, EsDocument.MENTIONS_PREFIX))
+          .map(f -> MentionFilters.toMentionsQuery(f, ""))
           .filter(Optional::isPresent)
           .map(Optional::get)
-          .forEach(queryBuilder::must);
+          .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
+              mentionType,
+              q,
+              ScoreMode.None)));
     }
 
     if (documentSearch.getRelationFilters() != null) {
       documentSearch.getRelationFilters().stream()
-          .map(f -> RelationFilters.toQuery(f, EsDocument.RELATIONS_PREFIX))
+          .map(f -> RelationFilters.toQuery(f, ""))
           .filter(Optional::isPresent)
           .map(Optional::get)
-          .forEach(queryBuilder::must);
+          .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
+              entityType,
+              q,
+              ScoreMode.None)));
     }
 
     final Flux<BaleenDocument> results =

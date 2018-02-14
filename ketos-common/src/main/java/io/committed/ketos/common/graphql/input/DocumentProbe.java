@@ -18,6 +18,7 @@ public class DocumentProbe {
     private String classification;
     private String caveats;
     private String releasability;
+    private String publishedId;
 
     private Date timestamp;
 
@@ -32,6 +33,7 @@ public class DocumentProbe {
       filter.setEndTimestamp(timestamp);
       filter.setStartTimestamp(timestamp);
       filter.setType(type);
+      filter.setPublishedId(publishedId);
 
       return filter;
     }
@@ -41,6 +43,8 @@ public class DocumentProbe {
   private DocumentInfoProbe info;
   private List<String> publishedIds;
   private Map<String, Object> metadata;
+  private Map<String, Object> properties;
+
   private String content;
 
   public DocumentFilter toDocumentFilter() {
@@ -49,10 +53,9 @@ public class DocumentProbe {
 
     filter.setId(id);
     filter.setContent(content);
-    filter.setPublishedIds(publishedIds);
     filter.setMetadata(metadata);
     filter.setInfo(info != null ? info.toFilter() : null);
-
+    filter.setProperties(properties);
     return filter;
   }
 }

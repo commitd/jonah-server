@@ -34,8 +34,6 @@ public final class MentionFilters {
   public static Optional<QueryBuilder> toMentionsQuery(final MentionFilter filter, final String prefix) {
     final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
-
-
     if (filter.getEndTimestamp() != null) {
       queryBuilder.must(QueryBuilders.rangeQuery("timestampEnd").lte(filter.getEndTimestamp()));
     }

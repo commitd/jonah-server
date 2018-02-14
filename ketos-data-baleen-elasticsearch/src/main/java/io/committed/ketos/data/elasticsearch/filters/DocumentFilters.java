@@ -1,6 +1,7 @@
 package io.committed.ketos.data.elasticsearch.filters;
 
 import java.util.Optional;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -64,16 +65,26 @@ public final class DocumentFilters {
       if (info.getType() != null) {
         queryBuilder.must(QueryBuilders.matchQuery("docType", info.getSource()));
       }
+
+      if (info.getPublishedId() != null) {
+        queryBuilder.must(QueryBuilders.matchQuery("publishedIds", info.getPublishedId()));
+      }
     }
 
     if (filter.getMetadata() != null) {
       filter.getMetadata().entrySet().forEach(e -> {
-        queryBuilder.must(QueryBuilders.matchQuery("metadata" + e.getKey(), e.getValue()));
+        queryBuilder.must(QueryBuilders.nestedQuery("metadata",
+            QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("metadata.key", e.getKey()))
+                .must(QueryBuilders.matchQuery("metadata.value", e.getValue())),
+            ScoreMode.None));
       });
     }
 
-    if (filter.getPublishedIds() != null) {
-      queryBuilder.must(QueryBuilders.termsQuery("publishedIds", filter.getPublishedIds()));
+    if (filter.getProperties() != null) {
+      filter.getProperties().entrySet().forEach(e -> {
+        queryBuilder.must(QueryBuilders.matchQuery("properties." + e.getKey(), e.getValue()));
+      });
     }
 
     return Optional.of(queryBuilder);

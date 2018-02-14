@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
-import io.committed.ketos.data.elasticsearch.providers.ElasticsearchMetadataProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -20,7 +19,7 @@ public class EsMetadataProviderFactory
 
 
   public EsMetadataProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-metadata", MetadataProvider.class, "documents", "document");
+    super("baleen-es-metadata", MetadataProvider.class, "baleen", "document");
     this.mapper = mapper;
   }
 
@@ -34,7 +33,9 @@ public class EsMetadataProviderFactory
       final EsDocumentService service =
           new EsDocumentService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
-      return Mono.just(new ElasticsearchMetadataProvider(dataset, datasource, service));
+      // return Mono.just(new ElasticsearchMetadataProvider(dataset, datasource, service));
+      return Mono.empty();
+
     } catch (final Exception e) {
       log.error("Unable to create ES Metadata Provider", e);
       return Mono.empty();

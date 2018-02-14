@@ -20,7 +20,7 @@ public class EsDocumentProviderFactory
 
 
   public EsDocumentProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-documents", DocumentProvider.class, "documents", "document");
+    super("baleen-es-documents", DocumentProvider.class, "baleen", "document");
     this.mapper = mapper;
   }
 
@@ -31,10 +31,15 @@ public class EsDocumentProviderFactory
     try {
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
+      final String mentionType = (String) settings.getOrDefault("mentionType", "mention");
+      final String entityType = (String) settings.getOrDefault("entityType", "entity");
+      final String relationType = (String) settings.getOrDefault("relationType", "relation");
+
       final EsDocumentService service =
           new EsDocumentService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
-      return Mono.just(new ElasticsearchDocumentProvider(dataset, datasource, service));
+      return Mono
+          .just(new ElasticsearchDocumentProvider(dataset, datasource, service, mentionType, entityType, relationType));
     } catch (final Exception e) {
       log.error("Unable to create ES Document Provider", e);
       return Mono.empty();
