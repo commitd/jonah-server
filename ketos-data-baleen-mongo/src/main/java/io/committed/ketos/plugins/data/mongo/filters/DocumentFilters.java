@@ -3,12 +3,9 @@ package io.committed.ketos.plugins.data.mongo.filters;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import io.committed.invest.support.data.utils.CriteriaUtils;
+import java.util.Optional;
+import org.bson.conversions.Bson;
+import com.mongodb.client.model.Filters;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 
@@ -18,72 +15,81 @@ public final class DocumentFilters {
     // Singleton
   }
 
+  public static Optional<Bson> createFilter(final Optional<DocumentFilter> documentFilter) {
+    return documentFilter.flatMap(DocumentFilters::createFilter);
+  }
 
-  public static List<CriteriaDefinition> createCriteria(@Nullable final DocumentFilter documentFilter) {
-    final List<CriteriaDefinition> list = new LinkedList<>();
+  public static Optional<Bson> createFilter(final DocumentFilter documentFilter) {
 
     if (documentFilter == null) {
-      return list;
+      return Optional.empty();
     }
 
-    Criteria criteria = new Criteria();
-
+    final List<Bson> filters = new LinkedList<>();
 
     // Text search must be first (in aggregations)
     if (documentFilter.getContent() != null) {
-      list.add(TextCriteria.forDefaultLanguage().matching(documentFilter.getContent()));
+      filters.add(Filters.text(documentFilter.getContent()));
     }
 
 
     if (documentFilter.getInfo() != null) {
       final DocumentInfoFilter info = documentFilter.getInfo();
       if (info.getCaveats() != null) {
-        criteria = criteria.and("document.caveats").in(info.getCaveats());
+        filters.add(Filters.in("properties.caveats", info.getCaveats()));
       }
 
       if (info.getReleasability() != null) {
-        criteria = criteria.and("document.releasability").in(info.getReleasability());
+        filters.add(Filters.in("properties.releasability", info.getCaveats()));
       }
 
       if (info.getEndTimestamp() != null) {
-        criteria = criteria.and("document.timestamp").lte(info.getEndTimestamp());
+        filters.add(Filters.lte("properties.timestamp", info.getEndTimestamp()));
       }
 
       if (info.getStartTimestamp() != null) {
-        criteria = criteria.and("document.timestamp").gte(info.getStartTimestamp());
+        filters.add(Filters.gte("properties.timestamp", info.getStartTimestamp()));
       }
 
       if (info.getLanguage() != null) {
-        criteria = criteria.and("document.language").is(info.getLanguage());
+        filters.add(Filters.eq("properties.language", info.getLanguage()));
       }
 
       if (info.getSource() != null) {
-        criteria = criteria.and("document.source").is(info.getSource());
+        filters.add(Filters.eq("properties.source", info.getSource()));
       }
 
       if (info.getType() != null) {
-        criteria = criteria.and("document.type").is(info.getType());
+        filters.add(Filters.eq("properties.type", info.getType()));
       }
+
+      if (info.getPublishedId() != null) {
+        filters.add(Filters.in("properties.publishedIds.id", info.getPublishedId()));
+      }
+
     }
 
     if (documentFilter.getMetadata() != null) {
       for (final Map.Entry<String, Object> e : documentFilter.getMetadata().entrySet()) {
-        criteria = criteria.and("metadata." + e.getKey()).is(e.getValue());
+        filters.add(Filters.elemMatch("metadata", Filters.and(
+            Filters.eq("metadata.key", e.getKey()),
+            Filters.eq("metadata.value", e.getValue()))));
+
       }
     }
 
-    if (documentFilter.getPublishedIds() != null) {
-      criteria = criteria.and("publishedIds").in(documentFilter.getPublishedIds());
+    if (documentFilter.getProperties() != null) {
+      for (final Map.Entry<String, Object> e : documentFilter.getProperties().entrySet()) {
+        filters.add(Filters.eq("propertiers." + e.getKey(), e.getValue()));
+      }
     }
 
-    list.add(criteria);
 
+    if (filters.isEmpty()) {
+      return Optional.empty();
+    }
 
-    return list;
+    return Optional.of(Filters.and(filters));
   }
 
-
-  public static Query createQuery(final DocumentFilter documentFilter) {
-    return CriteriaUtils.createQuery(createCriteria(documentFilter));
-  }
 }

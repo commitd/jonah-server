@@ -1,12 +1,13 @@
 package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import lombok.Data;
 
 @Data
 public class DocumentFilter {
+
+  // TODO: Really this should be properties... but what about startTimestamp/endTimestamp
 
   @Data
   public static class DocumentInfoFilter {
@@ -16,6 +17,7 @@ public class DocumentFilter {
     private String classification;
     private String caveats;
     private String releasability;
+    private String publishedId;
 
     private Date startTimestamp;
     private Date endTimestamp;
@@ -23,11 +25,9 @@ public class DocumentFilter {
   }
 
   private String id;
-  private DocumentInfoFilter info;
-  private List<String> publishedIds;
   private Map<String, Object> metadata;
+  private Map<String, Object> properties;
   private String content;
-
-
+  private DocumentInfoFilter info;
 
 }
