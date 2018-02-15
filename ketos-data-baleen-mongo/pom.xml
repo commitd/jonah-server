@@ -9,6 +9,11 @@
   <artifactId>ketos-data-baleen-mongo</artifactId>
   <name>Ketos Data Baleen Mongo</name>
 
+  <properties>
+    <mongodb.version>3.6.3</mongodb.version>
+    <mongodb-reactivestreams.version>1.7.0</mongodb-reactivestreams.version>
+  </properties>
+
   <dependencies>
 
     <dependency>
@@ -21,9 +26,29 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-      <scope>provided</scope>
+      <groupId>org.mongodb</groupId>
+      <artifactId>bson</artifactId>
+      <version>${mongodb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver-core</artifactId>
+      <version>${mongodb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver-async</artifactId>
+      <version>${mongodb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver</artifactId>
+      <version>${mongodb.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver-reactivestreams</artifactId>
+      <version>${mongodb-reactivestreams.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

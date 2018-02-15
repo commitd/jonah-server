@@ -3,7 +3,6 @@ package io.committed.ketos.plugins.data.mongo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 import io.committed.ketos.plugins.data.mongo.factory.MongoDocumentProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoEntityProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoMentionProviderFactory;
@@ -12,7 +11,6 @@ import io.committed.ketos.plugins.data.mongo.factory.MongoRelationProviderFactor
 
 @Configuration
 @ComponentScan(basePackageClasses = {BaleenMongoConfig.class})
-@EnableReactiveMongoRepositories
 public class BaleenMongoConfig {
 
   @Bean
