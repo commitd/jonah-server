@@ -9,50 +9,36 @@ public class RelationProbe {
 
   private String docId;
 
-  private String sourceId;
-
-  private String targetId;
-
-  private String sourceType;
-
-  private String targetType;
-
-  private String sourceValue;
-
-  private String targetValue;
-
   private Integer begin;
 
   private Integer end;
 
   private String type;
 
-  private String relationshipType;
-
-  private String relationSubtype;
+  private String subtype;
 
   private String value;
 
-  private Double confidence;
+  private MentionProbe source;
+
+  private MentionProbe target;
 
   public RelationFilter toFilter() {
     final RelationFilter filter = new RelationFilter();
 
     filter.setDocId(docId);
     filter.setId(id);
-    filter.setRelationshipType(relationshipType);
-    filter.setRelationSubtype(relationSubtype);
-    filter.setSourceId(sourceId);
-    filter.setSourceType(sourceType);
-    filter.setSourceValue(sourceValue);
-    filter.setTargetId(targetId);
-    filter.setTargetType(targetType);
-    filter.setTargetValue(targetValue);
+    filter.setSubType(subtype);
     filter.setType(type);
     filter.setValue(value);
 
-    // TODO: confidence, begin, end
+    if (source != null) {
+      filter.setSource(source.toFilter());
+    }
 
+    if (target != null) {
+      filter.setTarget(target.toFilter());
+    }
 
     return filter;
   }

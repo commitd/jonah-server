@@ -26,11 +26,6 @@ public class MentionProbe {
     filter.setProperties(properties);
     filter.setEntityId(entityId);
 
-    // TODO have this as after / before / below / above
-    // filter.setConfidence;
-    // filter.setBeing
-    // filter.setEnd(end);
-
     return filter;
 
   }

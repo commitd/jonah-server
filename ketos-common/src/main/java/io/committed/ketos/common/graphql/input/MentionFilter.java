@@ -14,11 +14,12 @@ public class MentionFilter {
   private String entityId;
 
   private String type;
+  private String subType;
   private String value;
 
   private Map<String, Object> properties;
 
-  // TODO: WE could have begin / end here but that might be too much detail...
+  // TODO: WE could have begin / end as startAfter/startBefore
   // private int begin;
   // private int end;
 
