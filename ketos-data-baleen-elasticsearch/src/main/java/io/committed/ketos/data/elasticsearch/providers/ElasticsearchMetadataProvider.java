@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -50,20 +51,18 @@ public class ElasticsearchMetadataProvider
 
   private Flux<TermBin> aggregateByMetadata(final Optional<QueryBuilder> query, final String field) {
 
-    final String fieldkeyword = BaleenProperties.METADATA + "." + field + ".keyword";
+    final String fieldkeyword = BaleenProperties.METADATA + "." + field;
 
-    NativeSearchQueryBuilder searchQueryBuilder = getService().queryBuilder()
+    final NativeSearchQueryBuilder searchQueryBuilder = getService().queryBuilder()
         .addAggregation(AggregationBuilders.nested("agg", BaleenProperties.METADATA)
-            .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword)));
+            .subAggregation(AggregationBuilders.filter("filtered", query.orElse(QueryBuilders.matchAllQuery()))
+                .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword))));
 
-    if (query.isPresent()) {
-      searchQueryBuilder = searchQueryBuilder.withQuery(query.get());
-    }
 
     return getService().query(searchQueryBuilder, response -> {
       final Nested nested = response.getAggregations().get("agg");
-
-      final Terms terms = nested.getAggregations().get("count");
+      final Filter filtered = nested.getAggregations().get("filtered");
+      final Terms terms = filtered.getAggregations().get("count");
       return Flux.fromIterable(terms.getBuckets())
           .map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
 
@@ -72,7 +71,7 @@ public class ElasticsearchMetadataProvider
 
   private NestedQueryBuilder queryByKey(final String key) {
     return QueryBuilders.nestedQuery(BaleenProperties.METADATA,
-        QueryBuilders.termQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, key), ScoreMode.None);
+        QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, key), ScoreMode.None);
   }
 
 }
