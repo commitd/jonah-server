@@ -32,11 +32,11 @@ public class DocumentSearch extends AbstractGraphQLNode {
 
   @JsonIgnore
   public boolean hasMentions() {
-    return mentionFilters.isEmpty();
+    return !mentionFilters.isEmpty();
   }
 
   @JsonIgnore
   public boolean hasRelations() {
-    return relationFilters.isEmpty();
+    return !relationFilters.isEmpty();
   }
 }

@@ -12,7 +12,6 @@ import org.bson.conversions.Bson;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.BsonField;
-import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import io.committed.invest.core.constants.BooleanOperator;
@@ -89,15 +88,15 @@ public final class DocumentFilters {
     if (documentFilter.getMetadata() != null) {
       for (final Map.Entry<String, Object> e : documentFilter.getMetadata().entrySet()) {
         filters.add(Filters.elemMatch("metadata", Filters.and(
-            Filters.eq("metadata.key", e.getKey()),
-            Filters.eq("metadata.value", e.getValue()))));
+            Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, e.getKey()),
+            Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE, e.getValue()))));
 
       }
     }
 
     if (documentFilter.getProperties() != null) {
       for (final Map.Entry<String, Object> e : documentFilter.getProperties().entrySet()) {
-        filters.add(Filters.eq("propertiers." + e.getKey(), e.getValue()));
+        filters.add(Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
       }
     }
 
@@ -116,7 +115,7 @@ public final class DocumentFilters {
   }
 
   public static List<Bson> createAggregation(final DocumentSearch documentSearch, final String documentCollection,
-      final String relationCollection, final String mentionCollection) {
+      final String mentionCollection, final String relationCollection) {
 
     // In order to join in Mongo you need to do an aggregation, and then use $lookup.
     // Lookup as two opiotns one to so a simple join (id in one collection -> docId to another),
@@ -241,16 +240,18 @@ public final class DocumentFilters {
     pipeline.add(Aggregates.project(Projections.include(BaleenProperties.EXTERNAL_ID)));
 
 
-    if (!documentSearch.hasMentions()) {
-      final List<Bson> filters = MentionFilters.createFilters(documentSearch.getMentionFilters().stream())
-          .collect(Collectors.toList());
+    if (documentSearch.hasMentions()) {
+      final List<Bson> filters =
+          MentionFilters.createFilters(documentSearch.getMentionFilters().stream())
+              .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, mentionCollection);
     }
 
 
-    if (!documentSearch.hasRelations()) {
-      final List<Bson> filters = RelationFilters.createFilters(documentSearch.getRelationFilters().stream())
-          .collect(Collectors.toList());
+    if (documentSearch.hasRelations()) {
+      final List<Bson> filters =
+          RelationFilters.createFilters(documentSearch.getRelationFilters().stream())
+              .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, relationCollection);
     }
 
@@ -267,8 +268,8 @@ public final class DocumentFilters {
     pipeline.add(
         Aggregates.lookup(documentCollection, BaleenProperties.EXTERNAL_ID, BaleenProperties.EXTERNAL_ID,
             joinedField));
-    pipeline.add(Aggregates.unwind(joinedField));
-    pipeline.add(Aggregates.replaceRoot(joinedField));
+    pipeline.add(Aggregates.unwind("$" + joinedField));
+    pipeline.add(Aggregates.replaceRoot("$" + joinedField));
   }
 
   private static void addFiltersToAggregation(final List<Bson> pipeline,
@@ -278,31 +279,32 @@ public final class DocumentFilters {
     final String joinedField = "joined";
     pipeline
         .add(Aggregates.lookup(collectionToJoin, BaleenProperties.EXTERNAL_ID, BaleenProperties.DOC_ID, joinedField));
-    pipeline.add(Aggregates.unwind(joinedField));
+    pipeline.add(Aggregates.unwind("$" + joinedField));
     // Move into the relations 'field' as our root (so that relationFilter works)
-    pipeline.add(Aggregates.replaceRoot(joinedField));
+    pipeline.add(Aggregates.replaceRoot("$" + joinedField));
 
 
     // Create cond for each query
     final int numFilters = filters.size();
 
-    final List<Field<?>> filterConditional = new ArrayList<>(numFilters);
+    final List<Bson> filterConditional = new ArrayList<>(numFilters);
     for (int i = 0; i < numFilters; i++) {
       final Bson f = filters.get(i);
       final String key = QUERY_PREFIX + i;
-
       final Document cond = new Document("$cond", Arrays.asList(f, true, false));
-      filterConditional.add(new Field<Document>(key, cond));
+      filterConditional.add(Projections.computed(key, cond));
     }
-    pipeline.add(Aggregates.addFields(filterConditional));
+    filterConditional.add(Projections.include(BaleenProperties.DOC_ID));
+    pipeline.add(Aggregates.project(
+        Projections.fields(filterConditional)));
 
     // Group back to document level
     final List<BsonField> groupByFields = new ArrayList<>(numFilters);
     for (int i = 0; i < numFilters; i++) {
       final String key = QUERY_PREFIX + i;
-      groupByFields.add(Accumulators.max(key, key));
+      groupByFields.add(Accumulators.max(key, "$" + key));
     }
-    pipeline.add(Aggregates.group(BaleenProperties.DOC_ID, groupByFields));
+    pipeline.add(Aggregates.group("$" + BaleenProperties.DOC_ID, groupByFields));
 
     // Apply the and/or filter
     final BooleanOperator operator = BooleanOperator.AND;
@@ -316,7 +318,7 @@ public final class DocumentFilters {
     pipeline.add(Aggregates.match(Filters.and(queryMatched)));
 
     // Project back to being jsut like document with externalId
-    pipeline.add(Aggregates.project(Projections.computed("externalId", "_id")));
+    pipeline.add(Aggregates.project(Projections.computed("externalId", "$_id")));
   }
 
 }
