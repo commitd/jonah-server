@@ -48,7 +48,7 @@ public class ElasticsearchMentionProvider
   @Override
   public Flux<TermBin> countByField(final Optional<MentionFilter> filter, final List<String> path,
       final int size) {
-    final Optional<QueryBuilder> query = MentionFilters.toMentionsQuery(filter, "");
+    final Optional<QueryBuilder> query = MentionFilters.toQuery(filter, "");
     final String field = FieldUtils.joinField(path);
     return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
 

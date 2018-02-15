@@ -25,6 +25,7 @@ public final class BaleenProperties {
   public static final String DOCUMENT_DATE = "documentDate";
   public static final String DOCUMENT_TITLE = "documentTitle";
   public static final String PUBLISHED_IDS = "publishedIds";
+  public static final String CONTENT = "content";
 
   // Common annotaiton propertiers
 
@@ -56,6 +57,9 @@ public final class BaleenProperties {
 
   // Mention only
   public static final String ENTITY_ID = "entityId";
+
+  // Entity only
+  public static final String MENTION_IDS = "mentionIds";
 
   private BaleenProperties() {
     // Singleton

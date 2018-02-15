@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 
@@ -12,52 +13,53 @@ public final class RelationFilters {
     // Singleton
   }
 
-  public static Optional<QueryBuilder> toQuery(final Optional<RelationFilter> filter, final String prefix) {
-    return filter.flatMap(f -> toQuery(f, prefix));
-  }
+  public static Optional<QueryBuilder> toQuery(final Optional<RelationFilter> relationFilter, final String prefix) {
+    if (!relationFilter.isPresent()) {
+      return Optional.empty();
+    }
 
-  public static Optional<QueryBuilder> toQuery(final RelationFilter filter, final String prefix) {
+    final RelationFilter filter = relationFilter.get();
+
     final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
     if (filter.getDocId() != null) {
       // This is on the .externalId not entities.docId, so no prefix
-      queryBuilder.must(QueryBuilders.termQuery("docId", filter.getDocId()));
+      queryBuilder.must(QueryBuilders.termQuery(prefix + BaleenProperties.DOC_ID, filter.getDocId()));
     }
 
     if (filter.getId() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "externalId", filter.getId()));
+      queryBuilder.must(QueryBuilders.termQuery(prefix + BaleenProperties.EXTERNAL_ID, filter.getId()));
     }
 
-    if (filter.getRelationshipType() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + "relationshipType", filter.getRelationshipType()));
+    if (filter.getSubType() != null) {
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + BaleenProperties.SUBTYPE, filter.getSubType()));
     }
 
-    if (filter.getRelationSubtype() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + "relationSubtype", filter.getRelationSubtype()));
+    if (filter.getSource() != null) {
+      MentionFilters
+          .toQuery(Optional.ofNullable(filter.getSource()), prefix + BaleenProperties.RELATION_SOURCE + ".")
+          .ifPresent(queryBuilder::must);
     }
 
-    if (filter.getSourceId() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "source", filter.getSourceId()));
-    }
-
-    if (filter.getTargetId() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + "target", filter.getSourceId()));
+    if (filter.getTarget() != null) {
+      MentionFilters
+          .toQuery(Optional.ofNullable(filter.getTarget()), prefix + BaleenProperties.RELATION_TARGET + ".")
+          .ifPresent(queryBuilder::must);
     }
 
     if (filter.getType() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + "type", filter.getType()));
+      queryBuilder.must(QueryBuilders.matchQuery(prefix + BaleenProperties.TYPE, filter.getType()));
     }
 
     if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.matchPhraseQuery(prefix + "value", filter.getValue()));
+      queryBuilder.must(QueryBuilders.matchPhraseQuery(prefix + BaleenProperties.VALUE, filter.getValue()));
     }
 
-
-    // TODO: Source/target type/value are not supported...
-    // but we could actually look for them on the entities after we return (in the RelationProvider
-    // rather than here). That wouldn't help us with some thing (like aggregations)
-    // Of course we could add value to the ES output
-
+    if (filter.getProperties() != null) {
+      filter.getProperties().entrySet()
+          .forEach(e -> queryBuilder
+              .must(QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
+    }
 
     return Optional.of(queryBuilder);
   }
