@@ -32,56 +32,35 @@ public final class RelationFilters {
     }
 
     if (relationFilter.getDocId() != null) {
-      filters.add(Filters.eq(BaleenProperties.DOC_ID, relationFilter.getRelationshipType()));
+      filters.add(Filters.eq(BaleenProperties.DOC_ID, relationFilter.getDocId()));
     }
 
     if (relationFilter.getValue() != null) {
       filters.add(Filters.text(relationFilter.getValue()));
     }
 
-    // relationtype has dropped so map it and getType to the same thing
-    final String relationType = relationFilter.getRelationshipType() != null ? relationFilter.getRelationshipType()
-        : relationFilter.getType();
-
-    if (relationType != null) {
-      filters.add(Filters.eq(BaleenProperties.TYPE, relationType));
+    if (relationFilter.getType() != null) {
+      filters.add(Filters.eq(BaleenProperties.TYPE, relationFilter.getType()));
     }
 
-    if (relationFilter.getRelationSubtype() != null) {
-      filters.add(Filters.eq(BaleenProperties.SUBTYPE, relationFilter.getRelationSubtype()));
+    if (relationFilter.getSubType() != null) {
+      filters.add(Filters.eq(BaleenProperties.SUBTYPE, relationFilter.getSubType()));
     }
 
-    if (relationFilter.getSourceId() != null) {
-      filters.add(Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.EXTERNAL_ID,
-          relationFilter.getSourceId()));
-    }
-
-    if (relationFilter.getSourceType() != null) {
-      filters.add(
-          Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.TYPE, relationFilter.getSourceType()));
-    }
-
-    if (relationFilter.getSourceValue() != null) {
-      filters.add(
-          Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.VALUE, relationFilter.getSourceValue()));
-    }
-
-    if (relationFilter.getTargetId() != null) {
-      filters
-          .add(Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.EXTERNAL_ID,
-              relationFilter.getTargetId()));
+    if (relationFilter.getSource() != null) {
+      MentionFilters.createFilter(Optional.ofNullable(relationFilter.getSource()),
+          BaleenProperties.RELATION_SOURCE + ".")
+          .ifPresent(filters::add);
     }
 
 
-    if (relationFilter.getTargetType() != null) {
-      filters.add(
-          Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.TYPE, relationFilter.getTargetType()));
+    if (relationFilter.getTarget() != null) {
+      MentionFilters.createFilter(Optional.ofNullable(relationFilter.getTarget()),
+          BaleenProperties.RELATION_TARGET + ".")
+          .ifPresent(filters::add);
+
     }
 
-    if (relationFilter.getTargetValue() != null) {
-      filters.add(
-          Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.VALUE, relationFilter.getTargetValue()));
-    }
 
     return FilterUtils.combine(filters);
   }

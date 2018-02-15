@@ -47,7 +47,7 @@ public class MongoEntityProvider extends AbstractBaleenMongoDataProvider<OutputE
   @Override
   public Flux<TermBin> countByField(final Optional<EntityFilter> filter, final List<String> path,
       final int size) {
-    return termAggregation(EntityFilters.createFilter(filter), path, size);
+    return termAggregation(EntityFilters.createFilter(filter, ""), path, size);
   }
 
   @Override
