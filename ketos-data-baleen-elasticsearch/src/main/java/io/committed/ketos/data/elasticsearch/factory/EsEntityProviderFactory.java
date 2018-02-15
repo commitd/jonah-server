@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
+import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
+import io.committed.ketos.data.elasticsearch.providers.ElasticsearchEntityProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -19,7 +21,8 @@ public class EsEntityProviderFactory
 
 
   public EsEntityProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-entities", EntityProvider.class, "baleen", "entity");
+    super("baleen-es-entities", EntityProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
+        BaleenElasticsearchConstants.DEFAULT_ENTITY_TYPE);
     this.mapper = mapper;
   }
 
@@ -33,8 +36,7 @@ public class EsEntityProviderFactory
       final EsEntityService service =
           new EsEntityService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
-      // return Mono.just(new ElasticsearchEntityProvider(dataset, datasource, service));
-      return Mono.empty();
+      return Mono.just(new ElasticsearchEntityProvider(dataset, datasource, service));
 
     } catch (final Exception e) {
       log.error("Unable to create ES Entity Provider", e);

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
+import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
+import io.committed.ketos.data.elasticsearch.providers.ElasticsearchMentionProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -19,7 +21,8 @@ public class EsMentionProviderFactory
 
 
   public EsMentionProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-mentions", MentionProvider.class, "baleen", "mention");
+    super("baleen-es-mentions", MentionProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
+        BaleenElasticsearchConstants.DEFAULT_MENTION_TYPE);
     this.mapper = mapper;
   }
 
@@ -33,8 +36,7 @@ public class EsMentionProviderFactory
       final EsMentionService service =
           new EsMentionService(mapper, elastic, getIndexName(settings), getTypeName(settings));
 
-      // return Mono.just(new ElasticsearchMentionProvider(dataset, datasource, service));
-      return Mono.empty();
+      return Mono.just(new ElasticsearchMentionProvider(dataset, datasource, service));
 
     } catch (final Exception e) {
       log.error("Unable to create ES Mention Provider", e);

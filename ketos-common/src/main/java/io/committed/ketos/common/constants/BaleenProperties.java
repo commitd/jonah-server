@@ -2,6 +2,16 @@ package io.committed.ketos.common.constants;
 
 public final class BaleenProperties {
 
+  // General
+
+  public static final String EXTERNAL_ID = "externalId";
+  public static final String DOC_ID = "docId";
+  public static final String METADATA = "metadata";
+  public static final String METADATA_KEY = "key";
+  public static final String METADATA_VALUE = "value";
+  public static final String PROPERTIES = "properties";
+
+
   // Documentation based properties
 
   public static final String DOCUMENT_TYPE = "type";

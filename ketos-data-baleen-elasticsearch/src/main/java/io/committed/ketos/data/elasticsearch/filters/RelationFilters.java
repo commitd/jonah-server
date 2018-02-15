@@ -5,6 +5,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.ketos.common.graphql.input.RelationFilter;
+import io.committed.ketos.common.graphql.output.RelationSearch;
 
 public final class RelationFilters {
   private RelationFilters() {
@@ -59,5 +60,9 @@ public final class RelationFilters {
 
 
     return Optional.of(queryBuilder);
+  }
+
+  public static Optional<QueryBuilder> toQuery(final RelationSearch search) {
+    return toQuery(Optional.ofNullable(search.getRelationFilter()), "");
   }
 }

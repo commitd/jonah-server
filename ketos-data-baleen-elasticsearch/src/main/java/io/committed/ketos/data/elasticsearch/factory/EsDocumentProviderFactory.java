@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.data.elasticsearch.dao.BaleenElasticsearchConstants;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchDocumentProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,8 @@ public class EsDocumentProviderFactory
 
 
   public EsDocumentProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-documents", DocumentProvider.class, "baleen", "document");
+    super("baleen-es-documents", DocumentProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
+        BaleenElasticsearchConstants.DEFAULT_DOCUMENT_TYPE);
     this.mapper = mapper;
   }
 
@@ -31,9 +33,12 @@ public class EsDocumentProviderFactory
     try {
       final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
 
-      final String mentionType = (String) settings.getOrDefault("mentionType", "mention");
-      final String entityType = (String) settings.getOrDefault("entityType", "entity");
-      final String relationType = (String) settings.getOrDefault("relationType", "relation");
+      final String mentionType =
+          (String) settings.getOrDefault("mentionType", BaleenElasticsearchConstants.DEFAULT_MENTION_TYPE);
+      final String entityType =
+          (String) settings.getOrDefault("entityType", BaleenElasticsearchConstants.DEFAULT_ENTITY_TYPE);
+      final String relationType =
+          (String) settings.getOrDefault("relationType", BaleenElasticsearchConstants.DEFAULT_RELATION_TYPE);
 
       final EsDocumentService service =
           new EsDocumentService(mapper, elastic, getIndexName(settings), getTypeName(settings));

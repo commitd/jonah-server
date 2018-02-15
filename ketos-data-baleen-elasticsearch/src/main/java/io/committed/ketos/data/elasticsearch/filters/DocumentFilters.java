@@ -5,8 +5,10 @@ import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.join.query.JoinQueryBuilders;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
+import io.committed.ketos.common.graphql.output.DocumentSearch;
 
 public final class DocumentFilters {
 
@@ -89,5 +91,40 @@ public final class DocumentFilters {
 
     return Optional.of(queryBuilder);
 
+  }
+
+  public static Optional<QueryBuilder> toQuery(final DocumentSearch documentSearch, final String mentionType,
+      final String entityType,
+      final String relationType) {
+    final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+
+    if (documentSearch.getDocumentFilter() != null) {
+      DocumentFilters.toQuery(documentSearch.getDocumentFilter())
+          .ifPresent(queryBuilder::must);
+    }
+
+    if (documentSearch.getMentionFilters() != null) {
+      documentSearch.getMentionFilters().stream()
+          .map(f -> MentionFilters.toMentionsQuery(f, ""))
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
+              mentionType,
+              q,
+              ScoreMode.None)));
+    }
+
+    if (documentSearch.getRelationFilters() != null) {
+      documentSearch.getRelationFilters().stream()
+          .map(f -> RelationFilters.toQuery(f, ""))
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
+              relationType,
+              q,
+              ScoreMode.None)));
+    }
+
+    return Optional.of(queryBuilder);
   }
 }

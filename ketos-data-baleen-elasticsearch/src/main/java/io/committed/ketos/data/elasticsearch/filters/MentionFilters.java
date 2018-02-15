@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.output.MentionSearch;
 
 public final class MentionFilters {
   private MentionFilters() {
@@ -77,5 +78,9 @@ public final class MentionFilters {
     }
 
     return Optional.of(queryBuilder);
+  }
+
+  public static Optional<QueryBuilder> toQuery(final MentionSearch search) {
+    return toMentionsQuery(Optional.ofNullable(search.getMentionFilter()), "");
   }
 }

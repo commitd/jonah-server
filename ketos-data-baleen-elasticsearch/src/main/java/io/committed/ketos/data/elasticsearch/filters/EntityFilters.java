@@ -5,10 +5,29 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.ketos.common.graphql.input.EntityFilter;
+import io.committed.ketos.common.graphql.output.EntitySearch;
 
 public final class EntityFilters {
   private EntityFilters() {
     // Singleton
+  }
+
+  public static Optional<QueryBuilder> toQuery(final EntitySearch entitySearch) {
+    final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+    EntityFilters.toQuery(Optional.ofNullable(entitySearch.getEntityFilter()), "")
+        .ifPresent(boolQuery::must);
+
+    entitySearch.getMentionFilters().stream()
+        .map(f -> MentionFilters.toMentionsQuery(f, ""))
+        .filter(Optional::isPresent)
+        .forEach(q -> boolQuery.must(q.get()));
+
+    if (boolQuery.must().isEmpty()) {
+      return Optional.empty();
+    } else {
+      return Optional.of(boolQuery);
+    }
   }
 
   public static Optional<QueryBuilder> toQuery(final Optional<EntityFilter> filter, final String prefix) {
