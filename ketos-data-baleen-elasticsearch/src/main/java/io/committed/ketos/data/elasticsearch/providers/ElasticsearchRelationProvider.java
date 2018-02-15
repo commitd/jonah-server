@@ -34,7 +34,7 @@ public class ElasticsearchRelationProvider
 
 
   @Override
-  public Flux<BaleenRelation> getRelations(final BaleenDocument document) {
+  public Flux<BaleenRelation> getByDocument(final BaleenDocument document) {
     return getService()
         .getByDocumentId(document.getId())
         .map(Converters::toBaleenRelation);

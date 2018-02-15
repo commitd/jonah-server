@@ -4,12 +4,15 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.Nullable;
+import org.bson.conversions.Bson;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
-import org.springframework.data.mongodb.core.query.Criteria;
+import com.jayway.jsonpath.Criteria;
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.output.MentionSearch;
 
 public final class MentionFilters {
 
@@ -105,5 +108,13 @@ public final class MentionFilters {
 
 
     return criteria;
+  }
+
+  public static Optional<Bson> createFilter(final Optional<MentionFilter> filter) {
+    // TODO Auto-generated method stub
+  }
+
+  public static Optional<Bson> createFilter(final MentionSearch mentionSearch) {
+    // TODO Auto-generated method stub
   }
 }

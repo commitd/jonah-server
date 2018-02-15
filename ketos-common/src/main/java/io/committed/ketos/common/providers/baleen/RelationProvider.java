@@ -18,7 +18,7 @@ public interface RelationProvider extends DataProvider {
 
   Flux<BaleenRelation> getAll(int offset, int limit);
 
-  Flux<BaleenRelation> getRelations(BaleenDocument document);
+  Flux<BaleenRelation> getByDocument(BaleenDocument document);
 
   Flux<BaleenRelation> getSourceRelations(final BaleenMention mention);
 

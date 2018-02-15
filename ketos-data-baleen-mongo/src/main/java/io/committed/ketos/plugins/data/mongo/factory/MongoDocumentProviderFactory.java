@@ -5,6 +5,7 @@ import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
+import io.committed.ketos.plugins.data.mongo.data.BaleenMongoConstants;
 import io.committed.ketos.plugins.data.mongo.providers.MongoDocumentProvider;
 import reactor.core.publisher.Mono;
 
@@ -12,7 +13,8 @@ public class MongoDocumentProviderFactory
     extends AbstractMongoDataProviderFactory<DocumentProvider> {
 
   public MongoDocumentProviderFactory() {
-    super("baleen-mongo-documents", DocumentProvider.class, "baleen", "documents");
+    super("baleen-mongo-documents", DocumentProvider.class, BaleenMongoConstants.DEFAULT_DATABASE,
+        BaleenMongoConstants.DEFAULT_DOCUMENT_COLLECTION);
   }
 
   @Override
@@ -22,7 +24,15 @@ public class MongoDocumentProviderFactory
         .withCodecRegistry(BaleenCodecs.codecRegistry());
     final String collectionName = getCollectionName(settings);
 
-    return Mono.just(new MongoDocumentProvider(dataset, datasource, database, collectionName));
+    final String mentionCollection =
+        (String) settings.getOrDefault("mentionCollection", BaleenMongoConstants.DEFAULT_MENTION_COLLECTION);
+    final String entityCollection =
+        (String) settings.getOrDefault("entityCollection", BaleenMongoConstants.DEFAULT_ENTITY_COLLECTION);
+    final String relationCollection =
+        (String) settings.getOrDefault("relationCollection", BaleenMongoConstants.DEFAULT_RELATION_COLLECTION);
+
+    return Mono.just(new MongoDocumentProvider(dataset, datasource, database, collectionName,
+        mentionCollection, entityCollection, relationCollection));
   }
 
 }

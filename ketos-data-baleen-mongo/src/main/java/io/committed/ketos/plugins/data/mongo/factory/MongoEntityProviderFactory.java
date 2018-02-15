@@ -5,12 +5,15 @@ import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
+import io.committed.ketos.plugins.data.mongo.data.BaleenMongoConstants;
+import io.committed.ketos.plugins.data.mongo.providers.MongoEntityProvider;
 import reactor.core.publisher.Mono;
 
 public class MongoEntityProviderFactory extends AbstractMongoDataProviderFactory<EntityProvider> {
 
   public MongoEntityProviderFactory() {
-    super("baleen-mongo-entities", EntityProvider.class, "baleen", "entities");
+    super("baleen-mongo-entities", EntityProvider.class, BaleenMongoConstants.DEFAULT_DATABASE,
+        BaleenMongoConstants.DEFAULT_ENTITY_COLLECTION);
   }
 
   @Override
@@ -20,9 +23,8 @@ public class MongoEntityProviderFactory extends AbstractMongoDataProviderFactory
         .withCodecRegistry(BaleenCodecs.codecRegistry());
     final String collectionName = getCollectionName(settings);
 
-    // return Mono.just(new MongoEntityProvider(dataset, datasource, database, collectionName));
+    return Mono.just(new MongoEntityProvider(dataset, datasource, database, collectionName));
 
-    return Mono.empty();
   }
 
 }

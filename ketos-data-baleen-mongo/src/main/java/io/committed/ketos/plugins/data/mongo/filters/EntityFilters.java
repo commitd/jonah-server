@@ -3,10 +3,13 @@ package io.committed.ketos.plugins.data.mongo.filters;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.bson.conversions.Bson;
+import com.jayway.jsonpath.Criteria;
 import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.output.EntitySearch;
 
 public final class EntityFilters {
 
@@ -42,5 +45,13 @@ public final class EntityFilters {
     }
 
     return MentionFilters.createCriteria(mentionFilter, "", "entities.");
+  }
+
+  public static Optional<Bson> createFilter(final Optional<EntityFilter> filter) {
+    // TODO Auto-generated method stub
+  }
+
+  public static Optional<Bson> createFilter(final EntitySearch entitySearch) {
+    // TODO Auto-generated method stub
   }
 }

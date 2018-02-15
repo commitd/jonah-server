@@ -3,8 +3,11 @@ package io.committed.ketos.plugins.data.mongo.filters;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import org.springframework.data.mongodb.core.query.Criteria;
+import java.util.Optional;
+import org.bson.conversions.Bson;
+import com.jayway.jsonpath.Criteria;
 import io.committed.ketos.common.graphql.input.RelationFilter;
+import io.committed.ketos.common.graphql.output.RelationSearch;
 
 public final class RelationFilters {
 
@@ -74,5 +77,13 @@ public final class RelationFilters {
     }
 
     return criteria;
+  }
+
+  public static Optional<Bson> createFilter(final Optional<RelationFilter> filter) {
+    // TODO Auto-generated method stub
+  }
+
+  public static Optional<Bson> createFilter(final RelationSearch relationSearch) {
+    // TODO Auto-generated method stub
   }
 }
