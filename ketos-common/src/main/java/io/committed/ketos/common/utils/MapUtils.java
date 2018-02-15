@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.springframework.util.StringUtils;
 
 public final class MapUtils {
 
@@ -42,7 +41,7 @@ public final class MapUtils {
 
   public static Optional<String> getStringAsKey(final Map<String, Object> metadata, final String key) {
     return getAsKey(metadata, key, String.class)
-        .filter(StringUtils::isEmpty);
+        .filter(s -> !s.isEmpty());
   }
 
   public static Collection<String> getStringsAsKey(final Map<String, Object> metadata, final String key) {

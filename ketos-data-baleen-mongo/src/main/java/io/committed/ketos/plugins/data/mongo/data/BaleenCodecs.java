@@ -18,6 +18,7 @@ import org.bson.codecs.pojo.PropertyCodecProvider;
 import org.bson.codecs.pojo.PropertyCodecRegistry;
 import org.bson.codecs.pojo.TypeWithTypeParameters;
 import org.bson.conversions.Bson;
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.baleenconsumer.OutputDocumentMetadata;
 import io.committed.ketos.common.baleenconsumer.OutputEntity;
@@ -45,7 +46,7 @@ public final class BaleenCodecs {
 
 
   public static PojoCodecProvider pojoCodecProviders() {
-    return PojoCodecProvider.builder().automatic(false)
+    return PojoCodecProvider.builder()
         .register(new MapStringObjectPropertyCodecProvider())
         .register(OutputDocument.class)
         .register(OutputEntity.class)
@@ -54,6 +55,7 @@ public final class BaleenCodecs {
         .register(OutputFullDocument.class)
         .register(OutputDocumentMetadata.class)
         .register(OutputLatLon.class)
+        .register(TermBin.class)
         .build();
   }
 

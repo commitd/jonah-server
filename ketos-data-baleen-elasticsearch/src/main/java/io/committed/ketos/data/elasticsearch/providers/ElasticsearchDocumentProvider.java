@@ -7,8 +7,10 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -74,14 +76,19 @@ public class ElasticsearchDocumentProvider
   public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path,
       final int size) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
-    return getService().termAggregation(query, path, size);
+    final String field = FieldUtils.joinField(path);
+    return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
   }
 
   @Override
   public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
-    return getService().timelineAggregation(query, "properties.documentDate", interval);
+    final String field = BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE;
+
+    return getService().nestedTimelineAggregation(query, interval, BaleenProperties.PROPERTIES, field);
   }
+
+
 
 }
 

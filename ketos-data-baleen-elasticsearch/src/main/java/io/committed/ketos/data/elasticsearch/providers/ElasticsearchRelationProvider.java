@@ -6,8 +6,10 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -76,9 +78,10 @@ public class ElasticsearchRelationProvider
 
   @Override
   public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path,
-      final int limit) {
+      final int size) {
     final Optional<QueryBuilder> query = RelationFilters.toQuery(filter, "");
-    return getService().termAggregation(query, path, limit);
+    final String field = FieldUtils.joinField(path);
+    return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
   }
 
   @Override

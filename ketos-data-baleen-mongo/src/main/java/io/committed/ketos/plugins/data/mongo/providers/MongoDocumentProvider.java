@@ -3,6 +3,8 @@ package io.committed.ketos.plugins.data.mongo.providers;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -128,15 +131,25 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
         dateString = "%Y-%m-%d";
     }
 
+
+
+    // Convert from milliseconds to data
+    // https://stackoverflow.com/questions/29892152/convert-milliseconds-to-date-in-mongodb-aggregation-pipeline-for-group-by
+    final Document tsToDate = new Document("ts",
+        new Document("$add", Arrays.asList(new Date(0),
+            String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE))));
+    aggregation.add(Aggregates.project(tsToDate));
+    // then create a grouping
     final Document dateToString = new Document("date",
         new Document("$dateToString",
             new Document()
                 .append("format", dateString)
-                .append("date", "$properties.timestamp")));
+                .append("date", "$ts")));
     aggregation.add(Aggregates.project(dateToString));
-    aggregation.add(Aggregates.group("date", Accumulators.sum("count", 1)));
+    aggregation.add(Aggregates.group("$date", Accumulators.sum("count", 1)));
     aggregation
-        .add(Aggregates.project(Projections.fields(Projections.computed("_id", "term"), Projections.include("count"))));
+        .add(Aggregates
+            .project(Projections.fields(Projections.computed("term", "$_id"), Projections.include("count"))));
 
     return aggregate(aggregation, TermBin.class).map(t -> {
       final LocalDate date = LocalDate.parse(t.getTerm());
