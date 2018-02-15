@@ -75,6 +75,8 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
         DocumentFilters.createAggregation(documentSearch, getCollectionName(), mentionCollection, relationCollection);
 
     final Flux<BaleenDocument> results = aggregate(aggregation, OutputDocument.class)
+        .skip(offset)
+        .take(size)
         .map(Converters::toBaleenDocument);
 
     return new DocumentSearchResult(results, Mono.empty());
