@@ -43,6 +43,9 @@ public final class BaleenProperties {
   public static final String NORMAL_WORD_DISTANCE = "wordDistanceNormalized";
   public static final String NORMAL_DEPENDENCY_DISTANCE = "dependencyDistanceNormalized";
 
+  public static final String RELATION_TARGET = "target";
+  public static final String RELATION_SOURCE = "source";
+
   // Mention and entity properties
 
   public static final String START_TIMESTAMP = "timestampStart";
@@ -50,6 +53,9 @@ public final class BaleenProperties {
   public static final String GEOJSON = "geoJson";
   public static final String POI = "poi";
   public static final String TEMPORAL_PRECISION = "precision";
+
+  // Mention only
+  public static final String ENTITY_ID = "entityId";
 
   private BaleenProperties() {
     // Singleton

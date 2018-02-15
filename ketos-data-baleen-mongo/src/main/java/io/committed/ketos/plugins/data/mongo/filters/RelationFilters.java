@@ -1,11 +1,13 @@
 package io.committed.ketos.plugins.data.mongo.filters;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.bson.conversions.Bson;
-import com.jayway.jsonpath.Criteria;
+import com.mongodb.client.model.Filters;
+import io.committed.invest.support.mongo.utils.FilterUtils;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 
@@ -15,75 +17,83 @@ public final class RelationFilters {
     // Singleton
   }
 
-  public static List<Criteria> createCriteria(final Collection<RelationFilter> relationFilters,
-      final String prefix) {
-    final List<Criteria> list = new LinkedList<>();
-    for (final RelationFilter f : relationFilters) {
-      list.add(createCriteria(f, prefix));
+  public static Optional<Bson> createFilter(final Optional<RelationFilter> filter) {
+
+    if (!filter.isPresent()) {
+      return Optional.empty();
     }
-    return list;
-  }
 
-  public static Criteria createCriteria(final RelationFilter relationFilter) {
-    return createCriteria(relationFilter, "");
-  }
+    final RelationFilter relationFilter = filter.get();
 
-  public static Criteria createCriteria(final RelationFilter relationFilter, final String prefix) {
-    Criteria criteria = new Criteria();
+    final List<Bson> filters = new LinkedList<>();
+
+    if (relationFilter.getId() != null) {
+      filters.add(Filters.eq(BaleenProperties.EXTERNAL_ID, relationFilter.getId()));
+    }
 
     if (relationFilter.getDocId() != null) {
-      criteria = criteria.and(prefix + "docId").is(relationFilter.getDocId());
-    }
-
-    if (relationFilter.getType() != null) {
-      criteria = criteria.and(prefix + "type").is(relationFilter.getType());
+      filters.add(Filters.eq(BaleenProperties.DOC_ID, relationFilter.getRelationshipType()));
     }
 
     if (relationFilter.getValue() != null) {
-      criteria = criteria.and(prefix + "value").is(relationFilter.getValue());
+      filters.add(Filters.text(relationFilter.getValue()));
     }
 
-    if (relationFilter.getRelationshipType() != null) {
-      criteria = criteria.and(prefix + "relationshipType").is(relationFilter.getRelationshipType());
+    // relationtype has dropped so map it and getType to the same thing
+    final String relationType = relationFilter.getRelationshipType() != null ? relationFilter.getRelationshipType()
+        : relationFilter.getType();
+
+    if (relationType != null) {
+      filters.add(Filters.eq(BaleenProperties.TYPE, relationType));
     }
 
     if (relationFilter.getRelationSubtype() != null) {
-      criteria = criteria.and(prefix + "relationSubtype").is(relationFilter.getRelationSubtype());
+      filters.add(Filters.eq(BaleenProperties.SUBTYPE, relationFilter.getRelationSubtype()));
     }
 
     if (relationFilter.getSourceId() != null) {
-      criteria = criteria.and(prefix + "sourceId").is(relationFilter.getSourceId());
+      filters.add(Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.EXTERNAL_ID,
+          relationFilter.getSourceId()));
     }
 
     if (relationFilter.getSourceType() != null) {
-      criteria = criteria.and(prefix + "sourceType").is(relationFilter.getSourceType());
+      filters.add(
+          Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.TYPE, relationFilter.getSourceType()));
     }
 
     if (relationFilter.getSourceValue() != null) {
-      criteria = criteria.and(prefix + "sourceValue").is(relationFilter.getSourceValue());
+      filters.add(
+          Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.VALUE, relationFilter.getSourceValue()));
     }
 
     if (relationFilter.getTargetId() != null) {
-      criteria = criteria.and(prefix + "targetId").is(relationFilter.getTargetId());
+      filters
+          .add(Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.EXTERNAL_ID,
+              relationFilter.getTargetId()));
     }
 
 
     if (relationFilter.getTargetType() != null) {
-      criteria = criteria.and(prefix + "targetType").is(relationFilter.getTargetType());
+      filters.add(
+          Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.TYPE, relationFilter.getTargetType()));
     }
 
     if (relationFilter.getTargetValue() != null) {
-      criteria = criteria.and(prefix + "targetValue").is(relationFilter.getTargetValue());
+      filters.add(
+          Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.VALUE, relationFilter.getTargetValue()));
     }
 
-    return criteria;
+    return FilterUtils.combine(filters);
   }
 
-  public static Optional<Bson> createFilter(final Optional<RelationFilter> filter) {
-    // TODO Auto-generated method stub
+  public static Stream<Bson> createFilters(final Stream<RelationFilter> filters) {
+    return filters
+        .map(f -> createFilter(Optional.ofNullable(f)))
+        .filter(Optional::isPresent)
+        .map(Optional::get);
   }
 
   public static Optional<Bson> createFilter(final RelationSearch relationSearch) {
-    // TODO Auto-generated method stub
+    return createFilter(Optional.ofNullable(relationSearch.getRelationFilter()));
   }
 }

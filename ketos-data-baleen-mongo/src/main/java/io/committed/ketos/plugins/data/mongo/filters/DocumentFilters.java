@@ -16,6 +16,7 @@ import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import io.committed.invest.core.constants.BooleanOperator;
+import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
@@ -30,15 +31,13 @@ public final class DocumentFilters {
     // Singleton
   }
 
-  public static Optional<Bson> createFilter(final Optional<DocumentFilter> documentFilter) {
-    return documentFilter.flatMap(DocumentFilters::createFilter);
-  }
+  public static Optional<Bson> createFilter(final Optional<DocumentFilter> filter) {
 
-  public static Optional<Bson> createFilter(final DocumentFilter documentFilter) {
-
-    if (documentFilter == null) {
+    if (!filter.isPresent()) {
       return Optional.empty();
     }
+
+    final DocumentFilter documentFilter = filter.get();
 
     final List<Bson> filters = new LinkedList<>();
 
@@ -47,6 +46,9 @@ public final class DocumentFilters {
       filters.add(Filters.text(documentFilter.getContent()));
     }
 
+    if (documentFilter.getId() != null) {
+      filters.add(Filters.eq(BaleenProperties.EXTERNAL_ID, documentFilter.getId()));
+    }
 
     if (documentFilter.getInfo() != null) {
       final DocumentInfoFilter info = documentFilter.getInfo();
@@ -100,11 +102,7 @@ public final class DocumentFilters {
     }
 
 
-    if (filters.isEmpty()) {
-      return Optional.empty();
-    }
-
-    return Optional.of(Filters.and(filters));
+    return FilterUtils.combine(filters);
   }
 
   public static boolean isAggregation(final DocumentSearch documentSearch) {
@@ -235,7 +233,7 @@ public final class DocumentFilters {
     final List<Bson> pipeline = new ArrayList<>();
 
     // Add the document matches
-    DocumentFilters.createFilter(documentSearch.getDocumentFilter()).ifPresent(f -> {
+    DocumentFilters.createFilter(Optional.ofNullable(documentSearch.getDocumentFilter())).ifPresent(f -> {
       pipeline.add(Aggregates.match(f));
     });
 
@@ -244,20 +242,14 @@ public final class DocumentFilters {
 
 
     if (!documentSearch.hasMentions()) {
-      final List<Bson> filters = documentSearch.getMentionFilters().stream()
-          .map(MentionFilters::createFilter)
-          .filter(Optional::isPresent)
-          .map(Optional::get)
+      final List<Bson> filters = MentionFilters.createFilters(documentSearch.getMentionFilters().stream())
           .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, mentionCollection);
     }
 
 
     if (!documentSearch.hasRelations()) {
-      final List<Bson> filters = documentSearch.getRelationFilters().stream()
-          .map(RelationFilters::createFilter)
-          .filter(Optional::isPresent)
-          .map(Optional::get)
+      final List<Bson> filters = RelationFilters.createFilters(documentSearch.getRelationFilters().stream())
           .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, relationCollection);
     }

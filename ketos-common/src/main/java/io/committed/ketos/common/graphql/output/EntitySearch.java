@@ -26,4 +26,8 @@ public class EntitySearch extends AbstractGraphQLNode {
     this.mentionFilters = mentionFilters == null ? Collections.emptyList() : mentionFilters;
   }
 
+  public boolean hasMentions() {
+    return !mentionFilters.isEmpty();
+  }
+
 }

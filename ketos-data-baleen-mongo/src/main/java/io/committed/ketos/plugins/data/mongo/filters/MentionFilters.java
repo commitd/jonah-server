@@ -1,16 +1,20 @@
 package io.committed.ketos.plugins.data.mongo.filters;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nullable;
+import java.util.stream.Stream;
 import org.bson.conversions.Bson;
-import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
-import com.jayway.jsonpath.Criteria;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.geojson.NamedCoordinateReferenceSystem;
+import com.mongodb.client.model.geojson.Polygon;
+import com.mongodb.client.model.geojson.PolygonCoordinates;
+import com.mongodb.client.model.geojson.Position;
 import io.committed.invest.core.dto.analytic.GeoBox;
+import io.committed.invest.support.mongo.utils.FilterUtils;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 
@@ -20,101 +24,88 @@ public final class MentionFilters {
     // Singleton
   }
 
-  public static List<Criteria> createCriteria(final Collection<MentionFilter> mentionFilters,
-      final String entityPrefix, final String mentionsPrefix) {
-    final List<Criteria> list = new LinkedList<>();
-    for (final MentionFilter f : mentionFilters) {
-      list.add(createCriteria(f, entityPrefix, mentionsPrefix));
-    }
-    return list;
-  }
-
-
-  public static Criteria createCriteria(@Nullable final MentionFilter mentionFilter, final String entityPrefix,
-      final String mentionsPrefix) {
-    Criteria criteria = new Criteria();
-
-    if (mentionFilter == null) {
-      return criteria;
+  public static Optional<Bson> createFilter(final Optional<MentionFilter> filter) {
+    if (!filter.isPresent()) {
+      return Optional.empty();
     }
 
-    // TODO: Need to sanitise MentionFilter somewhere...[before it gets here] eg if startTimestsamp is
-    // set then it's
-    // temporal... etc. You can't have within and start/endTimestamp etc because it
-    // if you have startTimestamp you can add additional EXACT date type prop need to look up what that
-    // is.
+    final MentionFilter mentionFilter = filter.get();
 
-    // Entity stuff
+    final List<Bson> filters = new LinkedList<>();
+
+    if (mentionFilter.getId() != null) {
+      filters.add(Filters.eq(BaleenProperties.EXTERNAL_ID, mentionFilter.getId()));
+    }
 
     if (mentionFilter.getDocId() != null) {
-      criteria = criteria.and(entityPrefix + "docId").is(mentionFilter.getDocId());
+      filters.add(Filters.eq(BaleenProperties.DOC_ID, mentionFilter.getDocId()));
     }
 
     if (mentionFilter.getEntityId() != null) {
-      criteria = criteria.and(entityPrefix + "id").is(mentionFilter.getEntityId());
+      filters.add(Filters.eq(BaleenProperties.ENTITY_ID, mentionFilter.getEntityId()));
     }
 
-    // Now mention
-
     if (mentionFilter.getType() != null) {
-      criteria = criteria.and(mentionsPrefix + "type").is(mentionFilter.getType());
+      filters.add(Filters.eq(BaleenProperties.TYPE, mentionFilter.getType()));
     }
 
     if (mentionFilter.getValue() != null) {
-      criteria = criteria.and(mentionsPrefix + "value").is(mentionFilter.getValue());
+      filters.add(Filters.eq(BaleenProperties.VALUE, mentionFilter.getValue()));
     }
+
 
     if (mentionFilter.getProperties() != null) {
       for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
-        criteria = criteria.and(mentionsPrefix + e.getKey()).is(e.getValue());
+        filters.add(
+            Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
       }
     }
 
     if (mentionFilter.getStartTimestamp() != null) {
-      criteria = criteria.and(mentionsPrefix + "timestampStart").gte(mentionFilter.getStartTimestamp());
+
+      filters.add(
+          Filters.gte(BaleenProperties.PROPERTIES + ".timestampStart", mentionFilter.getStartTimestamp().getTime()));
     }
 
 
     if (mentionFilter.getEndTimestamp() != null) {
-      criteria = criteria.and(mentionsPrefix + "timestampEnd").lte(mentionFilter.getEndTimestamp());
+      filters.add(
+          Filters.gte(BaleenProperties.PROPERTIES + ".timestampSop", mentionFilter.getEndTimestamp().getTime()));
     }
 
     if (mentionFilter.getWithin() != null) {
       final GeoBox within = mentionFilter.getWithin();
 
-      // TODO Ideally we'd use a box and within as that's nice and easy...
+      // Ideally we'd use a box and within as that's nice and easy...
       // but then we have lots of country stuff which is global (is colonies) so
-      // so we need to us an intersection.
-      // final Box box = new Box(
-      // new Point(within.getSafeW(), within.getSafeS(),
-      // new Point(within.getSafeE(), within.getSafeN());
+      // so we need to us an intersection (as box doesn't work with geoJson)
 
+      final Position bl = new Position(within.getSafeW(), within.getSafeS());
+      final Position br = new Position(within.getSafeE(), within.getSafeS());
+      final Position tr = new Position(within.getSafeE(), within.getSafeN());
+      final Position tl = new Position(within.getSafeW(), within.getSafeN());
 
-      final Point bl = new Point(within.getSafeW(), within.getSafeS());
-      final Point br = new Point(within.getSafeE(), within.getSafeS());
-      final Point tr = new Point(within.getSafeE(), within.getSafeN());
-      final Point tl = new Point(within.getSafeW(), within.getSafeN());
-
-      final GeoJsonPolygon geoJson = new GeoJsonPolygon(bl, br, tr, tl, bl);
-
-      // TODO: In either within on intersection, this won't actually find anything if the search is bigger
+      // In either within on intersection, this won't actually find anything if the search is bigger
       // than a hemisphere!
-      // there's a fix
       // https://docs.mongodb.com/manual/reference/operator/query/geoIntersects/#intersects-a-big-polygon
-      // but you cant set the CRS in Sprign Data Mongo.
 
-      criteria = criteria.and(mentionsPrefix + "geoJson").intersects(geoJson);
+      final PolygonCoordinates coordinates = new PolygonCoordinates(Arrays.asList(bl, br, tr, tl, bl));
+      final Polygon polygon = new Polygon(NamedCoordinateReferenceSystem.EPSG_4326_STRICT_WINDING, coordinates);
+      Filters.geoIntersects(BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon);
     }
 
 
-    return criteria;
-  }
-
-  public static Optional<Bson> createFilter(final Optional<MentionFilter> filter) {
-    // TODO Auto-generated method stub
+    return FilterUtils.combine(filters);
   }
 
   public static Optional<Bson> createFilter(final MentionSearch mentionSearch) {
-    // TODO Auto-generated method stub
+    return createFilter(Optional.ofNullable(mentionSearch.getMentionFilter()));
+  }
+
+  public static Stream<Bson> createFilters(final Stream<MentionFilter> mentionFilters) {
+    return mentionFilters
+        .map(f -> createFilter(Optional.ofNullable(f)))
+        .filter(Optional::isPresent)
+        .map(Optional::get);
   }
 }
