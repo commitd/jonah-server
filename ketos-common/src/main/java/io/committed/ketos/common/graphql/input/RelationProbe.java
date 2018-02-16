@@ -15,7 +15,7 @@ public class RelationProbe {
 
   private String type;
 
-  private String subtype;
+  private String subType;
 
   private String value;
 
@@ -28,7 +28,7 @@ public class RelationProbe {
 
     filter.setDocId(docId);
     filter.setId(id);
-    filter.setSubType(subtype);
+    filter.setSubType(subType);
     filter.setType(type);
     filter.setValue(value);
 
