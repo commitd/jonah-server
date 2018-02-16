@@ -115,7 +115,7 @@ public class MongoMentionProvider extends AbstractBaleenMongoDataProvider<Output
   @Override
   public Flux<TermBin> countByField(final Optional<MentionFilter> filter, final List<String> path,
       final int size) {
-    return termAggregation(MentionFilters.createFilter(filter, ""), path, size);
+    return termAggregation(MentionFilters.createFilter(filter, "", false), path, size);
   }
 
   @Override

@@ -17,6 +17,7 @@ import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.output.MentionSearch;
+import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
 public final class MentionFilters {
 
@@ -24,7 +25,8 @@ public final class MentionFilters {
     // Singleton
   }
 
-  public static Optional<Bson> createFilter(final Optional<MentionFilter> filter, final String prefix) {
+  public static Optional<Bson> createFilter(final Optional<MentionFilter> filter, final String prefix,
+      final boolean operatorMode) {
     if (!filter.isPresent()) {
       return Optional.empty();
     }
@@ -34,30 +36,32 @@ public final class MentionFilters {
     final List<Bson> filters = new LinkedList<>();
 
     if (mentionFilter.getId() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.EXTERNAL_ID, mentionFilter.getId()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, mentionFilter.getId(), operatorMode));
     }
 
     if (mentionFilter.getDocId() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.DOC_ID, mentionFilter.getDocId()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.DOC_ID, mentionFilter.getDocId(), operatorMode));
     }
 
     if (mentionFilter.getEntityId() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.ENTITY_ID, mentionFilter.getEntityId()));
+      filters
+          .add(CustomFilters.eqFilter(prefix + BaleenProperties.ENTITY_ID, mentionFilter.getEntityId(), operatorMode));
     }
 
     if (mentionFilter.getType() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.TYPE, mentionFilter.getType()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, mentionFilter.getType(), operatorMode));
     }
 
     if (mentionFilter.getValue() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.VALUE, mentionFilter.getValue()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.VALUE, mentionFilter.getValue(), operatorMode));
     }
 
 
     if (mentionFilter.getProperties() != null) {
       for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
         filters.add(
-            Filters.eq(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
+            CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
+                operatorMode));
       }
     }
 
@@ -101,12 +105,12 @@ public final class MentionFilters {
   }
 
   public static Optional<Bson> createFilter(final MentionSearch mentionSearch) {
-    return createFilter(Optional.ofNullable(mentionSearch.getMentionFilter()), "");
+    return createFilter(Optional.ofNullable(mentionSearch.getMentionFilter()), "", false);
   }
 
-  public static Stream<Bson> createFilters(final Stream<MentionFilter> mentionFilters) {
+  public static Stream<Bson> createFilters(final Stream<MentionFilter> mentionFilters, final boolean operatorMode) {
     return mentionFilters
-        .map(f -> createFilter(Optional.ofNullable(f), ""))
+        .map(f -> createFilter(Optional.ofNullable(f), "", operatorMode))
         .filter(Optional::isPresent)
         .map(Optional::get);
   }

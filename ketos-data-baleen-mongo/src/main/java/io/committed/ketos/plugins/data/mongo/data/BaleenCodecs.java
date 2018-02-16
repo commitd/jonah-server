@@ -137,7 +137,7 @@ public final class BaleenCodecs {
 
     @Override
     public void encode(final BsonWriter writer, final Bson value, final EncoderContext encoderContext) {
-      final BsonDocument bsonDocument = value.toBsonDocument(Document.class, codecRegistry);
+      final BsonDocument bsonDocument = value.toBsonDocument(Document.class, codecRegistry);;
       final Codec<BsonDocument> codec = codecRegistry.get(BsonDocument.class);
       codec.encode(writer, bsonDocument, encoderContext);
     }

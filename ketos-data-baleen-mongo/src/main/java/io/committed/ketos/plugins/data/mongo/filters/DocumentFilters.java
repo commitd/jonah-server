@@ -14,7 +14,6 @@ import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.BsonField;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
-import io.committed.invest.core.constants.BooleanOperator;
 import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
@@ -82,7 +81,6 @@ public final class DocumentFilters {
       if (info.getPublishedId() != null) {
         filters.add(Filters.in("properties.publishedIds.id", info.getPublishedId()));
       }
-
     }
 
     if (documentFilter.getMetadata() != null) {
@@ -242,21 +240,21 @@ public final class DocumentFilters {
 
     if (documentSearch.hasMentions()) {
       final List<Bson> filters =
-          MentionFilters.createFilters(documentSearch.getMentionFilters().stream())
+          MentionFilters.createFilters(documentSearch.getMentionFilters().stream(), true)
               .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, mentionCollection);
     }
 
     if (documentSearch.hasEntities()) {
       final List<Bson> filters =
-          EntityFilters.createFilters(documentSearch.getEntityFilters().stream())
+          EntityFilters.createFilters(documentSearch.getEntityFilters().stream(), true)
               .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, entityCollection);
     }
 
     if (documentSearch.hasRelations()) {
       final List<Bson> filters =
-          RelationFilters.createFilters(documentSearch.getRelationFilters().stream())
+          RelationFilters.createFilters(documentSearch.getRelationFilters().stream(), true)
               .collect(Collectors.toList());
       addFiltersToAggregation(pipeline, filters, relationCollection);
     }
@@ -312,8 +310,6 @@ public final class DocumentFilters {
     }
     pipeline.add(Aggregates.group("$" + BaleenProperties.DOC_ID, groupByFields));
 
-    // Apply the and/or filter
-    final BooleanOperator operator = BooleanOperator.AND;
     final List<Bson> queryMatched = new ArrayList<>(numFilters);
     for (int i = 0; i < numFilters; i++) {
       final String key = QUERY_PREFIX + i;

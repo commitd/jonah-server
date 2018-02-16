@@ -117,7 +117,7 @@ public class MongoRelationProvider extends AbstractBaleenMongoDataProvider<Outpu
   @Override
   public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path,
       final int size) {
-    return termAggregation(RelationFilters.createFilter(filter), path, size);
+    return termAggregation(RelationFilters.createFilter(filter, false), path, size);
   }
 
   @Override

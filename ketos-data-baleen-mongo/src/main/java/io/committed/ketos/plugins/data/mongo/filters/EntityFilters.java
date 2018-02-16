@@ -17,6 +17,7 @@ import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.output.EntitySearch;
+import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
 public final class EntityFilters {
 
@@ -24,7 +25,8 @@ public final class EntityFilters {
     // Singleton
   }
 
-  public static Optional<Bson> createFilter(final Optional<EntityFilter> filter, final String prefix) {
+  public static Optional<Bson> createFilter(final Optional<EntityFilter> filter, final String prefix,
+      final boolean operatorMode) {
 
     if (!filter.isPresent()) {
       return Optional.empty();
@@ -36,30 +38,32 @@ public final class EntityFilters {
 
 
     if (mentionFilter.getId() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.EXTERNAL_ID, mentionFilter.getId()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, mentionFilter.getId(), operatorMode));
     }
 
     if (mentionFilter.getDocId() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.DOC_ID, mentionFilter.getDocId()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.DOC_ID, mentionFilter.getDocId(), operatorMode));
     }
 
     if (mentionFilter.getMentionId() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.MENTION_IDS, mentionFilter.getMentionId()));
+      filters.add(
+          CustomFilters.eqFilter(prefix + BaleenProperties.MENTION_IDS, mentionFilter.getMentionId(), operatorMode));
     }
 
     if (mentionFilter.getType() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.TYPE, mentionFilter.getType()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, mentionFilter.getType(), operatorMode));
     }
 
     if (mentionFilter.getValue() != null) {
-      filters.add(Filters.eq(prefix + BaleenProperties.VALUE, mentionFilter.getValue()));
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.VALUE, mentionFilter.getValue(), operatorMode));
     }
 
 
     if (mentionFilter.getProperties() != null) {
       for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
         filters.add(
-            Filters.eq(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
+            CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
+                operatorMode));
       }
     }
 
@@ -102,12 +106,12 @@ public final class EntityFilters {
   }
 
   public static Optional<Bson> createFilter(final EntitySearch entitySearch) {
-    return createFilter(Optional.ofNullable(entitySearch.getEntityFilter()), "");
+    return createFilter(Optional.ofNullable(entitySearch.getEntityFilter()), "", false);
   }
 
-  public static Stream<Bson> createFilters(final Stream<EntityFilter> filters) {
+  public static Stream<Bson> createFilters(final Stream<EntityFilter> filters, final boolean operatorMode) {
     return filters
-        .map(f -> createFilter(Optional.ofNullable(f), ""))
+        .map(f -> createFilter(Optional.ofNullable(f), "", operatorMode))
         .filter(Optional::isPresent)
         .map(Optional::get);
   }
