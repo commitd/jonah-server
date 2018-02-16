@@ -3,6 +3,7 @@ package io.committed.ketos.data.elasticsearch.repository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -11,7 +12,6 @@ import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.joda.time.DateTime;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
@@ -28,9 +28,9 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   // We have to provide an upper value...
   private static final int ALL_RESULTS = 10000;
 
-  public AbstractEsBaleenService(final ObjectMapper mapper, final ElasticsearchTemplate elastic, final String indexName,
+  public AbstractEsBaleenService(final Client client, final ObjectMapper mapper, final String indexName,
       final String typeName, final Class<T> clazz) {
-    super(mapper, elastic, indexName, typeName, clazz);
+    super(client, mapper, indexName, typeName, clazz);
   }
 
   public Mono<T> getByExternalId(final String id) {

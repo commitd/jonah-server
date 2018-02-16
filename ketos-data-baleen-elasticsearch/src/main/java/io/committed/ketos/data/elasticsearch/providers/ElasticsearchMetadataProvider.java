@@ -5,11 +5,11 @@ import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
@@ -53,20 +53,21 @@ public class ElasticsearchMetadataProvider
 
     final String fieldkeyword = BaleenProperties.METADATA + "." + field;
 
-    final NativeSearchQueryBuilder searchQueryBuilder = getService().queryBuilder()
-        .addAggregation(AggregationBuilders.nested("agg", BaleenProperties.METADATA)
-            .subAggregation(AggregationBuilders.filter("filtered", query.orElse(QueryBuilders.matchAllQuery()))
-                .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword))));
+
+    final AggregationBuilder ab = AggregationBuilders.nested("agg", BaleenProperties.METADATA)
+        .subAggregation(AggregationBuilders.filter("filtered", query.orElse(QueryBuilders.matchAllQuery()))
+            .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword)));
 
 
-    return getService().query(searchQueryBuilder, response -> {
-      final Nested nested = response.getAggregations().get("agg");
-      final Filter filtered = nested.getAggregations().get("filtered");
-      final Terms terms = filtered.getAggregations().get("count");
-      return Flux.fromIterable(terms.getBuckets())
-          .map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
+    return getService().aggregation(Optional.empty(), ab)
+        .flatMapMany(response -> {
+          final Nested nested = response.get("agg");
+          final Filter filtered = nested.getAggregations().get("filtered");
+          final Terms terms = filtered.getAggregations().get("count");
+          return Flux.fromIterable(terms.getBuckets())
+              .map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
 
-    });
+        });
   }
 
   private NestedQueryBuilder queryByKey(final String key) {

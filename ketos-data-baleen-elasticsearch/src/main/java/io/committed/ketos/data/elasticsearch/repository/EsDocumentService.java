@@ -1,14 +1,14 @@
 package io.committed.ketos.data.elasticsearch.repository;
 
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.elasticsearch.client.Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 
 public class EsDocumentService extends AbstractEsBaleenService<OutputDocument> {
 
-  public EsDocumentService(final ObjectMapper mapper, final ElasticsearchTemplate elastic, final String indexName,
+  public EsDocumentService(final Client client, final ObjectMapper mapper, final String indexName,
       final String typeName) {
-    super(mapper, elastic, indexName, typeName, OutputDocument.class);
+    super(client, mapper, indexName, typeName, OutputDocument.class);
   }
 
 }

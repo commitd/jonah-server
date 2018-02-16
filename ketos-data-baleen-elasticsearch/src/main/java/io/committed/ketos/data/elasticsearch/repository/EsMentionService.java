@@ -1,14 +1,14 @@
 package io.committed.ketos.data.elasticsearch.repository;
 
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.elasticsearch.client.Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
 
 public class EsMentionService extends AbstractEsBaleenService<OutputMention> {
 
-  public EsMentionService(final ObjectMapper mapper, final ElasticsearchTemplate elastic, final String indexName,
+  public EsMentionService(final Client client, final ObjectMapper mapper, final String indexName,
       final String typeName) {
-    super(mapper, elastic, indexName, typeName, OutputMention.class);
+    super(client, mapper, indexName, typeName, OutputMention.class);
   }
 
 }

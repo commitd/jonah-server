@@ -1,7 +1,7 @@
 package io.committed.ketos.data.elasticsearch.factory;
 
 import java.util.Map;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.elasticsearch.client.Client;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
@@ -31,10 +31,10 @@ public class EsMetadataProviderFactory
   public Mono<MetadataProvider> build(final String dataset, final String datasource,
       final Map<String, Object> settings) {
     try {
-      final ElasticsearchTemplate elastic = buildElasticTemplate(settings);
+      final Client elastic = buildElasticClient(settings);
 
       final EsDocumentService service =
-          new EsDocumentService(mapper, elastic, getIndexName(settings), getTypeName(settings));
+          new EsDocumentService(elastic, mapper, getIndexName(settings), getTypeName(settings));
 
       return Mono.just(new ElasticsearchMetadataProvider(dataset, datasource, service));
 
