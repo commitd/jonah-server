@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.geojson.NamedCoordinateReferenceSystem;
@@ -104,5 +105,10 @@ public final class EntityFilters {
     return createFilter(Optional.ofNullable(entitySearch.getEntityFilter()), "");
   }
 
-
+  public static Stream<Bson> createFilters(final Stream<EntityFilter> filters) {
+    return filters
+        .map(f -> createFilter(Optional.ofNullable(f), ""))
+        .filter(Optional::isPresent)
+        .map(Optional::get);
+  }
 }

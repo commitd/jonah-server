@@ -14,6 +14,7 @@ import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
+import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
@@ -109,6 +110,8 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "mentions",
           description = "Including mentions") final List<MentionFilter> mentionFilters,
+      @GraphQLArgument(name = "entities",
+          description = "Including entities") final List<EntityFilter> entityFilters,
       @GraphQLArgument(name = "relations",
           description = "Include relations") final List<RelationFilter> relationFilters) {
 
@@ -117,6 +120,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
         .documentFilter(documentFilter)
         .mentionFilters(mentionFilters)
         .relationFilters(relationFilters)
+        .entityFilters(entityFilters)
         .build();
   }
 

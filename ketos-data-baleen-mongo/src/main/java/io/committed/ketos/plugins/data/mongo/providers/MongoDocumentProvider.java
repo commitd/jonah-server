@@ -75,7 +75,8 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
       final int size) {
 
     final List<Bson> aggregation =
-        DocumentFilters.createAggregation(documentSearch, getCollectionName(), mentionCollection, relationCollection);
+        DocumentFilters.createAggregation(documentSearch, getCollectionName(), mentionCollection, entityCollection,
+            relationCollection);
 
     final Flux<BaleenDocument> results = aggregate(aggregation, OutputDocument.class)
         .skip(offset)

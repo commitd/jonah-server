@@ -117,6 +117,17 @@ public final class DocumentFilters {
               ScoreMode.None)));
     }
 
+    if (documentSearch.getEntityFilters() != null) {
+      documentSearch.getEntityFilters().stream()
+          .map(f -> EntityFilters.toQuery(Optional.ofNullable(f), ""))
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
+              entityType,
+              q,
+              ScoreMode.None)));
+    }
+
     if (documentSearch.getRelationFilters() != null) {
       documentSearch.getRelationFilters().stream()
           .map(f -> RelationFilters.toQuery(Optional.ofNullable(f), ""))

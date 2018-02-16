@@ -105,7 +105,7 @@ public final class DocumentFilters {
   }
 
   public static boolean isAggregation(final DocumentSearch documentSearch) {
-    return documentSearch.hasMentions() || documentSearch.hasRelations();
+    return documentSearch.hasMentions() || documentSearch.hasRelations() || documentSearch.hasEntities();
   }
 
   public static Optional<Bson> createFilter(final DocumentSearch documentSearch) {
@@ -115,7 +115,7 @@ public final class DocumentFilters {
   }
 
   public static List<Bson> createAggregation(final DocumentSearch documentSearch, final String documentCollection,
-      final String mentionCollection, final String relationCollection) {
+      final String mentionCollection, final String entityCollection, final String relationCollection) {
 
     // In order to join in Mongo you need to do an aggregation, and then use $lookup.
     // Lookup as two opiotns one to so a simple join (id in one collection -> docId to another),
@@ -247,6 +247,12 @@ public final class DocumentFilters {
       addFiltersToAggregation(pipeline, filters, mentionCollection);
     }
 
+    if (documentSearch.hasEntities()) {
+      final List<Bson> filters =
+          EntityFilters.createFilters(documentSearch.getEntityFilters().stream())
+              .collect(Collectors.toList());
+      addFiltersToAggregation(pipeline, filters, entityCollection);
+    }
 
     if (documentSearch.hasRelations()) {
       final List<Bson> filters =
