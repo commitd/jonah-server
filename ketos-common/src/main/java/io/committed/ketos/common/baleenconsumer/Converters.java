@@ -71,7 +71,7 @@ public final class Converters {
         .id(relation.getExternalId())
         .properties(relation.getProperties())
         .source(toBaleenMention(relation.getSource()))
-        .subtype(relation.getSubType())
+        .subType(relation.getSubType())
         .target(toBaleenMention(relation.getTarget()))
         .type(relation.getType())
         .value(relation.getValue())

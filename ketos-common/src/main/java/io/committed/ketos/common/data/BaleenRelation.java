@@ -24,7 +24,7 @@ public class BaleenRelation extends AbstractGraphQLNode {
 
   private final String type;
 
-  private final String subtype;
+  private final String subType;
 
   private final String value;
 
@@ -44,7 +44,7 @@ public class BaleenRelation extends AbstractGraphQLNode {
     this.begin = begin;
     this.end = end;
     this.type = type;
-    this.subtype = subtype;
+    this.subType = subtype;
     this.value = value;
     this.source = source;
     this.target = target;
