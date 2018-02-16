@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import io.committed.invest.extensions.annotations.GraphQLService;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentInfo;
 import io.committed.ketos.common.data.BaleenDocumentInfo.BaleenDocumentInfoBuilder;
@@ -22,14 +23,15 @@ public class DocumentInfoService {
 
     final Map<String, Object> properties = document.getProperties();
 
-    builder.caveats(MapUtils.getStringsAsKey(properties, "caveats"));
-    builder.classification(MapUtils.getStringAsKey(properties, "classification").orElse(null));
-    builder.date(MapUtils.getDateAsKey(properties, "documentDate").orElse(null));
-    builder.language(MapUtils.getStringAsKey(properties, "language").orElse("NA"));
-    builder.releasability(MapUtils.getStringsAsKey(properties, "releasability"));
-    builder.source(MapUtils.getStringAsKey(properties, "classification").orElse(null));
-    builder.timestamp(MapUtils.getDateAsKey(properties, "timestamp").orElse(null));
-    builder.title(MapUtils.getStringAsKey(properties, "documentTitle").orElse(null));
+    builder.caveats(MapUtils.getStringsAsKey(properties, BaleenProperties.CAVEATS));
+    builder.classification(MapUtils.getStringAsKey(properties, BaleenProperties.CLASSIFICATION).orElse(null));
+    builder.date(MapUtils.getDateAsKey(properties, BaleenProperties.DOCUMENT_DATE).orElse(null));
+    builder.language(MapUtils.getStringAsKey(properties, BaleenProperties.LANGUAGE).orElse("NA"));
+    builder.releasability(MapUtils.getStringsAsKey(properties, BaleenProperties.RELEASABILITY));
+    builder.source(MapUtils.getStringAsKey(properties, BaleenProperties.SOURCE).orElse(""));
+    builder.timestamp(MapUtils.getDateAsKey(properties, BaleenProperties.TIMESTAMP).orElse(null));
+    builder.title(MapUtils.getStringAsKey(properties, BaleenProperties.DOCUMENT_TITLE).orElse("Unknown"));
+    builder.type(MapUtils.getStringAsKey(properties, BaleenProperties.DOCUMENT_TYPE).orElse("Unknown"));
 
     builder.publishedIds(extractPublishedIds(properties));
 
