@@ -32,57 +32,61 @@ public final class EntityFilters {
       return Optional.empty();
     }
 
-    final EntityFilter mentionFilter = filter.get();
+    final EntityFilter entityFilter = filter.get();
 
     final List<Bson> filters = new LinkedList<>();
 
-
-    if (mentionFilter.getId() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, mentionFilter.getId(), operatorMode));
+    if (entityFilter.getValue() != null) {
+      // Since there is only a single text index, we can't be specific here about which value to use
+      // prefix + BaleenProperties.VALUE, ;
+      filters.add(Filters.text(entityFilter.getValue()));
     }
 
-    if (mentionFilter.getDocId() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.DOC_ID, mentionFilter.getDocId(), operatorMode));
+    if (entityFilter.getId() != null) {
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, entityFilter.getId(), operatorMode));
     }
 
-    if (mentionFilter.getMentionId() != null) {
+    if (entityFilter.getDocId() != null) {
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.DOC_ID, entityFilter.getDocId(), operatorMode));
+    }
+
+    if (entityFilter.getMentionId() != null) {
       filters.add(
-          CustomFilters.eqFilter(prefix + BaleenProperties.MENTION_IDS, mentionFilter.getMentionId(), operatorMode));
+          CustomFilters.eqFilter(prefix + BaleenProperties.MENTION_IDS, entityFilter.getMentionId(), operatorMode));
     }
 
-    if (mentionFilter.getType() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, mentionFilter.getType(), operatorMode));
+    if (entityFilter.getType() != null) {
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, entityFilter.getType(), operatorMode));
+    }
+    if (entityFilter.getSubType() != null) {
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.SUBTYPE, entityFilter.getSubType(), operatorMode));
     }
 
-    if (mentionFilter.getValue() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.VALUE, mentionFilter.getValue(), operatorMode));
-    }
 
-
-    if (mentionFilter.getProperties() != null) {
-      for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
+    if (entityFilter.getProperties() != null) {
+      for (final Map.Entry<String, Object> e : entityFilter.getProperties().entrySet()) {
         filters.add(
             CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
                 operatorMode));
       }
     }
 
-    if (mentionFilter.getStartTimestamp() != null) {
+    if (entityFilter.getStartTimestamp() != null) {
 
       filters.add(
           Filters.gte(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP,
-              mentionFilter.getStartTimestamp().getTime()));
+              entityFilter.getStartTimestamp().getTime()));
     }
 
 
-    if (mentionFilter.getEndTimestamp() != null) {
+    if (entityFilter.getEndTimestamp() != null) {
       filters.add(
           Filters.gte(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP,
-              mentionFilter.getEndTimestamp().getTime()));
+              entityFilter.getEndTimestamp().getTime()));
     }
 
-    if (mentionFilter.getWithin() != null) {
-      final GeoBox within = mentionFilter.getWithin();
+    if (entityFilter.getWithin() != null) {
+      final GeoBox within = entityFilter.getWithin();
 
       // Ideally we'd use a box and within as that's nice and easy...
       // but then we have lots of country stuff which is global (is colonies) so

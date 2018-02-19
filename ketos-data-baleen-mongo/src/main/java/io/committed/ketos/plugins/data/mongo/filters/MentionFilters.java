@@ -35,6 +35,12 @@ public final class MentionFilters {
 
     final List<Bson> filters = new LinkedList<>();
 
+    if (mentionFilter.getValue() != null) {
+      // Since there is only a single text index, we can't be specific here about which value to use
+      // prefix + BaleenProperties.VALUE, ;
+      filters.add(Filters.text(mentionFilter.getValue()));
+    }
+
     if (mentionFilter.getId() != null) {
       filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, mentionFilter.getId(), operatorMode));
     }
@@ -52,10 +58,9 @@ public final class MentionFilters {
       filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, mentionFilter.getType(), operatorMode));
     }
 
-    if (mentionFilter.getValue() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.VALUE, mentionFilter.getValue(), operatorMode));
+    if (mentionFilter.getSubType() != null) {
+      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.SUBTYPE, mentionFilter.getSubType(), operatorMode));
     }
-
 
     if (mentionFilter.getProperties() != null) {
       for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
