@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.bson.conversions.Bson;
-import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Projections;
 import com.mongodb.reactivestreams.client.MongoDatabase;
@@ -36,15 +35,16 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
   }
 
   protected Flux<TermBin> termAggregation(final Optional<Bson> filter, final List<String> path, final int size) {
-    final String field = "$" + FieldUtils.joinField(path);
+    final String fieldName = FieldUtils.joinField(path);
+    final String field = "$" + fieldName;
 
     final List<Bson> aggregation = new LinkedList<>();
 
-    filter.ifPresent(aggregation::add);
-
-    aggregation.add(Aggregates.group(field, Accumulators.sum("count", 1)));
+    filter.ifPresent(f -> aggregation.add(Aggregates.match(f)));
+    aggregation.add(Aggregates.sortByCount(field));
     aggregation.add(
         Aggregates.project(Projections.fields(Projections.computed("term", "$_id"), Projections.include("count"))));
-    return aggregate(aggregation, TermBin.class).take(size);
+    return aggregate(aggregation, TermBin.class)
+        .take(size);
   }
 }

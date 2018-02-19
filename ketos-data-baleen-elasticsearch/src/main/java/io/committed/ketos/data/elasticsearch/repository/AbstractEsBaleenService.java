@@ -45,7 +45,12 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   public Flux<TermBin> termAggregation(final Optional<QueryBuilder> query, final List<String> path,
       final int size) {
     final String field = FieldUtils.joinField(path);
-    return termAggregation(query, field, size);
+    if (path.size() == 1) {
+      return termAggregation(query, field, size);
+    } else {
+      return nestedTermAggregation(query, path.get(0), field, size);
+
+    }
   }
 
   public Flux<TermBin> nestedTermAggregation(final Optional<QueryBuilder> query,

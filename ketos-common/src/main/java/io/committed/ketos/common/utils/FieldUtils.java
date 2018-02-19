@@ -27,6 +27,8 @@ public final class FieldUtils {
   public static Mono<TermCount> joinTermBins(final Flux<TermBin> flux) {
     return flux.groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
-        .collectList().map(TermCount::new);
+        .sort()
+        .collectList()
+        .map(TermCount::new);
   }
 }
