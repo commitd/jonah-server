@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor()
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class NamedGeoLocation extends GeoLocation {
@@ -17,7 +17,14 @@ public class NamedGeoLocation extends GeoLocation {
   private String type;
 
   public NamedGeoLocation(final double lat, final double lon) {
+    this("", "", lat, lon);
+
+  }
+
+  public NamedGeoLocation(final String name, final String type, final double lat, final double lon) {
     super(lat, lon);
+    this.name = name;
+    this.type = type;
   }
 
 

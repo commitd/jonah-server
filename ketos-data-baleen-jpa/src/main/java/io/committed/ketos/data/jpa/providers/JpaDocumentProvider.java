@@ -17,6 +17,7 @@ import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -144,5 +145,10 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
     return Flux.empty();
   }
 
+
+  @Override
+  public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
+    return Flux.empty();
+  }
 
 }

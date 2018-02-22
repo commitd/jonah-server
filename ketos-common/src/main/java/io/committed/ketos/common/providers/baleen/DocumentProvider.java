@@ -9,6 +9,7 @@ import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -49,5 +50,8 @@ public interface DocumentProvider extends DataProvider {
 
 
   Flux<TimeBin> countByJoinedDate(Optional<DocumentFilter> documentFilter, ItemTypes joinedType, TimeInterval interval);
+
+
+  Flux<NamedGeoLocation> documentLocations(Optional<DocumentFilter> documentFilter, int size);
 
 }

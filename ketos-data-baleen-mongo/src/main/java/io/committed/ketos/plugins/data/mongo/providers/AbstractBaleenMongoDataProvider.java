@@ -106,4 +106,5 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
           return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
         });
   }
+
 }

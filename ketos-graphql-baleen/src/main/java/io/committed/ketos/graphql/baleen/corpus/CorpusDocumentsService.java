@@ -13,6 +13,7 @@ import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.input.EntityFilter;
@@ -212,5 +213,21 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     return FieldUtils.joinTimeBins(
         providers.flatMap(p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, interval)),
         interval);
+  }
+
+  @GraphQLQuery(name = "documentLocations",
+      description = "Count of type (entity,mention) by field value including a document filter")
+  public Flux<NamedGeoLocation> documentLocations(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of locations to return",
+          defaultValue = "10") final int size,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
+    return providers.flatMap(p -> p.documentLocations(Optional.ofNullable(documentFilter), size));
+
   }
 }

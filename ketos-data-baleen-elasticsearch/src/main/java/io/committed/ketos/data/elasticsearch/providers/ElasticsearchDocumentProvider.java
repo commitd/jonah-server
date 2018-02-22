@@ -13,6 +13,7 @@ import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
@@ -104,6 +105,11 @@ public class ElasticsearchDocumentProvider
     return null;
   }
 
+  @Override
+  public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 }
 

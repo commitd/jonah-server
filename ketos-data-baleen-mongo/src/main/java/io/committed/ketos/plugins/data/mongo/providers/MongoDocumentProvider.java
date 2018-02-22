@@ -1,13 +1,16 @@
 
 package io.committed.ketos.plugins.data.mongo.providers;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.reactivestreams.Publisher;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.reactivestreams.client.FindPublisher;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
@@ -19,6 +22,7 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.constants.BaleenTypes;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
@@ -159,10 +163,54 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
 
     final List<Bson> aggregation = joinCollection(documentFilter, joinedType);
 
-
     return termAggregation(aggregation, path, size);
   }
 
+
+  // TODO: Quite specific... but perhaps this is better? (no entity/mention field... leave it to the
+  // impl)
+  @Override
+  public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
+    final List<Bson> aggregation = joinCollection(documentFilter, ItemTypes.ENTITY);
+
+
+
+    // Get locations, with pois
+    final String poiFieldName = BaleenProperties.PROPERTIES + "." + BaleenProperties.POI;
+    aggregation.add(Aggregates.match(
+        Filters.and(
+            Filters.eq(BaleenProperties.TYPE, BaleenTypes.LOCATION),
+            Filters.ne(poiFieldName, null))));
+
+    aggregation.add(Aggregates.project(Projections.fields(Projections.computed("poi", "$" + poiFieldName),
+        Projections.include(BaleenProperties.VALUE))));
+
+    aggregate(aggregation, Document.class).subscribe(d -> {
+      System.out.println(d);
+    });
+
+    return aggregate(aggregation, Document.class)
+        .flatMap(d -> {
+          final Object pois = d.get("poi");
+          if (pois instanceof Collection) {
+
+            return Flux.fromIterable((Collection<Document>) pois).map(poi -> {
+              final Double lat = poi.getDouble("lat");
+              final Double lon = poi.getDouble("lon");
+              final String value = d.getString("value");
+
+              return new NamedGeoLocation(value, "", lat, lon);
+            });
+
+          } else {
+            return Flux.empty();
+          }
+
+        })
+        .take(size);
+
+
+  }
 
   private List<Bson> joinCollection(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType) {
     final List<Bson> aggregation = new LinkedList<>();
@@ -182,7 +230,6 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
 
     return aggregation;
   }
-
 
 
   protected String itemTypeToJoinCollection(final ItemTypes type) {
