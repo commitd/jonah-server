@@ -103,7 +103,8 @@ public final class EntityFilters {
 
       final PolygonCoordinates coordinates = new PolygonCoordinates(Arrays.asList(bl, br, tr, tl, bl));
       final Polygon polygon = new Polygon(NamedCoordinateReferenceSystem.EPSG_4326_STRICT_WINDING, coordinates);
-      Filters.geoIntersects(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon);
+      filters
+          .add(Filters.geoIntersects(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon));
     }
 
     return FilterUtils.combine(filters);
