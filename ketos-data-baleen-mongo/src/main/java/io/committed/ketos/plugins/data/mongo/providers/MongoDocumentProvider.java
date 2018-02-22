@@ -185,10 +185,6 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
     aggregation.add(Aggregates.project(Projections.fields(Projections.computed("poi", "$" + poiFieldName),
         Projections.include(BaleenProperties.VALUE))));
 
-    aggregate(aggregation, Document.class).subscribe(d -> {
-      System.out.println(d);
-    });
-
     return aggregate(aggregation, Document.class)
         .flatMap(d -> {
           final Object pois = d.get("poi");
