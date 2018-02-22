@@ -172,7 +172,7 @@ public class DocumentLocationField extends AbstractGraphQlService {
 
   @GraphQLQuery(name = "geohash")
   public String getGeohash(@GraphQLContext final GeoLocation location,
-      @GraphQLArgument(name = "precision", defaultValue = "9") final int precision) {
+      @GraphQLArgument(name = "precision", defaultValue = "7") final int precision) {
     final double lat = location.getLat();
     final double lon = location.getLon();
 
