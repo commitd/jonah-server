@@ -8,8 +8,8 @@ import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
-import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
+import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
@@ -59,4 +59,6 @@ public class DocumentSearchService extends AbstractGraphQlService {
         .total(count)
         .build();
   }
+
+
 }

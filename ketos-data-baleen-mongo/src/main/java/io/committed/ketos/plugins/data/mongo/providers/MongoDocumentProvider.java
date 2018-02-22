@@ -1,19 +1,13 @@
 
 package io.committed.ketos.plugins.data.mongo.providers;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.reactivestreams.Publisher;
-import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.FindPublisher;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
@@ -22,6 +16,8 @@ import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
+import io.committed.ketos.common.constants.BaleenTypes;
+import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -120,43 +116,11 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
       aggregation.add(Aggregates.match(f));
     });
 
-    String dateString;
-    switch (interval) {
-      case YEAR:
-        dateString = "%Y-01-01";
-        break;
-      case MONTH:
-        dateString = "%Y-%m-01";
-        break;
-      default: // TODO: Everything else we drop to day resolution (could do hour, min, sec
-        dateString = "%Y-%m-%d";
-    }
-
-
-
-    // Convert from milliseconds to data
-    // https://stackoverflow.com/questions/29892152/convert-milliseconds-to-date-in-mongodb-aggregation-pipeline-for-group-by
-    final Document tsToDate = new Document("ts",
-        new Document("$add", Arrays.asList(new Date(0),
-            String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE))));
-    aggregation.add(Aggregates.project(tsToDate));
-    // then create a grouping
-    final Document dateToString = new Document("date",
-        new Document("$dateToString",
-            new Document()
-                .append("format", dateString)
-                .append("date", "$ts")));
-    aggregation.add(Aggregates.project(dateToString));
-    aggregation.add(Aggregates.group("$date", Accumulators.sum("count", 1)));
-    aggregation
-        .add(Aggregates
-            .project(Projections.fields(Projections.computed("term", "$_id"), Projections.include("count"))));
-
-    return aggregate(aggregation, TermBin.class).map(t -> {
-      final LocalDate date = LocalDate.parse(t.getTerm());
-      return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
-    });
+    return timelineAggregation(aggregation, interval,
+        String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE), 1);
   }
+
+
 
   @Override
   public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path,
@@ -164,5 +128,74 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
     return termAggregation(DocumentFilters.createFilter(documentFilter), path, size);
   }
 
+  // TODO: Where should this really be - perhsp in another provider.
+  // TODO: Then we'd really need a helper to create the data providesr ... jsut give it a baleen db
+  // and let it create everything
+  @Override
+  public Flux<TimeBin> countByJoinedDate(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
+      final TimeInterval interval) {
+
+    final List<Bson> aggregation = joinCollection(documentFilter, joinedType);
+
+    aggregation.add(Aggregates.match(
+        Filters.and(
+            Filters.eq(BaleenProperties.TYPE, BaleenTypes.TEMPORAL),
+            Filters.eq(BaleenProperties.PROPERTIES + "." + BaleenProperties.TEMPORAL_PRECISION,
+                BaleenProperties.TEMPORAL_PRECISION__EXACT))));
+
+    // TODO: It's hard to pick here... this will produce a lot of stuff on the start of month or day as
+    // it mentions
+    // July 2016 for example. We do have a timestampStart and timestampEnd so we could do something but
+    // anything is equally odd
+    // TODO: Crazy Baleen outputs seconds here, but mills for value!
+    return timelineAggregation(aggregation, interval,
+        String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP), 1000);
+  }
+
+  @Override
+  public Flux<TermBin> countByJoinedField(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
+      final List<String> path,
+      final int size) {
+
+    final List<Bson> aggregation = joinCollection(documentFilter, joinedType);
+
+
+    return termAggregation(aggregation, path, size);
+  }
+
+
+  private List<Bson> joinCollection(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType) {
+    final List<Bson> aggregation = new LinkedList<>();
+
+    DocumentFilters.createFilter(documentFilter).ifPresent(f -> {
+      aggregation.add(Aggregates.match(f));
+    });
+
+    final String collection = itemTypeToJoinCollection(joinedType);
+
+
+    // Join on the collection and then unwind
+    final String JOINED_FIELD = "joined";
+    aggregation.add(Aggregates.lookup(collection, "externalId", "docId", JOINED_FIELD));
+    aggregation.add(Aggregates.unwind("$" + JOINED_FIELD));
+    aggregation.add(Aggregates.replaceRoot("$" + JOINED_FIELD));
+
+    return aggregation;
+  }
+
+
+
+  protected String itemTypeToJoinCollection(final ItemTypes type) {
+    switch (type) {
+      case ENTITY:
+        return entityCollection;
+      case RELATION:
+        return relationCollection;
+      case MENTION:
+        return mentionCollection;
+      default:
+        throw new IllegalArgumentException("Not supported join collection");
+    }
+  }
 }
 

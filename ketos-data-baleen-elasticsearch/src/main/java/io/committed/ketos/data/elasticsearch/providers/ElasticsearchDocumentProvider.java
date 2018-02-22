@@ -11,6 +11,7 @@ import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
+import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -88,6 +89,20 @@ public class ElasticsearchDocumentProvider
     return getService().nestedTimelineAggregation(query, interval, BaleenProperties.PROPERTIES, field);
   }
 
+
+  @Override
+  public Flux<TimeBin> countByJoinedDate(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
+      final TimeInterval interval) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Flux<TermBin> countByJoinedField(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
+      final List<String> path, final int size) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 
 }

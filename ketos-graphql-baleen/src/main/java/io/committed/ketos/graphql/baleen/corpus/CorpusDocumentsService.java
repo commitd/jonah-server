@@ -10,6 +10,7 @@ import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
+import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
@@ -165,4 +166,51 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
 
+  // TODO: This could also exist on the documents search but it would raise issues what what we do
+  // with the (entity,relation,metnion) filter on that search. It seems like quite a lot of work to
+  // make it consistent with the document search)
+  @GraphQLQuery(name = "countByTypesField",
+      description = "Count of type (entity,relation,mention) by field value including a document filter")
+  public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLNonNull @GraphQLArgument(name = "field",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
+      @GraphQLNonNull @GraphQLArgument(name = "type",
+          description = "The type (entity,relation,mention) to join") final ItemTypes type,
+      @GraphQLArgument(name = "size",
+          description = "Maximum number of documents to return, for pagination",
+          defaultValue = "10") final int size,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    final List<String> path = FieldUtils.fieldSplitter(field);
+
+    if (path.isEmpty()) {
+      return Mono.empty();
+    }
+
+    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
+    return FieldUtils.joinTermBins(providers
+        .flatMap(p -> p.countByJoinedField(Optional.ofNullable(documentFilter), type, path, size)));
+  }
+
+  @GraphQLQuery(name = "timelineByTypeField",
+      description = "Count of type (entity,mention) by field value including a document filter")
+  public Mono<Timeline> countByTypeDates(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLNonNull @GraphQLArgument(name = "type",
+          description = "The type (entity,mention) to join") final ItemTypes type,
+      @GraphQLArgument(name = "interval",
+          description = "Time interval to group by",
+          defaultValueProvider = TimeIntervalDefault.class) final TimeInterval interval,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
+    return FieldUtils.joinTimeBins(
+        providers.flatMap(p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, interval)),
+        interval);
+  }
 }

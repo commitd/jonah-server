@@ -15,6 +15,7 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
+import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
@@ -129,6 +130,18 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
     final Flux<JpaDocumentMetadata> metadata =
         Flux.fromStream(metadataRepo.findByDocId(document.getExternalId()));
     return document.toBaleenDocument(metadata);
+  }
+
+  @Override
+  public Flux<TermBin> countByJoinedField(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
+      final List<String> path, final int size) {
+    return Flux.empty();
+  }
+
+  @Override
+  public Flux<TimeBin> countByJoinedDate(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
+      final TimeInterval interval) {
+    return Flux.empty();
   }
 
 
