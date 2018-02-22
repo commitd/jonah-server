@@ -56,7 +56,6 @@ public final class BaleenCodecs {
         .register(OutputDocumentMetadata.class)
         .register(OutputLatLon.class)
         .register(TermBin.class)
-        .register(AnyTermBin.class)
         .build();
   }
 
