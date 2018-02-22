@@ -57,7 +57,7 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
         Aggregates.project(Projections.fields(Projections.computed("term", "$_id"), Projections.include("count"))));
     return aggregate(aggregation, Document.class)
         .map(d -> {
-          final Object k = d.get("term");
+          final Object k = d.get("term", "NA");
           final long c = d.getInteger("count", 0);
           return new TermBin(k.toString(), c);
         })
