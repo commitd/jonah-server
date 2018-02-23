@@ -12,7 +12,6 @@ import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
-import io.committed.ketos.graphql.defaultvalueproviders.TimeIntervalDefault;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -57,8 +56,7 @@ public class DocumentSearchDocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "interval",
-          description = "Time interval to group by",
-          defaultValueProvider = TimeIntervalDefault.class) final TimeInterval interval,
+          description = "Time interval to group by") final TimeInterval interval,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -66,6 +64,7 @@ public class DocumentSearchDocumentsService extends AbstractGraphQlService {
     if (!corpus.isPresent()) {
       return Mono.empty();
     }
+
     return corpusDocumentService.getDocumentTimeline(corpus.get(), documentFilter, interval, hints);
 
   }

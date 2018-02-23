@@ -25,7 +25,6 @@ import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.common.utils.FieldUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
-import io.committed.ketos.graphql.defaultvalueproviders.TimeIntervalDefault;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -154,17 +153,25 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "interval",
-          description = "Time interval to group by",
-          defaultValueProvider = TimeIntervalDefault.class) final TimeInterval interval,
+          description = "Time interval to group by") final TimeInterval interval,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+
+    // If intervalis null, calculate one
+    TimeInterval bestInterval;
+    if (interval == null) {
+      bestInterval = documentTimeRange(corpus, documentFilter, hints).block().getInterval();
+    } else {
+      bestInterval = interval;
+    }
+
     return getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByDate(Optional.ofNullable(documentFilter), interval))
+        .flatMap(p -> p.countByDate(Optional.ofNullable(documentFilter), bestInterval))
         .groupBy(TimeBin::getTs)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount())
             .map(l -> new TimeBin(g.key(), l)))
         .collectList()
-        .map(l -> new Timeline(interval, l));
+        .map(l -> new Timeline(bestInterval, l));
   }
 
 
@@ -205,15 +212,30 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       @GraphQLNonNull @GraphQLArgument(name = "type",
           description = "The type (entity,mention) to join") final ItemTypes type,
       @GraphQLArgument(name = "interval",
-          description = "Time interval to group by",
-          defaultValueProvider = TimeIntervalDefault.class) final TimeInterval interval,
+          description = "Time interval to group by") final TimeInterval interval,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
+
+    // If intervalis null, calculate one
+    TimeInterval bestInterval;
+    if (interval == null) {
+      // If we have a entity or a mention calculate based on entities (should basically be the same)
+      // Else (which probably isn't going to happen much but...) use document
+      if (type == ItemTypes.ENTITY || type == ItemTypes.MENTION) {
+        bestInterval = entityTimeRange(corpus, documentFilter, hints).block().getInterval();
+      } else {
+        bestInterval = documentTimeRange(corpus, documentFilter, hints).block().getInterval();
+      }
+
+    } else {
+      bestInterval = interval;
+    }
+
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
     return FieldUtils.joinTimeBins(
-        providers.flatMap(p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, interval)),
-        interval);
+        providers.flatMap(p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, bestInterval)),
+        bestInterval);
   }
 
   @GraphQLQuery(name = "documentLocations",
@@ -247,7 +269,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
 
 
   @GraphQLQuery(name = "entityTimeRange", description = "Get the range of dates for entities")
-  public Mono<TimeRange> timeRange(@GraphQLContext final BaleenCorpus corpus,
+  public Mono<TimeRange> entityTimeRange(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "query",
           description = "Search query") final DocumentFilter documentFilter,
       @GraphQLArgument(name = "hints",
