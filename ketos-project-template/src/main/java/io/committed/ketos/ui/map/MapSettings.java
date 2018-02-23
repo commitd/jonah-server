@@ -9,5 +9,4 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("ketos.map")
 public class MapSettings {
 
-  // TODO: Create any settings you need here
 }

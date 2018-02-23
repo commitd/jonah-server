@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class DocumentFilter {
 
-  // TODO: Really this should be properties... but what about startTimestamp/endTimestamp
-
   @Data
   public static class DocumentInfoFilter {
     private String type;

@@ -51,7 +51,6 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
 
   @Override
   public DocumentSearchResult search(final DocumentSearch documentSearch, final int offset, final int size) {
-    // TODO: Ignores most of the query!
     final String query = documentSearch.getDocumentFilter().getContent();
 
     final Mono<Long> count = Mono.just(documents.countByContentContaining(query));
@@ -79,7 +78,7 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
 
   @Override
   public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
-    // TODO: Only group by day
+    // NOTE: Only group by day
 
     return Flux.fromStream(documents.countByDate()).map(t -> {
       final LocalDate date = LocalDate.parse(t.getTerm());

@@ -41,8 +41,6 @@ public interface DocumentProvider extends DataProvider {
 
   Flux<TermBin> countByField(Optional<DocumentFilter> documentFilter, List<String> path, int size);
 
-  // TODO: Special case, because of the return type... but seems wrong to have this different to
-  // above.
   Flux<TimeBin> countByDate(Optional<DocumentFilter> documentFilter, final TimeInterval interval);
 
 

@@ -4,6 +4,7 @@ import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
+import io.committed.invest.support.data.AbstractCrudMutation;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.CrudDocumentProvider;
 import io.leangen.graphql.annotations.GraphQLArgument;

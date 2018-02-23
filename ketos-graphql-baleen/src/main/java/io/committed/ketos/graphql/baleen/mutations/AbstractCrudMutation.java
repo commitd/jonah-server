@@ -1,14 +1,13 @@
 package io.committed.ketos.graphql.baleen.mutations;
 
+import io.committed.invest.extensions.data.providers.AbstractCrudDataProvider;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
-import io.committed.ketos.common.providers.baleen.AbstractCrudDataProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-// TODO: move to invest?
 public abstract class AbstractCrudMutation<T, P extends AbstractCrudDataProvider<T>> extends AbstractGraphQlService {
 
   private final Class<T> itemClass;

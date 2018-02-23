@@ -26,7 +26,7 @@ public class JpaEntity {
   private String type;
   private List<String> value;
 
-  // TODO: There is a geojson entry in the table.
+  // NOTE: There is a geojson entry in the table so that could be added
 
 
   public BaleenEntity toBaleenEntity() {
@@ -46,12 +46,6 @@ public class JpaEntity {
   }
 
   public JpaEntity(final EntityProbe probe) {
-    // TODO: We do what we can here.. but in reality it's impossible to really do antyhing on these
-    // fields
-    // You'd need to rewrite the JPA output of Baleen for this to work well.
-    // I suspect that even then the SPring JPA won't know what to do with the colleciton matching?
-    // WE could also pull the data from the mention filter in (eg that value) but that's not
-
     this.docId = probe.getDocId();
     this.externalId = probe.getId() != null ? Collections.singletonList(probe.getId()) : null;
   }

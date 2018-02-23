@@ -47,8 +47,6 @@ public final class MapUtils {
   public static Collection<String> getStringsAsKey(final Map<String, Object> metadata, final String key) {
     final Optional<Object> optional = getAsKey(metadata, key);
 
-    // TODO: Should we toString things here..., should we filter out non strings?
-
     if (optional.isPresent()) {
       final Object o = optional.get();
 

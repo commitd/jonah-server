@@ -28,7 +28,7 @@ public class EntityMentionsService extends AbstractGraphQlService {
       name = "hints",
       description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    // TODO: Silly that we have to provider an offline and limit here?
+    // TODO: Silly that we have to provide a limit here?
     final MentionFilter filter = new MentionFilter();
     filter.setDocId(entity.getDocId());
     filter.setEntityId(entity.getId());
