@@ -20,6 +20,8 @@ public class KetosCoreActions {
 
   public static final String DOCUMENT = "document";
 
+  public static final String MENTION = "mention";
+
   public static final String ENTITY = "entity";
 
   public static final String RELATION = "relation";
@@ -43,6 +45,8 @@ public class KetosCoreActions {
   public static final String DOCUMENT_VIEW = make(DOCUMENT, VIEW);
 
   public static final String DOCUMENT_SEARCH = make(DOCUMENT, SEARCH);
+
+  public static final String MENTION_VIEW = make(MENTION, VIEW);
 
   public static final String ENTITY_VIEW = make(ENTITY, VIEW);
 
