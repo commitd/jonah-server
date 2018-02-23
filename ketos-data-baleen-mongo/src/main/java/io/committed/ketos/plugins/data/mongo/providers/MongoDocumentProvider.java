@@ -2,6 +2,7 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import com.mongodb.reactivestreams.client.FindPublisher;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
@@ -156,6 +158,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
         String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP), 1000);
   }
 
+
   @Override
   public Flux<TermBin> countByJoinedField(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
       final List<String> path,
@@ -207,6 +210,33 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
 
 
   }
+
+  @Override
+  public Mono<TimeRange> documentTimeRange(final Optional<DocumentFilter> documentFilter) {
+    final List<Bson> aggregation = new LinkedList<>();
+    DocumentFilters.createFilter(documentFilter).ifPresent(f -> {
+      aggregation.add(Aggregates.match(f));
+    });
+    return calculateTimeRange(aggregation, "properties.documentDate", "properties.documentDate");
+  }
+
+  @Override
+  public Mono<TimeRange> entityTimeRange(final Optional<DocumentFilter> documentFilter) {
+    final List<Bson> aggregation = joinCollection(documentFilter, ItemTypes.ENTITY);
+
+    aggregation.add(Aggregates.match(Filters.and(
+        Filters.eq(BaleenProperties.TYPE, BaleenTypes.TEMPORAL),
+        Filters.eq(BaleenProperties.PROPERTIES + "." + BaleenProperties.TEMPORAL_PRECISION,
+            BaleenProperties.TEMPORAL_PRECISION__EXACT))));
+
+    return calculateTimeRange(aggregation, "properties.timestampStart", "properties.timestampStop")
+        .doOnNext(r -> {
+          // Correct s to ms!
+          r.setEnd(new Date(r.getEnd().getTime() * 1000));
+          r.setStart(new Date(r.getStart().getTime() * 1000));
+        });
+  }
+
 
   private List<Bson> joinCollection(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType) {
     final List<Bson> aggregation = new LinkedList<>();

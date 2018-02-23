@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.elasticsearch.index.query.QueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.invest.support.data.utils.FieldUtils;
@@ -107,6 +108,18 @@ public class ElasticsearchDocumentProvider
 
   @Override
   public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Mono<TimeRange> documentTimeRange(final Optional<DocumentFilter> documentFilter) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Mono<TimeRange> entityTimeRange(final Optional<DocumentFilter> documentFilter) {
     // TODO Auto-generated method stub
     return null;
   }

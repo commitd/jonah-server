@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.constants.ItemTypes;
@@ -53,5 +54,10 @@ public interface DocumentProvider extends DataProvider {
 
 
   Flux<NamedGeoLocation> documentLocations(Optional<DocumentFilter> documentFilter, int size);
+
+
+  Mono<TimeRange> documentTimeRange(Optional<DocumentFilter> documentFilter);
+
+  Mono<TimeRange> entityTimeRange(Optional<DocumentFilter> documentFilter);
 
 }

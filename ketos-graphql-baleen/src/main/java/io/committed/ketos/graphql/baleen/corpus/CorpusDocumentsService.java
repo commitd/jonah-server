@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.analytic.Timeline;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.extensions.annotations.GraphQLService;
@@ -228,6 +229,34 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
     return providers.flatMap(p -> p.documentLocations(Optional.ofNullable(documentFilter), size));
+  }
 
+  @GraphQLQuery(name = "documentTimeRange", description = "Get the range of dates for entities")
+  public Mono<TimeRange> documentTimeRange(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProviders(corpus, DocumentProvider.class, hints)
+        .flatMap(p -> p.documentTimeRange(Optional.ofNullable(documentFilter)))
+        .reduce(new TimeRange(), (acc, r) -> {
+          acc.expand(r);
+          return acc;
+        });
+  }
+
+
+  @GraphQLQuery(name = "entityTimeRange", description = "Get the range of dates for entities")
+  public Mono<TimeRange> timeRange(@GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query",
+          description = "Search query") final DocumentFilter documentFilter,
+      @GraphQLArgument(name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+    return getProviders(corpus, DocumentProvider.class, hints)
+        .flatMap(p -> p.entityTimeRange(Optional.ofNullable(documentFilter)))
+        .reduce(new TimeRange(), (acc, r) -> {
+          acc.expand(r);
+          return acc;
+        });
   }
 }

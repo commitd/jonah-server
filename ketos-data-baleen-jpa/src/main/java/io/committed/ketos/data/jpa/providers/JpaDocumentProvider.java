@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
@@ -149,6 +150,16 @@ public class JpaDocumentProvider extends AbstractJpaDataProvider implements Docu
   @Override
   public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
     return Flux.empty();
+  }
+
+  @Override
+  public Mono<TimeRange> documentTimeRange(final Optional<DocumentFilter> documentFilter) {
+    return Mono.empty();
+  }
+
+  @Override
+  public Mono<TimeRange> entityTimeRange(final Optional<DocumentFilter> documentFilter) {
+    return Mono.empty();
   }
 
 }

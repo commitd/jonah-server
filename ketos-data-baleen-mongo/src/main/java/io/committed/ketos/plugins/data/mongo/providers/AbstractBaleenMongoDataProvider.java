@@ -11,10 +11,12 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.mongo.AbstractMongoCollectionDataProvider;
 import io.committed.invest.support.data.utils.FieldUtils;
@@ -105,6 +107,26 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
           final LocalDate date = LocalDate.parse(t.getTerm());
           return new TimeBin(date.atStartOfDay(ZoneOffset.UTC).toInstant(), t.getCount());
         });
+  }
+
+  protected Mono<TimeRange> calculateTimeRange(final List<Bson> aggregation, final String minField,
+      final String maxField) {
+
+    // This shouldn't be necessary but some of the output from Baleen is bad
+    aggregation.add(Aggregates.match(Filters.and(
+        Filters.gte(minField, 0),
+        Filters.gte(maxField, 0))));
+    aggregation.add(Aggregates.group(
+        null,
+        Accumulators.min("min", "$" + minField),
+        Accumulators.max("max", "$" + minField)));
+
+    return aggregate(aggregation, Document.class)
+        .map(d -> {
+          final long min = d.get("min", Number.class).longValue();
+          final long max = d.get("max", Number.class).longValue();
+          return new TimeRange(new Date(min), new Date(max));
+        }).next();
   }
 
 }

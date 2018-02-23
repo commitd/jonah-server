@@ -10,7 +10,7 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 @GraphQLService
 public class DtoGraphQlService {
 
-  @GraphQLQuery(name = "geohash")
+  @GraphQLQuery(name = "geohash", description = "Geohash for the lat lon")
   public String getGeohash(@GraphQLContext final GeoLocation location,
       @GraphQLArgument(name = "precision", defaultValue = "7") final int precision) {
     final double lat = location.getLat();

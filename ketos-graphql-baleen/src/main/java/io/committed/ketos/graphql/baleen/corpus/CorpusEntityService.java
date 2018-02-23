@@ -81,7 +81,6 @@ public class CorpusEntityService extends AbstractGraphQlService {
         .reduce(Long::sum);
   }
 
-
   @GraphQLQuery(name = "countByEntityField", description = "Count of entities by value")
   public Mono<TermCount> countByField(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "query",
@@ -101,5 +100,6 @@ public class CorpusEntityService extends AbstractGraphQlService {
     return FieldUtils.joinTermBins(getProviders(corpus, EntityProvider.class, hints)
         .flatMap(p -> p.countByField(Optional.ofNullable(entityFilter), path, limit)));
   }
+
 }
 
