@@ -7,5 +7,4 @@ public class BaleenDocumentReference {
 
   private String documentId;
 
-  private String mentionId;
 }

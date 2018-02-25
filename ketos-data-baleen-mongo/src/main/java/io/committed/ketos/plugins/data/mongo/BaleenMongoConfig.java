@@ -3,6 +3,10 @@ package io.committed.ketos.plugins.data.mongo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import io.committed.ketos.plugins.data.mongo.factory.MongoCrudDocumentProviderFactory;
+import io.committed.ketos.plugins.data.mongo.factory.MongoCrudEntityProviderFactory;
+import io.committed.ketos.plugins.data.mongo.factory.MongoCrudMentionProviderFactory;
+import io.committed.ketos.plugins.data.mongo.factory.MongoCrudRelationProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoDocumentProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoEntityProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoMentionProviderFactory;
@@ -37,4 +41,25 @@ public class BaleenMongoConfig {
   public MongoMetadataProviderFactory mongoMetadataDataProviderFactory() {
     return new MongoMetadataProviderFactory();
   }
+
+  @Bean
+  public MongoCrudDocumentProviderFactory mongoCrudDocumentProviderFactory() {
+    return new MongoCrudDocumentProviderFactory();
+  }
+
+  @Bean
+  public MongoCrudEntityProviderFactory mongoCrudEntityProviderFactory() {
+    return new MongoCrudEntityProviderFactory();
+  }
+
+  @Bean
+  public MongoCrudRelationProviderFactory mongoCrudRelationProviderFactory() {
+    return new MongoCrudRelationProviderFactory();
+  }
+
+  @Bean
+  public MongoCrudMentionProviderFactory mongoMentionCrudDataProviderFactory() {
+    return new MongoCrudMentionProviderFactory();
+  }
+
 }
