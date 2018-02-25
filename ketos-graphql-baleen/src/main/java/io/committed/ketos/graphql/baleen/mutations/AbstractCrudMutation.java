@@ -1,5 +1,6 @@
 package io.committed.ketos.graphql.baleen.mutations;
 
+import java.util.Optional;
 import io.committed.invest.extensions.data.providers.AbstractCrudDataProvider;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.invest.extensions.data.providers.DataProviders;
@@ -8,7 +9,8 @@ import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public abstract class AbstractCrudMutation<T, P extends AbstractCrudDataProvider<T>> extends AbstractGraphQlService {
+public abstract class AbstractCrudMutation<R, T, P extends AbstractCrudDataProvider<R, T>>
+    extends AbstractGraphQlService {
 
   private final Class<T> itemClass;
   private final Class<P> providerClass;
@@ -28,12 +30,11 @@ public abstract class AbstractCrudMutation<T, P extends AbstractCrudDataProvider
     return providerClass;
   }
 
-  protected Flux<DataProvider> delete(final String id, final DataHints hints) {
+  protected Flux<DataProvider> delete(final Optional<String> datasetId, final R reference, final DataHints hints) {
 
-    return getDataProviders()
-        .find(providerClass, hints)
+    return getProviders(datasetId, hints)
         .flatMap(p -> {
-          final boolean delete = p.delete(id);
+          final boolean delete = p.delete(reference);
           if (delete) {
             return Mono.just(p);
           } else {
@@ -43,10 +44,9 @@ public abstract class AbstractCrudMutation<T, P extends AbstractCrudDataProvider
 
   }
 
-  public Flux<DataProvider> save(final T t, final DataHints hints) {
+  public Flux<DataProvider> save(final Optional<String> datasetId, final T t, final DataHints hints) {
 
-    return getDataProviders()
-        .find(providerClass, hints)
+    return getProviders(datasetId, hints)
         .flatMap(p -> {
           final boolean saved = p.save(t);
           if (saved) {
@@ -56,6 +56,15 @@ public abstract class AbstractCrudMutation<T, P extends AbstractCrudDataProvider
           }
         });
 
+  }
+
+  protected Flux<P> getProviders(final Optional<String> datasetId, final DataHints hints) {
+    if (datasetId.isPresent()) {
+      return getDataProviders().findForDataset(datasetId.get(), providerClass, hints);
+    } else {
+      return getDataProviders()
+          .find(providerClass, hints);
+    }
   }
 
 }
