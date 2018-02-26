@@ -56,10 +56,12 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   public Flux<TermBin> nestedTermAggregation(final Optional<QueryBuilder> query,
       final String nestedPath, final String field, final int size) {
 
+    final String keywordField = field + ".keyword";
+
     final NestedAggregationBuilder aggregationBuilder =
         AggregationBuilders.nested("nested", nestedPath)
             .subAggregation(AggregationBuilders.terms("agg")
-                .field(field)
+                .field(keywordField)
                 .size(size));
 
 

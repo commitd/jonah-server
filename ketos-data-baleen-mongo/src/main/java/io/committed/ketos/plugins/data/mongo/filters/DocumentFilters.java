@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.bson.Document;
@@ -84,18 +83,15 @@ public final class DocumentFilters {
     }
 
     if (documentFilter.getMetadata() != null) {
-      for (final Map.Entry<String, Object> e : documentFilter.getMetadata().entrySet()) {
-        filters.add(Filters.elemMatch("metadata", Filters.and(
-            Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, e.getKey()),
-            Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE, e.getValue()))));
+      documentFilter.getMetadata().stream().forEach(e -> filters.add(Filters.elemMatch("metadata", Filters.and(
+          Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, e.getKey()),
+          Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE, e.getValue())))));
 
-      }
     }
 
     if (documentFilter.getProperties() != null) {
-      for (final Map.Entry<String, Object> e : documentFilter.getProperties().entrySet()) {
-        filters.add(Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
-      }
+      documentFilter.getProperties().stream()
+          .forEach(e -> filters.add(Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
     }
 
 

@@ -75,7 +75,7 @@ public final class DocumentFilters {
     }
 
     if (filter.getMetadata() != null) {
-      filter.getMetadata().entrySet().forEach(e -> {
+      filter.getMetadata().stream().forEach(e -> {
         queryBuilder.must(QueryBuilders.nestedQuery(BaleenProperties.METADATA,
             QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY,
@@ -87,7 +87,7 @@ public final class DocumentFilters {
     }
 
     if (filter.getProperties() != null) {
-      filter.getProperties().entrySet().forEach(e -> {
+      filter.getProperties().stream().forEach(e -> {
         queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
       });
     }

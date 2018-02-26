@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentMetadata;
@@ -47,8 +48,9 @@ public class JpaDocument {
         .id(externalId)
         .content(content)
         .metadata(
-            metadata.map(m -> new BaleenDocumentMetadata(m.getName(), m.getValue())))
-        .properties(properties)
+            metadata.map(m -> new BaleenDocumentMetadata(m.getName(), m.getValue()))
+                .collectList().block())
+        .properties(new PropertiesMap(properties))
         .build();
   }
 

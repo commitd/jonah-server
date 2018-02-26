@@ -1,5 +1,6 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
+import java.util.stream.Collectors;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.MongoDatabase;
@@ -54,9 +55,10 @@ public class MongoCrudDocumentProvider
     final OutputDocument o = new OutputDocument();
     o.setContent(item.getContent());
     o.setExternalId(item.getId());
-    o.setMetadata(item.getMetadata().map(m -> new OutputDocumentMetadata(m.getKey(), m.getValue()))
-        .collectList().block());
-    o.setProperties(item.getProperties());
+    o.setMetadata(item.getMetadata().stream()
+        .map(m -> new OutputDocumentMetadata(m.getKey(), m.getValue()))
+        .collect(Collectors.toList()));
+    o.setProperties(item.getProperties().asMap());
     return o;
   }
 

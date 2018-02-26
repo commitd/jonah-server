@@ -1,7 +1,8 @@
 package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesList;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
 @Data
@@ -23,8 +24,8 @@ public class DocumentFilter {
   }
 
   private String id;
-  private Map<String, Object> metadata;
-  private Map<String, Object> properties;
+  private PropertiesList metadata;
+  private PropertiesMap properties;
   private String content;
   private DocumentInfoFilter info;
 

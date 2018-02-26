@@ -1,12 +1,13 @@
 package io.committed.ketos.common.baleenconsumer;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentMetadata;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
-import reactor.core.publisher.Flux;
 
 public final class Converters {
 
@@ -19,12 +20,12 @@ public final class Converters {
         .content(document.getContent())
         .id(document.getExternalId())
         .metadata(toBaleenDocumentMetadata(document.getMetadata()))
-        .properties(document.getProperties())
+        .properties(new PropertiesMap(document.getProperties()))
         .build();
   }
 
-  public static Flux<BaleenDocumentMetadata> toBaleenDocumentMetadata(final List<OutputDocumentMetadata> metadata) {
-    return Flux.fromIterable(metadata).map(Converters::toBaleenDocumentMetadata);
+  public static List<BaleenDocumentMetadata> toBaleenDocumentMetadata(final List<OutputDocumentMetadata> metadata) {
+    return metadata.stream().map(Converters::toBaleenDocumentMetadata).collect(Collectors.toList());
   }
 
   public static BaleenDocumentMetadata toBaleenDocumentMetadata(final OutputDocumentMetadata metadata) {

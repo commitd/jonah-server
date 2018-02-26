@@ -2,7 +2,8 @@ package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesList;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import lombok.Data;
 
@@ -42,8 +43,8 @@ public class DocumentProbe {
   private String id;
   private DocumentInfoProbe info;
   private List<String> publishedIds;
-  private Map<String, Object> metadata;
-  private Map<String, Object> properties;
+  private PropertiesList metadata;
+  private PropertiesMap properties;
 
   private String content;
 

@@ -21,7 +21,7 @@ public class DocumentInfoService {
 
     final BaleenDocumentInfoBuilder builder = BaleenDocumentInfo.builder();
 
-    final Map<String, Object> properties = document.getProperties();
+    final Map<String, Object> properties = document.getProperties().asMap();
 
     builder.caveats(MapUtils.getStringsAsKey(properties, BaleenProperties.CAVEATS));
     builder.classification(MapUtils.getStringAsKey(properties, BaleenProperties.CLASSIFICATION).orElse(null));
