@@ -1,5 +1,6 @@
 package io.committed.ketos.common.graphql.input;
 
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
 @Data
@@ -23,6 +24,8 @@ public class RelationProbe {
 
   private MentionProbe target;
 
+  private PropertiesMap properties;
+
   public RelationFilter toFilter() {
     final RelationFilter filter = new RelationFilter();
 
@@ -31,6 +34,7 @@ public class RelationProbe {
     filter.setSubType(subType);
     filter.setType(type);
     filter.setValue(value);
+    filter.setProperties(properties);
 
     if (source != null) {
       filter.setSource(source.toFilter());

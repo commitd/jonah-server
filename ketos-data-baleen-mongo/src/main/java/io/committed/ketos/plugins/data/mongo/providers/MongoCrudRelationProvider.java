@@ -51,7 +51,7 @@ public class MongoCrudRelationProvider
     final OutputRelation o = new OutputRelation();
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
-    o.setProperties(item.getProperties());
+    o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
     o.setType(item.getType());
     o.setValue(item.getValue());

@@ -68,14 +68,14 @@ public class DocumentLocationField extends AbstractGraphQlService {
         .flatMap(p -> p.search(search, offset, limit).getResults())
         // Require geo
         .filter(m -> {
-          final Object geoJson = m.getProperties().get("geoJson");
+          final Object geoJson = m.getProperties().asMap().get("geoJson");
           return geoJson != null && geoJson instanceof String;
         }).map(m -> {
           // TODO: Baleen should return produce more sensible here... but that's not in our gift to
           // change
 
           // bit crazy to have to do this work
-          final String geoJson = (String) m.getProperties().get("geoJson");
+          final String geoJson = (String) m.getProperties().asMap().get("geoJson");
 
           // TODO: Add location name to GeoLocation (being the mention value to this)
 

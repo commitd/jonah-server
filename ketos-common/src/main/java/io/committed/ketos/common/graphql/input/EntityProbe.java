@@ -1,6 +1,6 @@
 package io.committed.ketos.common.graphql.input;
 
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
 @Data
@@ -11,7 +11,7 @@ public class EntityProbe {
   private String type;
   private String subType;
   private String value;
-  private Map<String, Object> properties;
+  private PropertiesMap properties;
 
 
   public EntityFilter toFilter() {

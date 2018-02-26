@@ -3,7 +3,6 @@ package io.committed.ketos.plugins.data.mongo.filters;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.bson.conversions.Bson;
@@ -63,11 +62,11 @@ public final class MentionFilters {
     }
 
     if (mentionFilter.getProperties() != null) {
-      for (final Map.Entry<String, Object> e : mentionFilter.getProperties().entrySet()) {
+      mentionFilter.getProperties().stream().forEach(e -> {
         filters.add(
             CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
                 operatorMode));
-      }
+      });
     }
 
     if (mentionFilter.getStartTimestamp() != null) {

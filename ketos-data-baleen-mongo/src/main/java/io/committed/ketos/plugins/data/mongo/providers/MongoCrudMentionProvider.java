@@ -91,7 +91,7 @@ public class MongoCrudMentionProvider
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
     o.setEntityId(item.getEntityId());
-    o.setProperties(item.getProperties());
+    o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
     o.setType(item.getType());
     o.setValue(item.getValue());

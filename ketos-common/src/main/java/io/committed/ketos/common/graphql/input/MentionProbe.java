@@ -1,6 +1,6 @@
 package io.committed.ketos.common.graphql.input;
 
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
 @Data
@@ -14,7 +14,7 @@ public class MentionProbe {
   private String subType;
   private String value;
   private String entityId;
-  private Map<String, Object> properties;
+  private PropertiesMap properties;
 
   public MentionFilter toFilter() {
     final MentionFilter filter = new MentionFilter();

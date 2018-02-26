@@ -1,7 +1,6 @@
 package io.committed.ketos.common.data;
 
-import java.util.Collections;
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLQuery;
@@ -36,16 +35,16 @@ public class BaleenEntity extends AbstractGraphQLNode {
 
   @GraphQLQuery(name = "properties",
       description = "Additional properties of this entity")
-  private final Map<String, Object> properties;
+  private final PropertiesMap properties;
 
   public BaleenEntity(final String id, final String docId, final String type, final String subType,
-      final String value, final Map<String, Object> properties) {
+      final String value, final PropertiesMap properties) {
     this.id = id;
     this.docId = docId;
     this.type = type;
     this.subType = subType;
     this.value = value;
-    this.properties = properties == null ? Collections.emptyMap() : properties;
+    this.properties = properties == null ? new PropertiesMap() : properties;
   }
 
 

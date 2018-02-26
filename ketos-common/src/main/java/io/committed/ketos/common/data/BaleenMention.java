@@ -1,7 +1,6 @@
 package io.committed.ketos.common.data;
 
-import java.util.Collections;
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
 import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Builder;
@@ -23,11 +22,11 @@ public class BaleenMention extends AbstractGraphQLNode {
   private final String entityId;
   private final String docId;
 
-  private final Map<String, Object> properties;
+  private final PropertiesMap properties;
 
   public BaleenMention(@GraphQLId final String id, final int begin, final int end,
       final String type, final String subType, final String value,
-      final String entityId, final String docId, final Map<String, Object> properties) {
+      final String entityId, final String docId, final PropertiesMap properties) {
     super();
     this.id = id;
     this.begin = begin;
@@ -37,7 +36,7 @@ public class BaleenMention extends AbstractGraphQLNode {
     this.value = value;
     this.entityId = entityId;
     this.docId = docId;
-    this.properties = properties == null ? Collections.emptyMap() : properties;
+    this.properties = properties == null ? new PropertiesMap() : properties;
   }
 
 

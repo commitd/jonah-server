@@ -2,7 +2,6 @@ package io.committed.ketos.plugins.data.mongo.filters;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.bson.conversions.Bson;
@@ -54,11 +53,11 @@ public final class RelationFilters {
     }
 
     if (relationFilter.getProperties() != null) {
-      for (final Map.Entry<String, Object> e : relationFilter.getProperties().entrySet()) {
+      relationFilter.getProperties().stream().forEach(e -> {
         filters.add(
             CustomFilters.eqFilter(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
                 operatorMode));
-      }
+      });
     }
 
 

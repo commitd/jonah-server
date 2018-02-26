@@ -51,7 +51,7 @@ public class MongoCrudEntityProvider
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
     // TODO: ... mentions will be lost here. We need to actually get the entity and then put it here!
-    o.setProperties(item.getProperties());
+    o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
     o.setType(item.getType());
     o.setValue(item.getValue());

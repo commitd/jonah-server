@@ -39,7 +39,7 @@ public final class MentionFilters {
     }
 
     if (filter.getProperties() != null) {
-      filter.getProperties().entrySet()
+      filter.getProperties().stream()
           .forEach(e -> queryBuilder
               .must(QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
     }

@@ -54,9 +54,8 @@ public final class EntityFilters {
     }
 
     if (filter.getProperties() != null) {
-      filter.getProperties().entrySet()
-          .forEach(e -> queryBuilder
-              .must(QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
+      filter.getProperties().stream().forEach(e -> queryBuilder
+          .must(QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
     }
 
     if (filter.getStartTimestamp() != null) {

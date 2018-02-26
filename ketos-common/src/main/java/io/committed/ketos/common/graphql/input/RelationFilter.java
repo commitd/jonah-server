@@ -1,6 +1,6 @@
 package io.committed.ketos.common.graphql.input;
 
-import java.util.Map;
+import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
 @Data
@@ -15,7 +15,7 @@ public class RelationFilter {
 
   private String value;
 
-  private Map<String, Object> properties;
+  private PropertiesMap properties;
 
   private MentionFilter source;
 
