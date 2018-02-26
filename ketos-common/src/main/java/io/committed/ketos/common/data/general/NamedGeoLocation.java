@@ -40,5 +40,4 @@ public class NamedGeoLocation extends GeoLocation {
     return super.getLon();
   }
 
-
 }

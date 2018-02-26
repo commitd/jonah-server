@@ -3,6 +3,7 @@ package io.committed.ketos.plugins.data.mongo.providers;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -186,26 +187,30 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
             Filters.ne(poiFieldName, null))));
 
     aggregation.add(Aggregates.project(Projections.fields(Projections.computed("poi", "$" + poiFieldName),
-        Projections.include(BaleenProperties.VALUE))));
+        Projections.include(BaleenProperties.VALUE, BaleenProperties.TYPE))));
 
     return aggregate(aggregation, Document.class)
         .flatMap(d -> {
           final Object pois = d.get("poi");
-          if (pois instanceof Collection) {
+          final String value = d.get(BaleenProperties.VALUE, "");
+          final String type = d.get(BaleenProperties.TYPE, "");
 
-            return Flux.fromIterable((Collection<Document>) pois).map(poi -> {
-              final Double lat = poi.getDouble("lat");
-              final Double lon = poi.getDouble("lon");
-              final String value = d.getString("value");
+          if (pois != null && pois instanceof Collection && ((Collection) pois).size() >= 2) {
 
-              return new NamedGeoLocation(value, "", lat, lon);
-            });
+            final Collection<Object> c = (Collection<Object>) pois;
+            final Iterator<Object> it = c.iterator();
+            final Object lon = it.next();
+            final Object lat = it.next();
 
-          } else {
-            return Flux.empty();
+
+            if (lon instanceof Double && lat instanceof Double && lat != null && lon != null) {
+              return Flux.just(new NamedGeoLocation(value, type, (double) lat, (double) lon));
+            }
           }
-
+          return Flux.empty();
         })
+        // Distinct so we hopefully drop the excessive junk
+        .distinct()
         .take(size);
 
 
