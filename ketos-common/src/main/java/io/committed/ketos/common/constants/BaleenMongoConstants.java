@@ -1,6 +1,15 @@
-package io.committed.ketos.plugins.data.mongo.data;
+package io.committed.ketos.common.constants;
 
 public final class BaleenMongoConstants {
+
+  // Settings for MongoDataProviders
+  public static final String SETTING_URI = "uri";
+  public static final String SETTING_DB = "db";
+  public static final String SETTING_COLLECTION = "collection";
+
+  // Defaults output
+  public static final String DEFAULT_HOST = "localhost";
+  public static final int DEFAULT_PORT = 27017;
 
   public static final String DEFAULT_DATABASE = "baleen";
   public static final String DEFAULT_DOCUMENT_COLLECTION = "documents";
