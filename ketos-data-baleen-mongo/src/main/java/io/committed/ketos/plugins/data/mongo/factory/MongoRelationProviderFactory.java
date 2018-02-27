@@ -3,9 +3,9 @@ package io.committed.ketos.plugins.data.mongo.factory;
 import java.util.Map;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
+import io.committed.ketos.common.constants.BaleenMongoConstants;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
-import io.committed.ketos.plugins.data.mongo.data.BaleenMongoConstants;
 import io.committed.ketos.plugins.data.mongo.providers.MongoRelationProvider;
 import reactor.core.publisher.Mono;
 

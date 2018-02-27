@@ -2,30 +2,26 @@ package io.committed.ketos.plugins.data.feedback.mongo;
 
 import java.util.Map;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.repository.support.ReactiveMongoRepositoryFactory;
-import com.mongodb.reactivestreams.client.MongoClient;
-import com.mongodb.reactivestreams.client.MongoClients;
-import io.committed.invest.extensions.data.providers.AbstractDataProviderFactory;
-import io.committed.invest.extensions.data.providers.DatabaseConstants;
+import org.springframework.data.repository.core.support.ReactiveRepositoryFactorySupport;
+import io.committed.invest.support.data.mongo.AbstractSpringDataMongoDataProviderFactory;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
 import reactor.core.publisher.Mono;
 
 public class MongoFeedbackProviderFactory
-    extends AbstractDataProviderFactory<FeedbackDataProvider> {
+    extends AbstractSpringDataMongoDataProviderFactory<FeedbackDataProvider> {
 
   public MongoFeedbackProviderFactory() {
-    super("feedback-mongo", FeedbackDataProvider.class, DatabaseConstants.MONGO);
+    super("feedback-mongo", FeedbackDataProvider.class);
   }
 
   @Override
   public Mono<FeedbackDataProvider> build(final String dataset, final String datasource,
       final Map<String, Object> settings) {
-    final MongoClient mongoClient = MongoClients.create();
-    final ReactiveMongoTemplate mongoTemplate = new ReactiveMongoTemplate(mongoClient, "feedback");
-    final ReactiveMongoRepositoryFactory factory =
-        new ReactiveMongoRepositoryFactory(mongoTemplate);
-    final MongoFeedbackRepository repository = factory.getRepository(MongoFeedbackRepository.class);
+    final ReactiveMongoTemplate mongoTemplate = buildMongoTemplate(settings);
+    final ReactiveRepositoryFactorySupport factorySupport = buildRepositoryFactory(mongoTemplate);
+    final MongoFeedbackRepository repository = factorySupport.getRepository(MongoFeedbackRepository.class);
     return Mono.just(new MongoFeedbackDataProvider(dataset, datasource, repository));
   }
+
 
 }
