@@ -47,7 +47,7 @@ public class FeedbackGraphQlService {
         .pluginId(pluginId).timestamp(Instant.now()).build();
 
     // Save into every feeback provider...
-    return providers.findAll(FeedbackDataProvider.class).flatMap(d -> d.save(f)).last();
+    return providers.findAll(FeedbackDataProvider.class).flatMap(d -> d.save(f)).next();
   }
 
   @GraphQLMutation(name = "deleteFeedback", description = "Save feedback")
