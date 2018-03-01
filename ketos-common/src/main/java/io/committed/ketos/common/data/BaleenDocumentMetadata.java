@@ -3,13 +3,16 @@ package io.committed.ketos.common.data;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class BaleenDocumentMetadata {
 
-  private final String key;
+  private String key;
 
-  private final String value;
+  private String value;
 }
+

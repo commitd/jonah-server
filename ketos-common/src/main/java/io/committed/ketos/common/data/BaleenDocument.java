@@ -9,6 +9,7 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,16 +17,17 @@ import reactor.core.publisher.Mono;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
 public class BaleenDocument extends AbstractGraphQLNode {
 
   @GraphQLId
-  private final String id;
+  private String id;
 
-  private final List<BaleenDocumentMetadata> metadata;
+  private List<BaleenDocumentMetadata> metadata;
 
-  private final String content;
+  private String content;
 
-  private final PropertiesMap properties;
+  private PropertiesMap properties;
 
   @GraphQLQuery(name = "length", description = "Length of document content in characters")
   public int length() {
