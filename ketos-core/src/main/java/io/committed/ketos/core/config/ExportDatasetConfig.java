@@ -26,7 +26,7 @@ public class ExportDatasetConfig {
 
     if (settings.getMongo() != null) {
       settings.getMongo().stream()
-          .map(c -> c.toDataset())
+          .map(MongoCorpus::toDataset)
           .forEach(datasets::add);
     }
 
