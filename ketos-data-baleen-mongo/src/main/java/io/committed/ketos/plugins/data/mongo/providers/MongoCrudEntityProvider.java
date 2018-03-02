@@ -16,18 +16,30 @@ public class MongoCrudEntityProvider
     implements CrudEntityProvider {
 
   private final String entityCollection;
+  private final String mentionCollection;
+  private final String relationCollection;
 
   public MongoCrudEntityProvider(final String dataset, final String datasource, final MongoDatabase mongoDatabase,
-      final String entityCollection) {
+      final String mentionCollection, final String entityCollection, final String relationCollection) {
     super(dataset, datasource, mongoDatabase);
+    this.mentionCollection = mentionCollection;
     this.entityCollection = entityCollection;
+    this.relationCollection = relationCollection;
   }
 
   @Override
   public Mono<Boolean> delete(final BaleenEntityReference reference) {
-    // Must
-    // - delete actual entity
-    // we leave the mentions
+
+    delete(mentionCollection, Filters.and(
+        Filters.eq(BaleenProperties.ENTITY_ID, reference.getEntityId()),
+        Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId())));
+
+    delete(relationCollection, Filters.and(
+        Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId()),
+        Filters.or(
+            Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.ENTITY_ID, reference.getEntityId()),
+            Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.ENTITY_ID,
+                reference.getEntityId()))));
 
     return delete(entityCollection, filterForEntity(reference.getDocumentId(), reference.getEntityId()));
   }
@@ -46,11 +58,13 @@ public class MongoCrudEntityProvider
         Filters.eq(BaleenProperties.DOC_ID, documentId));
   }
 
+
   private OutputEntity toOutputEntity(final BaleenEntity item) {
     final OutputEntity o = new OutputEntity();
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
-    // TODO: ... mentions will be lost here. We need to actually get the entity and then put it here!
+    // TODO: ... mentions will be lost here. We need to actually get the entity and then put it here and
+    // we don't use it ourselves.
     o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
     o.setType(item.getType());

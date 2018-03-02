@@ -24,6 +24,12 @@ public class MongoCrudEntityProviderFactory
         .withCodecRegistry(BaleenCodecs.codecRegistry());
     final String collectionName = getCollectionName(settings);
 
-    return Mono.just(new MongoCrudEntityProvider(dataset, datasource, database, collectionName));
+    final String mentionCollection =
+        (String) settings.getOrDefault("mentionCollection", BaleenMongoConstants.DEFAULT_MENTION_COLLECTION);
+    final String relationCollection =
+        (String) settings.getOrDefault("relationCollection", BaleenMongoConstants.DEFAULT_RELATION_COLLECTION);
+
+    return Mono.just(new MongoCrudEntityProvider(dataset, datasource, database, mentionCollection, collectionName,
+        relationCollection));
   }
 }
