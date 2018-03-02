@@ -3,15 +3,23 @@ package io.committed.ketos.data.elasticsearch.repository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.UpdateByQueryAction;
+import org.elasticsearch.index.reindex.UpdateByQueryRequestBuilder;
+import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.script.Script;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.joda.time.DateTime;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
@@ -20,9 +28,11 @@ import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportServic
 import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportService<T> {
 
   // We have to provide an upper value...
@@ -97,5 +107,50 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
           });
 
         });
+  }
+
+  public boolean updateOrSave(final String idField, final String id, final T t) {
+    String value;
+    try {
+      value = getMapper().writeValueAsString(t);
+    } catch (final JsonProcessingException e) {
+      log.warn("UNable to save", e);
+      return false;
+    }
+    final Script script = new Script(String.format("ctx._source = %s", value));
+
+    final UpdateByQueryRequestBuilder ubqrb = UpdateByQueryAction.INSTANCE
+        .newRequestBuilder(getClient())
+        .source(getIndex())
+        .script(script)
+        .filter(QueryBuilders.boolQuery()
+            .must(QueryBuilders.typeQuery(getType()))
+            .must(QueryBuilders.matchQuery(idField, id)));
+
+
+    BulkByScrollResponse bulkByScrollResponse;
+    try {
+      bulkByScrollResponse = ubqrb.execute().get();
+    } catch (final Exception e) {
+      log.warn("Ubable to execute update", e);
+      return false;
+    }
+
+    if (bulkByScrollResponse.getUpdated() > 0) {
+      return true;
+    }
+
+    // Not updated any, so create new
+    try {
+
+      final IndexResponse indexResponse = getClient().prepareIndex(getIndex(), getType())
+          .setSource(value, XContentType.JSON)
+          .execute()
+          .get();
+      return indexResponse.status().equals(RestStatus.OK);
+    } catch (final Exception e) {
+      log.warn("Ubable to execute index", e);
+      return false;
+    }
   }
 }

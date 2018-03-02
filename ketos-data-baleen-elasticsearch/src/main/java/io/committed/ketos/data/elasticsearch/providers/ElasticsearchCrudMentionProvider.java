@@ -1,5 +1,7 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.providers.baleen.CrudMentionProvider;
@@ -44,8 +46,12 @@ public class ElasticsearchCrudMentionProvider
 
   @Override
   public Mono<Boolean> save(final BaleenMention item) {
-    // TODO Auto-generated method stub
-    return null;
+    final OutputMention mention = Converters.toOutputMention(item);
+
+    relations.updateSource(item.getId(), mention);
+    relations.updateTarget(item.getId(), mention);
+
+    return Mono.just(mentions.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), mention));
   }
 
 }

@@ -1,5 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.CrudEntityProvider;
@@ -38,10 +39,11 @@ public class ElasticsearchCrudEntityProvider
     return Mono.just(delete(entities, reference.getDocumentId(), reference.getEntityId()));
   }
 
+
   @Override
   public Mono<Boolean> save(final BaleenEntity item) {
-    // TODO Auto-generated method stub
-    return null;
+    return Mono
+        .just(entities.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputEntity(item)));
   }
 
 }

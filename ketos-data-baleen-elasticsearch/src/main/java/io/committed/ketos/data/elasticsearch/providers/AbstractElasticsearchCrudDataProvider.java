@@ -15,15 +15,6 @@ public abstract class AbstractElasticsearchCrudDataProvider<R, T>
     super(dataset, datasource);
   }
 
-  // protected <S> Mono<Boolean> replace(final String type, final String id, final S replacement,
-  // final Class<S> clazz) {
-  //
-  // }
-  //
-  // protected Mono<Boolean> update(final String type, final Bson filter, final Bson update) {
-  //
-  // }
-
   protected boolean delete(final ElasticsearchSupportService<?> service, final String docId, final String externalId) {
     return delete(service, docId, BaleenProperties.EXTERNAL_ID, externalId);
   }

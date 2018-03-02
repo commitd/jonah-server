@@ -4,6 +4,7 @@ import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoCrudDataProvider;
+import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -36,7 +37,8 @@ public class MongoCrudRelationProvider
   @Override
   public Mono<Boolean> save(final BaleenRelation item) {
     // NOTE if you have changed the docId here (or entityId) then you'll not be replacing the old one!
-    return replace(relationCollection, filterForRelation(item.getDocId(), item.getId()), toOutputRelation(item),
+    return replace(relationCollection, filterForRelation(item.getDocId(), item.getId()),
+        Converters.toOutputRelation(item),
         OutputRelation.class);
 
   }
@@ -46,21 +48,5 @@ public class MongoCrudRelationProvider
         Filters.eq(BaleenProperties.EXTERNAL_ID, relationId),
         Filters.eq(BaleenProperties.DOC_ID, documentId));
   }
-
-  private OutputRelation toOutputRelation(final BaleenRelation item) {
-    final OutputRelation o = new OutputRelation();
-    o.setDocId(item.getDocId());
-    o.setExternalId(item.getId());
-    o.setProperties(item.getProperties().asMap());
-    o.setSubType(item.getSubType());
-    o.setType(item.getType());
-    o.setValue(item.getValue());
-    o.setBegin(item.getBegin());
-    o.setEnd(item.getEnd());
-    o.setSource(MongoCrudMentionProvider.toOutputMention(item.getSource()));
-    o.setTarget(MongoCrudMentionProvider.toOutputMention(item.getTarget()));
-    return o;
-  }
-
 
 }

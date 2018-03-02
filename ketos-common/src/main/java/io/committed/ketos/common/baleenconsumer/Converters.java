@@ -78,4 +78,58 @@ public final class Converters {
         .value(relation.getValue())
         .build();
   }
+
+
+  public static OutputDocument toOutputDocument(final BaleenDocument item) {
+    final OutputDocument o = new OutputDocument();
+    o.setContent(item.getContent());
+    o.setExternalId(item.getId());
+    o.setMetadata(item.getMetadata().stream()
+        .map(m -> new OutputDocumentMetadata(m.getKey(), m.getValue()))
+        .collect(Collectors.toList()));
+    o.setProperties(item.getProperties().asMap());
+    return o;
+  }
+
+
+  public static OutputEntity toOutputEntity(final BaleenEntity item) {
+    final OutputEntity o = new OutputEntity();
+    o.setDocId(item.getDocId());
+    o.setExternalId(item.getId());
+    // TODO: ... mentions will be lost here. We need to actually get the entity and then put it here and
+    // we don't use it ourselves.
+    o.setProperties(item.getProperties().asMap());
+    o.setSubType(item.getSubType());
+    o.setType(item.getType());
+    o.setValue(item.getValue());
+    return o;
+  }
+
+
+  public static OutputRelation toOutputRelation(final BaleenRelation item) {
+    final OutputRelation o = new OutputRelation();
+    o.setDocId(item.getDocId());
+    o.setExternalId(item.getId());
+    o.setProperties(item.getProperties().asMap());
+    o.setSubType(item.getSubType());
+    o.setType(item.getType());
+    o.setValue(item.getValue());
+    o.setBegin(item.getBegin());
+    o.setEnd(item.getEnd());
+    o.setSource(toOutputMention(item.getSource()));
+    o.setTarget(toOutputMention(item.getTarget()));
+    return o;
+  }
+
+  public static OutputMention toOutputMention(final BaleenMention item) {
+    final OutputMention o = new OutputMention();
+    o.setDocId(item.getDocId());
+    o.setExternalId(item.getId());
+    o.setEntityId(item.getEntityId());
+    o.setProperties(item.getProperties().asMap());
+    o.setSubType(item.getSubType());
+    o.setType(item.getType());
+    o.setValue(item.getValue());
+    return o;
+  }
 }

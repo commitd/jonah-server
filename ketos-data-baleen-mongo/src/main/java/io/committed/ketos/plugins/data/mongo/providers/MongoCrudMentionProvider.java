@@ -5,6 +5,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoCrudDataProvider;
+import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenMention;
@@ -65,7 +66,7 @@ public class MongoCrudMentionProvider
     // NOTE We know (that baleen) derives the entity from the mention. But we can't change the entity
     // really that up to the caller to also set.
 
-    final OutputMention outputMention = toOutputMention(item);
+    final OutputMention outputMention = Converters.toOutputMention(item);
 
     // Update relation source
 
@@ -86,16 +87,5 @@ public class MongoCrudMentionProvider
         OutputMention.class);
   }
 
-  public static OutputMention toOutputMention(final BaleenMention item) {
-    final OutputMention o = new OutputMention();
-    o.setDocId(item.getDocId());
-    o.setExternalId(item.getId());
-    o.setEntityId(item.getEntityId());
-    o.setProperties(item.getProperties().asMap());
-    o.setSubType(item.getSubType());
-    o.setType(item.getType());
-    o.setValue(item.getValue());
-    return o;
-  }
 
 }

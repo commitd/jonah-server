@@ -2,6 +2,7 @@ package io.committed.ketos.data.elasticsearch.providers;
 
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.CrudDocumentProvider;
@@ -47,8 +48,8 @@ public class ElasticsearchCrudDocumentProvider
 
   @Override
   public Mono<Boolean> save(final BaleenDocument item) {
-    // TODO Auto-generated method stub
-    return null;
+    return Mono
+        .just(documents.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputDocument(item)));
   }
 
 }

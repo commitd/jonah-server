@@ -1,5 +1,7 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.CrudRelationProvider;
 import io.committed.ketos.common.references.BaleenRelationReference;
@@ -25,8 +27,8 @@ public class ElasticsearchCrudRelationProvider
 
   @Override
   public Mono<Boolean> save(final BaleenRelation item) {
-    // TODO Auto-generated method stub
-    return null;
+    return Mono
+        .just(relations.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputRelation(item)));
   }
 
 }

@@ -4,6 +4,7 @@ import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoCrudDataProvider;
+import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputEntity;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenEntity;
@@ -47,7 +48,7 @@ public class MongoCrudEntityProvider
   @Override
   public Mono<Boolean> save(final BaleenEntity item) {
     // NOTE if you have changed the docId here (or entityId) then you'll not be replacing the old one!
-    return replace(entityCollection, filterForEntity(item.getDocId(), item.getId()), toOutputEntity(item),
+    return replace(entityCollection, filterForEntity(item.getDocId(), item.getId()), Converters.toOutputEntity(item),
         OutputEntity.class);
 
   }
@@ -57,20 +58,5 @@ public class MongoCrudEntityProvider
         Filters.eq(BaleenProperties.EXTERNAL_ID, entityId),
         Filters.eq(BaleenProperties.DOC_ID, documentId));
   }
-
-
-  private OutputEntity toOutputEntity(final BaleenEntity item) {
-    final OutputEntity o = new OutputEntity();
-    o.setDocId(item.getDocId());
-    o.setExternalId(item.getId());
-    // TODO: ... mentions will be lost here. We need to actually get the entity and then put it here and
-    // we don't use it ourselves.
-    o.setProperties(item.getProperties().asMap());
-    o.setSubType(item.getSubType());
-    o.setType(item.getType());
-    o.setValue(item.getValue());
-    return o;
-  }
-
 
 }

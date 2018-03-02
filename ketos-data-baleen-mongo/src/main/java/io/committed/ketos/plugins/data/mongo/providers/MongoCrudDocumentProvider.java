@@ -1,12 +1,11 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
-import java.util.stream.Collectors;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 import io.committed.invest.support.data.mongo.AbstractMongoCrudDataProvider;
+import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
-import io.committed.ketos.common.baleenconsumer.OutputDocumentMetadata;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.CrudDocumentProvider;
@@ -48,19 +47,10 @@ public class MongoCrudDocumentProvider
 
   @Override
   public Mono<Boolean> save(final BaleenDocument item) {
-    return replace(documentCollection, filterForDoc(item.getId()), toOutputDocument(item), OutputDocument.class);
+    return replace(documentCollection, filterForDoc(item.getId()), Converters.toOutputDocument(item),
+        OutputDocument.class);
   }
 
-  private OutputDocument toOutputDocument(final BaleenDocument item) {
-    final OutputDocument o = new OutputDocument();
-    o.setContent(item.getContent());
-    o.setExternalId(item.getId());
-    o.setMetadata(item.getMetadata().stream()
-        .map(m -> new OutputDocumentMetadata(m.getKey(), m.getValue()))
-        .collect(Collectors.toList()));
-    o.setProperties(item.getProperties().asMap());
-    return o;
-  }
 
   private Bson filterForDoc(final String id) {
     return Filters.eq(BaleenProperties.EXTERNAL_ID, id);
