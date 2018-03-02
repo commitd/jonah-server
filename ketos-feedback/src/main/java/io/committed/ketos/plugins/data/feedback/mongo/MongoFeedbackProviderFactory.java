@@ -11,7 +11,7 @@ public class MongoFeedbackProviderFactory
     extends AbstractSpringDataMongoDataProviderFactory<FeedbackDataProvider> {
 
   public MongoFeedbackProviderFactory() {
-    super("feedback-mongo", FeedbackDataProvider.class);
+    super("feedback-mongo", FeedbackDataProvider.class, "ketos");
   }
 
   @Override
