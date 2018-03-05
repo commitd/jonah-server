@@ -54,6 +54,8 @@ public class RelationSearchService extends AbstractGraphQlService {
         .parent(search)
         .results(flux)
         .total(count)
+        .offset(offset)
+        .size(size)
         .build();
   }
 }

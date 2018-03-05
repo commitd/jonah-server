@@ -57,6 +57,8 @@ public class EntitySearchService extends AbstractGraphQlService {
         .parent(search)
         .results(entities)
         .total(count)
+        .offset(offset)
+        .size(size)
         .build();
   }
 }

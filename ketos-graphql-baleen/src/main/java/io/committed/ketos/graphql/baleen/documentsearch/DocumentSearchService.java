@@ -57,6 +57,8 @@ public class DocumentSearchService extends AbstractGraphQlService {
         .parent(documentSearch)
         .results(documents)
         .total(count)
+        .offset(offset)
+        .size(size)
         .build();
   }
 

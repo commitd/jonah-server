@@ -18,9 +18,16 @@ public class Relations extends AbstractGraphQLNode {
 
   private final Mono<Long> total;
 
+  private final long offset;
+
+  private final long size;
+
   @Builder
-  public Relations(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenRelation> results) {
+  public Relations(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenRelation> results,
+      final long offset, final long size) {
     super(parent);
+    this.offset = offset;
+    this.size = size;
     this.results = results.doOnNext(r -> r.setParent(this)).cache();
     this.total = total;
   }

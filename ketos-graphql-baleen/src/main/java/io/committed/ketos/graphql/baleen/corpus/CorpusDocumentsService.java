@@ -95,7 +95,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(Long::sum);
 
-    return Documents.builder().parent(corpus).results(documents).total(count).build();
+    return Documents.builder().parent(corpus).results(documents).total(count).offset(offset).size(size).build();
   }
 
   @GraphQLQuery(name = "countDocuments", description = "Get the number of documents")

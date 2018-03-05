@@ -18,9 +18,16 @@ public class Mentions extends AbstractGraphQLNode {
 
   private final Mono<Long> total;
 
+  private final long offset;
+
+  private final long size;
+
   @Builder
-  public Mentions(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenMention> results) {
+  public Mentions(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenMention> results,
+      final long offset, final long size) {
     super(parent);
+    this.offset = offset;
+    this.size = size;
     this.results = results.doOnNext(r -> r.setParent(this)).cache();
     this.total = total;
   }
