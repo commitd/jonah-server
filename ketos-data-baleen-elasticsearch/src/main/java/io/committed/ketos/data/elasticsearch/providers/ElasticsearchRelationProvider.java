@@ -89,9 +89,9 @@ public class ElasticsearchRelationProvider
     final Optional<QueryBuilder> query =
         RelationFilters.toQuery(search);
     if (query.isPresent()) {
-      return new RelationSearchResult(findRelations(query.get(), offset, limit), Mono.empty());
+      return new RelationSearchResult(findRelations(query.get(), offset, limit), Mono.empty(), offset, limit);
     } else {
-      return new RelationSearchResult(getAll(offset, limit), count());
+      return new RelationSearchResult(getAll(offset, limit), count(), offset, limit);
     }
   }
 

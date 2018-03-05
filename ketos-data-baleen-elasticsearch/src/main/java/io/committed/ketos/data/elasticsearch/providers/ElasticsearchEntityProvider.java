@@ -57,9 +57,9 @@ public class ElasticsearchEntityProvider
     if (query.isPresent()) {
       final Flux<OutputEntity> search =
           getService().search(query.get(), offset, limit);
-      return new EntitySearchResult(search.map(Converters::toBaleenEntity), Mono.empty());
+      return new EntitySearchResult(search.map(Converters::toBaleenEntity), Mono.empty(), offset, limit);
     } else {
-      return new EntitySearchResult(getAll(offset, limit), count());
+      return new EntitySearchResult(getAll(offset, limit), count(), offset, limit);
     }
   }
 

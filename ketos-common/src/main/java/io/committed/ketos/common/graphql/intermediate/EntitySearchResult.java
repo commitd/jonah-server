@@ -15,4 +15,8 @@ public class EntitySearchResult {
   private Flux<BaleenEntity> results;
 
   private Mono<Long> total;
+
+  private long offset;
+
+  private long size;
 }

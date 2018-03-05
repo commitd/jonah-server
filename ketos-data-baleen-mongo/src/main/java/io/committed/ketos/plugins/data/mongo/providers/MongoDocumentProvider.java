@@ -86,7 +86,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
         .take(size)
         .map(Converters::toBaleenDocument);
 
-    return new DocumentSearchResult(results, Mono.empty());
+    return new DocumentSearchResult(results, Mono.empty(), offset, size);
   }
 
 
@@ -109,7 +109,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
         .take(size)
         .map(Converters::toBaleenDocument);
 
-    return new DocumentSearchResult(flux, total);
+    return new DocumentSearchResult(flux, total, offset, size);
   }
 
 

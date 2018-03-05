@@ -15,4 +15,8 @@ public class DocumentSearchResult {
   private Flux<BaleenDocument> results;
 
   private Mono<Long> total;
+
+  private long offset;
+
+  private long size;
 }

@@ -27,75 +27,6 @@ public class MongoMentionProvider extends AbstractBaleenMongoDataProvider<Output
     super(dataset, datasource, mongoDatabase, collection, OutputMention.class);
   }
 
-  // @Override
-  // public Flux<BaleenMention> getByDocument(final BaleenDocument document) {
-  // return getMentionsByDocumentId(document.getId());
-  // }
-  //
-  // private Flux<BaleenEntity> getByDocumentId(final String id) {
-  // return entities.findByDocId(id).map(MongoEntities::toEntity);
-  // }
-  //
-  // private Flux<BaleenMention> getMentionsByDocumentId(final String documentId) {
-  // return getByDocumentId(documentId);;
-  // }
-  //
-  // private Mono<BaleenMention> relationMentionById(final BaleenRelation relation,
-  // final String sourceId) {
-  // return getMentionsByDocumentId(relation.getDocId())
-  // .filter(m -> sourceId.equals(m.getId()))
-  // .next();
-  // }
-  //
-  // @Override
-  // public Mono<BaleenMention> getById(final String id) {
-  // final MentionFilter filter = new MentionFilter();
-  // filter.setId(id);
-  // final MentionSearch search = MentionSearch.builder().mentionFilter(filter).build();
-  // return search(search, 0, 1).getResults().next();
-  // }
-  //
-  // @Override
-  // public Flux<BaleenMention> getAll(final int offset, final int limit) {
-  // return search(MentionSearch.builder().build(), offset, limit).getResults();
-  // }
-  //
-  //
-  // @Override
-  // public Mono<Long> count() {
-  // return aggregateOverMentions(CountOutcome.class, Optional.empty(),
-  // Aggregation.count().as("total"))
-  // .next()
-  // .map(CountOutcome::getTotal);
-  // }
-  //
-  // @Override
-  // public Flux<TermBin> countByField(final Optional<MentionFilter> filter, final List<String> path,
-  // final int limit) {
-  //
-  // // There's no nesting mention properties (sadly!)... so the field is just the last path segment
-  // final String field = path.get(path.size() - 1);
-  //
-  // return aggregateOverMentions(TermBin.class,
-  // filter,
-  // group(field).count().as("count"),
-  // Aggregation.project("count").and("_id").as("term"));
-  // }
-  //
-  // @Override
-  // public MentionSearchResult search(final MentionSearch search, final int offset, final int limit)
-  // {
-  //
-  // final Flux<BaleenMention> results = aggregateOverMentions(Document.class,
-  // Optional.ofNullable(search.getMentionFilter()))
-  // .skip(offset)
-  // .take(limit)
-  // .map(MongoMention::new)
-  // .map(MongoMention::toMention);
-  //
-  // return new MentionSearchResult(results, Mono.empty());
-  // }
-
   @Override
   public Mono<BaleenMention> getById(final String id) {
     return findByExternalId(id).map(Converters::toBaleenMention);
@@ -136,6 +67,6 @@ public class MongoMentionProvider extends AbstractBaleenMongoDataProvider<Output
       flux = getAll(offset, size);
     }
 
-    return new MentionSearchResult(flux, total);
+    return new MentionSearchResult(flux, total, offset, size);
   }
 }

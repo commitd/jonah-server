@@ -15,4 +15,8 @@ public class MentionSearchResult {
   private Flux<BaleenMention> results;
 
   private Mono<Long> total;
+
+  private long offset;
+
+  private long size;
 }

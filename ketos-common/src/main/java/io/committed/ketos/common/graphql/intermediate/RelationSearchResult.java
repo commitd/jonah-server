@@ -15,4 +15,8 @@ public class RelationSearchResult {
   private Flux<BaleenRelation> results;
 
   private Mono<Long> total;
+
+  private long offset;
+
+  private long size;
 }

@@ -74,7 +74,7 @@ public class JpaEntityProvider extends AbstractJpaDataProvider implements Entity
   public EntitySearchResult search(final EntitySearch entitySearch, final int offset, final int limit) {
     // TODO Not worth implementing, very unclear what the correct way to map the search into the
     // database it...
-    return new EntitySearchResult(Flux.empty(), Mono.empty());
+    return new EntitySearchResult(Flux.empty(), Mono.empty(), offset, limit);
   }
 
 

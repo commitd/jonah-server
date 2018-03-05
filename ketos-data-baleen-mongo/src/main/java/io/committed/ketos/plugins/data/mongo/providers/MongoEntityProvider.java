@@ -68,6 +68,6 @@ public class MongoEntityProvider extends AbstractBaleenMongoDataProvider<OutputE
       flux = getAll(offset, size);
     }
 
-    return new EntitySearchResult(flux, total);
+    return new EntitySearchResult(flux, total, offset, size);
   }
 }

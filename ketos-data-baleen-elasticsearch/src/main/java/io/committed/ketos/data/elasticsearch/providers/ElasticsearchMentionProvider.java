@@ -72,7 +72,8 @@ public class ElasticsearchMentionProvider
 
     return new MentionSearchResult(
         results,
-        Mono.empty());
+        Mono.empty(),
+        offset, limit);
 
   }
 

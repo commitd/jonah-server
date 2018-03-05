@@ -85,7 +85,7 @@ public class ElasticsearchDocumentProvider
       results = getService().getAll(offset, limit).map(Converters::toBaleenDocument);
     }
 
-    return new DocumentSearchResult(results, Mono.empty());
+    return new DocumentSearchResult(results, Mono.empty(), offset, limit);
   }
 
   @Override
