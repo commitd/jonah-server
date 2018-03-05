@@ -58,11 +58,11 @@ public final class DocumentFilters {
       }
 
       if (info.getEndTimestamp() != null) {
-        filters.add(Filters.lte("properties.timestamp", info.getEndTimestamp()));
+        filters.add(Filters.lte("properties.timestamp", info.getEndTimestamp().getTime()));
       }
 
       if (info.getStartTimestamp() != null) {
-        filters.add(Filters.gte("properties.timestamp", info.getStartTimestamp()));
+        filters.add(Filters.gte("properties.timestamp", info.getStartTimestamp().getTime()));
       }
 
       if (info.getLanguage() != null) {
