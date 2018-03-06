@@ -39,26 +39,26 @@ public class ElasticsearchMetadataProvider
           getService()
               .count(queryByKey(key.get()));
 
-      return count.flux().map(c -> new TermBin(key.get(), c));
+      return count.flux().map(c -> new TermBin(key.get(), c)).take(size);
     } else {
       // if the key is not present we are calculating doc counts for all keys
-      return aggregateByMetadata(Optional.empty(), BaleenProperties.METADATA_KEY);
+      return aggregateByMetadata(Optional.empty(), BaleenProperties.METADATA_KEY, size);
     }
   }
 
   @Override
   public Flux<TermBin> countByValue(final Optional<String> key, final int size) {
-    return aggregateByMetadata(key.map(this::queryByKey), BaleenProperties.METADATA_VALUE);
+    return aggregateByMetadata(key.map(this::queryByKey), BaleenProperties.METADATA_VALUE, size);
   }
 
-  private Flux<TermBin> aggregateByMetadata(final Optional<QueryBuilder> query, final String field) {
+  private Flux<TermBin> aggregateByMetadata(final Optional<QueryBuilder> query, final String field, final int size) {
 
     final String fieldkeyword =
         ElasticsearchMapping.toAggregationField(Arrays.asList(BaleenProperties.METADATA, field));
 
     final AggregationBuilder ab = AggregationBuilders.nested("agg", BaleenProperties.METADATA)
         .subAggregation(AggregationBuilders.filter("filtered", query.orElse(QueryBuilders.matchAllQuery()))
-            .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword)));
+            .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword).size(size)));
 
     return getService().aggregation(Optional.empty(), ab)
         .flatMapMany(response -> {
