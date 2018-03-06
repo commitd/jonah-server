@@ -67,7 +67,7 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
   }
 
   protected Flux<TimeBin> timelineAggregation(final List<Bson> aggregation, final TimeInterval interval,
-      final Object timestampField) {
+      final String timestampField) {
 
     String dateString;
     switch (interval) {
@@ -82,11 +82,14 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
         dateString = "%Y-%m-%d";
     }
 
+    // Discard anything without a date
+    aggregation.add(Aggregates.match(Filters.exists(timestampField)));
+
     // Convert from milliseconds to data
     // https://stackoverflow.com/questions/29892152/convert-milliseconds-to-date-in-mongodb-aggregation-pipeline-for-group-by
     final Document tsToDate = new Document("ts",
         new Document("$add",
-            Arrays.asList(new Date(0), timestampField)));
+            Arrays.asList(new Date(0), "$" + timestampField)));
     aggregation.add(Aggregates.project(tsToDate));
     // then create a grouping
     final Document dateToString = new Document("date",
