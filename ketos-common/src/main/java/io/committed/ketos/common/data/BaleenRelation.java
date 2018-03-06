@@ -13,25 +13,25 @@ import lombok.EqualsAndHashCode;
 public class BaleenRelation extends AbstractGraphQLNode {
 
   @GraphQLId
-  private final String id;
+  private String id;
 
-  private final String docId;
+  private String docId;
 
-  private final int begin;
+  private int begin;
 
-  private final int end;
+  private int end;
 
-  private final String type;
+  private String type;
 
-  private final String subType;
+  private String subType;
 
-  private final String value;
+  private String value;
 
-  private final BaleenMention source;
+  private BaleenMention source;
 
-  private final BaleenMention target;
+  private BaleenMention target;
 
-  private final PropertiesMap properties;
+  private PropertiesMap properties;
 
   public BaleenRelation(final String id, final String docId, final int begin, final int end,
       final String type, final String subtype,

@@ -6,23 +6,25 @@ import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
 public class BaleenMention extends AbstractGraphQLNode {
 
   @GraphQLId
-  private final String id;
-  private final int begin;
-  private final int end;
-  private final String type;
-  private final String subType;
-  private final String value;
-  private final String entityId;
-  private final String docId;
+  private String id;
+  private int begin;
+  private int end;
+  private String type;
+  private String subType;
+  private String value;
+  private String entityId;
+  private String docId;
 
-  private final PropertiesMap properties;
+  private PropertiesMap properties;
 
   public BaleenMention(@GraphQLId final String id, final int begin, final int end,
       final String type, final String subType, final String value,
