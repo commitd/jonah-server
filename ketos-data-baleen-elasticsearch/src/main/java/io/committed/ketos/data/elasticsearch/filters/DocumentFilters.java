@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.join.query.JoinQueryBuilders;
+import io.committed.invest.core.utils.FieldUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
@@ -38,39 +39,53 @@ public final class DocumentFilters {
       final DocumentInfoFilter info = filter.getInfo();
 
       if (info.getCaveats() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.CAVEATS, info.getCaveats()));
+        queryBuilder.must(QueryBuilders.matchQuery(
+            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.CAVEATS), info.getCaveats()));
       }
 
       if (info.getClassification() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.CLASSIFICATION, info.getClassification()));
+        queryBuilder.must(
+            QueryBuilders.matchQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.CLASSIFICATION),
+                info.getClassification()));
       }
 
       if (info.getLanguage() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.LANGUAGE, info.getLanguage()));
+        queryBuilder.must(QueryBuilders.matchQuery(
+            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.LANGUAGE), info.getLanguage()));
       }
 
       if (info.getReleasability() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.RELEASABILITY, info.getReleasability()));
+        queryBuilder.must(
+            QueryBuilders.matchQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.RELEASABILITY),
+                info.getReleasability()));
       }
 
       if (info.getSource() != null) {
-        queryBuilder.must(QueryBuilders.termQuery(BaleenProperties.SOURCE, info.getSource()));
+        queryBuilder.must(QueryBuilders
+            .termQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.SOURCE), info.getSource()));
       }
 
       if (info.getStartTimestamp() != null) {
-        queryBuilder.must(QueryBuilders.rangeQuery(BaleenProperties.TIMESTAMP).gte(info.getStartTimestamp()));
+        queryBuilder.must(
+            QueryBuilders.rangeQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.TIMESTAMP))
+                .gte(info.getStartTimestamp().getTime()));
       }
 
-      if (info.getStartTimestamp() != null) {
-        queryBuilder.must(QueryBuilders.rangeQuery(BaleenProperties.TIMESTAMP).lte(info.getEndTimestamp()));
+      if (info.getEndTimestamp() != null) {
+        queryBuilder.must(
+            QueryBuilders.rangeQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.TIMESTAMP))
+                .lte(info.getEndTimestamp().getTime()));
       }
 
       if (info.getType() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.DOCUMENT_TYPE, info.getSource()));
+        queryBuilder.must(QueryBuilders.matchQuery(
+            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_TYPE), info.getType()));
       }
 
       if (info.getPublishedId() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.PUBLISHED_IDS + ".id", info.getPublishedId()));
+        queryBuilder.must(QueryBuilders.matchQuery(
+            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.PUBLISHED_IDS + ".id"),
+            info.getPublishedId()));
       }
     }
 
@@ -82,7 +97,7 @@ public final class DocumentFilters {
                     e.getKey()))
                 .must(QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE,
                     e.getValue())),
-            ScoreMode.None));
+            ScoreMode.Max));
       });
     }
 
@@ -114,7 +129,7 @@ public final class DocumentFilters {
           .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
               mentionType,
               q,
-              ScoreMode.None)));
+              ScoreMode.Max)));
     }
 
     if (documentSearch.getEntityFilters() != null) {
@@ -125,7 +140,7 @@ public final class DocumentFilters {
           .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
               entityType,
               q,
-              ScoreMode.None)));
+              ScoreMode.Max)));
     }
 
     if (documentSearch.getRelationFilters() != null) {
@@ -136,7 +151,7 @@ public final class DocumentFilters {
           .forEach(q -> queryBuilder.must(JoinQueryBuilders.hasChildQuery(
               relationType,
               q,
-              ScoreMode.None)));
+              ScoreMode.Max)));
     }
 
     return Optional.of(queryBuilder);

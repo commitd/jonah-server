@@ -10,7 +10,6 @@ import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServi
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
-import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -82,7 +81,7 @@ public class ElasticsearchRelationProvider
       final int size) {
     final Optional<QueryBuilder> query = RelationFilters.toQuery(filter, "");
     final String field = FieldUtils.joinField(ElasticsearchMapping.toAggregationPath(path));
-    return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
+    return getService().termAggregation(query, field, size);
   }
 
   @Override

@@ -8,7 +8,6 @@ import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServi
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
-import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.graphql.input.MentionFilter;
@@ -50,7 +49,7 @@ public class ElasticsearchMentionProvider
       final int size) {
     final Optional<QueryBuilder> query = MentionFilters.toQuery(filter, "");
     final String field = ElasticsearchMapping.toAggregationField(path);
-    return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
+    return getService().termAggregation(query, field, size);
 
   }
 

@@ -232,9 +232,8 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
 
     return calculateTimeRange(aggregation, "properties.timestampStart", "properties.timestampStop")
         .doOnNext(r -> {
-          // Correct s to ms!
-          r.setEnd(new Date(r.getEnd().getTime() * 1000));
-          r.setStart(new Date(r.getStart().getTime() * 1000));
+          r.setEnd(new Date(r.getEnd().getTime()));
+          r.setStart(new Date(r.getStart().getTime()));
         });
   }
 

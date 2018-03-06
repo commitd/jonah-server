@@ -47,13 +47,13 @@ public final class MentionFilters {
     if (filter.getStartTimestamp() != null) {
       queryBuilder
           .must(QueryBuilders.rangeQuery(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP)
-              .gte(filter.getStartTimestamp()));
+              .gte(filter.getStartTimestamp().getTime()));
     }
 
     if (filter.getEndTimestamp() != null) {
       queryBuilder
           .must(QueryBuilders.rangeQuery(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP)
-              .lte(filter.getEndTimestamp()));
+              .lte(filter.getEndTimestamp().getTime()));
     }
 
     if (filter.getType() != null) {

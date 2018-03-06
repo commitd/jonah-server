@@ -42,8 +42,8 @@ public class ElasticsearchEntityProvider
   @Override
   public Flux<TermBin> countByField(final Optional<EntityFilter> filter, final List<String> path,
       final int limit) {
-    final List<String> keywordPath = ElasticsearchMapping.toAggregationPath(path);
-    return getService().termAggregation(EntityFilters.toQuery(filter, ""), keywordPath, limit);
+    final String keywordField = ElasticsearchMapping.toAggregationField(path);
+    return getService().termAggregation(EntityFilters.toQuery(filter, ""), keywordField, limit);
   }
 
   @Override

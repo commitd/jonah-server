@@ -1,7 +1,6 @@
 package io.committed.ketos.data.elasticsearch.repository;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
-import io.committed.invest.core.utils.FieldUtils;
 import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportService;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
@@ -52,16 +50,16 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   }
 
 
-  public Flux<TermBin> termAggregation(final Optional<QueryBuilder> query, final List<String> path,
-      final int size) {
-    final String field = FieldUtils.joinField(path);
-    if (path.size() == 1) {
-      return termAggregation(query, field, size);
-    } else {
-      return nestedTermAggregation(query, path.get(0), field, size);
-
-    }
-  }
+  // public Flux<TermBin> termAggregation(final Optional<QueryBuilder> query, final List<String> path,
+  // final int size) {
+  // final String field = FieldUtils.joinField(path);
+  // if (path.size() == 1) {
+  // return termAggregation(query, field, size);
+  // } else {
+  // return nestedTermAggregation(query, path.get(0), field, size);
+  //
+  // }
+  // }
 
   public Flux<TermBin> nestedTermAggregation(final Optional<QueryBuilder> query,
       final String nestedPath, final String field, final int size) {

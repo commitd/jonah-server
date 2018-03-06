@@ -54,7 +54,7 @@ public final class DocumentFilters {
       }
 
       if (info.getReleasability() != null) {
-        filters.add(Filters.in("properties.releasability", info.getCaveats()));
+        filters.add(Filters.in("properties.releasability", info.getReleasability()));
       }
 
       if (info.getEndTimestamp() != null) {
@@ -79,6 +79,10 @@ public final class DocumentFilters {
 
       if (info.getPublishedId() != null) {
         filters.add(Filters.in("properties.publishedIds.id", info.getPublishedId()));
+      }
+
+      if (info.getClassification() != null) {
+        filters.add(Filters.in("properties.classification", info.getClassification()));
       }
     }
 

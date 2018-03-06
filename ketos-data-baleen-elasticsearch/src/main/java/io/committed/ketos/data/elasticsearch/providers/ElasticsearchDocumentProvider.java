@@ -10,7 +10,6 @@ import org.elasticsearch.join.aggregations.Children;
 import org.elasticsearch.join.aggregations.ChildrenAggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
-import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
@@ -94,7 +93,12 @@ public class ElasticsearchDocumentProvider
       final int size) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
     final String field = ElasticsearchMapping.toAggregationField(path);
-    return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
+    if (path.get(0).equalsIgnoreCase(BaleenProperties.METADATA)) {
+      return getService().nestedTermAggregation(query, BaleenProperties.METADATA, field, size);
+    } else {
+      return getService().termAggregation(query, field, size);
+
+    }
   }
 
   @Override
@@ -103,7 +107,7 @@ public class ElasticsearchDocumentProvider
     final String field = ElasticsearchMapping
         .toAggregationField(Arrays.asList(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE));
 
-    return getService().nestedTimelineAggregation(query, interval, BaleenProperties.PROPERTIES, field);
+    return getService().timelineAggregation(query, field, interval);
   }
 
 
@@ -118,12 +122,11 @@ public class ElasticsearchDocumentProvider
         .toAggregationField(Arrays.asList(BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP));
 
     final ChildrenAggregationBuilder aggregationBuilder =
-        new ChildrenAggregationBuilder("children", type).subAggregation(
-            AggregationBuilders.nested("nested", BaleenProperties.PROPERTIES)
-                .subAggregation(AggregationBuilders.dateHistogram("dh")
-                    .minDocCount(1)
-                    .field(field)
-                    .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval))));
+        new ChildrenAggregationBuilder("children", type)
+            .subAggregation(AggregationBuilders.dateHistogram("dh")
+                .minDocCount(1)
+                .field(field)
+                .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval)));
 
 
     return getService().aggregation(query,
@@ -131,8 +134,7 @@ public class ElasticsearchDocumentProvider
         aggregationBuilder)
         .flatMapMany(agg -> {
           final Children children = agg.get("children");
-          final Nested nested = children.getAggregations().get("nested");
-          final Histogram histogram = nested.getAggregations().get("dh");
+          final Histogram histogram = children.getAggregations().get("dh");
           return Flux.fromIterable(histogram.getBuckets()).map(b -> {
             final Instant i = Instant.ofEpochMilli(((DateTime) b.getKey()).toInstant().getMillis());
             return new TimeBin(i, b.getDocCount());
@@ -152,29 +154,14 @@ public class ElasticsearchDocumentProvider
 
     final ChildrenAggregationBuilder aggregationBuilder = new ChildrenAggregationBuilder("children", type);
     final TermsAggregationBuilder termBuilder = AggregationBuilders.terms("terms").field(field).size(size);
-
-    final boolean isNested = path.size() > 1;
-
-    if (isNested) {
-      aggregationBuilder.subAggregation(
-          AggregationBuilders.nested("nested", BaleenProperties.PROPERTIES)
-              .subAggregation(termBuilder));
-    } else {
-      aggregationBuilder.subAggregation(termBuilder);
-    }
+    aggregationBuilder.subAggregation(termBuilder);
 
     return getService().aggregation(query,
         // NOTE new ... as aggregationbuilders.children does not exist yet!
         aggregationBuilder)
         .flatMapMany(agg -> {
           final Children children = agg.get("children");
-          Terms terms;
-          if (isNested) {
-            final Nested nested = children.getAggregations().get("nested");
-            terms = nested.getAggregations().get("terms");
-          } else {
-            terms = children.getAggregations().get("terms");
-          }
+          final Terms terms = children.getAggregations().get("terms");
           return Flux.fromIterable(terms.getBuckets()).map(b -> {
             return new TermBin(b.getKeyAsString(), b.getDocCount());
           });
@@ -207,15 +194,13 @@ public class ElasticsearchDocumentProvider
   public Mono<TimeRange> documentTimeRange(final Optional<DocumentFilter> documentFilter) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
     return getService().aggregation(query,
-        AggregationBuilders.nested("nested", BaleenProperties.PROPERTIES)
-            .subAggregation(AggregationBuilders.min("min")
-                .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE))
-            .subAggregation(AggregationBuilders.max("max")
-                .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE)))
+        AggregationBuilders.min("min")
+            .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE),
+        AggregationBuilders.max("max")
+            .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE))
         .map(agg -> {
-          final Nested nested = agg.get("nested");
-          final Min min = nested.getAggregations().get("min");
-          final Max max = nested.getAggregations().get("max");
+          final Min min = agg.get("min");
+          final Max max = agg.get("max");
           return new TimeRange(new Date((long) min.getValue()), new Date((long) max.getValue()));
         });
   }
@@ -226,18 +211,15 @@ public class ElasticsearchDocumentProvider
     return getService().aggregation(query,
         // NOTE new ... as aggregationbuilders.children does not exist yet!
         new ChildrenAggregationBuilder("children", entityType)
-            .subAggregation(AggregationBuilders.nested("nested", BaleenProperties.PROPERTIES)
-                .subAggregation(AggregationBuilders.min("min")
-                    .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP))
-                .subAggregation(AggregationBuilders.max("max")
-                    .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP))))
+            .subAggregation(AggregationBuilders.min("min")
+                .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP))
+            .subAggregation(AggregationBuilders.max("max")
+                .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP)))
         .map(agg -> {
           final Children children = agg.get("children");
-          final Nested nested = children.getAggregations().get("nested");
-          final Min min = nested.getAggregations().get("min");
-          final Max max = nested.getAggregations().get("max");
-          // silly sec to millisec change
-          return new TimeRange(new Date((long) min.getValue() * 1000), new Date((long) max.getValue() * 1000));
+          final Min min = children.getAggregations().get("min");
+          final Max max = children.getAggregations().get("max");
+          return new TimeRange(new Date((long) min.getValue()), new Date((long) max.getValue()));
         });
   }
 
