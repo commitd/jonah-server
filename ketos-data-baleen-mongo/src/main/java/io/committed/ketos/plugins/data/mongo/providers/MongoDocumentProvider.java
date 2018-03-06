@@ -19,6 +19,7 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
+import io.committed.invest.core.utils.FieldUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
@@ -124,7 +125,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
     });
 
     return timelineAggregation(aggregation, interval,
-        String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE), 1);
+        FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE));
   }
 
 
@@ -154,7 +155,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
     // anything is equally odd
     // Baleen outputs seconds here, but mills for value!
     return timelineAggregation(aggregation, interval,
-        String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP), 1000);
+        FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP));
   }
 
 
