@@ -1,5 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import java.util.Optional;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.constants.BaleenProperties;
@@ -50,7 +51,10 @@ public class ElasticsearchCrudMentionProvider
     relations.updateSource(item.getId(), mention);
     relations.updateTarget(item.getId(), mention);
 
-    return mentions.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), mention);
+    // TODO: hard coded documents
+    return mentions.updateOrSave(Optional.of("document"), Optional.ofNullable(item.getDocId()),
+        BaleenProperties.EXTERNAL_ID, item.getId(),
+        mention);
   }
 
 }

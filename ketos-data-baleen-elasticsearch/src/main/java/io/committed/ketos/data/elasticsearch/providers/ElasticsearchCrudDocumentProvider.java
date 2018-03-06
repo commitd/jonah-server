@@ -1,5 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import java.util.Optional;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.ketos.common.baleenconsumer.Converters;
@@ -44,7 +45,8 @@ public class ElasticsearchCrudDocumentProvider
 
   @Override
   public boolean save(final BaleenDocument item) {
-    return documents.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputDocument(item));
+    return documents.updateOrSave(Optional.empty(), Optional.empty(), BaleenProperties.EXTERNAL_ID, item.getId(),
+        Converters.toOutputDocument(item));
   }
 
 }

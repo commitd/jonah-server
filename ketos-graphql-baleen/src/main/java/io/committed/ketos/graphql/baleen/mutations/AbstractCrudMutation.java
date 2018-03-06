@@ -31,13 +31,11 @@ public abstract class AbstractCrudMutation<R, T, P extends CrudDataProvider<R, T
   }
 
   protected Flux<DataProvider> delete(final Optional<String> datasetId, final R r, final DataHints hints) {
-
     return getProviders(datasetId, hints)
         .flatMap(p -> {
           final boolean done = p.delete(r);
           return done ? Mono.just(p) : Mono.empty();
         });
-
   }
 
 

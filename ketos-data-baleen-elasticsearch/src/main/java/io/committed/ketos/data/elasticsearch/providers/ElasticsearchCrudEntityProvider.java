@@ -1,5 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import java.util.Optional;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenEntity;
@@ -41,7 +42,11 @@ public class ElasticsearchCrudEntityProvider
 
   @Override
   public boolean save(final BaleenEntity item) {
-    return entities.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputEntity(item));
+    // TODO: use configuration name
+    return entities.updateOrSave(Optional.of("document"), Optional.ofNullable(item.getDocId()),
+        BaleenProperties.EXTERNAL_ID,
+        item.getId(),
+        Converters.toOutputEntity(item));
   }
 
 }
