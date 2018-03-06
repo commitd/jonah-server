@@ -23,7 +23,7 @@ public class EsCrudEntityProviderFactory
 
 
   public EsCrudEntityProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-crud-documents", CrudEntityProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
+    super("baleen-es-crud-entities", CrudEntityProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
         BaleenElasticsearchConstants.DEFAULT_ENTITY_TYPE);
     this.mapper = mapper;
   }

@@ -11,7 +11,6 @@ import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
 import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
-import reactor.core.publisher.Mono;
 
 public class ElasticsearchCrudDocumentProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenDocumentReference, BaleenDocument>
@@ -33,23 +32,19 @@ public class ElasticsearchCrudDocumentProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenDocumentReference reference) {
+  public boolean delete(final BaleenDocumentReference reference) {
 
     final MatchQueryBuilder query = QueryBuilders.matchQuery(BaleenProperties.DOC_ID, reference.getDocumentId());
 
     mentions.delete(query);
     entities.delete(query);
     relations.delete(query);
-    final boolean result =
-        documents.delete(QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, reference.getDocumentId()));
-
-    return Mono.just(result);
+    return documents.delete(QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, reference.getDocumentId()));
   }
 
   @Override
-  public Mono<Boolean> save(final BaleenDocument item) {
-    return Mono
-        .just(documents.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputDocument(item)));
+  public boolean save(final BaleenDocument item) {
+    return documents.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputDocument(item));
   }
 
 }

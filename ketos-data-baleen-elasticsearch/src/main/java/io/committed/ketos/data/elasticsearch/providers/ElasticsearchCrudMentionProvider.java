@@ -9,7 +9,6 @@ import io.committed.ketos.common.references.BaleenMentionReference;
 import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
-import reactor.core.publisher.Mono;
 
 public class ElasticsearchCrudMentionProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenMentionReference, BaleenMention>
@@ -29,7 +28,7 @@ public class ElasticsearchCrudMentionProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenMentionReference reference) {
+  public boolean delete(final BaleenMentionReference reference) {
 
     // TODO: Remove mentionId from any entities which contain it entities..
     // but we don't map it here in Ketos so just leaving it for now
@@ -39,19 +38,19 @@ public class ElasticsearchCrudMentionProvider
     delete(relations, reference.getDocumentId(), BaleenProperties.RELATION_TARGET + "." + BaleenProperties.EXTERNAL_ID,
         reference.getMentionId());
 
-    return Mono.just(delete(mentions, reference.getDocumentId(), reference.getMentionId()));
+    return delete(mentions, reference.getDocumentId(), reference.getMentionId());
   }
 
 
 
   @Override
-  public Mono<Boolean> save(final BaleenMention item) {
+  public boolean save(final BaleenMention item) {
     final OutputMention mention = Converters.toOutputMention(item);
 
     relations.updateSource(item.getId(), mention);
     relations.updateTarget(item.getId(), mention);
 
-    return Mono.just(mentions.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), mention));
+    return mentions.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), mention);
   }
 
 }

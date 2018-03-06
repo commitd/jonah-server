@@ -10,7 +10,6 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.CrudDocumentProvider;
 import io.committed.ketos.common.references.BaleenDocumentReference;
-import reactor.core.publisher.Mono;
 
 public class MongoCrudDocumentProvider
     extends AbstractMongoCrudDataProvider<BaleenDocumentReference, BaleenDocument>
@@ -33,7 +32,7 @@ public class MongoCrudDocumentProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenDocumentReference reference) {
+  public boolean delete(final BaleenDocumentReference reference) {
     // Delete everything
 
     final Bson filter = Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId());
@@ -46,7 +45,7 @@ public class MongoCrudDocumentProvider
   }
 
   @Override
-  public Mono<Boolean> save(final BaleenDocument item) {
+  public boolean save(final BaleenDocument item) {
     return replace(documentCollection, filterForDoc(item.getId()), Converters.toOutputDocument(item),
         OutputDocument.class);
   }

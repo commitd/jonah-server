@@ -33,17 +33,23 @@ public abstract class AbstractCrudMutation<R, T, P extends CrudDataProvider<R, T
   protected Flux<DataProvider> delete(final Optional<String> datasetId, final R r, final DataHints hints) {
 
     return getProviders(datasetId, hints)
-        .flatMap(p -> p.delete(r)
-            .flatMapMany(b -> b ? Mono.just(p) : Mono.empty()));
+        .flatMap(p -> {
+          final boolean done = p.delete(r);
+          return done ? Mono.just(p) : Mono.empty();
+        });
 
   }
+
 
   public Flux<DataProvider> save(final Optional<String> datasetId, final T t, final DataHints hints) {
 
     return getProviders(datasetId, hints)
-        .flatMap(p -> p.save(t)
-            .flatMapMany(b -> b ? Mono.just(p) : Mono.empty()));
+        .flatMap(p -> {
+          final boolean done = p.save(t);
+          return done ? Mono.just(p) : Mono.empty();
+        });
   }
+
 
   protected Flux<P> getProviders(final Optional<String> datasetId, final DataHints hints) {
     if (datasetId.isPresent()) {

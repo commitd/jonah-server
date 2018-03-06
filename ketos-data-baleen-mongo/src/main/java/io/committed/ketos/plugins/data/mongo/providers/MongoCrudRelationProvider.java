@@ -10,7 +10,6 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.CrudRelationProvider;
 import io.committed.ketos.common.references.BaleenRelationReference;
-import reactor.core.publisher.Mono;
 
 public class MongoCrudRelationProvider
     extends AbstractMongoCrudDataProvider<BaleenRelationReference, BaleenRelation>
@@ -26,7 +25,7 @@ public class MongoCrudRelationProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenRelationReference reference) {
+  public boolean delete(final BaleenRelationReference reference) {
     // Must
     // - delete actual relation
     // we leave the mentions
@@ -35,7 +34,7 @@ public class MongoCrudRelationProvider
   }
 
   @Override
-  public Mono<Boolean> save(final BaleenRelation item) {
+  public boolean save(final BaleenRelation item) {
     // NOTE if you have changed the docId here (or entityId) then you'll not be replacing the old one!
     return replace(relationCollection, filterForRelation(item.getDocId(), item.getId()),
         Converters.toOutputRelation(item),

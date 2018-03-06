@@ -11,7 +11,6 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.providers.baleen.CrudMentionProvider;
 import io.committed.ketos.common.references.BaleenMentionReference;
-import reactor.core.publisher.Mono;
 
 public class MongoCrudMentionProvider
     extends AbstractMongoCrudDataProvider<BaleenMentionReference, BaleenMention>
@@ -30,7 +29,7 @@ public class MongoCrudMentionProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenMentionReference reference) {
+  public boolean delete(final BaleenMentionReference reference) {
     // Must:
     // - delete the mention
     // - update the entityId so it doesn't have delete the mentionId from the entity
@@ -59,7 +58,7 @@ public class MongoCrudMentionProvider
   }
 
   @Override
-  public Mono<Boolean> save(final BaleenMention item) {
+  public boolean save(final BaleenMention item) {
     // Must
     // - update the actual mention
     // - update any relation which has this mention as either source or target

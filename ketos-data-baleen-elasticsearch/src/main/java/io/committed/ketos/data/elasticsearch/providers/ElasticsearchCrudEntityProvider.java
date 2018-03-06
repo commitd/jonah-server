@@ -8,7 +8,6 @@ import io.committed.ketos.common.references.BaleenEntityReference;
 import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
-import reactor.core.publisher.Mono;
 
 public class ElasticsearchCrudEntityProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenEntityReference, BaleenEntity>
@@ -27,7 +26,7 @@ public class ElasticsearchCrudEntityProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenEntityReference reference) {
+  public boolean delete(final BaleenEntityReference reference) {
 
     delete(mentions, reference.getDocumentId(), BaleenProperties.ENTITY_ID,
         reference.getEntityId());
@@ -36,14 +35,13 @@ public class ElasticsearchCrudEntityProvider
     delete(relations, reference.getDocumentId(), BaleenProperties.RELATION_TARGET + "." + BaleenProperties.ENTITY_ID,
         reference.getEntityId());
 
-    return Mono.just(delete(entities, reference.getDocumentId(), reference.getEntityId()));
+    return delete(entities, reference.getDocumentId(), reference.getEntityId());
   }
 
 
   @Override
-  public Mono<Boolean> save(final BaleenEntity item) {
-    return Mono
-        .just(entities.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputEntity(item)));
+  public boolean save(final BaleenEntity item) {
+    return entities.updateOrSave(BaleenProperties.EXTERNAL_ID, item.getId(), Converters.toOutputEntity(item));
   }
 
 }

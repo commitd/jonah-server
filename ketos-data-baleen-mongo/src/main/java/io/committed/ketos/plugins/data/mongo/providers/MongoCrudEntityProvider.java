@@ -10,7 +10,6 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.CrudEntityProvider;
 import io.committed.ketos.common.references.BaleenEntityReference;
-import reactor.core.publisher.Mono;
 
 public class MongoCrudEntityProvider
     extends AbstractMongoCrudDataProvider<BaleenEntityReference, BaleenEntity>
@@ -29,7 +28,7 @@ public class MongoCrudEntityProvider
   }
 
   @Override
-  public Mono<Boolean> delete(final BaleenEntityReference reference) {
+  public boolean delete(final BaleenEntityReference reference) {
 
     delete(mentionCollection, Filters.and(
         Filters.eq(BaleenProperties.ENTITY_ID, reference.getEntityId()),
@@ -46,7 +45,7 @@ public class MongoCrudEntityProvider
   }
 
   @Override
-  public Mono<Boolean> save(final BaleenEntity item) {
+  public boolean save(final BaleenEntity item) {
     // NOTE if you have changed the docId here (or entityId) then you'll not be replacing the old one!
     return replace(entityCollection, filterForEntity(item.getDocId(), item.getId()), Converters.toOutputEntity(item),
         OutputEntity.class);

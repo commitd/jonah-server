@@ -21,8 +21,6 @@ public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinit
   private String relations = BaleenElasticsearchConstants.DEFAULT_RELATION_TYPE;
   private String mentions = BaleenElasticsearchConstants.DEFAULT_MENTION_TYPE;
 
-  private boolean edittable = false;
-
   public ElasticsearchCorpus() {
     super("baleen-elasticsearch", "Elasticsearch Mongo", "Baleen output stored in Elasticsearch", "es");
   }

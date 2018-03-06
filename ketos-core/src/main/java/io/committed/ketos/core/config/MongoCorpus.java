@@ -20,8 +20,6 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
   private String relations = BaleenMongoConstants.DEFAULT_RELATION_COLLECTION;
   private String mentions = BaleenMongoConstants.DEFAULT_MENTION_COLLECTION;
 
-  private boolean edittable = false;
-
   public MongoCorpus() {
     super("baleen-mongo", "Baleen Mongo", "Baleen output from Mongo", "mongo");
   }

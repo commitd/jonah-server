@@ -109,6 +109,8 @@ public final class Converters {
   public static OutputRelation toOutputRelation(final BaleenRelation item) {
     final OutputRelation o = new OutputRelation();
     o.setDocId(item.getDocId());
+    o.setBegin(item.getBegin());
+    o.setEnd(item.getEnd());
     o.setExternalId(item.getId());
     o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
@@ -116,13 +118,19 @@ public final class Converters {
     o.setValue(item.getValue());
     o.setBegin(item.getBegin());
     o.setEnd(item.getEnd());
-    o.setSource(toOutputMention(item.getSource()));
-    o.setTarget(toOutputMention(item.getTarget()));
+    if (item.getSource() != null) {
+      o.setSource(toOutputMention(item.getSource()));
+    }
+    if (item.getTarget() != null) {
+      o.setTarget(toOutputMention(item.getTarget()));
+    }
     return o;
   }
 
   public static OutputMention toOutputMention(final BaleenMention item) {
     final OutputMention o = new OutputMention();
+    o.setBegin(item.getBegin());
+    o.setEnd(item.getEnd());
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
     o.setEntityId(item.getEntityId());
