@@ -7,6 +7,7 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentMetadata;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
+import io.committed.ketos.common.data.BaleenMention.BaleenMentionBuilder;
 import io.committed.ketos.common.data.BaleenRelation;
 
 public final class Converters {
@@ -51,17 +52,24 @@ public final class Converters {
   }
 
   public static BaleenMention toBaleenMention(final OutputMention mention) {
-    return BaleenMention.builder()
-        .begin(mention.getBegin())
-        .docId(mention.getDocId())
-        .end(mention.getEnd())
-        .entityId(mention.getEntityId())
-        .id(mention.getExternalId())
-        .properties(new PropertiesMap(mention.getProperties()))
-        .subType(mention.getSubType())
-        .type(mention.getType())
-        .value(mention.getValue())
-        .build();
+
+
+    final BaleenMentionBuilder builder = BaleenMention.builder();
+
+    // Mention can be null if the relation is 'corrupt'...
+    if (mention != null) {
+      builder.begin(mention.getBegin())
+          .docId(mention.getDocId())
+          .end(mention.getEnd())
+          .entityId(mention.getEntityId())
+          .id(mention.getExternalId())
+          .properties(new PropertiesMap(mention.getProperties()))
+          .subType(mention.getSubType())
+          .type(mention.getType())
+          .value(mention.getValue());
+    }
+
+    return builder.build();
   }
 
   public static BaleenRelation toBaleenRelation(final OutputRelation relation) {
