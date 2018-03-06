@@ -135,9 +135,6 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
     return termAggregation(DocumentFilters.createFilter(documentFilter), path, size);
   }
 
-  // TODO: Where should this really be - perhsp in another provider.
-  // TODO: Then we'd really need a helper to create the data providesr ... jsut give it a baleen db
-  // and let it create everything
   @Override
   public Flux<TimeBin> countByJoinedDate(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType,
       final TimeInterval interval) {
@@ -150,11 +147,12 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
             Filters.eq(BaleenProperties.PROPERTIES + "." + BaleenProperties.TEMPORAL_PRECISION,
                 BaleenProperties.TEMPORAL_PRECISION__EXACT))));
 
-    // TODO: It's hard to pick here... this will produce a lot of stuff on the start of month or day as
+    // It's hard to pick a sensible data here... this will produce a lot of stuff on the start of month
+    // or day as
     // it mentions
     // July 2016 for example. We do have a timestampStart and timestampEnd so we could do something but
     // anything is equally odd
-    // TODO: Crazy Baleen outputs seconds here, but mills for value!
+    // Baleen outputs seconds here, but mills for value!
     return timelineAggregation(aggregation, interval,
         String.format("$%s.%s", BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP), 1000);
   }
@@ -176,8 +174,6 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
   @Override
   public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
     final List<Bson> aggregation = joinCollection(documentFilter, ItemTypes.ENTITY);
-
-
 
     // Get locations, with pois
     final String poiFieldName = BaleenProperties.PROPERTIES + "." + BaleenProperties.POI;

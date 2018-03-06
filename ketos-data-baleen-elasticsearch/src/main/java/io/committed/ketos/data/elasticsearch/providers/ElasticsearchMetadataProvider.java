@@ -1,5 +1,6 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
+import java.util.Arrays;
 import java.util.Optional;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.NestedQueryBuilder;
@@ -12,6 +13,7 @@ import org.elasticsearch.search.aggregations.bucket.nested.Nested;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
@@ -51,13 +53,12 @@ public class ElasticsearchMetadataProvider
 
   private Flux<TermBin> aggregateByMetadata(final Optional<QueryBuilder> query, final String field) {
 
-    final String fieldkeyword = BaleenProperties.METADATA + "." + field;
-
+    final String fieldkeyword =
+        ElasticsearchMapping.toAggregationField(Arrays.asList(BaleenProperties.METADATA, field));
 
     final AggregationBuilder ab = AggregationBuilders.nested("agg", BaleenProperties.METADATA)
         .subAggregation(AggregationBuilders.filter("filtered", query.orElse(QueryBuilders.matchAllQuery()))
             .subAggregation(AggregationBuilders.terms("count").field(fieldkeyword)));
-
 
     return getService().aggregation(Optional.empty(), ab)
         .flatMapMany(response -> {

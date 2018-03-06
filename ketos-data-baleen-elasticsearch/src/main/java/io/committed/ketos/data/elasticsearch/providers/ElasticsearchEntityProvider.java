@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputEntity;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
@@ -41,7 +42,8 @@ public class ElasticsearchEntityProvider
   @Override
   public Flux<TermBin> countByField(final Optional<EntityFilter> filter, final List<String> path,
       final int limit) {
-    return getService().termAggregation(EntityFilters.toQuery(filter, ""), path, limit);
+    final List<String> keywordPath = ElasticsearchMapping.toAggregationPath(path);
+    return getService().termAggregation(EntityFilters.toQuery(filter, ""), keywordPath, limit);
   }
 
   @Override

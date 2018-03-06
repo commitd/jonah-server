@@ -1,6 +1,7 @@
 package io.committed.ketos.data.elasticsearch.providers;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +21,9 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.constants.TimeInterval;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
-import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.constants.ItemTypes;
@@ -92,14 +93,15 @@ public class ElasticsearchDocumentProvider
   public Flux<TermBin> countByField(final Optional<DocumentFilter> documentFilter, final List<String> path,
       final int size) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
-    final String field = FieldUtils.joinField(path);
+    final String field = ElasticsearchMapping.toAggregationField(path);
     return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
   }
 
   @Override
   public Flux<TimeBin> countByDate(final Optional<DocumentFilter> documentFilter, final TimeInterval interval) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
-    final String field = BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE;
+    final String field = ElasticsearchMapping
+        .toAggregationField(Arrays.asList(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE));
 
     return getService().nestedTimelineAggregation(query, interval, BaleenProperties.PROPERTIES, field);
   }
@@ -111,11 +113,16 @@ public class ElasticsearchDocumentProvider
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
 
     final String type = convertItemToType(joinedType);
+
+    final String field = ElasticsearchMapping
+        .toAggregationField(Arrays.asList(BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP));
+
     final ChildrenAggregationBuilder aggregationBuilder =
         new ChildrenAggregationBuilder("children", type).subAggregation(
             AggregationBuilders.nested("nested", BaleenProperties.PROPERTIES)
                 .subAggregation(AggregationBuilders.dateHistogram("dh")
                     .minDocCount(1)
+                    .field(field)
                     .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval))));
 
 
@@ -140,7 +147,7 @@ public class ElasticsearchDocumentProvider
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
 
     final String type = convertItemToType(joinedType);
-    final String field = FieldUtils.joinField(path);
+    final String field = ElasticsearchMapping.toAggregationField(path);
 
 
     final ChildrenAggregationBuilder aggregationBuilder = new ChildrenAggregationBuilder("children", type);

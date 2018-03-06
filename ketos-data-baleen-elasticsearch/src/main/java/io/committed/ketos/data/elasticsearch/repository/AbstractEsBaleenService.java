@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.constants.TimeInterval;
+import io.committed.invest.core.utils.FieldUtils;
 import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportService;
-import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -66,12 +66,10 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   public Flux<TermBin> nestedTermAggregation(final Optional<QueryBuilder> query,
       final String nestedPath, final String field, final int size) {
 
-    final String keywordField = field + ".keyword";
-
     final NestedAggregationBuilder aggregationBuilder =
         AggregationBuilders.nested("nested", nestedPath)
             .subAggregation(AggregationBuilders.terms("agg")
-                .field(keywordField)
+                .field(field)
                 .size(size));
 
 

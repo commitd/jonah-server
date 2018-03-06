@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.elasticsearch.index.query.QueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
-import io.committed.invest.support.data.utils.FieldUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
+import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -49,7 +49,7 @@ public class ElasticsearchMentionProvider
   public Flux<TermBin> countByField(final Optional<MentionFilter> filter, final List<String> path,
       final int size) {
     final Optional<QueryBuilder> query = MentionFilters.toQuery(filter, "");
-    final String field = FieldUtils.joinField(path);
+    final String field = ElasticsearchMapping.toAggregationField(path);
     return getService().nestedTermAggregation(query, BaleenProperties.PROPERTIES, field, size);
 
   }
