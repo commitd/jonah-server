@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.committed.invest.core.dto.analytic.TermCount;
+import io.committed.invest.core.utils.FieldUtils;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
@@ -13,7 +14,7 @@ import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.MentionProbe;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
-import io.committed.ketos.common.utils.FieldUtils;
+import io.committed.ketos.common.utils.BinUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -96,7 +97,7 @@ public class CorpusMentionService extends AbstractGraphQlService {
       return Mono.empty();
     }
 
-    return FieldUtils.joinTermBins(getProviders(corpus, MentionProvider.class, hints)
+    return BinUtils.joinTermBins(getProviders(corpus, MentionProvider.class, hints)
         .flatMap(p -> p.countByField(Optional.ofNullable(mentionFilter), path, limit)));
   }
 }

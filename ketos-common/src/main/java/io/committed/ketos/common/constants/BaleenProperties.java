@@ -39,6 +39,8 @@ public final class BaleenProperties {
   // Relation properties
 
   public static final String WORD_DISTANCE = "wordDistance";
+  public static final String SENTENCE_DISTANCE = "sentenceDistance";
+  public static final String DOCUMENT_DISTANCE = "documentDistance";
   public static final String DEPENDENCY_DISTANCE = "dependencyDistance";
   public static final String NORMAL_SENTENCE_DISTANCE = "sentenceDistanceNormalized";
   public static final String NORMAL_WORD_DISTANCE = "wordDistanceNormalized";
@@ -54,6 +56,10 @@ public final class BaleenProperties {
   public static final String GEOJSON = "geoJson";
   public static final String POI = "poi";
   public static final String TEMPORAL_PRECISION = "precision";
+  public static final String QUANTITY = "quantity";
+  public static final String AMOUNT = "amount";
+  public static final String IS_NORMALISED = "isNormalised";
+  public static final String NORMALISED_QUANTITY = "normalizedQuantity";
 
   // Mention/Entity property values
   public static final String TEMPORAL_PRECISION__EXACT = "EXACT";

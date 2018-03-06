@@ -8,6 +8,7 @@ import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.core.dto.analytic.Timeline;
 import io.committed.invest.core.dto.constants.TimeInterval;
+import io.committed.invest.core.utils.FieldUtils;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
@@ -23,7 +24,7 @@ import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
-import io.committed.ketos.common.utils.FieldUtils;
+import io.committed.ketos.common.utils.BinUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -144,7 +145,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       return Mono.empty();
     }
 
-    return FieldUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
+    return BinUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
         .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path, size)));
   }
 
@@ -200,7 +201,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     }
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
-    return FieldUtils.joinTermBins(providers
+    return BinUtils.joinTermBins(providers
         .flatMap(p -> p.countByJoinedField(Optional.ofNullable(documentFilter), type, path, size)));
   }
 
@@ -233,7 +234,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     }
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
-    return FieldUtils.joinTimeBins(
+    return BinUtils.joinTimeBins(
         providers.flatMap(p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, bestInterval)),
         bestInterval);
   }

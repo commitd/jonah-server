@@ -9,7 +9,7 @@ import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenCorpusMetadata;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
-import io.committed.ketos.common.utils.FieldUtils;
+import io.committed.ketos.common.utils.BinUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
@@ -43,7 +43,7 @@ public class CorpusMetadataService extends AbstractGraphQlService {
     final Flux<TermBin> flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class, hints)
         .flatMap(p -> p.countByKey(corpusMetadata.getKey(), size));
 
-    return FieldUtils.joinTermBins(flux);
+    return BinUtils.joinTermBins(flux);
   }
 
   @GraphQLQuery(name = "values", description = "Get all values for metadata")
@@ -56,7 +56,7 @@ public class CorpusMetadataService extends AbstractGraphQlService {
     final Flux<TermBin> flux = getProvidersFromContext(corpusMetadata, MetadataProvider.class, hints)
         .flatMap(p -> p.countByValue(corpusMetadata.getKey(), size));
 
-    return FieldUtils.joinTermBins(flux);
+    return BinUtils.joinTermBins(flux);
   }
 
 
