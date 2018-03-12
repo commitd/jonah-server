@@ -50,7 +50,7 @@ public class DocumentLocationField extends AbstractGraphQlService {
       @GraphQLArgument(name = "top", description = "Top bound (north)") final Double top,
       @GraphQLArgument(name = "bottom", description = "Bottom bound (south)") final Double bottom,
       @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -65,7 +65,7 @@ public class DocumentLocationField extends AbstractGraphQlService {
     final MentionSearch search = new MentionSearch(document, filter);
 
     return getProvidersFromContext(document, MentionProvider.class, hints)
-        .flatMap(p -> p.search(search, offset, limit).getResults())
+        .flatMap(p -> p.search(search, offset, size).getResults())
         // Require geo
         .filter(m -> {
           final Object geoJson = m.getProperties().asMap().get("geoJson");

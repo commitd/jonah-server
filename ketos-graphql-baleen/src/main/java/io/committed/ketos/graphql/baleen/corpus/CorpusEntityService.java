@@ -38,17 +38,17 @@ public class CorpusEntityService extends AbstractGraphQlService {
   public Flux<BaleenEntity> getEntities(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "probe", description = "The type of the entity") final EntityProbe probe,
       @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     if (probe != null) {
       return getProvidersFromContext(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getByExample(probe, offset, limit))
+          .flatMap(p -> p.getByExample(probe, offset, size))
           .doOnNext(eachAddParent(corpus));
     } else {
       return getProviders(corpus, EntityProvider.class, hints)
-          .flatMap(p -> p.getAll(offset, limit))
+          .flatMap(p -> p.getAll(offset, size))
           .doOnNext(eachAddParent(corpus));
     }
   }
@@ -88,7 +88,7 @@ public class CorpusEntityService extends AbstractGraphQlService {
           description = "Search query") final EntityFilter entityFilter,
       @GraphQLNonNull @GraphQLArgument(name = "field",
           description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -99,7 +99,7 @@ public class CorpusEntityService extends AbstractGraphQlService {
     }
 
     return BinUtils.joinTermBins(getProviders(corpus, EntityProvider.class, hints)
-        .flatMap(p -> p.countByField(Optional.ofNullable(entityFilter), path, limit)));
+        .flatMap(p -> p.countByField(Optional.ofNullable(entityFilter), path, size)));
   }
 
 }

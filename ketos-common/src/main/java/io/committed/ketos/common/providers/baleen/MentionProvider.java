@@ -27,19 +27,19 @@ public interface MentionProvider extends DataProvider {
 
   Mono<BaleenMention> getById(final String id);
 
-  Flux<BaleenMention> getAll(final int offset, final int limit);
+  Flux<BaleenMention> getAll(final int offset, final int size);
 
-  default Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int limit) {
-    return search(MentionSearch.builder().mentionFilter(probe.toFilter()).build(), offset, limit)
+  default Flux<BaleenMention> getByExample(final MentionProbe probe, final int offset, final int size) {
+    return search(MentionSearch.builder().mentionFilter(probe.toFilter()).build(), offset, size)
         .getResults();
   }
 
-  Flux<TermBin> countByField(Optional<MentionFilter> filter, List<String> path, final int limit);
+  Flux<TermBin> countByField(Optional<MentionFilter> filter, List<String> path, final int size);
 
 
   MentionSearchResult search(final MentionSearch search,
       final int offset,
-      final int limit);
+      final int size);
 
   Mono<Long> count();
 

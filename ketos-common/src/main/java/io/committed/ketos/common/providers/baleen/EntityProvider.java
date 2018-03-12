@@ -20,19 +20,19 @@ public interface EntityProvider extends DataProvider {
 
   Flux<BaleenEntity> getByDocument(final BaleenDocument document);
 
-  Flux<TermBin> countByField(Optional<EntityFilter> filter, List<String> path, final int limit);
+  Flux<TermBin> countByField(Optional<EntityFilter> filter, List<String> path, final int size);
 
-  Flux<BaleenEntity> getAll(final int offset, final int limit);
+  Flux<BaleenEntity> getAll(final int offset, final int size);
 
-  default Flux<BaleenEntity> getByExample(final EntityProbe probe, final int offset, final int limit) {
-    return search(EntitySearch.builder().entityFilter(probe.toFilter()).build(), offset, limit)
+  default Flux<BaleenEntity> getByExample(final EntityProbe probe, final int offset, final int size) {
+    return search(EntitySearch.builder().entityFilter(probe.toFilter()).build(), offset, size)
         .getResults();
   }
 
 
   EntitySearchResult search(final EntitySearch entitySearch,
       final int offset,
-      final int limit);
+      final int size);
 
 
   Mono<Long> count();

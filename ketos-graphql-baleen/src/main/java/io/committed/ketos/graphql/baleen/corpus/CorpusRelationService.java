@@ -43,19 +43,19 @@ public class CorpusRelationService extends AbstractGraphQlService {
   @GraphQLQuery(name = "relations", description = "Get all relations in the corpus")
   public Flux<BaleenRelation> getAllRelations(@GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size,
       @GraphQLArgument(name = "probe") final RelationProbe probe,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
     if (probe == null) {
       return getProviders(corpus, RelationProvider.class, hints)
-          .flatMap(p -> p.getAll(offset, limit))
+          .flatMap(p -> p.getAll(offset, size))
           .doOnNext(eachAddParent(corpus));
 
     } else {
       return getProviders(corpus, RelationProvider.class, hints)
-          .flatMap(p -> p.getByExample(probe, offset, limit))
+          .flatMap(p -> p.getByExample(probe, offset, size))
           .doOnNext(eachAddParent(corpus));
     }
 

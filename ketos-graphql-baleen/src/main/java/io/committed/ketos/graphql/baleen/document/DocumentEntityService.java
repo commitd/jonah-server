@@ -34,7 +34,7 @@ public class DocumentEntityService extends AbstractGraphQlService {
   public Flux<BaleenEntity> getByDocument(@GraphQLContext final BaleenDocument document,
       @GraphQLArgument(name = "probe", description = "The type of the entity") final EntityProbe probe,
       @GraphQLArgument(name = "offset", defaultValue = "10") final int offset,
-      @GraphQLArgument(name = "limit", defaultValue = "10") final int limit,
+      @GraphQLArgument(name = "size", defaultValue = "10") final int size,
       @GraphQLArgument(name = "hints",
           description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
@@ -55,7 +55,7 @@ public class DocumentEntityService extends AbstractGraphQlService {
     // This is the documetn we are looking for...
     documentProbe.setDocId(document.getId());
 
-    return entityService.getEntities(corpus.get(), documentProbe, offset, limit, hints);
+    return entityService.getEntities(corpus.get(), documentProbe, offset, size, hints);
 
 
   }

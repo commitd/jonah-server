@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 public interface RelationProvider extends DataProvider {
 
-  Flux<BaleenRelation> getAll(int offset, int limit);
+  Flux<BaleenRelation> getAll(int offset, int size);
 
   Flux<BaleenRelation> getByDocument(BaleenDocument document);
 
@@ -33,14 +33,14 @@ public interface RelationProvider extends DataProvider {
 
   Mono<Long> count();
 
-  default Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int limit) {
-    return search(RelationSearch.builder().relationFilter(probe.toFilter()).build(), offset, limit)
+  default Flux<BaleenRelation> getByExample(final RelationProbe probe, final int offset, final int size) {
+    return search(RelationSearch.builder().relationFilter(probe.toFilter()).build(), offset, size)
         .getResults();
   }
 
-  Flux<TermBin> countByField(Optional<RelationFilter> filter, List<String> path, final int limit);
+  Flux<TermBin> countByField(Optional<RelationFilter> filter, List<String> path, final int size);
 
   RelationSearchResult search(final RelationSearch search,
       final int offset,
-      final int limit);
+      final int size);
 }
