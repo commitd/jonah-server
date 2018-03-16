@@ -25,5 +25,11 @@
       <artifactId>geo</artifactId>
       <version>0.7.1</version>
     </dependency>
+    
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

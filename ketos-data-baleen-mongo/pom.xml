@@ -15,7 +15,6 @@
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
@@ -28,31 +27,27 @@
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>bson</artifactId>
-      <version>${mongodb.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongodb-driver-core</artifactId>
-      <version>${mongodb.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongodb-driver-async</artifactId>
-      <version>${mongodb.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongodb-driver</artifactId>
-      <version>${mongodb.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongodb-driver-reactivestreams</artifactId>
-      <version>${mongodb-reactivestreams.version}</version>
     </dependency>
+    
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-test</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

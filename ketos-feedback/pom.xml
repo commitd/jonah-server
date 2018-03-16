@@ -10,14 +10,8 @@
   <name>Ketos Feedback</name>
   <description>Allows users to provide feedback</description>
 
-  <properties>
-    <plugin.id>CorpusList</plugin.id>
-    <ui.dir>../../ketos-js/packages/</ui.dir>
-    <uiBuild.dir>/build</uiBuild.dir>
-  </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-core</artifactId>
@@ -25,11 +19,17 @@
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-support-data</artifactId>
-    </dependency> 
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-    </dependency> 
+    </dependency>
+
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>

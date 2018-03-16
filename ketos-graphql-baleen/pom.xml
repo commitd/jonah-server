@@ -7,6 +7,7 @@
     <version>0.3.0-SNAPSHOT</version>
   </parent>
   <artifactId>ketos-graphql-baleen</artifactId>
+  <name>Ketos GraphQL Baleen</name>
 
   <dependencies>
     <dependency>
@@ -19,13 +20,17 @@
       <artifactId>ketos-common</artifactId>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>de.grundid.opendatalab</groupId>
       <artifactId>geojson-jackson</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-  <name>Ketos GraphQL Baleen</name>
 
   <build>
     <plugins>
@@ -38,7 +43,7 @@
             <goals>
               <goal>shade</goal>
             </goals>
-            <!--  Include only our specific new depedency -->
+            <!-- Include only our specific new depedency -->
             <configuration>
               <artifactSet>
                 <includes>
