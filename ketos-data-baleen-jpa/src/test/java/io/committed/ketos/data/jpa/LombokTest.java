@@ -6,7 +6,7 @@ import io.committed.ketos.data.jpa.dao.JpaDocument;
 import io.committed.ketos.data.jpa.dao.JpaDocumentMetadata;
 import io.committed.ketos.data.jpa.dao.JpaEntity;
 
-public class LombokTests {
+public class LombokTest {
 
   @Test
   public void testLombok() {

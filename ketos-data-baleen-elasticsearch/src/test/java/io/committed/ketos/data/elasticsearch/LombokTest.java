@@ -1,16 +1,16 @@
-package io.committed.ketos.plugins.data.mongo;
+package io.committed.ketos.data.elasticsearch;
+
 
 import org.junit.Test;
 import io.committed.invest.test.LombokDataTestSupport;
-import io.committed.ketos.plugins.data.mongo.data.CountOutcome;
 
-public class LombokTests {
+public class LombokTest {
 
   @Test
   public void testLombok() {
     final LombokDataTestSupport mt = new LombokDataTestSupport();
 
-    mt.testClasses(CountOutcome.class);
+
 
   }
 

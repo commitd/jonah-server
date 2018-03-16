@@ -14,7 +14,7 @@ import io.committed.ketos.common.graphql.support.GraphQLNode;
 import io.committed.ketos.common.references.BaleenDocumentReference;
 import io.committed.ketos.common.ui.payloads.DocumentPayload;
 
-public class LombokTests {
+public class LombokTest {
 
   @Test
   public void testLombok() {
