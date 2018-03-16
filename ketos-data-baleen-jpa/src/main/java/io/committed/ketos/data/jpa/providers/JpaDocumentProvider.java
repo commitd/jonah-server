@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.TimeRange;
-import io.committed.invest.core.dto.constants.TimeInterval;
+import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.support.data.jpa.AbstractJpaDataProvider;
 import io.committed.invest.support.data.utils.OffsetLimitPagable;
 import io.committed.ketos.common.constants.ItemTypes;

@@ -1,10 +1,10 @@
 package io.committed.ketos.common.utils;
 
+import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.Timeline;
-import io.committed.invest.core.dto.constants.TimeInterval;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

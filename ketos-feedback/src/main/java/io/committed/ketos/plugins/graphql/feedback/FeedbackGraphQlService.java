@@ -4,8 +4,10 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.util.StringUtils;
-import io.committed.invest.core.graphql.Context;
+
+import io.committed.invest.core.graphql.InvestRootContext;
 import io.committed.invest.extensions.InvestUiExtension;
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
@@ -34,7 +36,7 @@ public class FeedbackGraphQlService {
   }
 
   @GraphQLMutation(name = "addFeedback", description = "Save feedback")
-  public Mono<Feedback> addFeedback(@GraphQLRootContext final Context context,
+  public Mono<Feedback> addFeedback(@GraphQLRootContext final InvestRootContext context,
       @GraphQLArgument(name = "pluginId") final String pluginId,
       @GraphQLArgument(name = "subject") final String subject,
       @GraphQLArgument(name = "type") final String type,
@@ -51,7 +53,7 @@ public class FeedbackGraphQlService {
   }
 
   @GraphQLMutation(name = "deleteFeedback", description = "Save feedback")
-  public boolean deleteFeedback(@GraphQLRootContext final Context context,
+  public boolean deleteFeedback(@GraphQLRootContext final InvestRootContext context,
       @GraphQLArgument(name = "id") final String feedbackId) {
 
     // TODO: Check if we are admin or the original feedback author
@@ -63,7 +65,7 @@ public class FeedbackGraphQlService {
   }
 
   @GraphQLQuery(name = "feedback", description = "Save feedback")
-  public Flux<Feedback> listFeedback(@GraphQLRootContext final Context context,
+  public Flux<Feedback> listFeedback(@GraphQLRootContext final InvestRootContext context,
       @GraphQLArgument(name = "offset", description = "Start offset",
           defaultValue = "0") final int offset,
       @GraphQLArgument(name = "size", description = "Maximum values to return",

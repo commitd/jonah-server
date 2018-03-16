@@ -31,7 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
-import io.committed.invest.core.dto.constants.TimeInterval;
+import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportService;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
