@@ -6,17 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BaleenCorpus extends AbstractGraphQLNode {
 
   @GraphQLId
-  private final String id;
+  private String id;
 
-  private final String name;
+  private String name;
 
-  private final String description;
+  private String description;
 }

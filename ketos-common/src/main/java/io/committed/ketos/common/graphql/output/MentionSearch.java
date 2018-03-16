@@ -6,12 +6,14 @@ import io.committed.ketos.common.graphql.support.GraphQLNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class MentionSearch extends AbstractGraphQLNode {
 
-  private final MentionFilter mentionFilter;
+  private MentionFilter mentionFilter;
 
   @Builder
   public MentionSearch(final GraphQLNode parent, final MentionFilter mentionFilter) {

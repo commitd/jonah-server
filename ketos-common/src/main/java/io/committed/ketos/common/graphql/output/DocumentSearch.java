@@ -12,15 +12,17 @@ import io.committed.ketos.common.graphql.support.GraphQLNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class DocumentSearch extends AbstractGraphQLNode {
 
-  private final DocumentFilter documentFilter;
-  private final List<MentionFilter> mentionFilters;
-  private final List<RelationFilter> relationFilters;
-  private final List<EntityFilter> entityFilters;
+  private DocumentFilter documentFilter;
+  private List<MentionFilter> mentionFilters;
+  private List<RelationFilter> relationFilters;
+  private List<EntityFilter> entityFilters;
 
 
   @Builder

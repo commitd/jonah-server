@@ -8,12 +8,14 @@ import io.committed.ketos.common.graphql.support.GraphQLNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class EntitySearch extends AbstractGraphQLNode {
 
-  private final EntityFilter entityFilter;
+  private EntityFilter entityFilter;
 
   @Builder
   public EntitySearch(final GraphQLNode parent, final EntityFilter entityFilter,

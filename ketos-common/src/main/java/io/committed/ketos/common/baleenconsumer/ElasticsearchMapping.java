@@ -37,6 +37,10 @@ public class ElasticsearchMapping {
       BaleenProperties.CONFIDENCE,
       BaleenProperties.IS_NORMALISED, BaleenProperties.NORMALISED_QUANTITY);
 
+  private ElasticsearchMapping() {
+    // Singleton
+  }
+
   public static List<String> toAggregationPath(final List<String> path) {
     return getAggregationField(0, path);
   }

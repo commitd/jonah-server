@@ -7,20 +7,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class Documents extends AbstractGraphQLNode {
-  private final Flux<BaleenDocument> results;
+  private Flux<BaleenDocument> results;
 
-  private final Mono<Long> total;
+  private Mono<Long> total;
 
-  private final long offset;
+  private long offset;
 
-  private final long size;
+  private long size;
 
   @Builder
   public Documents(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenDocument> results,
