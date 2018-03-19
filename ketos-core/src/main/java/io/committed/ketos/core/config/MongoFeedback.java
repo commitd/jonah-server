@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MongoFeedback extends AbstractKetosDataDefinition {
 
-  private String server = "localhost";
+  private String host = "localhost";
 
   private int port = 27017;
 
@@ -27,7 +27,7 @@ public class MongoFeedback extends AbstractKetosDataDefinition {
             .datasource(getDatasource())
             .factory("feedback-mongo")
             .settings(newSettings()
-                .put("uri", MongoCorpus.toMongoUri(server, port))
+                .put("uri", MongoCorpus.toMongoUri(host, port))
                 .put("db", db)
                 .build())
             .build());
