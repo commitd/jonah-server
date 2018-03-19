@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProviders;
+import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
@@ -117,6 +118,11 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.documents").isArray();
 
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { documents(probe:{id: \"test\"}){ id } } }",
+        defaultVariables())
+            .jsonPath("$.errors").doesNotExist()
+            .jsonPath("$.data.corpus.documents").isArray();
+
     StepVerifier.create(corpusDocumentsService.getDocumentByExample(getTestCorpus(), null, 0, 10, null))
         .assertNext(d -> assertNotNull(d.getParent()))
         .verifyComplete();
@@ -144,9 +150,16 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
   }
 
   @Test
+  public void testCountDocuments() {
+    when(documentProvider.count()).thenReturn(Mono.just(1l));
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { countDocuments } }", defaultVariables())
+        .jsonPath("$.data.corpus.countDocuments").isEqualTo(1);
+  }
+
+  @Test
   public void testSearchDocumentsNullArgs() {
     postQuery("query($corpus: String!) { corpus(id: $corpus) { searchDocuments { hits { total } } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        defaultVariables())
             .jsonPath("$.errors").isArray()
             .jsonPath("$.errors").isNotEmpty();
   }
@@ -158,7 +171,7 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
         .thenReturn(Flux.fromIterable(bins));
     postQuery(
         "query($corpus: String!) { corpus(id: $corpus) { countByDocumentField(field: \"id\") { bins { term } } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        defaultVariables())
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.countByDocumentField.bins").isArray()
             .jsonPath("$.data.corpus.countByDocumentField.bins[0].term").isEqualTo("test");
@@ -174,9 +187,38 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
   @Test
   public void testGetDocumentTypesEmptyArgs() {
     postQuery("query($corpus: String!) { corpus(id: $corpus) { countByDocumentField(field: \"\"){ count } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        defaultVariables())
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.countByDocumentField").isEqualTo(null);
+  }
+
+  @Test
+  public void testCountByTypesField() {
+    List<TermBin> results = Collections.singletonList(new TermBin("test", 1));
+    when(documentProvider.countByJoinedField(any(), any(ItemTypes.class), anyList(), anyInt()))
+        .thenReturn(Flux.fromIterable(results));
+    postQuery(
+        "query($corpus: String!) { corpus(id: $corpus) { countByTypesField(field: \"test\", type: DOCUMENT){ bins { term } } } }",
+        defaultVariables())
+            .jsonPath("$.data.corpus.countByTypesField.bins").isArray()
+            .jsonPath("$.data.corpus.countByTypesField.bins[0].term").isEqualTo("test");
+  }
+
+  @Test
+  public void testCountByTypesFieldNullArgs() {
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { countByTypesField{ count } } }",
+        defaultVariables())
+            .jsonPath("$.errors").exists()
+            .jsonPath("$.errors").isArray();
+  }
+
+  @Test
+  public void testCountByTypesFieldEmptyArgs() {
+    postQuery(
+        "query($corpus: String!) { corpus(id: $corpus) { countByTypesField(field: \"\", type: DOCUMENT){ count } } }",
+        defaultVariables())
+            .jsonPath("$.errors").doesNotExist()
+            .jsonPath("$.data.corpus.countByTypesField").isEqualTo(null);
   }
 
 }
