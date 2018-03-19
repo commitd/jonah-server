@@ -30,6 +30,12 @@
       <artifactId>invest-test</artifactId>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+  	  <groupId>io.committed.invest</groupId>
+  	  <artifactId>invest-plugin-graphql</artifactId>
+  	  <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
