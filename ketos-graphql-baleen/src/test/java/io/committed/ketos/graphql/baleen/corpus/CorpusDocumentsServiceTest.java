@@ -10,29 +10,18 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec;
 
 import io.committed.invest.core.dto.analytic.TermBin;
-import io.committed.invest.server.data.services.DefaultDatasetProviders;
-import io.committed.invest.server.data.services.DefaultDatasetRegistry;
-import io.committed.invest.server.graphql.GraphQlConfig;
-import io.committed.invest.server.graphql.data.GraphQlQuery;
-import io.committed.ketos.common.data.BaleenCorpus;
+import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
@@ -41,23 +30,33 @@ import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
-import io.committed.ketos.graphql.baleen.root.CorpusService;
+import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
+import io.committed.ketos.graphql.GraphqlTestConfiguration;
+import io.committed.ketos.graphql.KetosGraphqlTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@WebFluxTest
+@KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-    classes = {JacksonAutoConfiguration.class,
-        CorpusDocumentsService.class,
-        GraphqlTestConfiguration.class,
-        DefaultDatasetProviders.class,
-        CorpusService.class,
-        DefaultDatasetRegistry.class})
-@Import({GraphQlConfig.class})
-@DirtiesContext
-public class CorpusDocumentsServiceTest {
+public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
+
+  @TestConfiguration
+  static class TestContextConfig {
+    @Bean
+    public DocumentProvider documentProvider() {
+      DocumentProvider mock = Mockito.mock(DocumentProvider.class);
+      when(mock.getDataset()).thenReturn(GraphqlTestConfiguration.TEST_DATASET);
+      when(mock.getDatabase()).thenReturn(GraphqlTestConfiguration.TEST_DB);
+      when(mock.getDatasource()).thenReturn(GraphqlTestConfiguration.TEST_DATASOURCE);
+      return mock;
+    }
+
+    @Bean
+    public CorpusDocumentsService service(DataProviders providers) {
+      return new CorpusDocumentsService(providers);
+    }
+  }
 
   @Autowired
   private CorpusDocumentsService corpusDocumentsService;
@@ -66,13 +65,8 @@ public class CorpusDocumentsServiceTest {
   private DocumentProvider documentProvider;
 
   @Autowired
-  private WebTestClient webClient;
-
-  private BaleenCorpus testCorpus;
-
-  @Before
-  public void setup() {
-    testCorpus = new BaleenCorpus(GraphqlTestConfiguration.TEST_DATASET, "testCorpus", "");
+  public CorpusDocumentsServiceTest() {
+    super();
   }
 
   @After
@@ -89,7 +83,7 @@ public class CorpusDocumentsServiceTest {
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.document.id").isEqualTo("test");
 
-    StepVerifier.create(corpusDocumentsService.getDocument(testCorpus, "test", null))
+    StepVerifier.create(corpusDocumentsService.getDocument(getTestCorpus(), "test", null))
         .assertNext(d -> assertNotNull(d.getParent()))
         .verifyComplete();
   }
@@ -123,7 +117,7 @@ public class CorpusDocumentsServiceTest {
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.documents").isArray();
 
-    StepVerifier.create(corpusDocumentsService.getDocumentByExample(testCorpus, null, 0, 10, null))
+    StepVerifier.create(corpusDocumentsService.getDocumentByExample(getTestCorpus(), null, 0, 10, null))
         .assertNext(d -> assertNotNull(d.getParent()))
         .verifyComplete();
   }
@@ -140,10 +134,10 @@ public class CorpusDocumentsServiceTest {
     mentionFilter.setId("mentionId");
 
     DocumentSearch documents =
-        corpusDocumentsService.getDocuments(testCorpus, filter, Collections.singletonList(mentionFilter),
+        corpusDocumentsService.getDocuments(getTestCorpus(), filter, Collections.singletonList(mentionFilter),
             Collections.singletonList(entityFilter), Collections.singletonList(relationFilter));
 
-    assertEquals(testCorpus, documents.getParent());
+    assertEquals(getTestCorpus(), documents.getParent());
     assertEquals(mentionFilter, documents.getMentionFilters().get(0));
     assertEquals(entityFilter, documents.getEntityFilters().get(0));
     assertEquals(relationFilter, documents.getRelationFilters().get(0));
@@ -184,19 +178,5 @@ public class CorpusDocumentsServiceTest {
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.countByDocumentField").isEqualTo(null);
   }
-
-  private BodyContentSpec postQuery(String queryText, Map<String, Object> variables) {
-    GraphQlQuery query = new GraphQlQuery();
-    query.setQuery(queryText);
-    query.setVariables(variables);
-    return webClient.post()
-        .uri("/graphql")
-        .syncBody(query)
-        .exchange()
-        .expectStatus().isOk()
-        .expectBody();
-  }
-
-
 
 }
