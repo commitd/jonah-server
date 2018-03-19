@@ -25,6 +25,12 @@
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-plugin</artifactId>
     </dependency>
+          <!-- Testing -->
+    <dependency>
+		<groupId>io.projectreactor</groupId>
+		<artifactId>reactor-test</artifactId>
+		<scope>test</scope>
+	</dependency>
   </dependencies>
 
   <dependencyManagement>
@@ -63,6 +69,7 @@
         <artifactId>geojson-jackson</artifactId>
         <version>1.8</version>
       </dependency>
+      
     </dependencies>
   </dependencyManagement>
 
