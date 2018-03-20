@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import io.committed.invest.server.data.services.DefaultDatasetProviders;
 import io.committed.invest.server.data.services.DefaultDatasetRegistry;
 import io.committed.invest.server.graphql.GraphQlConfig;
+import io.committed.ketos.graphql.baleen.corpus.CorpusProviderService;
 import io.committed.ketos.graphql.baleen.root.CorpusService;
 
 @WebFluxTest
@@ -22,7 +23,8 @@ import io.committed.ketos.graphql.baleen.root.CorpusService;
         GraphqlTestConfiguration.class,
         DefaultDatasetProviders.class,
         CorpusService.class,
-        DefaultDatasetRegistry.class})
+        DefaultDatasetRegistry.class,
+        CorpusProviderService.class})
 @Import({GraphQlConfig.class})
 @DirtiesContext
 @Target({ElementType.TYPE})

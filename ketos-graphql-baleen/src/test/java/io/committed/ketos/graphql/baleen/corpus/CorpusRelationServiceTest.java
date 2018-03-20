@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.committed.invest.extensions.data.providers.DataProviders;
-import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.input.RelationProbe;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
@@ -98,18 +97,6 @@ public class CorpusRelationServiceTest extends AbstractKetosGraphqlTest {
     when(relationProvider.count()).thenReturn(Mono.just(10l));
     postQuery(corpusQuery(" countRelations "), defaultVariables())
         .jsonPath("$.data.corpus.countRelations").isEqualTo(10);
-  }
-
-  private BaleenRelation createRelation(String id, String sourceID, String targetId) {
-    BaleenMention source = new BaleenMention();
-    BaleenMention target = new BaleenMention();
-    source.setId(sourceID);
-    target.setId(targetId);
-    return createRelation(id, source, target);
-  }
-
-  private BaleenRelation createRelation(String id, BaleenMention source, BaleenMention target) {
-    return new BaleenRelation(id, "doc", 0, 0, "Test", "TestSub", "", source, target, null);
   }
 
 }
