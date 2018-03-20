@@ -41,6 +41,10 @@ public abstract class AbstractKetosGraphqlTest {
         .expectBody();
   }
 
+  protected String corpusQuery(String body) {
+    return "query($corpus: String!) { corpus(id: $corpus) { " + body + " } }";
+  }
+
 
 
 }
