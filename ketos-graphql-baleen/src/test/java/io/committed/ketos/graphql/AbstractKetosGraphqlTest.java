@@ -9,6 +9,8 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
 
 import io.committed.invest.server.graphql.data.GraphQlQuery;
 import io.committed.ketos.common.data.BaleenCorpus;
+import io.committed.ketos.common.data.BaleenMention;
+import io.committed.ketos.common.data.BaleenRelation;
 
 public abstract class AbstractKetosGraphqlTest {
 
@@ -45,6 +47,17 @@ public abstract class AbstractKetosGraphqlTest {
     return "query($corpus: String!) { corpus(id: $corpus) { " + body + " } }";
   }
 
+  protected BaleenRelation createRelation(String id, String sourceID, String targetId) {
+    BaleenMention source = new BaleenMention();
+    BaleenMention target = new BaleenMention();
+    source.setId(sourceID);
+    target.setId(targetId);
+    return createRelation(id, source, target);
+  }
+
+  protected BaleenRelation createRelation(String id, BaleenMention source, BaleenMention target) {
+    return new BaleenRelation(id, "doc", 0, 0, "Test", "TestSub", "", source, target, null);
+  }
 
 
 }
