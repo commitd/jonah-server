@@ -6,9 +6,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -20,7 +24,10 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
+import io.committed.invest.core.dto.analytic.TimeBin;
+import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -150,6 +157,18 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
   }
 
   @Test
+  public void testSampleDocuments() {
+    List<BaleenDocument> results = Collections.singletonList(new BaleenDocument("sample", null, "", null));
+    when(documentProvider.getAll(anyInt(), anyInt())).thenReturn(Flux.fromIterable(results));
+
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { sampleDocuments { size results { id } } } }",
+        defaultVariables())
+            .jsonPath("$.data.corpus.sampleDocuments.results").isArray()
+            .jsonPath("$.data.corpus.sampleDocuments.results").isNotEmpty()
+            .jsonPath("$.data.corpus.sampleDocuments.results[0].id").isEqualTo("sample");
+  }
+
+  @Test
   public void testCountDocuments() {
     when(documentProvider.count()).thenReturn(Mono.just(1l));
     postQuery("query($corpus: String!) { corpus(id: $corpus) { countDocuments } }", defaultVariables())
@@ -219,6 +238,77 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
         defaultVariables())
             .jsonPath("$.errors").doesNotExist()
             .jsonPath("$.data.corpus.countByTypesField").isEqualTo(null);
+  }
+
+  @Test
+  public void testDocumentTimerange() {
+    TimeRange timeRange = new TimeRange();
+    timeRange.setStart(new Date(1521106230000l));
+    timeRange.setEnd(new Date(1521365430000l));
+    when(documentProvider.documentTimeRange(any())).thenReturn(Mono.just(timeRange));
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { documentTimeRange{ start end duration } } }",
+        defaultVariables())
+            .jsonPath("$.data.corpus.documentTimeRange.start").exists()
+            .jsonPath("$.data.corpus.documentTimeRange.start").isEqualTo("2018-03-15T09:30:30Z")
+            .jsonPath("$.data.corpus.documentTimeRange.end").exists()
+            .jsonPath("$.data.corpus.documentTimeRange.end").isEqualTo("2018-03-18T09:30:30Z")
+            .jsonPath("$.data.corpus.documentTimeRange.duration").exists();
+  }
+
+  @Test
+  public void testEntityTimeRange() {
+    TimeRange timeRange = new TimeRange();
+    timeRange.setStart(new Date(1521106230000l));
+    timeRange.setEnd(new Date(1521365430000l));
+    when(documentProvider.entityTimeRange(any())).thenReturn(Mono.just(timeRange));
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { entityTimeRange{ start end duration } } }",
+        defaultVariables())
+            .jsonPath("$.data.corpus.entityTimeRange.start").exists()
+            .jsonPath("$.data.corpus.entityTimeRange.start").isEqualTo("2018-03-15T09:30:30Z")
+            .jsonPath("$.data.corpus.entityTimeRange.end").exists()
+            .jsonPath("$.data.corpus.entityTimeRange.end").isEqualTo("2018-03-18T09:30:30Z")
+            .jsonPath("$.data.corpus.entityTimeRange.duration").exists();
+  }
+
+  @Test
+  public void testDocumentTimeline() {
+    List<TimeBin> bins = new ArrayList<TimeBin>();
+    bins.add(new TimeBin(Instant.ofEpochMilli(1521365430000l), 2));
+    bins.add(new TimeBin(Instant.ofEpochMilli(1521451830000l), 3));
+    bins.add(new TimeBin(Instant.ofEpochMilli(1521451830000l), 2));
+    TimeRange timeRange = new TimeRange(new Date(1521365430000l), new Date(1521451830000l));
+    when(documentProvider.documentTimeRange(any())).thenReturn(Mono.just(timeRange));
+    when(documentProvider.countByDate(any(), eq(TimeInterval.HOUR))).thenReturn(Flux.fromIterable(bins));
+
+    postQuery("query($corpus: String!) { corpus(id: $corpus) { documentTimeline{ interval bins { count ts } } } }",
+        defaultVariables())
+            .jsonPath("$.data.corpus.documentTimeline.interval").isEqualTo("HOUR")
+            .jsonPath("$.data.corpus.documentTimeline.bins").isArray()
+            .jsonPath("$.data.corpus.documentTimeline.bins[0].count").isEqualTo("2")
+            .jsonPath("$.data.corpus.documentTimeline.bins[0].ts").isEqualTo("2018-03-18T09:30:30Z")
+            .jsonPath("$.data.corpus.documentTimeline.bins[1].count").isEqualTo("5")
+            .jsonPath("$.data.corpus.documentTimeline.bins[1].ts").isEqualTo("2018-03-19T09:30:30Z");
+  }
+
+  @Test
+  public void testDocumentTimelineWithInterval() {
+    List<TimeBin> bins = new ArrayList<TimeBin>();
+    bins.add(new TimeBin(Instant.ofEpochMilli(1521365430000l), 2));
+    bins.add(new TimeBin(Instant.ofEpochMilli(1521451830000l), 3));
+    bins.add(new TimeBin(Instant.ofEpochMilli(1521451830000l), 2));
+    TimeRange timeRange = new TimeRange(new Date(1521365430000l), new Date(1521451830000l));
+    when(documentProvider.documentTimeRange(any())).thenReturn(Mono.just(timeRange));
+    when(documentProvider.countByDate(any(), eq(TimeInterval.MINUTE))).thenReturn(Flux.fromIterable(bins));
+
+    postQuery(
+        "query($corpus: String!) { corpus(id: $corpus) { documentTimeline(interval: MINUTE){ interval bins { count ts } } } }",
+        defaultVariables())
+            .jsonPath("$.data.corpus.documentTimeline.interval").isEqualTo("MINUTE")
+            .jsonPath("$.data.corpus.documentTimeline.bins").isArray()
+            .jsonPath("$.data.corpus.documentTimeline.bins[0].count").isEqualTo("2")
+            .jsonPath("$.data.corpus.documentTimeline.bins[0].ts").isEqualTo("2018-03-18T09:30:30Z")
+            .jsonPath("$.data.corpus.documentTimeline.bins[1].count").isEqualTo("5")
+            .jsonPath("$.data.corpus.documentTimeline.bins[1].ts").isEqualTo("2018-03-19T09:30:30Z");
   }
 
 }
