@@ -14,9 +14,11 @@ import io.committed.ketos.common.constants.BaleenProperties;
  * Baleen-collectionreaders). In an effort to stay standardised with ES we have the following
  * convention:
  *
+ * <ul>
  * <li>Any field which is of a very specific type (time / geo) is mapped specifically.
  * <li>Any of the very core fields (eg docId, begin, end) is mapped specifically
  * <li>Anything else is left to ES, which means typically it's text with an inner field of keyword.
+ * </ul>
  *
  * For search this works well. If you search on properties.value you get a free text search, but for
  * aggregations you need to map to properties.value.keyword IF YOU ARE IN A TEXT field...

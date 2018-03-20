@@ -14,6 +14,12 @@ public final class BinUtils {
     // Singleton
   }
 
+  /**
+   * Join term bins.
+   *
+   * @param flux the flux
+   * @return joined string
+   */
   public static Mono<TermCount> joinTermBins(final Flux<TermBin> flux) {
     return flux.groupBy(TermBin::getTerm)
         .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TermBin(g.key(), l)))
@@ -23,14 +29,14 @@ public final class BinUtils {
   }
 
   /**
-   * Merge time bines to a single timeline
+   * Merge time bins to a single timeline
    *
    * Note this will not convert timebins of different intervals. All timebins must be of the same
    * interval size.
    *
-   * @param flux
-   * @param interval
-   * @return
+   * @param flux the flux
+   * @param interval the interval
+   * @return joined timeline
    */
   public static Mono<Timeline> joinTimeBins(final Flux<TimeBin> flux, final TimeInterval interval) {
     return flux.groupBy(TimeBin::getTs)
