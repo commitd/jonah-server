@@ -79,7 +79,6 @@
     <module>ketos-common</module>
     <module>ketos-data-baleen-mongo</module>
     <module>ketos-data-baleen-elasticsearch</module>
-    <module>ketos-data-baleen-jpa</module>
     <module>ketos-graphql-baleen</module>
     <module>ketos-ui-example-html</module>
     <module>ketos-feedback</module>
