@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec;
 
+import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.server.graphql.data.GraphQlQuery;
 import io.committed.ketos.common.data.BaleenCorpus;
+import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenRelation;
+import reactor.core.publisher.Flux;
 
 public abstract class AbstractKetosGraphqlTest {
 
@@ -57,6 +60,17 @@ public abstract class AbstractKetosGraphqlTest {
 
   protected BaleenRelation createRelation(String id, BaleenMention source, BaleenMention target) {
     return new BaleenRelation(id, "doc", 0, 0, "Test", "TestSub", "", source, target, null);
+  }
+
+  protected BaleenDocument getTestDoc() {
+    return new BaleenDocument("testDoc", null, "", null);
+  }
+
+  protected Flux<TermBin> getTestTermBins() {
+    TermBin bin = new TermBin();
+    bin.setTerm("test");
+    bin.setCount(1);
+    return Flux.fromIterable(Collections.singletonList(bin));
   }
 
 
