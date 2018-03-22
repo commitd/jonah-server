@@ -21,6 +21,8 @@ import com.mongodb.async.client.MongoClient;
 import com.mongodb.async.client.MongoClients;
 import com.mongodb.async.client.MongoDatabase;
 
+import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
+
 public abstract class AbstractMongoResourceTest {
 
   private static final String TEST_DB = "testDB";
@@ -52,7 +54,8 @@ public abstract class AbstractMongoResourceTest {
 
   protected Map<String, Object> getSettings() {
     Map<String, Object> settings = new HashMap<String, Object>();
-    settings.put("db", TEST_DB);
+    settings.put(AbstractMongoDataProviderFactory.SETTING_DB, TEST_DB);
+    settings.put(AbstractMongoDataProviderFactory.SETTING_URI, "mongodb://127.0.0.1:27017/");
     return settings;
   }
 
