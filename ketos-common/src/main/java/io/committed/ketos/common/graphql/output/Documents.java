@@ -31,6 +31,6 @@ public class Documents extends AbstractGraphQLNode {
     this.offset = offset;
     this.size = size;
     this.results = results == null ? Flux.empty() : results.doOnNext(r -> r.setParent(this)).cache();
-    this.total = total;
+    this.total = total == null ? Mono.empty() : total;
   }
 }
