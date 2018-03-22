@@ -62,7 +62,7 @@ public class FeedbackGraphQlService {
     return true;
   }
 
-  @GraphQLQuery(name = "feedback", description = "Save feedback")
+  @GraphQLQuery(name = "feedback", description = "List feedback")
   public Flux<Feedback> listFeedback(@GraphQLRootContext final InvestRootContext context,
       @GraphQLArgument(name = "offset", description = "Start offset",
           defaultValue = "0") final int offset,

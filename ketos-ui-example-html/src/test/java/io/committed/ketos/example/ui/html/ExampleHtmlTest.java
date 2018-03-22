@@ -16,7 +16,7 @@ import io.committed.invest.test.InvestTestContext;
 @WebFluxTest
 @ContextConfiguration(classes = {InvestTestContext.class, ExampleHtmlUi.class, ServerCoreConfiguration.class})
 @DirtiesContext
-public class InvestUiApplicationExtensionTest {
+public class ExampleHtmlTest {
 
   @Autowired
   private WebTestClient webClient;
