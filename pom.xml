@@ -82,5 +82,6 @@
     <module>ketos-graphql-baleen</module>
     <module>ketos-ui-example-html</module>
     <module>ketos-feedback</module>
+    <module>ketos-doc-cluster</module>
   </modules>
 </project>
