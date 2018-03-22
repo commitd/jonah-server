@@ -7,6 +7,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.utils.FieldUtils;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.data.elasticsearch.SearchHits;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
@@ -26,7 +27,7 @@ public class ElasticsearchRelationProvider
     extends AbstractElasticsearchServiceDataProvider<OutputRelation, EsRelationService>
     implements RelationProvider {
 
-  private static final int ALL_RELATIONS = 10000;
+  private static final int ALL_RELATIONS = 999;
 
 
   public ElasticsearchRelationProvider(final String dataset, final String datasource,
@@ -54,6 +55,7 @@ public class ElasticsearchRelationProvider
     return getService().search(QueryBuilders.termQuery("source.externalId", mention.getId()),
         0,
         ALL_RELATIONS)
+        .flatMapMany(SearchHits::getResults)
         .map(Converters::toBaleenRelation);
   }
 
@@ -61,6 +63,7 @@ public class ElasticsearchRelationProvider
   public Flux<BaleenRelation> getTargetRelations(final BaleenMention mention) {
     return getService().search(QueryBuilders.termQuery("target.externalId", mention.getId()), 0,
         ALL_RELATIONS)
+        .flatMapMany(SearchHits::getResults)
         .map(Converters::toBaleenRelation);
   }
 
@@ -88,17 +91,15 @@ public class ElasticsearchRelationProvider
   public RelationSearchResult search(final RelationSearch search, final int offset, final int limit) {
     final Optional<QueryBuilder> query =
         RelationFilters.toQuery(search);
+
     if (query.isPresent()) {
-      return new RelationSearchResult(findRelations(query.get(), offset, limit), Mono.empty(), offset, limit);
+      final Mono<SearchHits<OutputRelation>> hits = getService().search(query.get(), offset, limit);
+      final Flux<BaleenRelation> results = hits.flatMapMany(SearchHits::getResults).map(Converters::toBaleenRelation);
+      final Mono<Long> total = hits.map(SearchHits::getTotal);
+      return new RelationSearchResult(results, total, offset, limit);
     } else {
       return new RelationSearchResult(getAll(offset, limit), count(), offset, limit);
     }
-  }
-
-
-  private Flux<BaleenRelation> findRelations(final QueryBuilder query, final int offset,
-      final int limit) {
-    return getService().search(query, offset, limit).map(Converters::toBaleenRelation);
   }
 
 

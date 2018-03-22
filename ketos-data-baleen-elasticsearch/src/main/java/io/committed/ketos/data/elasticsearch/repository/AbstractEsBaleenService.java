@@ -33,6 +33,7 @@ import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportService;
+import io.committed.invest.support.data.elasticsearch.SearchHits;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -51,11 +52,14 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   }
 
   public Mono<T> getByExternalId(final String id) {
-    return search(QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, id), 0, 1).next();
+    return search(QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, id), 0, 1)
+        .flatMapMany(SearchHits::getResults)
+        .next();
   }
 
   public Flux<T> getByDocumentId(final String id) {
-    return search(QueryBuilders.matchQuery(BaleenProperties.DOC_ID, id), 0, ALL_RESULTS);
+    return search(QueryBuilders.matchQuery(BaleenProperties.DOC_ID, id), 0, ALL_RESULTS)
+        .flatMapMany(SearchHits::getResults);
   }
 
   public Flux<TermBin> nestedTermAggregation(final Optional<QueryBuilder> query,

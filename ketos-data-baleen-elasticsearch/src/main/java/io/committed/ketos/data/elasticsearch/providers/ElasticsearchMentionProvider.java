@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.elasticsearch.index.query.QueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.data.elasticsearch.SearchHits;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
@@ -58,21 +59,14 @@ public class ElasticsearchMentionProvider
 
     final Optional<QueryBuilder> query = MentionFilters.toQuery(search);
 
-    final Flux<BaleenMention> results;
-
-    // TODO: count can be calculated
-
     if (query.isPresent()) {
-      results = getService().search(query.get(), offset, limit)
-          .map(Converters::toBaleenMention);
+      final Mono<SearchHits<OutputMention>> hits = getService().search(query.get(), offset, limit);
+      final Flux<BaleenMention> results = hits.flatMapMany(SearchHits::getResults).map(Converters::toBaleenMention);
+      final Mono<Long> total = hits.map(SearchHits::getTotal);
+      return new MentionSearchResult(results, total, offset, limit);
     } else {
-      results = getAll(offset, limit);
+      return new MentionSearchResult(getAll(offset, limit), count(), offset, limit);
     }
-
-    return new MentionSearchResult(
-        results,
-        Mono.empty(),
-        offset, limit);
 
   }
 

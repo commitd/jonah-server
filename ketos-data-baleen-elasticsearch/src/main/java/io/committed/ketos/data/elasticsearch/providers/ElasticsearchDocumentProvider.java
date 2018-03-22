@@ -20,6 +20,7 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.TimeRange;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.data.elasticsearch.SearchHits;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
@@ -41,9 +42,9 @@ public class ElasticsearchDocumentProvider
     extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements DocumentProvider {
 
-  private String mentionType;
-  private String entityType;
-  private String relationType;
+  private final String mentionType;
+  private final String entityType;
+  private final String relationType;
 
   public ElasticsearchDocumentProvider(final String dataset, final String datasource,
       final EsDocumentService documentService, final String mentionType, final String entityType,
@@ -76,16 +77,18 @@ public class ElasticsearchDocumentProvider
 
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentSearch, mentionType, entityType, relationType);
 
-    // TODO: count is available from ES, but we can't get it via search() which just returns a flux
-
     Flux<BaleenDocument> results;
+    final Mono<Long> total;
     if (query.isPresent()) {
-      results = getService().search(query.get(), offset, limit).map(Converters::toBaleenDocument);
+      final Mono<SearchHits<OutputDocument>> hits = getService().search(query.get(), offset, limit);
+      results = hits.flatMapMany(SearchHits::getResults).map(Converters::toBaleenDocument);
+      total = hits.map(SearchHits::getTotal);
     } else {
       results = getService().getAll(offset, limit).map(Converters::toBaleenDocument);
+      total = getService().count();
     }
 
-    return new DocumentSearchResult(results, Mono.empty(), offset, limit);
+    return new DocumentSearchResult(results, total, offset, limit);
   }
 
   @Override

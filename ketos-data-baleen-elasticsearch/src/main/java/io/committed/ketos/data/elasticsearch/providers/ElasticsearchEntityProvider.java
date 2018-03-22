@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.elasticsearch.index.query.QueryBuilder;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
+import io.committed.invest.support.data.elasticsearch.SearchHits;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputEntity;
@@ -57,9 +58,10 @@ public class ElasticsearchEntityProvider
     final Optional<QueryBuilder> query = EntityFilters.toQuery(entitySearch);
 
     if (query.isPresent()) {
-      final Flux<OutputEntity> search =
-          getService().search(query.get(), offset, limit);
-      return new EntitySearchResult(search.map(Converters::toBaleenEntity), Mono.empty(), offset, limit);
+      final Mono<SearchHits<OutputEntity>> hits = getService().search(query.get(), offset, limit);
+      final Flux<BaleenEntity> results = hits.flatMapMany(SearchHits::getResults).map(Converters::toBaleenEntity);
+      final Mono<Long> total = hits.map(SearchHits::getTotal);
+      return new EntitySearchResult(results, total, offset, limit);
     } else {
       return new EntitySearchResult(getAll(offset, limit), count(), offset, limit);
     }
