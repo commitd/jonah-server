@@ -35,7 +35,7 @@ public abstract class AbstractMongoResourceTest {
 
   @BeforeClass
   public static void setupClass() {
-    client = MongoClients.create("mongodb://localhost:27017");
+    client = MongoClients.create("mongodb://127.0.0.1:27017");
   }
 
   @AfterClass
