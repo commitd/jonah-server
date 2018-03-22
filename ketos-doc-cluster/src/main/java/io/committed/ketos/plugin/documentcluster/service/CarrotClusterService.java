@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.plugin.documentcluster.data.Clusters;
 import io.committed.ketos.plugin.documentcluster.data.Topic;
-import io.committed.ketos.plugin.documentcluster.data.Topic.TopicBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -85,10 +84,11 @@ public class CarrotClusterService {
 
   protected Topic convertToTopic(final Cluster cluster, final Map<String, BaleenDocument> idToBaleenDocument) {
 
-    final TopicBuilder topic = Topic.builder()
-        .score(cluster.getScore())
-        .label(cluster.getLabel())
-        .keywords(cluster.getPhrases());
+    final Topic topic = new Topic();
+
+    topic.setScore(cluster.getScore());
+    topic.setLabel(cluster.getLabel());
+    topic.setKeywords(cluster.getPhrases());
 
 
     final List<BaleenDocument> baleenDocuments = cluster.getDocuments().stream()
@@ -96,9 +96,8 @@ public class CarrotClusterService {
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
 
-    return topic
-        .documents(baleenDocuments)
-        .build();
+    topic.setDocuments(baleenDocuments);
+    return topic;
   }
 
 }
