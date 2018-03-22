@@ -68,8 +68,8 @@ public final class MapUtils {
           Date d = null;
           if (o instanceof Date) {
             d = (Date) o;
-          } else if (o instanceof Long || o instanceof Integer) {
-            final long l = (long) o;
+          } else if (o instanceof Number) {
+            final long l = ((Number) o).longValue();
             d = new Date(l);
           }
 

@@ -7,6 +7,7 @@ import io.committed.invest.test.BeanTestSupport;
 import io.committed.invest.test.LombokDataTestSupport;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
 import io.committed.ketos.common.data.BaleenCorpus;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.intermediate.EntitySearchResult;
 import io.committed.ketos.common.graphql.output.Documents;
@@ -36,6 +37,7 @@ public class LombokTest {
 
     mt.testPackage(DocumentPayload.class);
 
+    mt.testClass(NamedGeoLocation.class);
   }
 
 }

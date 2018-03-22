@@ -6,13 +6,15 @@ import io.committed.ketos.common.graphql.support.GraphQLNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BaleenCorpusMetadata extends AbstractGraphQLNode {
 
-  private final Optional<String> key;
+  private Optional<String> key;
 
   public BaleenCorpusMetadata(final GraphQLNode parent, final Optional<String> key) {
     super(parent);

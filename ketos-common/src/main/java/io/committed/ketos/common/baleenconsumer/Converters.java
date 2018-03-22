@@ -1,5 +1,6 @@
 package io.committed.ketos.common.baleenconsumer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import io.committed.invest.core.dto.collections.PropertiesMap;
@@ -26,7 +27,8 @@ public final class Converters {
   }
 
   public static List<BaleenDocumentMetadata> toBaleenDocumentMetadata(final List<OutputDocumentMetadata> metadata) {
-    return metadata.stream().map(Converters::toBaleenDocumentMetadata).collect(Collectors.toList());
+    return metadata != null ? metadata.stream().map(Converters::toBaleenDocumentMetadata).collect(Collectors.toList())
+        : Collections.emptyList();
   }
 
   public static BaleenDocumentMetadata toBaleenDocumentMetadata(final OutputDocumentMetadata metadata) {
@@ -36,9 +38,6 @@ public final class Converters {
         .build();
   }
 
-  public static BaleenDocument toBaleenDocument(final OutputFullDocument document) {
-    return toBaleenDocument((OutputDocument) document);
-  }
 
   public static BaleenEntity toBaleenEntity(final OutputEntity entity) {
     return BaleenEntity.builder()

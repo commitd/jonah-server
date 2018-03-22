@@ -30,7 +30,7 @@ import io.committed.ketos.common.constants.BaleenProperties;
  */
 public class ElasticsearchMapping {
 
-  private final static Set<String> NON_KEYWORD_PROPERTY_FIELD = Sets.newHashSet(
+  private static final Set<String> NON_KEYWORD_PROPERTY_FIELD = Sets.newHashSet(
       BaleenProperties.POI, BaleenProperties.GEOJSON,
       BaleenProperties.TIMESTAMP, BaleenProperties.DOCUMENT_DATE,
       BaleenProperties.START_TIMESTAMP, BaleenProperties.STOP_TIMESTAMP,
