@@ -7,6 +7,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.RelationSearch;
+import io.committed.ketos.common.utils.ValueConversion;
 
 public final class RelationFilters {
   private RelationFilters() {
@@ -22,17 +23,32 @@ public final class RelationFilters {
 
     final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
-    if (filter.getDocId() != null) {
-      // This is on the .externalId not entities.docId, so no prefix
-      queryBuilder.must(QueryBuilders.termQuery(prefix + BaleenProperties.DOC_ID, filter.getDocId()));
-    }
+    ValueConversion.stringValue(filter.getDocId())
+        .map(s -> QueryBuilders.termQuery(prefix + BaleenProperties.DOC_ID, s))
+        .ifPresent(queryBuilder::must);
 
-    if (filter.getId() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + BaleenProperties.EXTERNAL_ID, filter.getId()));
-    }
+    ValueConversion.stringValue(filter.getId())
+        .map(s -> QueryBuilders.termQuery(prefix + BaleenProperties.EXTERNAL_ID, s))
+        .ifPresent(queryBuilder::must);
 
-    if (filter.getSubType() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + BaleenProperties.SUBTYPE, filter.getSubType()));
+    ValueConversion.stringValue(filter.getType())
+        .map(s -> QueryBuilders.matchQuery(prefix + BaleenProperties.TYPE, s))
+        .ifPresent(queryBuilder::must);
+
+    ValueConversion.stringValue(filter.getSubType())
+        .map(s -> QueryBuilders.matchQuery(prefix + BaleenProperties.SUBTYPE, s))
+        .ifPresent(queryBuilder::must);
+
+    ValueConversion.stringValue(filter.getValue())
+        .map(s -> QueryBuilders.matchPhraseQuery(prefix + BaleenProperties.VALUE, s))
+        .ifPresent(queryBuilder::must);
+
+    if (filter.getProperties() != null) {
+      filter.getProperties().stream()
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+              ValueConversion.valueOrNull(e.getValue())))
+          .forEach(queryBuilder::must);
     }
 
     if (filter.getSource() != null) {
@@ -45,20 +61,6 @@ public final class RelationFilters {
       MentionFilters
           .toQuery(Optional.ofNullable(filter.getTarget()), prefix + BaleenProperties.RELATION_TARGET + ".")
           .ifPresent(queryBuilder::must);
-    }
-
-    if (filter.getType() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + BaleenProperties.TYPE, filter.getType()));
-    }
-
-    if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.matchPhraseQuery(prefix + BaleenProperties.VALUE, filter.getValue()));
-    }
-
-    if (filter.getProperties() != null) {
-      filter.getProperties().stream()
-          .forEach(e -> queryBuilder
-              .must(QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
     }
 
     return Optional.of(queryBuilder);

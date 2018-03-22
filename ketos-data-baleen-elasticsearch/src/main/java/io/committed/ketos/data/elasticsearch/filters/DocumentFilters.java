@@ -11,6 +11,7 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
+import io.committed.ketos.common.utils.ValueConversion;
 
 public final class DocumentFilters {
 
@@ -26,44 +27,42 @@ public final class DocumentFilters {
 
     final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
-    if (filter.getContent() != null) {
-      queryBuilder.must(QueryBuilders.queryStringQuery(filter.getContent()).defaultField(BaleenProperties.CONTENT));
-    }
+    ValueConversion.stringValue(filter.getContent())
+        .map(s -> QueryBuilders.queryStringQuery(s).defaultField(BaleenProperties.CONTENT))
+        .ifPresent(queryBuilder::must);
 
-    if (filter.getId() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(BaleenProperties.EXTERNAL_ID, filter.getId()));
-    }
-
+    ValueConversion.stringValue(filter.getId())
+        .map(s -> QueryBuilders.termQuery(BaleenProperties.EXTERNAL_ID, s))
+        .ifPresent(queryBuilder::must);
 
     if (filter.getInfo() != null) {
       final DocumentInfoFilter info = filter.getInfo();
 
-      if (info.getCaveats() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(
-            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.CAVEATS), info.getCaveats()));
-      }
+      ValueConversion.stringValue(info.getCaveats())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.CAVEATS), s))
+          .ifPresent(queryBuilder::must);
 
-      if (info.getClassification() != null) {
-        queryBuilder.must(
-            QueryBuilders.matchQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.CLASSIFICATION),
-                info.getClassification()));
-      }
+      ValueConversion.stringValue(info.getClassification())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.CLASSIFICATION), s))
+          .ifPresent(queryBuilder::must);
 
-      if (info.getLanguage() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(
-            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.LANGUAGE), info.getLanguage()));
-      }
+      ValueConversion.stringValue(info.getLanguage())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.LANGUAGE), s))
+          .ifPresent(queryBuilder::must);
 
-      if (info.getReleasability() != null) {
-        queryBuilder.must(
-            QueryBuilders.matchQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.RELEASABILITY),
-                info.getReleasability()));
-      }
 
-      if (info.getSource() != null) {
-        queryBuilder.must(QueryBuilders
-            .termQuery(FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.SOURCE), info.getSource()));
-      }
+      ValueConversion.stringValue(info.getReleasability())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.RELEASABILITY), s))
+          .ifPresent(queryBuilder::must);
+
+      ValueConversion.stringValue(info.getSource())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.SOURCE), s))
+          .ifPresent(queryBuilder::must);
 
       if (info.getStartTimestamp() != null) {
         queryBuilder.must(
@@ -77,34 +76,38 @@ public final class DocumentFilters {
                 .lte(info.getEndTimestamp().getTime()));
       }
 
-      if (info.getType() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(
-            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_TYPE), info.getType()));
-      }
+      ValueConversion.stringValue(info.getType())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_TYPE), s))
+          .ifPresent(queryBuilder::must);
 
-      if (info.getPublishedId() != null) {
-        queryBuilder.must(QueryBuilders.matchQuery(
-            FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.PUBLISHED_IDS + ".id"),
-            info.getPublishedId()));
-      }
+      ValueConversion.stringValue(info.getPublishedId())
+          .map(s -> QueryBuilders.matchQuery(
+              FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.PUBLISHED_IDS + ".id"), s))
+          .ifPresent(queryBuilder::must);
+
     }
 
     if (filter.getMetadata() != null) {
-      filter.getMetadata().stream().forEach(e -> {
-        queryBuilder.must(QueryBuilders.nestedQuery(BaleenProperties.METADATA,
-            QueryBuilders.boolQuery()
-                .must(QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY,
-                    e.getKey()))
-                .must(QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE,
-                    e.getValue())),
-            ScoreMode.Max));
-      });
+      filter.getMetadata().stream()
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> QueryBuilders.nestedQuery(BaleenProperties.METADATA,
+              QueryBuilders.boolQuery()
+                  .must(QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY,
+                      e.getKey()))
+                  .must(QueryBuilders.matchQuery(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE,
+                      ValueConversion.valueOrNull(e.getValue()))),
+              ScoreMode.Max))
+          .forEach(queryBuilder::must);
+
     }
 
     if (filter.getProperties() != null) {
-      filter.getProperties().stream().forEach(e -> {
-        queryBuilder.must(QueryBuilders.matchQuery(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue()));
-      });
+      filter.getProperties().stream()
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> QueryBuilders.matchQuery(BaleenProperties.PROPERTIES + "." + e.getKey(),
+              ValueConversion.valueOrNull(e.getValue())))
+          .forEach(queryBuilder::must);
     }
 
     return Optional.of(queryBuilder);

@@ -8,6 +8,7 @@ import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.output.MentionSearch;
+import io.committed.ketos.common.utils.ValueConversion;
 
 public final class MentionFilters {
   private MentionFilters() {
@@ -25,23 +26,36 @@ public final class MentionFilters {
 
     final BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 
+    ValueConversion.stringValue(filter.getDocId())
+        .map(s -> QueryBuilders.termQuery(prefix + BaleenProperties.DOC_ID, s))
+        .ifPresent(queryBuilder::must);
 
+    ValueConversion.stringValue(filter.getId())
+        .map(s -> QueryBuilders.termQuery(prefix + BaleenProperties.EXTERNAL_ID, s))
+        .ifPresent(queryBuilder::must);
 
-    if (filter.getEntityId() != null) {
-      // Actually no such thing... but mention-entity id
-      queryBuilder.must(QueryBuilders.termQuery(prefix + BaleenProperties.ENTITY_ID, filter.getEntityId()));
+    ValueConversion.stringValue(filter.getType())
+        .map(s -> QueryBuilders.matchQuery(prefix + BaleenProperties.TYPE, s))
+        .ifPresent(queryBuilder::must);
 
-    }
+    ValueConversion.stringValue(filter.getSubType())
+        .map(s -> QueryBuilders.matchQuery(prefix + BaleenProperties.SUBTYPE, s))
+        .ifPresent(queryBuilder::must);
 
-    if (filter.getId() != null) {
-      queryBuilder.must(QueryBuilders.termQuery(prefix + BaleenProperties.EXTERNAL_ID, filter.getId()));
+    ValueConversion.stringValue(filter.getValue())
+        .map(s -> QueryBuilders.matchPhraseQuery(prefix + BaleenProperties.VALUE, s))
+        .ifPresent(queryBuilder::must);
 
-    }
+    ValueConversion.stringValue(filter.getEntityId())
+        .map(s -> QueryBuilders.termQuery(prefix + BaleenProperties.ENTITY_ID, s))
+        .ifPresent(queryBuilder::must);
 
     if (filter.getProperties() != null) {
       filter.getProperties().stream()
-          .forEach(e -> queryBuilder
-              .must(QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+              ValueConversion.valueOrNull(e.getValue())))
+          .forEach(queryBuilder::must);
     }
 
     if (filter.getStartTimestamp() != null) {
@@ -56,20 +70,6 @@ public final class MentionFilters {
               .lte(filter.getEndTimestamp().getTime()));
     }
 
-    if (filter.getType() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + BaleenProperties.TYPE, filter.getType()));
-
-    }
-
-    if (filter.getSubType() != null) {
-      queryBuilder.must(QueryBuilders.matchQuery(prefix + BaleenProperties.SUBTYPE, filter.getSubType()));
-
-    }
-
-    if (filter.getValue() != null) {
-      queryBuilder.must(QueryBuilders.matchPhraseQuery(prefix + BaleenProperties.VALUE, filter.getValue()));
-
-    }
 
     if (filter.getWithin() != null) {
       final GeoBox box = filter.getWithin();
