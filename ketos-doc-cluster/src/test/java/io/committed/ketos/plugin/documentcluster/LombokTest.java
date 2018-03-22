@@ -6,7 +6,7 @@ import io.committed.invest.test.LombokDataTestSupport;
 import io.committed.ketos.plugin.documentcluster.data.Clusters;
 import io.committed.ketos.plugin.documentcluster.data.Topic;
 
-public class LombokTests {
+public class LombokTest {
 
   @Test
   public void testLombok() {
