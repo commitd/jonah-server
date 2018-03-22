@@ -22,7 +22,6 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.baleenconsumer.OutputDocumentMetadata;
 import io.committed.ketos.common.baleenconsumer.OutputEntity;
-import io.committed.ketos.common.baleenconsumer.OutputFullDocument;
 import io.committed.ketos.common.baleenconsumer.OutputLatLon;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
@@ -52,7 +51,6 @@ public final class BaleenCodecs {
         .register(OutputEntity.class)
         .register(OutputMention.class)
         .register(OutputRelation.class)
-        .register(OutputFullDocument.class)
         .register(OutputDocumentMetadata.class)
         .register(OutputLatLon.class)
         .register(TermBin.class)
@@ -129,7 +127,7 @@ public final class BaleenCodecs {
 
   public static class BsonCodec implements Codec<Bson> {
 
-    private CodecRegistry codecRegistry;
+    private final CodecRegistry codecRegistry;
 
     public BsonCodec(final CodecRegistry codecRegistry) {
       this.codecRegistry = codecRegistry;
