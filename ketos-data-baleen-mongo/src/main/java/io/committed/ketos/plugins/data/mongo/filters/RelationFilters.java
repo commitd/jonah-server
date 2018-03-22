@@ -10,6 +10,7 @@ import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.RelationSearch;
+import io.committed.ketos.common.utils.ValueConversion;
 import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
 public final class RelationFilters {
@@ -28,36 +29,33 @@ public final class RelationFilters {
 
     final List<Bson> filters = new LinkedList<>();
 
-    if (relationFilter.getId() != null) {
-      filters.add(CustomFilters.eqFilter(BaleenProperties.EXTERNAL_ID, relationFilter.getId(),
-          operatorMode));
-    }
+    ValueConversion.stringValue(relationFilter.getValue())
+        .map(Filters::text)
+        .ifPresent(filters::add);
 
-    if (relationFilter.getDocId() != null) {
-      filters.add(CustomFilters.eqFilter(BaleenProperties.DOC_ID, relationFilter.getDocId(),
-          operatorMode));
-    }
+    ValueConversion.stringValue(relationFilter.getId())
+        .map(s -> CustomFilters.eqFilter(BaleenProperties.EXTERNAL_ID, s, operatorMode))
+        .ifPresent(filters::add);
 
-    if (relationFilter.getValue() != null) {
-      filters.add(Filters.text(relationFilter.getValue()));
-    }
+    ValueConversion.stringValue(relationFilter.getDocId())
+        .map(s -> CustomFilters.eqFilter(BaleenProperties.DOC_ID, s, operatorMode))
+        .ifPresent(filters::add);
 
-    if (relationFilter.getType() != null) {
-      filters.add(CustomFilters.eqFilter(BaleenProperties.TYPE, relationFilter.getType(),
-          operatorMode));
-    }
+    ValueConversion.stringValue(relationFilter.getType())
+        .map(s -> CustomFilters.eqFilter(BaleenProperties.TYPE, s, operatorMode))
+        .ifPresent(filters::add);
 
-    if (relationFilter.getSubType() != null) {
-      filters.add(CustomFilters.eqFilter(BaleenProperties.SUBTYPE, relationFilter.getSubType(),
-          operatorMode));
-    }
+    ValueConversion.stringValue(relationFilter.getSubType())
+        .map(s -> CustomFilters.eqFilter(BaleenProperties.SUBTYPE, s, operatorMode))
+        .ifPresent(filters::add);
 
     if (relationFilter.getProperties() != null) {
-      relationFilter.getProperties().stream().forEach(e -> {
-        filters.add(
-            CustomFilters.eqFilter(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
-                operatorMode));
-      });
+      relationFilter.getProperties().stream()
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> CustomFilters.eqFilter(BaleenProperties.PROPERTIES + "." + e.getKey(),
+              ValueConversion.valueOrNull(e.getValue()),
+              operatorMode))
+          .forEach(filters::add);
     }
 
 

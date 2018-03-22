@@ -16,6 +16,7 @@ import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.output.EntitySearch;
+import io.committed.ketos.common.utils.ValueConversion;
 import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
 public final class EntityFilters {
@@ -35,39 +36,39 @@ public final class EntityFilters {
 
     final List<Bson> filters = new LinkedList<>();
 
-    if (entityFilter.getValue() != null) {
-      // Since there is only a single text index, we can't be specific here about which value to use
-      // prefix + BaleenProperties.VALUE, ;
-      filters.add(Filters.text(entityFilter.getValue()));
-    }
+    // Since there is only a single text index, we can't be specific here about which value to use (eg
+    // if we have a prefix opply)
+    ValueConversion.stringValue(entityFilter.getValue())
+        .map(Filters::text)
+        .ifPresent(filters::add);
 
-    if (entityFilter.getId() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, entityFilter.getId(), operatorMode));
-    }
+    ValueConversion.stringValue(entityFilter.getId())
+        .map(s -> CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, s, operatorMode))
+        .ifPresent(filters::add);
 
-    if (entityFilter.getDocId() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.DOC_ID, entityFilter.getDocId(), operatorMode));
-    }
+    ValueConversion.stringValue(entityFilter.getDocId())
+        .map(s -> CustomFilters.eqFilter(prefix + BaleenProperties.DOC_ID, s, operatorMode))
+        .ifPresent(filters::add);
 
-    if (entityFilter.getMentionId() != null) {
-      filters.add(
-          CustomFilters.eqFilter(prefix + BaleenProperties.MENTION_IDS, entityFilter.getMentionId(), operatorMode));
-    }
+    ValueConversion.stringValue(entityFilter.getMentionId())
+        .map(s -> CustomFilters.eqFilter(prefix + BaleenProperties.MENTION_IDS, s, operatorMode))
+        .ifPresent(filters::add);
 
-    if (entityFilter.getType() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, entityFilter.getType(), operatorMode));
-    }
-    if (entityFilter.getSubType() != null) {
-      filters.add(CustomFilters.eqFilter(prefix + BaleenProperties.SUBTYPE, entityFilter.getSubType(), operatorMode));
-    }
+    ValueConversion.stringValue(entityFilter.getType())
+        .map(s -> CustomFilters.eqFilter(prefix + BaleenProperties.TYPE, s, operatorMode))
+        .ifPresent(filters::add);
 
+    ValueConversion.stringValue(entityFilter.getSubType())
+        .map(s -> CustomFilters.eqFilter(prefix + BaleenProperties.SUBTYPE, s, operatorMode))
+        .ifPresent(filters::add);
 
     if (entityFilter.getProperties() != null) {
-      entityFilter.getProperties().stream().forEach(e -> {
-        filters.add(
-            CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue(),
-                operatorMode));
-      });
+      entityFilter.getProperties().stream()
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+              ValueConversion.valueOrNull(e.getValue()),
+              operatorMode))
+          .forEach(filters::add);
     }
 
     if (entityFilter.getStartTimestamp() != null) {

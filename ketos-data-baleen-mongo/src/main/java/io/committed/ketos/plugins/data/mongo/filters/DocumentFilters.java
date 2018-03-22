@@ -18,6 +18,7 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
+import io.committed.ketos.common.utils.ValueConversion;
 
 public final class DocumentFilters {
 
@@ -39,23 +40,24 @@ public final class DocumentFilters {
     final List<Bson> filters = new LinkedList<>();
 
     // Text search must be first (in aggregations)
-    if (documentFilter.getContent() != null) {
-      filters.add(Filters.text(documentFilter.getContent()));
-    }
+    ValueConversion.stringValue(documentFilter.getContent())
+        .map(Filters::text)
+        .ifPresent(filters::add);
 
-    if (documentFilter.getId() != null) {
-      filters.add(Filters.eq(BaleenProperties.EXTERNAL_ID, documentFilter.getId()));
-    }
+    ValueConversion.stringValue(documentFilter.getId())
+        .map(s -> Filters.eq(BaleenProperties.EXTERNAL_ID, s))
+        .ifPresent(filters::add);
 
     if (documentFilter.getInfo() != null) {
       final DocumentInfoFilter info = documentFilter.getInfo();
-      if (info.getCaveats() != null) {
-        filters.add(Filters.in("properties.caveats", info.getCaveats()));
-      }
 
-      if (info.getReleasability() != null) {
-        filters.add(Filters.in("properties.releasability", info.getReleasability()));
-      }
+      ValueConversion.stringValue(info.getCaveats())
+          .map(s -> Filters.in("properties.caveats", s))
+          .ifPresent(filters::add);
+
+      ValueConversion.stringValue(info.getReleasability())
+          .map(s -> Filters.in("properties.releasability", s))
+          .ifPresent(filters::add);
 
       if (info.getEndTimestamp() != null) {
         filters.add(Filters.lte("properties.timestamp", info.getEndTimestamp().getTime()));
@@ -65,37 +67,45 @@ public final class DocumentFilters {
         filters.add(Filters.gte("properties.timestamp", info.getStartTimestamp().getTime()));
       }
 
-      if (info.getLanguage() != null) {
-        filters.add(Filters.eq("properties.language", info.getLanguage()));
-      }
+      ValueConversion.stringValue(info.getLanguage())
+          .map(s -> Filters.eq("properties.language", s))
+          .ifPresent(filters::add);
 
-      if (info.getSource() != null) {
-        filters.add(Filters.eq("properties.source", info.getSource()));
-      }
+      ValueConversion.stringValue(info.getSource())
+          .map(s -> Filters.eq("properties.source", s))
+          .ifPresent(filters::add);
 
-      if (info.getType() != null) {
-        filters.add(Filters.eq("properties.type", info.getType()));
-      }
+      ValueConversion.stringValue(info.getType())
+          .map(s -> Filters.eq("properties.type", s))
+          .ifPresent(filters::add);
 
-      if (info.getPublishedId() != null) {
-        filters.add(Filters.in("properties.publishedIds.id", info.getPublishedId()));
-      }
+      ValueConversion.stringValue(info.getPublishedId())
+          .map(s -> Filters.in("properties.publishedIds.id", s))
+          .ifPresent(filters::add);
 
-      if (info.getClassification() != null) {
-        filters.add(Filters.in("properties.classification", info.getClassification()));
-      }
+      ValueConversion.stringValue(info.getClassification())
+          .map(s -> Filters.in("properties.classification", s))
+          .ifPresent(filters::add);
     }
 
     if (documentFilter.getMetadata() != null) {
-      documentFilter.getMetadata().stream().forEach(e -> filters.add(Filters.elemMatch("metadata", Filters.and(
-          Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, e.getKey()),
-          Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE, e.getValue())))));
+      documentFilter.getMetadata().stream()
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> Filters.elemMatch("metadata", Filters.and(
+              Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, e.getKey()),
+              Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE,
+                  ValueConversion.valueOrNull(e.getValue())))))
+          .forEach(filters::add);
 
     }
 
     if (documentFilter.getProperties() != null) {
       documentFilter.getProperties().stream()
-          .forEach(e -> filters.add(Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(), e.getValue())));
+          .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
+          .map(e -> Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(),
+              ValueConversion.valueOrNull(e.getValue())))
+          .forEach(filters::add);
+
     }
 
 
