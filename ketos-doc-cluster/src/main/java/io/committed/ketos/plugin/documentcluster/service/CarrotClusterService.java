@@ -65,11 +65,13 @@ public class CarrotClusterService {
 
   protected List<Cluster> clusterWithLingo(final Optional<String> query, final List<Document> input) {
     /* A controller to manage the processing pipeline. */
-    final Controller controller = ControllerFactory.createSimple();
 
-    final ProcessingResult result = controller.process(input, query.orElse(null),
-        LingoClusteringAlgorithm.class);
-    return result.getClusters();
+    try (final Controller controller = ControllerFactory.createSimple()) {
+
+      final ProcessingResult result = controller.process(input, query.orElse(null),
+          LingoClusteringAlgorithm.class);
+      return result.getClusters();
+    }
 
   }
 
