@@ -1,0 +1,47 @@
+{
+	"documents": [
+		{
+		    "externalId" : "402da4330a8ac77d0b250fe35c43a98b76c7876cbc00bba8df95832cefac1c4d",
+		    "metadata" : [ 
+		        {
+		            "key" : "X-Parsed-By",
+		            "value" : "org.apache.tika.parser.EmptyParser"
+		        }, 
+		        {
+		            "key" : "resourceName",
+		            "value" : "/Users/steventaylor/Documents/Beachcomber/data/.DS_Store"
+		        }, 
+		        {
+		            "key" : "Content-Type",
+		            "value" : "application/octet-stream"
+		        }, 
+		        {
+		            "key" : "baleen:content-mappers",
+		            "value" : "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
+		        }, 
+		        {
+		            "key" : "baleen:content-mappers",
+		            "value" : "uk.gov.dstl.baleen.contentmappers.MetaTags"
+		        }, 
+		        {
+		            "key" : "baleen:content-extractor",
+		            "value" : "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
+		        }
+		    ],
+		    "properties" : {
+		        "documentDate" : 1520329943913,
+		        "publishedIds" : [],
+		        "releasability" : [],
+		        "language" : "x-unspecified",
+		        "source" : "/Users/test/docs/data/testdocument.txt",
+		        "type" : null,
+		        "classification" : null,
+		        "documentTitle" : "test doc",
+		        "caveats" : [],
+		        "hash" : "402da4330a8ad77d0b250fe35c43a68b76c7876cbc00bba8df95832cefac1c4d",
+		        "timestamp" : 1520329943913
+		    },
+		    "content" : " \n \n"
+		}
+	]
+}
