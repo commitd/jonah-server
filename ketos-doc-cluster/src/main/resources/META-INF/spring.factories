@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.plugins.documentcluster.DocumentClusterExtension
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.committed.ketos.plugin.documentcluster.DocumentClusterExtension

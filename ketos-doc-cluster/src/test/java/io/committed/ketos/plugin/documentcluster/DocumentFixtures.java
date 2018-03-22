@@ -5,7 +5,7 @@ import java.util.List;
 import io.committed.ketos.common.data.BaleenDocument;
 import reactor.core.publisher.Flux;
 
-public final class Documents {
+public final class DocumentFixtures {
   // Headlines from wiki news (creative common attribution)
   // Taken 22 March 2018
   // See https://en.wikinews.org/wiki/Main_Page
@@ -29,7 +29,7 @@ public final class Documents {
           .build());
 
 
-  private Documents() {
+  private DocumentFixtures() {
     // Singleon
   }
 

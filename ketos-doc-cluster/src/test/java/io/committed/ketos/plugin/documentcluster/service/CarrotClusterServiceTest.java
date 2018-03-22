@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import io.committed.ketos.plugin.documentcluster.Documents;
+import io.committed.ketos.plugin.documentcluster.DocumentFixtures;
 import io.committed.ketos.plugin.documentcluster.data.Clusters;
 import io.committed.ketos.plugin.documentcluster.data.Topic;
 
@@ -14,7 +14,7 @@ public class CarrotClusterServiceTest {
   public void testWithoutHint() {
     final CarrotClusterService service = new CarrotClusterService();
 
-    final Clusters clusters = service.cluster(Optional.empty(), Documents.flux()).block();
+    final Clusters clusters = service.cluster(Optional.empty(), DocumentFixtures.flux()).block();
 
 
     assertValidClusters(clusters);
@@ -25,7 +25,7 @@ public class CarrotClusterServiceTest {
   public void testWithHint() {
     final CarrotClusterService service = new CarrotClusterService();
 
-    final Clusters clusters = service.cluster(Optional.of("United States"), Documents.flux()).block();
+    final Clusters clusters = service.cluster(Optional.of("United States"), DocumentFixtures.flux()).block();
 
     assertValidClusters(clusters);
   }

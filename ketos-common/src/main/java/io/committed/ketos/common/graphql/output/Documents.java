@@ -30,7 +30,7 @@ public class Documents extends AbstractGraphQLNode {
     super(parent);
     this.offset = offset;
     this.size = size;
-    this.results = results.doOnNext(r -> r.setParent(this)).cache();
+    this.results = results == null ? Flux.empty() : results.doOnNext(r -> r.setParent(this)).cache();
     this.total = total;
   }
 }
