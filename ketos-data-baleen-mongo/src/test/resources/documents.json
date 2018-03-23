@@ -29549,21 +29549,21 @@
             }
         },
         {
-        "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
-        "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-        "externalId" : "226a1f57-6698-44be-9243-5375de78582a",
-        "baleenId" : "7f23fef74eaed6a9d2571d8e1eeafaaf978325c1d8f18dd3754929edd38923e5",
-        "entityId" : "295d3608-1aa2-4a50-83a0-f1de8d541995",
-        "baleenEntityId" : "eb834c5a10b68d0fb793321bca40c9dc715142827c0f143326e45a422f854118",
-        "begin" : 3109,
-        "end" : 3116,
-        "type" : "Location",
-        "subType" : null,
-        "value" : "British",
-        "properties" : {
-            "geoJson" : {
-                "type" : "MultiPolygon",
-                "coordinates" : [ 
+            "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
+            "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
+            "externalId" : "226a1f57-6698-44be-9243-5375de78582a",
+            "baleenId" : "7f23fef74eaed6a9d2571d8e1eeafaaf978325c1d8f18dd3754929edd38923e5",
+            "entityId" : "295d3608-1aa2-4a50-83a0-f1de8d541995",
+            "baleenEntityId" : "eb834c5a10b68d0fb793321bca40c9dc715142827c0f143326e45a422f854118",
+            "begin" : 3109,
+            "end" : 3116,
+            "type" : "Location",
+            "subType" : null,
+            "value" : "British",
+            "properties" : {
+                "geoJson" : {
+                    "type" : "MultiPolygon",
+                    "coordinates" : [ 
                     [ 
                         [ 
                             [ 
@@ -58252,104 +58252,107 @@
                             ]
                         ]
                     ]
-                ]
-            },
-            "isNormalised" : false,
-            "confidence" : 1.0,
-            "subType" : null,
-            "poi" : [ 
-                -3.6520603696708, 
-                54.5263926200755
-            ],
-            "type" : "Location",
-            "value" : "British"
-        }
-    },{
-        "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
-        "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-        "externalId" : "9b84a724-b18c-47e7-b302-2c83c268925d",
-        "baleenId" : "e9b1d71e0450547b015c080ff749d6461963e2939778d5a496a463f4926567a2",
-        "entityId" : "94913989-218e-4772-9ed5-3e3990d1d4ed",
-        "baleenEntityId" : "762becd35fb79dd07673b4d4b1ff7a0ed47f88544c9db3f5f1a1ab62f8673fb7",
-        "begin" : 2838,
-        "end" : 2865,
-        "type" : "Organisation",
-        "subType" : null,
-        "value" : "City University of New York",
-        "properties" : {
-            "subType" : null,
+                ]},
+                "isNormalised" : false,
+                "confidence" : 1.0,
+                "subType" : null,
+                "poi" : [ 
+                    -3.6520603696708, 
+                    54.5263926200755
+                ],
+                "type" : "Location",
+                "value" : "British"
+            }
+        },
+        {
+            "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
+            "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
+            "externalId" : "9b84a724-b18c-47e7-b302-2c83c268925d",
+            "baleenId" : "e9b1d71e0450547b015c080ff749d6461963e2939778d5a496a463f4926567a2",
+            "entityId" : "94913989-218e-4772-9ed5-3e3990d1d4ed",
+            "baleenEntityId" : "762becd35fb79dd07673b4d4b1ff7a0ed47f88544c9db3f5f1a1ab62f8673fb7",
+            "begin" : 2838,
+            "end" : 2865,
             "type" : "Organisation",
+            "subType" : null,
             "value" : "City University of New York",
-            "isNormalised" : false,
-            "confidence" : 0.998785436153412
+            "properties" : {
+                "subType" : null,
+                "type" : "Organisation",
+                "value" : "City University of New York",
+                "isNormalised" : false,
+                "confidence" : 0.998785436153412
+            }
         }
-    }],
-    "relations":[{
-        "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
-        "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-        "externalId" : "9dec8723-5ba5-4fb1-8718-6c12586aaa89",
-        "baleenId" : "061b500cc0583939b9b26656747285bc08de48a9a4dd2507116b02691e58df51",
-        "type" : "associated",
-        "subType" : "",
-        "value" : " was 76 years old. His children released the following statement: \"We are deeply saddened that our beloved father passed away today. He was a great scientist and an extraordinary man whose work and legacy will live on for many years. His courage and persistence with his brilliance and humour inspired people across the world. He once said, 'It would not be much of a universe if it wasn't home to the people you love.' We will :Person1502: during a flight aboard a modified Boeing 727 aircraft in 2007. miss him forever.\" Image: :Person1503:. Astronomer royal :Person1504: said of :Person1541:, \":Person1505: was far from being the archetypal unworldy or nerdish scientist. His personality remained amazingly unwarped by his frustrations[...] Few, if any, of :Person1549:’s successors have done more to deepen our insights into gravity, space and time.\" :Person1542: studied at Oxford and Cambridge Universities and was in 1979 awarded a post once held by Isaac Newton, the Lucasian Professor of Mathematics. His scientific work focused on fundamental aspects of the universe and space, including black :Person1550:. The heat emitted from black :Person1552: is called :Person1543: radiation after him. He was also known for placing bets with other researchers about who would disprove whose theories, as with one he lost to :Person1506:, over whether black :Person1553: can permanently remove information from the universe — :Person1544: conceded they probably cannot. :Person1545: was diagnosed with amyotrophic lateral sclerosis, also called :Person1507:'s disease, as a young man and spent much of his life in a wheelchair. Doctors predicted he would not live to be 25. Since losing the use of his voice after a tracheotomy in 1985, :Person1546: communicated with a compute-raided speech system. :Person1547: maintained a public image to an extent that drew criticism from some of his peers. He became widely known to the general public for his 1988 book, A Brief History of Time: From the Big Bang to Black :Person1554:, and has made cameo appearances on many popular television shows, including The Simpsons, Star Trek: The Next Generation, and The Big Bang Theory. He was also the subject of the 2014 biopic The Theory of Everything. \"Not since :Person1508: has a scientist so captured the public imagination and endeared himself to tens of millions of people around the world,\" fellow physicist Michio Kaku of the City University of New York was quoted by the New York Times. Despite many other honors, including the Wolf Prize, :Person1509: award, and Fundamental Physics prize, the Presidential Medal of Freedom from U.S. :Person1510: and being named a Commander of the British Empire, :Person1511: was not awarded a Nobel Prize. He explained, \"The Nobel is given only for theoretical work that has been confirmed by observation. It is very, very difficult to observe the things I have worked on.\" In a 1989 remark to :Person1512:, :Person1513: observed, \"We are just an advanced breed of monkeys on a minor planet of a very average star[...] But we can understand the universe. That makes us something very special.\" :Person1548: is survived by his three children, Luc,y :Person1514:, and Tim",
-        "source" : {
+    ],
+    "relations":[
+        {
             "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
             "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-            "externalId" : "b857d949-3ae6-4942-bcf5-e1e727eda58d",
-            "baleenId" : "2f35c9a579b60bbbd53be28397500e39b4e3e148f5e37e6ce6f9c79cca57bd15",
-            "entityId" : "0bd40743-fbec-4484-b9fc-08d89a916840",
-            "baleenEntityId" : "bfc2358c12b199a5bcf0d82ff71805da50dd3108ddd2308d6f5c1c2870308646",
-            "begin" : 461,
-            "end" : 468,
-            "type" : "Person",
-            "subType" : null,
-            "value" : null,
-            "properties" : {
-                "gender" : "MALE",
-                "isNormalised" : false,
-                "confidence" : 0.0,
-                "subType" : null,
-                "title" : "",
-                "type" : "Person",
-                "value" : "Hawking"
-            }
-        },
-        "target" : {
-            "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
-            "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-            "externalId" : "a8672e25-0f23-43cf-b735-fba8f2d48f3b",
-            "baleenId" : "e05898040784db9a63c28e8f3d743f2819e9c5ca13f0f49823d63e5321dc8d63",
-            "entityId" : "42ad69a0-f11b-449e-947f-fe91f52be3d7",
-            "baleenEntityId" : "5ae59f5a5541509f410b965e529cd1e461a30c1b8a60aec61c072853ae7f8bf0",
-            "begin" : 3615,
-            "end" : 3618,
-            "type" : "Person",
-            "subType" : null,
-            "value" : "Tim",
-            "properties" : {
-                "gender" : "MALE",
-                "isNormalised" : false,
-                "confidence" : 0.99997353553772,
-                "subType" : null,
-                "title" : "",
-                "type" : "Person",
-                "value" : "Tim"
-            }
-        },
-        "properties" : {
-            "relationshipType" : "associated",
-            "dependencyDistance" : 0,
-            "wordDistance" : 0,
-            "confidence" : 0.100000001490116,
-            "sentenceDistance" : 0,
-            "subType" : "",
-            "source" : "2f35c9a579b60bbbd53be28397500e39b4e3e148f5e37e6ce6f9c79cca57bd15",
+            "externalId" : "9dec8723-5ba5-4fb1-8718-6c12586aaa89",
+            "baleenId" : "061b500cc0583939b9b26656747285bc08de48a9a4dd2507116b02691e58df51",
             "type" : "associated",
-            "relationSubType" : "",
+            "subType" : "",
             "value" : " was 76 years old. His children released the following statement: \"We are deeply saddened that our beloved father passed away today. He was a great scientist and an extraordinary man whose work and legacy will live on for many years. His courage and persistence with his brilliance and humour inspired people across the world. He once said, 'It would not be much of a universe if it wasn't home to the people you love.' We will :Person1502: during a flight aboard a modified Boeing 727 aircraft in 2007. miss him forever.\" Image: :Person1503:. Astronomer royal :Person1504: said of :Person1541:, \":Person1505: was far from being the archetypal unworldy or nerdish scientist. His personality remained amazingly unwarped by his frustrations[...] Few, if any, of :Person1549:’s successors have done more to deepen our insights into gravity, space and time.\" :Person1542: studied at Oxford and Cambridge Universities and was in 1979 awarded a post once held by Isaac Newton, the Lucasian Professor of Mathematics. His scientific work focused on fundamental aspects of the universe and space, including black :Person1550:. The heat emitted from black :Person1552: is called :Person1543: radiation after him. He was also known for placing bets with other researchers about who would disprove whose theories, as with one he lost to :Person1506:, over whether black :Person1553: can permanently remove information from the universe — :Person1544: conceded they probably cannot. :Person1545: was diagnosed with amyotrophic lateral sclerosis, also called :Person1507:'s disease, as a young man and spent much of his life in a wheelchair. Doctors predicted he would not live to be 25. Since losing the use of his voice after a tracheotomy in 1985, :Person1546: communicated with a compute-raided speech system. :Person1547: maintained a public image to an extent that drew criticism from some of his peers. He became widely known to the general public for his 1988 book, A Brief History of Time: From the Big Bang to Black :Person1554:, and has made cameo appearances on many popular television shows, including The Simpsons, Star Trek: The Next Generation, and The Big Bang Theory. He was also the subject of the 2014 biopic The Theory of Everything. \"Not since :Person1508: has a scientist so captured the public imagination and endeared himself to tens of millions of people around the world,\" fellow physicist Michio Kaku of the City University of New York was quoted by the New York Times. Despite many other honors, including the Wolf Prize, :Person1509: award, and Fundamental Physics prize, the Presidential Medal of Freedom from U.S. :Person1510: and being named a Commander of the British Empire, :Person1511: was not awarded a Nobel Prize. He explained, \"The Nobel is given only for theoretical work that has been confirmed by observation. It is very, very difficult to observe the things I have worked on.\" In a 1989 remark to :Person1512:, :Person1513: observed, \"We are just an advanced breed of monkeys on a minor planet of a very average star[...] But we can understand the universe. That makes us something very special.\" :Person1548: is survived by his three children, Luc,y :Person1514:, and Tim",
-            "target" : "e05898040784db9a63c28e8f3d743f2819e9c5ca13f0f49823d63e5321dc8d63"
-        },
-        "begin" : 461,
-        "end" : 3618
-    }]
+            "source" : {
+                "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
+                "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
+                "externalId" : "b857d949-3ae6-4942-bcf5-e1e727eda58d",
+                "baleenId" : "2f35c9a579b60bbbd53be28397500e39b4e3e148f5e37e6ce6f9c79cca57bd15",
+                "entityId" : "0bd40743-fbec-4484-b9fc-08d89a916840",
+                "baleenEntityId" : "bfc2358c12b199a5bcf0d82ff71805da50dd3108ddd2308d6f5c1c2870308646",
+                "begin" : 461,
+                "end" : 468,
+                "type" : "Person",
+                "subType" : null,
+                "value" : null,
+                "properties" : {
+                    "gender" : "MALE",
+                    "isNormalised" : false,
+                    "confidence" : 0.0,
+                    "subType" : null,
+                    "title" : "",
+                    "type" : "Person",
+                    "value" : "Hawking"
+                }
+            },
+            "target" : {
+                "docId" : "a19f6ed4-87bb-4dc6-919e-596761127082",
+                "baleenDocId" : "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
+                "externalId" : "a8672e25-0f23-43cf-b735-fba8f2d48f3b",
+                "baleenId" : "e05898040784db9a63c28e8f3d743f2819e9c5ca13f0f49823d63e5321dc8d63",
+                "entityId" : "42ad69a0-f11b-449e-947f-fe91f52be3d7",
+                "baleenEntityId" : "5ae59f5a5541509f410b965e529cd1e461a30c1b8a60aec61c072853ae7f8bf0",
+                "begin" : 3615,
+                "end" : 3618,
+                "type" : "Person",
+                "subType" : null,
+                "value" : "Tim",
+                "properties" : {
+                    "gender" : "MALE",
+                    "isNormalised" : false,
+                    "confidence" : 0.99997353553772,
+                    "subType" : null,
+                    "title" : "",
+                    "type" : "Person",
+                    "value" : "Tim"
+                }
+            },
+            "properties" : {
+                "relationshipType" : "associated",
+                "dependencyDistance" : 0,
+                "wordDistance" : 0,
+                "confidence" : 0.100000001490116,
+                "sentenceDistance" : 0,
+                "subType" : "",
+                "source" : "2f35c9a579b60bbbd53be28397500e39b4e3e148f5e37e6ce6f9c79cca57bd15",
+                "type" : "associated",
+                "relationSubType" : "",
+                "value" : " was 76 years old. His children released the following statement: \"We are deeply saddened that our beloved father passed away today. He was a great scientist and an extraordinary man whose work and legacy will live on for many years. His courage and persistence with his brilliance and humour inspired people across the world. He once said, 'It would not be much of a universe if it wasn't home to the people you love.' We will :Person1502: during a flight aboard a modified Boeing 727 aircraft in 2007. miss him forever.\" Image: :Person1503:. Astronomer royal :Person1504: said of :Person1541:, \":Person1505: was far from being the archetypal unworldy or nerdish scientist. His personality remained amazingly unwarped by his frustrations[...] Few, if any, of :Person1549:’s successors have done more to deepen our insights into gravity, space and time.\" :Person1542: studied at Oxford and Cambridge Universities and was in 1979 awarded a post once held by Isaac Newton, the Lucasian Professor of Mathematics. His scientific work focused on fundamental aspects of the universe and space, including black :Person1550:. The heat emitted from black :Person1552: is called :Person1543: radiation after him. He was also known for placing bets with other researchers about who would disprove whose theories, as with one he lost to :Person1506:, over whether black :Person1553: can permanently remove information from the universe — :Person1544: conceded they probably cannot. :Person1545: was diagnosed with amyotrophic lateral sclerosis, also called :Person1507:'s disease, as a young man and spent much of his life in a wheelchair. Doctors predicted he would not live to be 25. Since losing the use of his voice after a tracheotomy in 1985, :Person1546: communicated with a compute-raided speech system. :Person1547: maintained a public image to an extent that drew criticism from some of his peers. He became widely known to the general public for his 1988 book, A Brief History of Time: From the Big Bang to Black :Person1554:, and has made cameo appearances on many popular television shows, including The Simpsons, Star Trek: The Next Generation, and The Big Bang Theory. He was also the subject of the 2014 biopic The Theory of Everything. \"Not since :Person1508: has a scientist so captured the public imagination and endeared himself to tens of millions of people around the world,\" fellow physicist Michio Kaku of the City University of New York was quoted by the New York Times. Despite many other honors, including the Wolf Prize, :Person1509: award, and Fundamental Physics prize, the Presidential Medal of Freedom from U.S. :Person1510: and being named a Commander of the British Empire, :Person1511: was not awarded a Nobel Prize. He explained, \"The Nobel is given only for theoretical work that has been confirmed by observation. It is very, very difficult to observe the things I have worked on.\" In a 1989 remark to :Person1512:, :Person1513: observed, \"We are just an advanced breed of monkeys on a minor planet of a very average star[...] But we can understand the universe. That makes us something very special.\" :Person1548: is survived by his three children, Luc,y :Person1514:, and Tim",
+                "target" : "e05898040784db9a63c28e8f3d743f2819e9c5ca13f0f49823d63e5321dc8d63"
+            },
+            "begin" : 461,
+            "end" : 3618
+        }
+    ]
 }
