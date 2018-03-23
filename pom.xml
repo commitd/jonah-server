@@ -83,5 +83,6 @@
     <module>ketos-ui-example-html</module>
     <module>ketos-feedback</module>
     <module>ketos-doc-cluster</module>
+    <module>ketos-test</module>
   </modules>
 </project>

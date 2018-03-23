@@ -1,33 +1,41 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
-import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.junit.Test;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
-import io.committed.ketos.common.data.BaleenDocument;
-import io.committed.ketos.plugins.data.mongo.AbstractMongoResourceTest;
+import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
+import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.plugins.data.mongo.MongoTestResource;
 import io.committed.ketos.plugins.data.mongo.factory.MongoDocumentProviderFactory;
+import io.committed.ketos.test.common.providers.baleen.AbstractDocumentProviderTest;
 
-public class MongoDocumentProviderTest extends AbstractMongoResourceTest {
+public class MongoDocumentProviderTest extends AbstractDocumentProviderTest {
 
-  private MongoDocumentProvider documentProvider;
+  private static final MongoTestResource testResource = new MongoTestResource();
 
-  public MongoDocumentProviderTest() {
-    MongoDocumentProviderFactory factory = new MongoDocumentProviderFactory();
-    documentProvider =
-        (MongoDocumentProvider) factory.build("testDataset", "testDatasource", getSettings()).block();
+  @BeforeClass
+  public static void beforeClass() {
+    testResource.setupMongo("documentProviderTest.json");
   }
 
-  @Test
-  public void testGetById() {
-    BaleenDocument doc =
-        documentProvider.getById("402da4330a8ac77d0b250fe35c43a98b76c7876cbc00bba8df95832cefac1c4d").block();
-    assertEquals("402da4330a8ac77d0b250fe35c43a98b76c7876cbc00bba8df95832cefac1c4d", doc.getId());
-    assertEquals(" \n \n", doc.getContent());
+  @AfterClass
+  public static void afterClass() {
+    testResource.clearMongo();
   }
 
   @Override
-  protected String getResourcePath() {
-    return "documentProviderTest.json";
+  public DocumentProvider getDocumentProvider() {
+    MongoDocumentProviderFactory factory = new MongoDocumentProviderFactory();
+    return (MongoDocumentProvider) factory.build("testDataset", "testDatasource", getSettings()).block();
+  }
+
+  private Map<String, Object> getSettings() {
+    Map<String, Object> settings = new HashMap<String, Object>();
+    settings.put(AbstractMongoDataProviderFactory.SETTING_DB, MongoTestResource.TEST_DB);
+    settings.put(AbstractMongoDataProviderFactory.SETTING_URI, "mongodb://127.0.0.1:27017/");
+    return settings;
   }
 }

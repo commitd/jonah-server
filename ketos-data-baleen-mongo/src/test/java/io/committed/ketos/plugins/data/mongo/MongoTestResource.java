@@ -11,9 +11,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,47 +18,29 @@ import com.mongodb.async.client.MongoClient;
 import com.mongodb.async.client.MongoClients;
 import com.mongodb.async.client.MongoDatabase;
 
-import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
+public class MongoTestResource {
 
-public abstract class AbstractMongoResourceTest {
-
-  private static final String TEST_DB = "testDB";
+  public static final String TEST_DB = "testDB";
 
   private static MongoClient client;
 
   private ObjectMapper mapper;
 
-  public AbstractMongoResourceTest() {
-    mapper = new ObjectMapper();
-  }
-
-  @BeforeClass
-  public static void setupClass() {
+  public void setupMongo(String jsonPath) {
     client = MongoClients.create("mongodb://127.0.0.1:27017");
+    mapper = new ObjectMapper();
+    loadResource(jsonPath);
   }
 
-  @AfterClass
-  public static void teardownClass() {
+  public void clearMongo() {
     client.getDatabase(TEST_DB).drop((result, throwable) -> {
       client.close();
     });
   }
 
-  @Before
-  public void setup() {
-    loadResource();
-  }
-
-  protected Map<String, Object> getSettings() {
-    Map<String, Object> settings = new HashMap<String, Object>();
-    settings.put(AbstractMongoDataProviderFactory.SETTING_DB, TEST_DB);
-    settings.put(AbstractMongoDataProviderFactory.SETTING_URI, "mongodb://127.0.0.1:27017/");
-    return settings;
-  }
-
-  protected void loadResource() {
+  protected void loadResource(String resourcePath) {
     Map<String, List<Map<String, Object>>> value = null;
-    try (InputStream resource = getClass().getClassLoader().getResourceAsStream(getResourcePath())) {
+    try (InputStream resource = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
       value = mapper.readValue(resource, new TypeReference<HashMap<String, List<Map<String, Object>>>>() {});
     } catch (IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
@@ -85,8 +64,6 @@ public abstract class AbstractMongoResourceTest {
       load(db, "mentions", value.get("mentions"));
     }
   }
-
-  protected abstract String getResourcePath();
 
   private void load(MongoDatabase db, String collection, List<Map<String, Object>> values) {
     db.getCollection(collection).insertMany(toDocuments(values), null);

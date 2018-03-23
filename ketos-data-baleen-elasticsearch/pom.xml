@@ -32,5 +32,11 @@
       <artifactId>invest-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-test</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

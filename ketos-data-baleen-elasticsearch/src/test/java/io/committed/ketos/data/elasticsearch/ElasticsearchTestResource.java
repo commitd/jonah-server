@@ -19,14 +19,11 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class AbstractElasticsearchTest {
+public class ElasticsearchTestResource {
 
   public static final String TEST_DB = "testdb";
 
@@ -34,8 +31,7 @@ public abstract class AbstractElasticsearchTest {
 
   private ObjectMapper mapper;
 
-  @BeforeClass
-  public static void beforeClass() {
+  public void setupElastic(String resourcePath) {
     Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
 
     InetSocketTransportAddress inetSocketAddress;
@@ -45,16 +41,11 @@ public abstract class AbstractElasticsearchTest {
     } catch (UnknownHostException e) {
       fail("Error creating elastic client");
     }
-  }
-
-  @Before
-  public void before() {
     mapper = new ObjectMapper();
-    loadResource();
+    loadResource(resourcePath);
   }
 
-  @After
-  public void after() {
+  public void cleanElastic() {
     DeleteIndexRequest request = new DeleteIndexRequest(TEST_DB);
     client.admin().indices().delete(request).actionGet();
   }
@@ -67,9 +58,9 @@ public abstract class AbstractElasticsearchTest {
     return new PreBuiltTransportClient(settings).addTransportAddress(inetSocketAddress);
   }
 
-  protected void loadResource() {
+  protected void loadResource(String resourcePath) {
     Map<String, List<Map<String, Object>>> value = null;
-    try (InputStream resource = getClass().getClassLoader().getResourceAsStream(getResourcePath())) {
+    try (InputStream resource = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
       value = mapper.readValue(resource, new TypeReference<HashMap<String, List<Map<String, Object>>>>() {});
     } catch (IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
@@ -124,6 +115,5 @@ public abstract class AbstractElasticsearchTest {
     return "";
   }
 
-  protected abstract String getResourcePath();
 
 }
