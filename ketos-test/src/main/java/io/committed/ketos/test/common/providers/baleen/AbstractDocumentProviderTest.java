@@ -12,9 +12,8 @@ public abstract class AbstractDocumentProviderTest {
   @Test
   public void testGetById() {
     BaleenDocument doc =
-        getDocumentProvider().getById("402da4330a8ac77d0b250fe35c43a98b76c7876cbc00bba8df95832cefac1c4d").block();
-    assertEquals("402da4330a8ac77d0b250fe35c43a98b76c7876cbc00bba8df95832cefac1c4d", doc.getId());
-    assertEquals(" \n \n", doc.getContent());
+        getDocumentProvider().getById("575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b").block();
+    assertEquals("575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b", doc.getId());
   }
 
   public abstract DocumentProvider getDocumentProvider();

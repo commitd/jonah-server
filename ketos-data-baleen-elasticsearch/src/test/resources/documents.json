@@ -1,704 +1,703 @@
 {
-    "documents": [
-        {
-            "externalId": "0b0c5261d34b4f43fd1d4945fbf4529ceb6228d04de66d6389ddb65f9d88273c",
-            "baleenId": "504078d2-dd51-445c-882b-3ae5bd8b9ae1",
-            "metadata": [
-                {
-                    "key": "date",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "pdf:PDFVersion",
-                    "value": "1.4"
-                },
-                {
-                    "key": "xmp:CreatorTool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:modify_annotations",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print_degraded",
-                    "value": "true"
-                },
-                {
-                    "key": "dcterms:created",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "Last-Modified",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "dcterms:modified",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "dc:format",
-                    "value": "application/pdf; version=1.4"
-                },
-                {
-                    "key": "Last-Save-Date",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "pdf:docinfo:creator_tool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:fill_in_form",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:modified",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "meta:save-date",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "modified",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "Content-Type",
-                    "value": "application/pdf"
-                },
-                {
-                    "key": "X-Parsed-By",
-                    "value": "io.committed.krill.extraction.tika.pdf.PdfParser"
-                },
-                {
-                    "key": "creator",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "meta:creation-date",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "created",
-                    "value": "Thu Mar 22 10:33:59 GMT 2018"
-                },
-                {
-                    "key": "access_permission:extract_for_accessibility",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:assemble_document",
-                    "value": "true"
-                },
-                {
-                    "key": "xmpTPg:NPages",
-                    "value": "1"
-                },
-                {
-                    "key": "Creation-Date",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "resourceName",
-                    "value": "/Users/steventaylor/Documents/data/Uber_suspends_self-driving_car_program_after_pedestrian_death_in_Arizona,_United_States.pdf"
-                },
-                {
-                    "key": "access_permission:extract_content",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print",
-                    "value": "true"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "access_permission:can_modify",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "pdf:docinfo:created",
-                    "value": "2018-03-22T10:33:59Z"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
-                },
-                {
-                    "key": "baleen:content-extractor",
-                    "value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
-                }
-            ],
-            "properties": {
-                "documentDate": 1521714839000,
-                "publishedIds": [],
-                "releasability": [],
-                "language": "x-unspecified",
-                "source": "/Users/steventaylor/Documents/data/Uber_suspends_self-driving_car_program_after_pedestrian_death_in_Arizona,_United_States.pdf",
-                "type": null,
-                "classification": null,
-                "documentTitle": "Uber_suspends_self-driving_car_program_after_pedestrian_death_in_Arizona,_United_States",
-                "caveats": [],
-                "hash": "34be4793c0c28ed13d3abe07089ca44e95292bc39acdc6a4b4d11c36e8c7072c",
-                "timestamp": 1521726502944
-            },
-            "content": "\n  \n   \n    \n     \n       \n       \n        \n       \n     \n     \n   \n  \n \n"
-        },
-        {
-            "externalId": "a63c64f8241098409a03bd31ccb7623d39e4bde3985c62152e8d2d4254e2b52b",
-            "baleenId": "c27857bc-e067-4647-8ca2-7b144fafc384",
-            "metadata": [
-                {
-                    "key": "date",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "pdf:PDFVersion",
-                    "value": "1.4"
-                },
-                {
-                    "key": "xmp:CreatorTool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:modify_annotations",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print_degraded",
-                    "value": "true"
-                },
-                {
-                    "key": "dcterms:created",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "Last-Modified",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "dcterms:modified",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "dc:format",
-                    "value": "application/pdf; version=1.4"
-                },
-                {
-                    "key": "Last-Save-Date",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "pdf:docinfo:creator_tool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:fill_in_form",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:modified",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "meta:save-date",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "modified",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "Content-Type",
-                    "value": "application/pdf"
-                },
-                {
-                    "key": "X-Parsed-By",
-                    "value": "io.committed.krill.extraction.tika.pdf.PdfParser"
-                },
-                {
-                    "key": "creator",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "meta:creation-date",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "created",
-                    "value": "Thu Mar 22 10:34:10 GMT 2018"
-                },
-                {
-                    "key": "access_permission:extract_for_accessibility",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:assemble_document",
-                    "value": "true"
-                },
-                {
-                    "key": "xmpTPg:NPages",
-                    "value": "2"
-                },
-                {
-                    "key": "Creation-Date",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "resourceName",
-                    "value": "/Users/steventaylor/Documents/data/United_States__Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center.pdf"
-                },
-                {
-                    "key": "access_permission:extract_content",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print",
-                    "value": "true"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "access_permission:can_modify",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "pdf:docinfo:created",
-                    "value": "2018-03-22T10:34:10Z"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
-                },
-                {
-                    "key": "baleen:content-extractor",
-                    "value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
-                },
-                {
-                    "key": "keyword",
-                    "value": "suffered immediately fatal head wounds caused"
-                },
-                {
-                    "key": "keyword",
-                    "value": "thec reative commons attribution 2"
-                },
-                {
-                    "key": "keyword",
-                    "value": "killing 3 mental health worker"
-                },
-                {
-                    "key": "keyword",
-                    "value": "sister links yountville shooting march 15"
-                },
-                {
-                    "key": "keyword",
-                    "value": "check individual image pages prior"
-                }
-            ],
-            "properties": {
-                "documentDate": 1521714850000,
-                "publishedIds": [],
-                "releasability": [],
-                "language": "en",
-                "source": "/Users/steventaylor/Documents/data/United_States__Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center.pdf",
-                "type": null,
-                "classification": null,
-                "documentTitle": "United_States__Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center",
-                "caveats": [],
-                "hash": "eab58f505892b7b2833fecb18442d864c0a7ad8fb83fac2a56b94519f09af7c4",
-                "timestamp": 1521726503120
-            },
-            "content": "\n  \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n         \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       United States: Coroner says former patient killed self Saturday, March 17, 2018 Office, which show that Albert Wong killed himself after shooting his three hostages at The Pathway Home veterans' psychiatric center in Yountville, California last Friday. The hostages died instantly from rifle shots to the head, and Wong shot himself in the head with a shotgun. Officials said there was no indication any of the four was killed by a sheriff's deputy who exchanged shots with Wong. The Sheriff of Napa County also acts as the county coroner. According to the official report, the three hostages \"all suffered immediately fatal head wounds caused by a high velocity projectile consistent with the rifle that the shooter, Albert Wong, used in this incident\". Wong's The Pathway Home has its offices at the fatal head wound was self-inflicted. Sheriff's Captain Steven Blower clarified that neither Veterans Home of California Yountville Wong nor the hostages was shot by the deputy. complex. Image: CHHSA. According to authorities, Wong, a former Pathway resident, drove a rented car to the center Friday, March 9, and shortly after 10 AM local time (UTC-8), dressed in black and armed with a semi-automatic rifle, took five of the people at a leaving party hostage. The first call to the emergency 9-1-1 number was made at about 10:20. About ten minutes later, shots were heard, and a sheriff's deputy and Wong exchanged fire. Wong then shut himself in a room with three of the hostages. The campus was evacuated, but there was no further contact with Wong. A little before 6 PM, a video feed from a remote-controlled robot showed the four people in the room were probably dead. The three victims were all women. Christine Loeber, 48, was the executive director of the home. Jen Golick, 42, was its clinical director. Jennifer Gonzales Shushereba, 36, was a psychologist on the staff of the San Francisco Department of Veterans Affairs Healthcare System and also worked with PsychArmor, a nonprofit group, to create a toolkit for college campuses to assist students with post-traumatic stress disorder (PTSD). She was entering her last trimester of pregnanc.y Wong, 36, was a decorated veteran who served in the infantry inA fghanistan for a year in 2011–2012. He had been in treatment at the center for about a year but had been expelled two weeks before the hostage-taking because knives were found in his possession. His brother Tyrone Lampkin told The Press Democrat, Wong had been angry and said he \"wanted to get back at them\", but what he had mentioned was to \"talk to them, yell at them, not to kill them\". The Board of Directors of The Pathway Home announced on Wednesday that it would suspend operations \"indefinitely\". It is a ten-year-old non-profit in-patient center treating veterans with PTSD, brain injuries, depression and addictions on the campus of the Veterans Home of California Yountville. Yountville is a small town in the wine country a little more than 50 miles north of San Francisco. Founded as a last-resort center for intensive treatment of veterans who had not been helped by other approaches, it transitioned in 2015 to providing care to those not yet in crisis, including veterans studying at Napa Community College. The Veterans Home is the largest in the United States, with more than 900 residents. Sister links Yountville shooting March 15, 2018 \n       \n     \n     \n    \n     \n       \n       \n       and three hostages at California veterans center \n       \n     \n     \n    \n     \n       \n       \n       In the United States, autopsy results were released on Thursday by the Napa County Sheriff's \n       \n     \n     \n    \n    \n    \n     \n       \n       \n       Sources Evan Sernoffsky. \"Coroner: Yountville massacre victims, killer died from gunshot wounds to head\" — San Francisco Chronicle, \n       \n     \n     \n   \n   \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       AP. \"Sheriff: Vet shot self after killing 3 mental health worker\"s — The News-Item, March 15, 2018 Dorothy Salmon. \"A Message from The Pathway Home\" — The Pathway Home, March 14, 2018 Julie Johnson, Mary Callahan and Martin Espinoza. F\"ormer soldier in Yountville attacks said he 'wanted to get back' at veterans workers\" — The Press Democrat, March 11, 2018 Sophie Haigney and Jenna Lyons. \"Yountville victim Jennifer Golick helped 'countless families heal\"' — San Francisco Chronicle, March 10, 2018 Frank Baker with Amy Forliti, Michael Balsamo and Ellen Knickmeye, rAP. \"Veterans home workers slain in standoff remembered as devoted caregivers\" — Chicago Tribune, March 10, 2018 Ellen Knickmeyer and Janie Har with Olga R. Rodriguez, Paul Elias, Jocelyn Geck,e Armanda Lee Myers, Michael Balsamo and Julie Watson, AP. \"3 workers killed at California veterans cente, rgunman dead\" — WSET-TV, March 10, 2018 Retrieved from \"https://en.wikinews.org/w/index.php? This page was last edited on 18 March 2018, at 15:42. All text created after September 25, 2005 available under the terms of theC reative Commons Attribution 2.5 License, unless otherwise specified. Contributions must be attributed toW ikinews; see Terms of use for details. Copyright on images may vary, please check individual image pages prior to duplication . By using this site, you agree to theT erms of Use and Privacy Policy. Wikinews®, and the Wikinews logo are registered trademarks of theW ikimedia Foundation, Inc . Wikinews is not responsible for the content of external sites. \n       \n     \n     \n    title=United_States:_Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center&oldid=43910\"56 \n    \n   \n  \n \n"
-        },
-        {
-            "externalId": "fd683817e7b32a1beae34d5a166f26d78830973c27a07eec7877760711993add",
-            "baleenId": "36b04ead-aead-4f92-852f-1d402af54392",
-            "metadata": [
-                {
-                    "key": "date",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "pdf:PDFVersion",
-                    "value": "1.4"
-                },
-                {
-                    "key": "xmp:CreatorTool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:modify_annotations",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print_degraded",
-                    "value": "true"
-                },
-                {
-                    "key": "dcterms:created",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "Last-Modified",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "dcterms:modified",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "dc:format",
-                    "value": "application/pdf; version=1.4"
-                },
-                {
-                    "key": "Last-Save-Date",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "pdf:docinfo:creator_tool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:fill_in_form",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:modified",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "meta:save-date",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "modified",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "Content-Type",
-                    "value": "application/pdf"
-                },
-                {
-                    "key": "X-Parsed-By",
-                    "value": "io.committed.krill.extraction.tika.pdf.PdfParser"
-                },
-                {
-                    "key": "creator",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "meta:creation-date",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "created",
-                    "value": "Thu Mar 22 10:35:46 GMT 2018"
-                },
-                {
-                    "key": "access_permission:extract_for_accessibility",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:assemble_document",
-                    "value": "true"
-                },
-                {
-                    "key": "xmpTPg:NPages",
-                    "value": "2"
-                },
-                {
-                    "key": "Creation-Date",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "resourceName",
-                    "value": "/Users/steventaylor/Documents/data/China_ends_presidential_term_limits_in_constitutional_amendment.pdf"
-                },
-                {
-                    "key": "access_permission:extract_content",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print",
-                    "value": "true"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "access_permission:can_modify",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "pdf:docinfo:created",
-                    "value": "2018-03-22T10:35:46Z"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
-                },
-                {
-                    "key": "baleen:content-extractor",
-                    "value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
-                },
-                {
-                    "key": "keyword",
-                    "value": "national legislature adopts landmark constitutional amendmen"
-                },
-                {
-                    "key": "keyword",
-                    "value": "china parliament scraps presidential term limit"
-                },
-                {
-                    "key": "keyword",
-                    "value": "thec reative commons attribution 2"
-                },
-                {
-                    "key": "keyword",
-                    "value": "check individual image pages prior"
-                },
-                {
-                    "key": "keyword",
-                    "value": "china ends presidential term limits"
-                }
-            ],
-            "properties": {
-                "documentDate": 1521714946000,
-                "publishedIds": [],
-                "releasability": [],
-                "language": "en",
-                "source": "/Users/steventaylor/Documents/data/China_ends_presidential_term_limits_in_constitutional_amendment.pdf",
-                "type": null,
-                "classification": null,
-                "documentTitle": "China_ends_presidential_term_limits_in_constitutional_amendment",
-                "caveats": [],
-                "hash": "b46a86a84d0c33059ed717e30f59c6f2edbcb833b0caa273a565d19ba1c6672b",
-                "timestamp": 1521726499097
-            },
-            "content": "\n  \n   \n    \n     \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       China ends presidential term limits in constitutional amendment Tuesday, March 13, 2018 On Sunday, China's National People's Congress (NPC) voted to amend the Constitution of the People's Republic of China in several ways, including eliminating term limits for the offices of President and Vice President. The changes mean Xi Jinping may be President for life if he so chooses. The vote in the legislature was nearly unanimous. 2958 votes were cast in favor, two opposed, three abstained. Without this change, Xi would be required to leave office in 2023. thought\", as the theory is also known, was approved by theC ommunist Party of China in the autumn of 2017. Shen Chunyao, the chairperson for the Commission for Legislative Affairs of the NPC, told Xinhua News Agency, \"As an important content of the amendment, the inclusion of Xi's thought into the country's fundamental law reflects the common aspiration of the entire Xi Jinping in 2016 Image: VOA. Communist Party of China and all Chinese people of various ethnic groups\". News media reported a backlash to the news on the Internet. In response, state censors were blocking images of Winnie the Pooh and words like \"I disagree\" and \"Emperor\". Reuters reported difficulties in getting reactions to the lifting of term limits from members of the congress, one woman choosing to remain anonymous and remarking, \"You can't ask me that\". Under China's constitution, the presidency is a largely ceremonial office with limited powers. However, since 1993, as a matter of convention, the presidency has been held simultaneously by the General Secretary of the Communist Party of Chin,a the top leader in the one-party communist state. Xi Jinping's powerful positions as General Secretary and Chairman of the Central Military Commission do not have any term limit. Sources \"China parliament scraps presidential term limit\"s — Al Jazeera, March 11, 2018 Lu Hui. \"China's national legislature adopts landmark constitutional amendmen\" t— Xinhua News Agency, March 11, 2018 \"China's Xi allowed to remain 'president for life' as term limits remove\"d — BBC News, March 11, 2018 Ben Blanchard, Christian Shepherd. C\"hina allows Xi to remain president indefinitely, tightening his grip on powe\"r — Reuters, March 11, 2018 Chris Buckley and Adam Wu. \"Ending Term Limits for Chinas’ Xi Is a Big Deal. Heres’ Why. - Is the presidency \n       \n     \n     \n    \n    \n     \n       \n       \n       In another change, Xi's own political theory was written into the constitution. \"Xi Jinping \n       \n     \n     \n    \n     \n       \n       \n       powerful in China?\" — The New York Times, March 10, 2018 Clayton Dube. \"USC and China in the News: January and February 2018 - February 27, 2018: CN\"N — CNN, February 27, 2018 \n       \n     \n     \n   \n   \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       Retrieved from \"https://en.wikinews.org/w/index.php? title=China_ends_presidential_term_limits_in_constitutional_amendment&oldid=438996\"9 This page was last edited on 14 March 2018, at 00:17. All text created after September 25, 2005 available under the terms of theC reative Commons Attribution 2.5 License, unless otherwise specified. Contributions must be attributed toW ikinews; see Terms of use for details. Copyright on images may vary, please check individual image pages prior to duplication. By using this site, you agree to theT erms of Use and Privacy Policy. Wikinews®, and the Wikinews logo are registered trademarks of theW ikimedia Foundation, Inc . Wikinews is not responsible for the content of external sites. \n       \n     \n     \n    \n   \n  \n \n"
-        },
-        {
-            "externalId": "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-            "baleenId": "278c9df2-122d-498d-8c91-52be93895c32",
-            "metadata": [
-                {
-                    "key": "date",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "pdf:PDFVersion",
-                    "value": "1.4"
-                },
-                {
-                    "key": "xmp:CreatorTool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:modify_annotations",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print_degraded",
-                    "value": "true"
-                },
-                {
-                    "key": "dcterms:created",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "Last-Modified",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "dcterms:modified",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "dc:format",
-                    "value": "application/pdf; version=1.4"
-                },
-                {
-                    "key": "Last-Save-Date",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "pdf:docinfo:creator_tool",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "access_permission:fill_in_form",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:modified",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "meta:save-date",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "modified",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "Content-Type",
-                    "value": "application/pdf"
-                },
-                {
-                    "key": "X-Parsed-By",
-                    "value": "io.committed.krill.extraction.tika.pdf.PdfParser"
-                },
-                {
-                    "key": "creator",
-                    "value": "Chromium"
-                },
-                {
-                    "key": "meta:creation-date",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "created",
-                    "value": "Thu Mar 22 10:34:30 GMT 2018"
-                },
-                {
-                    "key": "access_permission:extract_for_accessibility",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:assemble_document",
-                    "value": "true"
-                },
-                {
-                    "key": "xmpTPg:NPages",
-                    "value": "2"
-                },
-                {
-                    "key": "Creation-Date",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "resourceName",
-                    "value": "/Users/steventaylor/Documents/data/British_scientist_Stephen_Hawking_dies_aged_76.pdf"
-                },
-                {
-                    "key": "access_permission:extract_content",
-                    "value": "true"
-                },
-                {
-                    "key": "access_permission:can_print",
-                    "value": "true"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "access_permission:can_modify",
-                    "value": "true"
-                },
-                {
-                    "key": "pdf:docinfo:producer",
-                    "value": "Skia/PDF m58"
-                },
-                {
-                    "key": "pdf:docinfo:created",
-                    "value": "2018-03-22T10:34:30Z"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
-                },
-                {
-                    "key": "baleen:content-mappers",
-                    "value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
-                },
-                {
-                    "key": "baleen:content-extractor",
-                    "value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
-                },
-                {
-                    "key": "keyword",
-                    "value": "british scientist stephen hawking dies aged 76 saturday"
-                },
-                {
-                    "key": "keyword",
-                    "value": "2018 british theoretical physicist stephen hawking died"
-                },
-                {
-                    "key": "keyword",
-                    "value": "thec reative commons attribution 2"
-                },
-                {
-                    "key": "keyword",
-                    "value": "check individual image pages prior"
-                },
-                {
-                    "key": "keyword",
-                    "value": "pioneering physicist stephen hawking dies"
-                }
-            ],
-            "properties": {
-                "documentDate": 1521714870000,
-                "publishedIds": [],
-                "releasability": [],
-                "language": "en",
-                "source": "/Users/steventaylor/Documents/data/British_scientist_Stephen_Hawking_dies_aged_76.pdf",
-                "type": null,
-                "classification": null,
-                "documentTitle": "British_scientist_Stephen_Hawking_dies_aged_76",
-                "caveats": [],
-                "hash": "694cc91d42a63fa3f0f941c8a476bb0dd6e84218681de1df3e2f8ed8437b999d",
-                "timestamp": 1521726496056
-            },
-            "content": "\n  \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       British scientist Stephen Hawking dies aged 76 Saturday, March 17, 2018 British theoretical physicist Stephen Hawking died at his home in Cambridge, England, early on Wednesday morning, a family spokesman said that day. Hawking was 76 years old. His children released the following statement: \"We are deeply saddened that our beloved father passed away today. He was a great scientist and an extraordinary man whose work and legacy will live on for many years. His courage and persistence with his brilliance and humour inspired people across the world. He once said, 'It would not be much of a universe if it wasn't home to the people you love.' We will Stephen Hawking during a flight aboard a modified Boeing 727 aircraft in 2007. miss him forever.\" Image: Jim Campbell/Aero-News Network. Astronomer royal Lord Rees said of Hawking, \"Stephen was far from being the archetypal unworldy or nerdish scientist. His personality remained amazingly unwarped by his frustrations[...] Few, if any, of Einstein’s successors have done more to deepen our insights into gravity, space and time.\" Hawking studied at Oxford and Cambridge Universities and was in 1979 awarded a post once held by Isaac Newton, the Lucasian Professor of Mathematics. His scientific work focused on fundamental aspects of the universe and space, including black holes. The heat emitted from black holes is called Hawking radiation after him. He was also known for placing bets with other researchers about who would disprove whose theories, as with one he lost to John Preskill, over whether black holes can permanently remove information from the universe — Hawking conceded they probably cannot. Hawking was diagnosed with amyotrophic lateral sclerosis, also called Lou Gherig's disease, as a young man and spent much of his life in a wheelchair. Doctors predicted he would not live to be 25. Since losing the use of his voice after a tracheotomy in 1985, Hawking communicated with a compute-raided speech system. Hawking maintained a public image to an extent that drew criticism from some of his peers. He became widely known to the general public for his 1988 book, A Brief History of Time: From the Big Bang to Black Holes, and has made cameo appearances on many popular television shows, including The Simpsons, Star Trek: The Next Generation, and The Big Bang Theory. He was also the subject of the 2014 biopic The Theory of Everything. \"Not since Albert Einstein has a scientist so captured the public imagination and endeared himself to tens of millions of people around the world,\" fellow physicist Michio Kaku of the City University of New York was quoted by the New York Times. Despite many other honors, including the Wolf Prize, Albert Einstein award, and Fundamental Physics prize, the Presidential Medal of Freedom from U.S. President Barack Obama and being named a Commander of the British Empire, Stephen Hawking was not awarded a Nobel Prize. He explained, \"The Nobel is given only for theoretical work that has been confirmed by observation. It is very, very difficult to observe the things I have worked on.\" In a 1989 remark to Der Speigel, Hawking observed, \"We are just an advanced breed of monkeys on a minor planet of a very average star[...] But we can understand the universe. That makes us something very special.\" Hawking is survived by his three children, Luc,y Robert, and Tim, and three grandchildren. \n       \n     \n     \n    \n   \n   \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       Sources Dennis Overbye. \"Stephen Hawking, Who Examined the Universe and Explained Black Holes, Dies at 7\" 6— New York Times, March 14, 2018 Ian Sample. \"Stephen Hawking, science's brightest sta,r dies aged 76\" — The Guardian, March 14, 2018 Sam Byford. \"Pioneering physicist Stephen Hawking dies at 76\" — The Verge, March 14, 2018 Dan Vergano. \"Stephen Hawking, legendary physicist, dies at 76, family say\"s — USA Today, March 14, 2018 Retrieved from \"https://en.wikinews.org/w/index.php? title=British_scientist_Stephen_Hawking_dies_aged_76&oldid=439128\"3 This page was last edited on 19 March 2018, at 12:56. All text created after September 25, 2005 available under the terms of theC reative Commons Attribution 2.5 License, unless otherwise specified. Contributions must be attributed toW ikinews; see Terms of use for details. Copyright on images may vary, please check individual image pages prior to duplication. By using this site, you agree to theT erms of Use and Privacy Policy. Wikinews®, and the Wikinews logo are registered trademarks of theW ikimedia Foundation, Inc . Wikinews is not responsible for the content of external sites.  \n        \n       \n     \n     \n    \n   \n  \n \n"
-        }
-    ]
+	"documents":[
+		{
+		"externalId": "0b0c5261d34b4f43fd1d4945fbf4529ceb6228d04de66d6389ddb65f9d88273c",
+		"baleenId": "c70a6416-789e-403e-8dad-741ce82d5a08",
+		"metadata": [
+			{
+				"key": "date",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "pdf:PDFVersion",
+				"value": "1.4"
+			},
+			{
+				"key": "xmp:CreatorTool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:modify_annotations",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print_degraded",
+				"value": "true"
+			},
+			{
+				"key": "dcterms:created",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "Last-Modified",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "dcterms:modified",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "dc:format",
+				"value": "application/pdf; version=1.4"
+			},
+			{
+				"key": "Last-Save-Date",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "pdf:docinfo:creator_tool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:fill_in_form",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:modified",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "meta:save-date",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "modified",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "Content-Type",
+				"value": "application/pdf"
+			},
+			{
+				"key": "X-Parsed-By",
+				"value": "io.committed.krill.extraction.tika.pdf.PdfParser"
+			},
+			{
+				"key": "creator",
+				"value": "Chromium"
+			},
+			{
+				"key": "meta:creation-date",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "created",
+				"value": "Thu Mar 22 10:33:59 GMT 2018"
+			},
+			{
+				"key": "access_permission:extract_for_accessibility",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:assemble_document",
+				"value": "true"
+			},
+			{
+				"key": "xmpTPg:NPages",
+				"value": "1"
+			},
+			{
+				"key": "Creation-Date",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "resourceName",
+				"value": "/Users/steventaylor/Documents/data/Uber_suspends_self-driving_car_program_after_pedestrian_death_in_Arizona,_United_States.pdf"
+			},
+			{
+				"key": "access_permission:extract_content",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print",
+				"value": "true"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "access_permission:can_modify",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "pdf:docinfo:created",
+				"value": "2018-03-22T10:33:59Z"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
+			},
+			{
+				"key": "baleen:content-extractor",
+				"value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
+			}
+		],
+		"properties": {
+			"documentDate": 1521714839000,
+			"publishedIds": [],
+			"releasability": [],
+			"language": "x-unspecified",
+			"source": "/Users/steventaylor/Documents/data/Uber_suspends_self-driving_car_program_after_pedestrian_death_in_Arizona,_United_States.pdf",
+			"type": null,
+			"classification": null,
+			"documentTitle": "Uber_suspends_self-driving_car_program_after_pedestrian_death_in_Arizona,_United_States",
+			"caveats": [],
+			"hash": "34be4793c0c28ed13d3abe07089ca44e95292bc39acdc6a4b4d11c36e8c7072c",
+			"timestamp": 1521794000287
+		},
+		"content": "\n  \n   \n    \n     \n       \n       \n        \n       \n     \n     \n   \n  \n \n"
+	},
+	{
+		"externalId": "a63c64f8241098409a03bd31ccb7623d39e4bde3985c62152e8d2d4254e2b52b",
+		"baleenId": "5be11b4c-cfc2-4eca-95e9-ec1d098356b8",
+		"metadata": [
+			{
+				"key": "date",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "pdf:PDFVersion",
+				"value": "1.4"
+			},
+			{
+				"key": "xmp:CreatorTool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:modify_annotations",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print_degraded",
+				"value": "true"
+			},
+			{
+				"key": "dcterms:created",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "Last-Modified",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "dcterms:modified",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "dc:format",
+				"value": "application/pdf; version=1.4"
+			},
+			{
+				"key": "Last-Save-Date",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "pdf:docinfo:creator_tool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:fill_in_form",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:modified",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "meta:save-date",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "modified",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "Content-Type",
+				"value": "application/pdf"
+			},
+			{
+				"key": "X-Parsed-By",
+				"value": "io.committed.krill.extraction.tika.pdf.PdfParser"
+			},
+			{
+				"key": "creator",
+				"value": "Chromium"
+			},
+			{
+				"key": "meta:creation-date",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "created",
+				"value": "Thu Mar 22 10:34:10 GMT 2018"
+			},
+			{
+				"key": "access_permission:extract_for_accessibility",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:assemble_document",
+				"value": "true"
+			},
+			{
+				"key": "xmpTPg:NPages",
+				"value": "2"
+			},
+			{
+				"key": "Creation-Date",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "resourceName",
+				"value": "/Users/steventaylor/Documents/data/United_States__Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center.pdf"
+			},
+			{
+				"key": "access_permission:extract_content",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print",
+				"value": "true"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "access_permission:can_modify",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "pdf:docinfo:created",
+				"value": "2018-03-22T10:34:10Z"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
+			},
+			{
+				"key": "baleen:content-extractor",
+				"value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
+			},
+			{
+				"key": "keyword",
+				"value": "suffered immediately fatal head wounds caused"
+			},
+			{
+				"key": "keyword",
+				"value": "thec reative commons attribution 2"
+			},
+			{
+				"key": "keyword",
+				"value": "killing 3 mental health worker"
+			},
+			{
+				"key": "keyword",
+				"value": "sister links yountville shooting march 15"
+			},
+			{
+				"key": "keyword",
+				"value": "check individual image pages prior"
+			}
+		],
+		"properties": {
+			"documentDate": 1521714850000,
+			"publishedIds": [],
+			"releasability": [],
+			"language": "en",
+			"source": "/Users/steventaylor/Documents/data/United_States__Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center.pdf",
+			"type": null,
+			"classification": null,
+			"documentTitle": "United_States__Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center",
+			"caveats": [],
+			"hash": "eab58f505892b7b2833fecb18442d864c0a7ad8fb83fac2a56b94519f09af7c4",
+			"timestamp": 1521794000441
+		},
+		"content": "\n  \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n         \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       United States: Coroner says former patient killed self Saturday, March 17, 2018 Office, which show that Albert Wong killed himself after shooting his three hostages at The Pathway Home veterans' psychiatric center in Yountville, California last Friday. The hostages died instantly from rifle shots to the head, and Wong shot himself in the head with a shotgun. Officials said there was no indication any of the four was killed by a sheriff's deputy who exchanged shots with Wong. The Sheriff of Napa County also acts as the county coroner. According to the official report, the three hostages \"all suffered immediately fatal head wounds caused by a high velocity projectile consistent with the rifle that the shooter, Albert Wong, used in this incident\". Wong's The Pathway Home has its offices at the fatal head wound was self-inflicted. Sheriff's Captain Steven Blower clarified that neither Veterans Home of California Yountville Wong nor the hostages was shot by the deputy. complex. Image: CHHSA. According to authorities, Wong, a former Pathway resident, drove a rented car to the center Friday, March 9, and shortly after 10 AM local time (UTC-8), dressed in black and armed with a semi-automatic rifle, took five of the people at a leaving party hostage. The first call to the emergency 9-1-1 number was made at about 10:20. About ten minutes later, shots were heard, and a sheriff's deputy and Wong exchanged fire. Wong then shut himself in a room with three of the hostages. The campus was evacuated, but there was no further contact with Wong. A little before 6 PM, a video feed from a remote-controlled robot showed the four people in the room were probably dead. The three victims were all women. Christine Loeber, 48, was the executive director of the home. Jen Golick, 42, was its clinical director. Jennifer Gonzales Shushereba, 36, was a psychologist on the staff of the San Francisco Department of Veterans Affairs Healthcare System and also worked with PsychArmor, a nonprofit group, to create a toolkit for college campuses to assist students with post-traumatic stress disorder (PTSD). She was entering her last trimester of pregnanc.y Wong, 36, was a decorated veteran who served in the infantry inA fghanistan for a year in 2011–2012. He had been in treatment at the center for about a year but had been expelled two weeks before the hostage-taking because knives were found in his possession. His brother Tyrone Lampkin told The Press Democrat, Wong had been angry and said he \"wanted to get back at them\", but what he had mentioned was to \"talk to them, yell at them, not to kill them\". The Board of Directors of The Pathway Home announced on Wednesday that it would suspend operations \"indefinitely\". It is a ten-year-old non-profit in-patient center treating veterans with PTSD, brain injuries, depression and addictions on the campus of the Veterans Home of California Yountville. Yountville is a small town in the wine country a little more than 50 miles north of San Francisco. Founded as a last-resort center for intensive treatment of veterans who had not been helped by other approaches, it transitioned in 2015 to providing care to those not yet in crisis, including veterans studying at Napa Community College. The Veterans Home is the largest in the United States, with more than 900 residents. Sister links Yountville shooting March 15, 2018 \n       \n     \n     \n    \n     \n       \n       \n       and three hostages at California veterans center \n       \n     \n     \n    \n     \n       \n       \n       In the United States, autopsy results were released on Thursday by the Napa County Sheriff's \n       \n     \n     \n    \n    \n    \n     \n       \n       \n       Sources Evan Sernoffsky. \"Coroner: Yountville massacre victims, killer died from gunshot wounds to head\" — San Francisco Chronicle, \n       \n     \n     \n   \n   \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       AP. \"Sheriff: Vet shot self after killing 3 mental health worker\"s — The News-Item, March 15, 2018 Dorothy Salmon. \"A Message from The Pathway Home\" — The Pathway Home, March 14, 2018 Julie Johnson, Mary Callahan and Martin Espinoza. F\"ormer soldier in Yountville attacks said he 'wanted to get back' at veterans workers\" — The Press Democrat, March 11, 2018 Sophie Haigney and Jenna Lyons. \"Yountville victim Jennifer Golick helped 'countless families heal\"' — San Francisco Chronicle, March 10, 2018 Frank Baker with Amy Forliti, Michael Balsamo and Ellen Knickmeye, rAP. \"Veterans home workers slain in standoff remembered as devoted caregivers\" — Chicago Tribune, March 10, 2018 Ellen Knickmeyer and Janie Har with Olga R. Rodriguez, Paul Elias, Jocelyn Geck,e Armanda Lee Myers, Michael Balsamo and Julie Watson, AP. \"3 workers killed at California veterans cente, rgunman dead\" — WSET-TV, March 10, 2018 Retrieved from \"https://en.wikinews.org/w/index.php? This page was last edited on 18 March 2018, at 15:42. All text created after September 25, 2005 available under the terms of theC reative Commons Attribution 2.5 License, unless otherwise specified. Contributions must be attributed toW ikinews; see Terms of use for details. Copyright on images may vary, please check individual image pages prior to duplication . By using this site, you agree to theT erms of Use and Privacy Policy. Wikinews®, and the Wikinews logo are registered trademarks of theW ikimedia Foundation, Inc . Wikinews is not responsible for the content of external sites. \n       \n     \n     \n    title=United_States:_Coroner_says_former_patient_killed_self_and_three_hostages_at_California_veterans_center&oldid=43910\"56 \n    \n   \n  \n \n"
+	},
+	{
+		"externalId": "fd683817e7b32a1beae34d5a166f26d78830973c27a07eec7877760711993add",
+		"baleenId": "34bb58ed-0dc9-47cc-b00f-95c96d209686",
+		"metadata": [
+			{
+				"key": "date",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "pdf:PDFVersion",
+				"value": "1.4"
+			},
+			{
+				"key": "xmp:CreatorTool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:modify_annotations",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print_degraded",
+				"value": "true"
+			},
+			{
+				"key": "dcterms:created",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "Last-Modified",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "dcterms:modified",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "dc:format",
+				"value": "application/pdf; version=1.4"
+			},
+			{
+				"key": "Last-Save-Date",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "pdf:docinfo:creator_tool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:fill_in_form",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:modified",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "meta:save-date",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "modified",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "Content-Type",
+				"value": "application/pdf"
+			},
+			{
+				"key": "X-Parsed-By",
+				"value": "io.committed.krill.extraction.tika.pdf.PdfParser"
+			},
+			{
+				"key": "creator",
+				"value": "Chromium"
+			},
+			{
+				"key": "meta:creation-date",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "created",
+				"value": "Thu Mar 22 10:35:46 GMT 2018"
+			},
+			{
+				"key": "access_permission:extract_for_accessibility",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:assemble_document",
+				"value": "true"
+			},
+			{
+				"key": "xmpTPg:NPages",
+				"value": "2"
+			},
+			{
+				"key": "Creation-Date",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "resourceName",
+				"value": "/Users/steventaylor/Documents/data/China_ends_presidential_term_limits_in_constitutional_amendment.pdf"
+			},
+			{
+				"key": "access_permission:extract_content",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print",
+				"value": "true"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "access_permission:can_modify",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "pdf:docinfo:created",
+				"value": "2018-03-22T10:35:46Z"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
+			},
+			{
+				"key": "baleen:content-extractor",
+				"value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
+			},
+			{
+				"key": "keyword",
+				"value": "national legislature adopts landmark constitutional amendmen"
+			},
+			{
+				"key": "keyword",
+				"value": "china parliament scraps presidential term limit"
+			},
+			{
+				"key": "keyword",
+				"value": "thec reative commons attribution 2"
+			},
+			{
+				"key": "keyword",
+				"value": "check individual image pages prior"
+			},
+			{
+				"key": "keyword",
+				"value": "china ends presidential term limits"
+			}
+		],
+		"properties": {
+			"documentDate": 1521714946000,
+			"publishedIds": [],
+			"releasability": [],
+			"language": "en",
+			"source": "/Users/steventaylor/Documents/data/China_ends_presidential_term_limits_in_constitutional_amendment.pdf",
+			"type": null,
+			"classification": null,
+			"documentTitle": "China_ends_presidential_term_limits_in_constitutional_amendment",
+			"caveats": [],
+			"hash": "b46a86a84d0c33059ed717e30f59c6f2edbcb833b0caa273a565d19ba1c6672b",
+			"timestamp": 1521793997092
+		},
+		"content": "\n  \n   \n    \n     \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       China ends presidential term limits in constitutional amendment Tuesday, March 13, 2018 On Sunday, China's National People's Congress (NPC) voted to amend the Constitution of the People's Republic of China in several ways, including eliminating term limits for the offices of President and Vice President. The changes mean Xi Jinping may be President for life if he so chooses. The vote in the legislature was nearly unanimous. 2958 votes were cast in favor, two opposed, three abstained. Without this change, Xi would be required to leave office in 2023. thought\", as the theory is also known, was approved by theC ommunist Party of China in the autumn of 2017. Shen Chunyao, the chairperson for the Commission for Legislative Affairs of the NPC, told Xinhua News Agency, \"As an important content of the amendment, the inclusion of Xi's thought into the country's fundamental law reflects the common aspiration of the entire Xi Jinping in 2016 Image: VOA. Communist Party of China and all Chinese people of various ethnic groups\". News media reported a backlash to the news on the Internet. In response, state censors were blocking images of Winnie the Pooh and words like \"I disagree\" and \"Emperor\". Reuters reported difficulties in getting reactions to the lifting of term limits from members of the congress, one woman choosing to remain anonymous and remarking, \"You can't ask me that\". Under China's constitution, the presidency is a largely ceremonial office with limited powers. However, since 1993, as a matter of convention, the presidency has been held simultaneously by the General Secretary of the Communist Party of Chin,a the top leader in the one-party communist state. Xi Jinping's powerful positions as General Secretary and Chairman of the Central Military Commission do not have any term limit. Sources \"China parliament scraps presidential term limit\"s — Al Jazeera, March 11, 2018 Lu Hui. \"China's national legislature adopts landmark constitutional amendmen\" t— Xinhua News Agency, March 11, 2018 \"China's Xi allowed to remain 'president for life' as term limits remove\"d — BBC News, March 11, 2018 Ben Blanchard, Christian Shepherd. C\"hina allows Xi to remain president indefinitely, tightening his grip on powe\"r — Reuters, March 11, 2018 Chris Buckley and Adam Wu. \"Ending Term Limits for Chinas’ Xi Is a Big Deal. Heres’ Why. - Is the presidency \n       \n     \n     \n    \n    \n     \n       \n       \n       In another change, Xi's own political theory was written into the constitution. \"Xi Jinping \n       \n     \n     \n    \n     \n       \n       \n       powerful in China?\" — The New York Times, March 10, 2018 Clayton Dube. \"USC and China in the News: January and February 2018 - February 27, 2018: CN\"N — CNN, February 27, 2018 \n       \n     \n     \n   \n   \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       Retrieved from \"https://en.wikinews.org/w/index.php? title=China_ends_presidential_term_limits_in_constitutional_amendment&oldid=438996\"9 This page was last edited on 14 March 2018, at 00:17. All text created after September 25, 2005 available under the terms of theC reative Commons Attribution 2.5 License, unless otherwise specified. Contributions must be attributed toW ikinews; see Terms of use for details. Copyright on images may vary, please check individual image pages prior to duplication. By using this site, you agree to theT erms of Use and Privacy Policy. Wikinews®, and the Wikinews logo are registered trademarks of theW ikimedia Foundation, Inc . Wikinews is not responsible for the content of external sites. \n       \n     \n     \n    \n   \n  \n \n"
+	},
+	{
+		"externalId": "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
+		"baleenId": "488f9ed2-d239-4f4c-b1d1-164740b301b6",
+		"metadata": [
+			{
+				"key": "date",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "pdf:PDFVersion",
+				"value": "1.4"
+			},
+			{
+				"key": "xmp:CreatorTool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:modify_annotations",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print_degraded",
+				"value": "true"
+			},
+			{
+				"key": "dcterms:created",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "Last-Modified",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "dcterms:modified",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "dc:format",
+				"value": "application/pdf; version=1.4"
+			},
+			{
+				"key": "Last-Save-Date",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "pdf:docinfo:creator_tool",
+				"value": "Chromium"
+			},
+			{
+				"key": "access_permission:fill_in_form",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:modified",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "meta:save-date",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "modified",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "Content-Type",
+				"value": "application/pdf"
+			},
+			{
+				"key": "X-Parsed-By",
+				"value": "io.committed.krill.extraction.tika.pdf.PdfParser"
+			},
+			{
+				"key": "creator",
+				"value": "Chromium"
+			},
+			{
+				"key": "meta:creation-date",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "created",
+				"value": "Thu Mar 22 10:34:30 GMT 2018"
+			},
+			{
+				"key": "access_permission:extract_for_accessibility",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:assemble_document",
+				"value": "true"
+			},
+			{
+				"key": "xmpTPg:NPages",
+				"value": "2"
+			},
+			{
+				"key": "Creation-Date",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "resourceName",
+				"value": "/Users/steventaylor/Documents/data/British_scientist_Stephen_Hawking_dies_aged_76.pdf"
+			},
+			{
+				"key": "access_permission:extract_content",
+				"value": "true"
+			},
+			{
+				"key": "access_permission:can_print",
+				"value": "true"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "access_permission:can_modify",
+				"value": "true"
+			},
+			{
+				"key": "pdf:docinfo:producer",
+				"value": "Skia/PDF m58"
+			},
+			{
+				"key": "pdf:docinfo:created",
+				"value": "2018-03-22T10:34:30Z"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.StructuralAnnotations"
+			},
+			{
+				"key": "baleen:content-mappers",
+				"value": "uk.gov.dstl.baleen.contentmappers.MetaTags"
+			},
+			{
+				"key": "baleen:content-extractor",
+				"value": "uk.gov.dstl.baleen.contentextractors.StructureContentExtractor"
+			},
+			{
+				"key": "keyword",
+				"value": "british scientist stephen hawking dies aged 76 saturday"
+			},
+			{
+				"key": "keyword",
+				"value": "2018 british theoretical physicist stephen hawking died"
+			},
+			{
+				"key": "keyword",
+				"value": "thec reative commons attribution 2"
+			},
+			{
+				"key": "keyword",
+				"value": "check individual image pages prior"
+			},
+			{
+				"key": "keyword",
+				"value": "pioneering physicist stephen hawking dies"
+			}
+		],
+		"properties": {
+			"documentDate": 1521714870000,
+			"publishedIds": [],
+			"releasability": [],
+			"language": "en",
+			"source": "/Users/steventaylor/Documents/data/British_scientist_Stephen_Hawking_dies_aged_76.pdf",
+			"type": null,
+			"classification": null,
+			"documentTitle": "British_scientist_Stephen_Hawking_dies_aged_76",
+			"caveats": [],
+			"hash": "694cc91d42a63fa3f0f941c8a476bb0dd6e84218681de1df3e2f8ed8437b999d",
+			"timestamp": 1521793995015
+		},
+		"content": "\n  \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       British scientist Stephen Hawking dies aged 76 Saturday, March 17, 2018 British theoretical physicist Stephen Hawking died at his home in Cambridge, England, early on Wednesday morning, a family spokesman said that day. Hawking was 76 years old. His children released the following statement: \"We are deeply saddened that our beloved father passed away today. He was a great scientist and an extraordinary man whose work and legacy will live on for many years. His courage and persistence with his brilliance and humour inspired people across the world. He once said, 'It would not be much of a universe if it wasn't home to the people you love.' We will Stephen Hawking during a flight aboard a modified Boeing 727 aircraft in 2007. miss him forever.\" Image: Jim Campbell/Aero-News Network. Astronomer royal Lord Rees said of Hawking, \"Stephen was far from being the archetypal unworldy or nerdish scientist. His personality remained amazingly unwarped by his frustrations[...] Few, if any, of Einstein’s successors have done more to deepen our insights into gravity, space and time.\" Hawking studied at Oxford and Cambridge Universities and was in 1979 awarded a post once held by Isaac Newton, the Lucasian Professor of Mathematics. His scientific work focused on fundamental aspects of the universe and space, including black holes. The heat emitted from black holes is called Hawking radiation after him. He was also known for placing bets with other researchers about who would disprove whose theories, as with one he lost to John Preskill, over whether black holes can permanently remove information from the universe — Hawking conceded they probably cannot. Hawking was diagnosed with amyotrophic lateral sclerosis, also called Lou Gherig's disease, as a young man and spent much of his life in a wheelchair. Doctors predicted he would not live to be 25. Since losing the use of his voice after a tracheotomy in 1985, Hawking communicated with a compute-raided speech system. Hawking maintained a public image to an extent that drew criticism from some of his peers. He became widely known to the general public for his 1988 book, A Brief History of Time: From the Big Bang to Black Holes, and has made cameo appearances on many popular television shows, including The Simpsons, Star Trek: The Next Generation, and The Big Bang Theory. He was also the subject of the 2014 biopic The Theory of Everything. \"Not since Albert Einstein has a scientist so captured the public imagination and endeared himself to tens of millions of people around the world,\" fellow physicist Michio Kaku of the City University of New York was quoted by the New York Times. Despite many other honors, including the Wolf Prize, Albert Einstein award, and Fundamental Physics prize, the Presidential Medal of Freedom from U.S. President Barack Obama and being named a Commander of the British Empire, Stephen Hawking was not awarded a Nobel Prize. He explained, \"The Nobel is given only for theoretical work that has been confirmed by observation. It is very, very difficult to observe the things I have worked on.\" In a 1989 remark to Der Speigel, Hawking observed, \"We are just an advanced breed of monkeys on a minor planet of a very average star[...] But we can understand the universe. That makes us something very special.\" Hawking is survived by his three children, Luc,y Robert, and Tim, and three grandchildren. \n       \n     \n     \n    \n   \n   \n   \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n        \n       \n     \n     \n    \n     \n       \n       \n       Sources Dennis Overbye. \"Stephen Hawking, Who Examined the Universe and Explained Black Holes, Dies at 7\" 6— New York Times, March 14, 2018 Ian Sample. \"Stephen Hawking, science's brightest sta,r dies aged 76\" — The Guardian, March 14, 2018 Sam Byford. \"Pioneering physicist Stephen Hawking dies at 76\" — The Verge, March 14, 2018 Dan Vergano. \"Stephen Hawking, legendary physicist, dies at 76, family say\"s — USA Today, March 14, 2018 Retrieved from \"https://en.wikinews.org/w/index.php? title=British_scientist_Stephen_Hawking_dies_aged_76&oldid=439128\"3 This page was last edited on 19 March 2018, at 12:56. All text created after September 25, 2005 available under the terms of theC reative Commons Attribution 2.5 License, unless otherwise specified. Contributions must be attributed toW ikinews; see Terms of use for details. Copyright on images may vary, please check individual image pages prior to duplication. By using this site, you agree to theT erms of Use and Privacy Policy. Wikinews®, and the Wikinews logo are registered trademarks of theW ikimedia Foundation, Inc . Wikinews is not responsible for the content of external sites.  \n        \n       \n     \n     \n    \n   \n  \n \n"
+	}]
 }
