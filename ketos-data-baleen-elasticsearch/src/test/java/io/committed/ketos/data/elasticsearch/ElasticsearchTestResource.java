@@ -88,7 +88,7 @@ public class ElasticsearchTestResource {
     if (value.get("mentions") != null) {
       loadWithParent(client, TEST_DB, "mention", value.get("mentions"));
     }
-    if (value.get("relation") != null) {
+    if (value.get("relations") != null) {
       loadWithParent(client, TEST_DB, "relation", value.get("relations"));
     }
 
