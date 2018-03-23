@@ -11,6 +11,15 @@ import io.committed.invest.extensions.data.providers.DataProviders;
 @Configuration
 public class FeedbackGraphQlExtension implements InvestGraphQlExtension {
 
+  @Override
+  public String getName() {
+    return "Feedback GraphQL";
+  }
+
+  @Override
+  public String getDescription() {
+    return "Feedback GraphQL Resolvers";
+  }
 
   @Bean
   public FeedbackGraphQlService feedbackGraphQlService(

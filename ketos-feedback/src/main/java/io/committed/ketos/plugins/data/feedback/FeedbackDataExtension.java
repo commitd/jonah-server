@@ -8,6 +8,15 @@ import io.committed.ketos.plugins.data.feedback.mongo.MongoFeedbackProviderFacto
 @Configuration
 public class FeedbackDataExtension implements InvestDataExtension {
 
+  @Override
+  public String getName() {
+    return "Feedback data";
+  }
+
+  @Override
+  public String getDescription() {
+    return "Feedback data providers";
+  }
 
   @Bean
   public MongoFeedbackProviderFactory mongoFeedbackProviderFactory() {
