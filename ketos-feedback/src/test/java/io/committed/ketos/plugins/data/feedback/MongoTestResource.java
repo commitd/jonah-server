@@ -11,7 +11,7 @@ public class MongoTestResource {
 
   private MongoClient client;
 
-  public void setupMongo(final String jsonPath) {
+  public void setupMongo() {
     client = new MongoClient("127.0.0.1");
   }
 
