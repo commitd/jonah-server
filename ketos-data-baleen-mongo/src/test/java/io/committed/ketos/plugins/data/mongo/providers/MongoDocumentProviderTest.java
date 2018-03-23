@@ -18,7 +18,7 @@ public class MongoDocumentProviderTest extends AbstractDocumentProviderTest {
 
   @BeforeClass
   public static void beforeClass() {
-    testResource.setupMongo("documentProviderTest.json");
+    testResource.setupMongo("documents.json");
   }
 
   @AfterClass

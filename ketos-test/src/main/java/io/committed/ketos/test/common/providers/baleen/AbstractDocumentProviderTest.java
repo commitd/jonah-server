@@ -16,6 +16,12 @@ public abstract class AbstractDocumentProviderTest {
     assertEquals("575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b", doc.getId());
   }
 
+  @Test
+  public void testCount() {
+    long count = getDocumentProvider().count().block();
+    assertEquals(4, count);
+  }
+
   public abstract DocumentProvider getDocumentProvider();
 
 }

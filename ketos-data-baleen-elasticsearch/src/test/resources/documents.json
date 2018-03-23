@@ -2,7 +2,6 @@
 	"documents":[
 		{
 		"externalId": "0b0c5261d34b4f43fd1d4945fbf4529ceb6228d04de66d6389ddb65f9d88273c",
-		"baleenId": "c70a6416-789e-403e-8dad-741ce82d5a08",
 		"metadata": [
 			{
 				"key": "date",
@@ -162,7 +161,6 @@
 	},
 	{
 		"externalId": "a63c64f8241098409a03bd31ccb7623d39e4bde3985c62152e8d2d4254e2b52b",
-		"baleenId": "5be11b4c-cfc2-4eca-95e9-ec1d098356b8",
 		"metadata": [
 			{
 				"key": "date",
@@ -342,7 +340,6 @@
 	},
 	{
 		"externalId": "fd683817e7b32a1beae34d5a166f26d78830973c27a07eec7877760711993add",
-		"baleenId": "34bb58ed-0dc9-47cc-b00f-95c96d209686",
 		"metadata": [
 			{
 				"key": "date",
@@ -522,7 +519,6 @@
 	},
 	{
 		"externalId": "575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b",
-		"baleenId": "488f9ed2-d239-4f4c-b1d1-164740b301b6",
 		"metadata": [
 			{
 				"key": "date",
