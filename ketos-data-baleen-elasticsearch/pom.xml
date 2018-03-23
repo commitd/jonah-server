@@ -10,7 +10,6 @@
   <name>Ketos Data Baleen Elasticsearch</name>
 
   <dependencies>
-
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-support-data</artifactId>
@@ -21,7 +20,6 @@
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
     </dependency>
-
 
     <dependency>
       <groupId>org.springframework.data</groupId>
@@ -36,7 +34,19 @@
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-test</artifactId>
       <version>${project.version}</version>
+      <type>test-jar</type>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-plugin</artifactId>
+      <!--  This offends ES, and kills out unit tests -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-to-slf4j</artifactId>         
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>

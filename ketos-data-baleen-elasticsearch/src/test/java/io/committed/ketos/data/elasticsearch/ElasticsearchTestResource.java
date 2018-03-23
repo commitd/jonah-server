@@ -1,7 +1,6 @@
 package io.committed.ketos.data.elasticsearch;
 
 import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -9,7 +8,6 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
@@ -19,7 +17,6 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,38 +28,50 @@ public class ElasticsearchTestResource {
 
   private ObjectMapper mapper;
 
-  public void setupElastic(String resourcePath) {
-    Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
+  private EmbeddedElasticsearch5 elasticsearch;
 
-    InetSocketTransportAddress inetSocketAddress;
+  public void setupElastic(final String resourcePath) {
     try {
-      inetSocketAddress = new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300);
-      client = new PreBuiltTransportClient(settings).addTransportAddress(inetSocketAddress);
-    } catch (UnknownHostException e) {
-      fail("Error creating elastic client");
+      elasticsearch = new EmbeddedElasticsearch5();
+
+      client = createElasticClient();
+    } catch (final Exception e1) {
+      throw new RuntimeException(e1);
     }
+
+
     mapper = new ObjectMapper();
     loadResource(resourcePath);
   }
 
   public void cleanElastic() {
-    DeleteIndexRequest request = new DeleteIndexRequest(TEST_DB);
-    client.admin().indices().delete(request).actionGet();
+    if (client != null) {
+      final DeleteIndexRequest request = new DeleteIndexRequest(TEST_DB);
+      client.admin().indices().delete(request).actionGet();
+    }
+
+    try {
+      if (elasticsearch != null) {
+        elasticsearch.close();
+      }
+    } catch (final Exception e) {
+      throw new RuntimeException();
+    }
   }
 
-  protected Client createElasticClient() throws UnknownHostException {
-    Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
+  private Client createElasticClient() throws UnknownHostException {
+    final Settings settings = Settings.builder().put("cluster.name", elasticsearch.getClusterName()).build();
 
-    InetSocketTransportAddress inetSocketAddress =
-        new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300);
+    final InetSocketTransportAddress inetSocketAddress =
+        new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), elasticsearch.getTransportPort());
     return new PreBuiltTransportClient(settings).addTransportAddress(inetSocketAddress);
   }
 
-  protected void loadResource(String resourcePath) {
+  protected void loadResource(final String resourcePath) {
     Map<String, List<Map<String, Object>>> value = null;
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
       value = mapper.readValue(resource, new TypeReference<HashMap<String, List<Map<String, Object>>>>() {});
-    } catch (IOException e) {
+    } catch (final IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
 
@@ -86,34 +95,41 @@ public class ElasticsearchTestResource {
     client.admin().indices().refresh(new RefreshRequest(TEST_DB)).actionGet();
   }
 
-  private void loadMappings(String type) {
-    CreateIndexRequestBuilder prepareBuilder = client.admin().indices().prepareCreate("testdb");
+  private void loadMappings(final String type) {
+    final CreateIndexRequestBuilder prepareBuilder = client.admin().indices().prepareCreate("testdb");
     Map<String, Object> mapping = null;
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(type + "Mapping.json")) {
       mapping = mapper.readValue(resource, new TypeReference<HashMap<String, Map<String, Object>>>() {});
-    } catch (IOException e) {
+    } catch (final IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
     prepareBuilder.addMapping(type, mapping).execute().actionGet();
   }
 
-  private void load(Client client, String db, String type, List<Map<String, Object>> values) {
-    for (Map<String, Object> item : values) {
+  private void load(final Client client, final String db, final String type, final List<Map<String, Object>> values) {
+    for (final Map<String, Object> item : values) {
       client.prepareIndex(db, type).setRefreshPolicy(RefreshPolicy.IMMEDIATE)
           .setSource(toJson(item), XContentType.JSON)
           .get();
     }
   }
 
-  protected String toJson(Map<String, Object> value) {
+  protected String toJson(final Map<String, Object> value) {
     try {
       return mapper.writeValueAsString(value);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       System.out.println(e);
       fail("Failed to create json from resource map");
     }
     return "";
   }
 
+  public int getPort() {
+    return elasticsearch.getTransportPort();
+  }
+
+  public String getClusterName() {
+    return elasticsearch.getClusterName();
+  }
 
 }
