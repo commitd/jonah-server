@@ -14,28 +14,27 @@ import org.bson.Document;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoDatabase;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+
+import io.committed.invest.support.data.mongo.AbstractMongoDataProviderFactory;
 
 public class MongoTestResource {
 
   public static final String TEST_DB = "testDB";
 
-  private static MongoClient client;
+  private MongoClient client;
 
   private ObjectMapper mapper;
 
   public void setupMongo(String jsonPath) {
-    client = MongoClients.create("mongodb://127.0.0.1:27017");
+    client = new MongoClient("127.0.0.1");
     mapper = new ObjectMapper();
     loadResource(jsonPath);
   }
 
   public void clearMongo() {
-    client.getDatabase(TEST_DB).drop((result, throwable) -> {
-      client.close();
-    });
+    client.getDatabase(TEST_DB).drop();
   }
 
   protected void loadResource(String resourcePath) {
@@ -65,8 +64,15 @@ public class MongoTestResource {
     }
   }
 
+  public Map<String, Object> getSettings() {
+    Map<String, Object> settings = new HashMap<String, Object>();
+    settings.put(AbstractMongoDataProviderFactory.SETTING_DB, MongoTestResource.TEST_DB);
+    settings.put(AbstractMongoDataProviderFactory.SETTING_URI, "mongodb://127.0.0.1:27017/");
+    return settings;
+  }
+
   private void load(MongoDatabase db, String collection, List<Map<String, Object>> values) {
-    db.getCollection(collection).insertMany(toDocuments(values), null);
+    db.getCollection(collection).insertMany(toDocuments(values));
   }
 
   private List<Document> toDocuments(List<Map<String, Object>> values) {
