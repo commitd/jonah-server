@@ -40,13 +40,20 @@
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-plugin</artifactId>
-      <!--  This offends ES, and kills out unit tests -->
+      <!-- This offends ES, and kills out unit tests -->
       <exclusions>
         <exclusion>
           <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-to-slf4j</artifactId>         
+          <artifactId>log4j-to-slf4j</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

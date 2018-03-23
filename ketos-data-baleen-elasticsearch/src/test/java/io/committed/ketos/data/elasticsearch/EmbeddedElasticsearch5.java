@@ -1,4 +1,3 @@
-// NCA (c) Crown Copyright 2017
 package io.committed.ketos.data.elasticsearch;
 
 import java.io.IOException;
@@ -55,7 +54,6 @@ public class EmbeddedElasticsearch5 implements AutoCloseable {
     node.start();
 
     node.client().admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
-
     System.out.println("ES is ready");
   }
 
@@ -108,7 +106,7 @@ public class EmbeddedElasticsearch5 implements AutoCloseable {
   @Override
   public void close() throws IOException {
     node.close();
-    // TODO: FileUtils.deleteDirectory(dataPath.toFile());
+    FileUtils.deleteDirectory(dataPath.toFile());
   }
 
   public static int generateRandomPort() throws IOException {
