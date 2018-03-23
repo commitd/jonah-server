@@ -2,12 +2,17 @@ package io.committed.ketos.data.elasticsearch.providers;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.join.aggregations.Children;
 import org.elasticsearch.join.aggregations.ChildrenAggregationBuilder;
+import org.elasticsearch.join.query.JoinQueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -26,6 +31,7 @@ import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.constants.BaleenProperties;
+import io.committed.ketos.common.constants.BaleenTypes;
 import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.general.NamedGeoLocation;
@@ -35,6 +41,7 @@ import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.elasticsearch.filters.DocumentFilters;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
+import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -45,11 +52,14 @@ public class ElasticsearchDocumentProvider
   private final String mentionType;
   private final String entityType;
   private final String relationType;
+  private final EsEntityService entityService;
 
   public ElasticsearchDocumentProvider(final String dataset, final String datasource,
-      final EsDocumentService documentService, final String mentionType, final String entityType,
+      final EsDocumentService documentService, final EsEntityService entityService, final String mentionType,
+      final String entityType,
       final String relationType) {
     super(dataset, datasource, documentService);
+    this.entityService = entityService;
     this.mentionType = mentionType;
     this.entityType = entityType;
     this.relationType = relationType;
@@ -175,6 +185,8 @@ public class ElasticsearchDocumentProvider
 
   private String convertItemToType(final ItemTypes type) {
     switch (type) {
+      case DOCUMENT:
+        return getService().getType();
       case ENTITY:
         return entityType;
       case MENTION:
@@ -189,8 +201,43 @@ public class ElasticsearchDocumentProvider
   @Override
   public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
-    // TODO: If we determine any valid in this..
-    return Flux.empty();
+
+    final BoolQueryBuilder find = QueryBuilders.boolQuery()
+        .must(QueryBuilders.typeQuery(entityType))
+        .must(QueryBuilders.matchQuery(BaleenProperties.TYPE, BaleenTypes.LOCATION));
+
+    query.ifPresent(q -> find.must(JoinQueryBuilders.hasParentQuery(
+        getService().getType(),
+        q,
+        false)));
+
+    return entityService.search(find, 0, size)
+        .flatMapMany(e -> {
+          return e.getResults();
+        })
+        .filter(e -> {
+          return e.getProperties() != null && e.getProperties().get("poi") != null
+              && e.getProperties().get("poi") instanceof Collection;
+        })
+        .flatMap(e -> {
+          final Collection<Object> pois = (Collection<Object>) e.getProperties().get("poi");
+
+          Mono<NamedGeoLocation> mono = Mono.empty();
+
+          if (pois.size() >= 2) {
+            final Collection<Object> c = pois;
+            final Iterator<Object> it = c.iterator();
+            final Object lon = it.next();
+            final Object lat = it.next();
+
+            if (lon instanceof Double && lat instanceof Double && lat != null && lon != null) {
+              mono = Mono.just(new NamedGeoLocation(e.getValue(), e.getType(), (double) lat, (double) lon));
+            }
+          }
+          return mono;
+        })
+        .distinct().take(size);
+
   }
 
   @Override

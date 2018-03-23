@@ -9,6 +9,7 @@ import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchDocumentProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
+import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -42,9 +43,12 @@ public class EsDocumentProviderFactory
 
       final EsDocumentService service =
           new EsDocumentService(elastic, mapper, getIndexName(settings), getTypeName(settings));
+      final EsEntityService entityService =
+          new EsEntityService(elastic, mapper, getIndexName(settings), entityType);
 
       return Mono
-          .just(new ElasticsearchDocumentProvider(dataset, datasource, service, mentionType, entityType, relationType));
+          .just(new ElasticsearchDocumentProvider(dataset, datasource, service, entityService, mentionType, entityType,
+              relationType));
     } catch (final Exception e) {
       log.error("Unable to create ES Document Provider", e);
       return Mono.empty();
