@@ -47,8 +47,13 @@ public class FeedbackGraphQlService {
         .pluginId(pluginId).timestamp(Instant.now()).build();
 
     // Save into every feeback provider...
-    return providers.findAll(FeedbackDataProvider.class).flatMap(d -> d.save(f)).next();
+    final Feedback blockLast = getFeedbackProviders()
+        .flatMap(d -> d.save(f))
+        .blockLast();
+
+    return Mono.justOrEmpty(blockLast);
   }
+
 
   @GraphQLMutation(name = "deleteFeedback", description = "Save feedback")
   public boolean deleteFeedback(@GraphQLRootContext final InvestRootContext context,
@@ -56,7 +61,7 @@ public class FeedbackGraphQlService {
 
     // TODO: Check if we are admin or the original feedback author
 
-    providers.findAll(FeedbackDataProvider.class)
+    getFeedbackProviders()
         .subscribe(d -> d.delete(feedbackId));
 
     return true;
@@ -71,7 +76,7 @@ public class FeedbackGraphQlService {
 
     // TODO: Admin can list everything, user can only list there own. if not logged in then nothing
 
-    return providers.findAll(FeedbackDataProvider.class).flatMap(d -> d.findAll(offset, limit));
+    return getFeedbackProviders().flatMap(d -> d.findAll(offset, limit));
   }
 
   @GraphQLQuery(name = "pluginName", description = "Get plugin display name")
@@ -81,11 +86,18 @@ public class FeedbackGraphQlService {
 
     if (!StringUtils.isEmpty(pluginId)) {
 
-      name = uiExtensions.stream().filter(e -> pluginId.equalsIgnoreCase(e.getId()))
-          .map(InvestUiExtension::getName).findFirst();
+      name = uiExtensions.stream()
+          .filter(e -> pluginId.equalsIgnoreCase(e.getId()))
+          .map(InvestUiExtension::getName)
+          .findFirst();
 
     }
 
     return name.orElse(null);
+  }
+
+
+  private Flux<FeedbackDataProvider> getFeedbackProviders() {
+    return providers.findAll(FeedbackDataProvider.class);
   }
 }
