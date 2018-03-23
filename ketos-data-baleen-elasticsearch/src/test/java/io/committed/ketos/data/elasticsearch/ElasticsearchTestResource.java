@@ -1,6 +1,7 @@
 package io.committed.ketos.data.elasticsearch;
 
 import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -8,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
@@ -17,6 +19,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -75,40 +78,56 @@ public class ElasticsearchTestResource {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
 
+    loadMappings();
     if (value.get("documents") != null) {
-      loadMappings("document");
       load(client, TEST_DB, "document", value.get("documents"));
     }
     if (value.get("entities") != null) {
-      loadMappings("entity");
-      load(client, TEST_DB, "entity", value.get("entities"));
+      loadWithParent(client, TEST_DB, "entity", value.get("entities"));
     }
     if (value.get("mentions") != null) {
-      loadMappings("mention");
-      load(client, TEST_DB, "mention", value.get("mentions"));
+      loadWithParent(client, TEST_DB, "mention", value.get("mentions"));
     }
     if (value.get("relation") != null) {
-      loadMappings("relation");
-      load(client, TEST_DB, "relation", value.get("relations"));
+      loadWithParent(client, TEST_DB, "relation", value.get("relations"));
     }
 
     client.admin().indices().refresh(new RefreshRequest(TEST_DB)).actionGet();
   }
 
-  private void loadMappings(final String type) {
+  private void loadMappings() {
     final CreateIndexRequestBuilder prepareBuilder = client.admin().indices().prepareCreate("testdb");
+    prepareBuilder.addMapping("document", getMapping("document"));
+    prepareBuilder.addMapping("entity", getMapping("entity"));
+    prepareBuilder.addMapping("mention", getMapping("mention"));
+    prepareBuilder.addMapping("relation", getMapping("relation"));
+    prepareBuilder.execute().actionGet();
+  }
+
+  private Map<String, Object> getMapping(String type) {
     Map<String, Object> mapping = null;
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(type + "Mapping.json")) {
       mapping = mapper.readValue(resource, new TypeReference<HashMap<String, Map<String, Object>>>() {});
     } catch (final IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
-    prepareBuilder.addMapping(type, mapping).execute().actionGet();
+    return mapping;
   }
 
   private void load(final Client client, final String db, final String type, final List<Map<String, Object>> values) {
     for (final Map<String, Object> item : values) {
       client.prepareIndex(db, type).setRefreshPolicy(RefreshPolicy.IMMEDIATE)
+          .setSource(toJson(item), XContentType.JSON)
+          .get();
+    }
+  }
+
+  private void loadWithParent(final Client client, final String db, final String type,
+      final List<Map<String, Object>> values) {
+    for (final Map<String, Object> item : values) {
+      client.prepareIndex(db, type).setRefreshPolicy(RefreshPolicy.IMMEDIATE)
+          .setParent((String) item.get("docId"))
+          .setRouting((String) item.get("docId"))
           .setSource(toJson(item), XContentType.JSON)
           .get();
     }

@@ -1,1 +1,397 @@
-{"test":{"mappings":{"relation":{"_parent":{"type":"document"},"_routing":{"required":true},"properties":{"baleenDocId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"baleenId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"begin":{"type":"integer"},"docId":{"type":"keyword"},"end":{"type":"integer"},"externalId":{"type":"keyword"},"properties":{"properties":{"confidence":{"type":"float"},"dependencyDistance":{"type":"long"},"relationSubType":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"relationshipType":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"sentenceDistance":{"type":"integer"},"source":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"subType":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"target":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"type":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"value":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"wordDistance":{"type":"long"}}},"source":{"properties":{"baleenDocId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"baleenEntityId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"baleenId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"begin":{"type":"integer"},"docId":{"type":"keyword"},"end":{"type":"integer"},"entityId":{"type":"keyword"},"externalId":{"type":"keyword"},"properties":{"properties":{"confidence":{"type":"float"},"gender":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"geoJson":{"type":"geo_shape"},"isNormalised":{"type":"boolean"},"poi":{"type":"geo_point"},"timestampStart":{"type":"date","format":"epoch_millis"},"timestampStop":{"type":"date","format":"epoch_millis"},"title":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"type":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"value":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}}}},"subType":{"type":"keyword"},"type":{"type":"keyword"},"value":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}}}},"subType":{"type":"keyword"},"target":{"properties":{"baleenDocId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"baleenEntityId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"baleenId":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"begin":{"type":"integer"},"docId":{"type":"keyword"},"end":{"type":"integer"},"entityId":{"type":"keyword"},"externalId":{"type":"keyword"},"properties":{"properties":{"confidence":{"type":"float"},"gender":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"geoJson":{"type":"geo_shape"},"isNormalised":{"type":"boolean"},"poi":{"type":"geo_point"},"precision":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"scope":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"temporalType":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"timestampStart":{"type":"date","format":"epoch_millis"},"timestampStop":{"type":"date","format":"epoch_millis"},"title":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"type":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}},"value":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}}}},"subType":{"type":"keyword"},"type":{"type":"keyword"},"value":{"type":"date"}}},"type":{"type":"keyword"},"value":{"type":"text","fields":{"keyword":{"type":"keyword","ignore_above":256}}}}}}}}
+{
+	"_parent": {
+		"type": "document"
+	},
+	"_routing": {
+		"required": true
+	},
+	"properties": {
+		"baleenDocId": {
+			"type": "text",
+			"fields": {
+				"keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				}
+			}
+		},
+		"baleenId": {
+			"type": "text",
+			"fields": {
+				"keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				}
+			}
+		},
+		"begin": {
+			"type": "integer"
+		},
+		"docId": {
+			"type": "keyword"
+		},
+		"end": {
+			"type": "integer"
+		},
+		"externalId": {
+			"type": "keyword"
+		},
+		"properties": {
+			"properties": {
+				"confidence": {
+					"type": "float"
+				},
+				"dependencyDistance": {
+					"type": "long"
+				},
+				"relationSubType": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"relationshipType": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"sentenceDistance": {
+					"type": "integer"
+				},
+				"source": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"subType": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"target": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"type": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"value": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"wordDistance": {
+					"type": "long"
+				}
+			}
+		},
+		"source": {
+			"properties": {
+				"baleenDocId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"baleenEntityId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"baleenId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"begin": {
+					"type": "integer"
+				},
+				"docId": {
+					"type": "keyword"
+				},
+				"end": {
+					"type": "integer"
+				},
+				"entityId": {
+					"type": "keyword"
+				},
+				"externalId": {
+					"type": "keyword"
+				},
+				"properties": {
+					"properties": {
+						"confidence": {
+							"type": "float"
+						},
+						"gender": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"geoJson": {
+							"type": "geo_shape"
+						},
+						"isNormalised": {
+							"type": "boolean"
+						},
+						"poi": {
+							"type": "geo_point"
+						},
+						"timestampStart": {
+							"type": "date",
+							"format": "epoch_millis"
+						},
+						"timestampStop": {
+							"type": "date",
+							"format": "epoch_millis"
+						},
+						"title": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"type": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"value": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						}
+					}
+				},
+				"subType": {
+					"type": "keyword"
+				},
+				"type": {
+					"type": "keyword"
+				},
+				"value": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				}
+			}
+		},
+		"subType": {
+			"type": "keyword"
+		},
+		"target": {
+			"properties": {
+				"baleenDocId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"baleenEntityId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"baleenId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"begin": {
+					"type": "integer"
+				},
+				"docId": {
+					"type": "keyword"
+				},
+				"end": {
+					"type": "integer"
+				},
+				"entityId": {
+					"type": "keyword"
+				},
+				"externalId": {
+					"type": "keyword"
+				},
+				"properties": {
+					"properties": {
+						"confidence": {
+							"type": "float"
+						},
+						"gender": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"geoJson": {
+							"type": "geo_shape"
+						},
+						"isNormalised": {
+							"type": "boolean"
+						},
+						"poi": {
+							"type": "geo_point"
+						},
+						"precision": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"scope": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"temporalType": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"timestampStart": {
+							"type": "date",
+							"format": "epoch_millis"
+						},
+						"timestampStop": {
+							"type": "date",
+							"format": "epoch_millis"
+						},
+						"title": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"type": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"value": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						}
+					}
+				},
+				"subType": {
+					"type": "keyword"
+				},
+				"type": {
+					"type": "keyword"
+				},
+				"value": {
+					"type": "date"
+				}
+			}
+		},
+		"type": {
+			"type": "keyword"
+		},
+		"value": {
+			"type": "text",
+			"fields": {
+				"keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				}
+			}
+		}
+	}
+}
