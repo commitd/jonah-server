@@ -4,16 +4,22 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.index.reindex.ReindexPlugin;
+import org.elasticsearch.join.ParentJoinPlugin;
 import org.elasticsearch.node.InternalSettingsPreparer;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeValidationException;
+import org.elasticsearch.percolator.PercolatorPlugin;
 import org.elasticsearch.plugins.Plugin;
+import org.elasticsearch.script.mustache.MustachePlugin;
 import org.elasticsearch.transport.Netty4Plugin;
 
 public class EmbeddedElasticsearch5 implements AutoCloseable {
@@ -50,7 +56,13 @@ public class EmbeddedElasticsearch5 implements AutoCloseable {
             .put("http.enabled", true)
             .build();
 
-    final Collection<Class<? extends Plugin>> plugins = Collections.singletonList(Netty4Plugin.class);
+    List<Class<? extends Plugin>> plugins = new ArrayList<>();
+    plugins.add(Netty4Plugin.class);
+    plugins.add(ReindexPlugin.class);
+    plugins.add(PercolatorPlugin.class);
+    plugins.add(MustachePlugin.class);
+    plugins.add(ParentJoinPlugin.class);
+
     node = new PluginConfigurableNode(settings, plugins);
     node.start();
 
