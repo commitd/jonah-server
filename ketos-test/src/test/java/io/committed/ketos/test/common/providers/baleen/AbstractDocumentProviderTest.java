@@ -12,8 +12,11 @@ import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
 import io.committed.invest.core.dto.analytic.TimeRange;
+import io.committed.ketos.common.constants.ItemTypes;
 import io.committed.ketos.common.data.BaleenDocument;
+import io.committed.ketos.common.data.general.NamedGeoLocation;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
+import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
@@ -58,6 +61,29 @@ public abstract class AbstractDocumentProviderTest {
     assertEquals("a19f6ed4-87bb-4dc6-919e-596761127082",
         resultList.get(0).getId());
   }
+
+  @Test
+  public void testDocumentInfoFilter() {
+    DocumentFilter filter = new DocumentFilter();
+    DocumentInfoFilter infoFilter = new DocumentInfoFilter();
+    infoFilter.setLanguage("x-unspecified");
+    filter.setInfo(infoFilter);
+    DocumentSearch search = new DocumentSearch(null, filter, null, null, null);
+    List<BaleenDocument> results = getDocumentProvider().search(search, 0, 1000).getResults().collectList().block();
+    assertEquals(1, results.size());
+  }
+
+  // @Test
+  // public void testDocumentMetadataFilter() {
+  // DocumentFilter filter = new DocumentFilter();
+  // Map<String, Object> properties = new HashMap<String, Object>();
+  // properties.put("producer", "Skia/PDF m58");
+  // filter.setMetadata(new PropertiesList(properties));
+  // DocumentSearch search = new DocumentSearch(null, filter, null, null, null);
+  // List<BaleenDocument> results = getDocumentProvider().search(search, 0,
+  // 1000).getResults().collectList().block();
+  // assertEquals(1, results.size());
+  // }
 
   @Test
   public void testSearchWithEntities() {
@@ -108,20 +134,40 @@ public abstract class AbstractDocumentProviderTest {
   // @Test
   // public void testCountByJoinDate() {
   // List<TimeBin> results =
-  // getDocumentProvider().countByJoinedDate(Optional.empty(), ItemTypes.ENTITY,
+  // getDocumentProvider().countByJoinedDate(Optional.empty(), ItemTypes.MENTION,
   // TimeInterval.HOUR).collectList()
   // .block();
   // assertTrue(!results.isEmpty());
   // }
 
-  // @Test
-  // public void testDocumentLocations() {
-  // DocumentFilter filter = new DocumentFilter();
-  // filter.setId("575f6e573aaa400bd69f6c282ced6c81969aff20abe96be4ac8989f1f74ef55b");
-  // List<NamedGeoLocation> locations =
-  // getDocumentProvider().documentLocations(Optional.of(filter), 1000).collectList().block();
-  // assertEquals(1, locations.size());
-  // }
+  @Test
+  public void testDocumentLocations() {
+    DocumentFilter filter = new DocumentFilter();
+    filter.setId("a19f6ed4-87bb-4dc6-919e-596761127082");
+    List<NamedGeoLocation> locations =
+        getDocumentProvider().documentLocations(Optional.empty(), 1000).collectList().block();
+    assertEquals(1, locations.size());
+  }
+
+  @Test
+  public void testCountByJoinedField() {
+    List<TermBin> results =
+        getDocumentProvider().countByJoinedField(Optional.empty(), ItemTypes.ENTITY, Collections.singletonList("type"),
+            1000).collectList().block();
+    assertEquals(3, results.size());
+
+    List<TermBin> results2 =
+        getDocumentProvider().countByJoinedField(Optional.empty(), ItemTypes.MENTION, Collections.singletonList("type"),
+            1000).collectList().block();
+    assertEquals(3, results2.size());
+
+    List<TermBin> results3 =
+        getDocumentProvider()
+            .countByJoinedField(Optional.empty(), ItemTypes.RELATION, Collections.singletonList("type"),
+                1000)
+            .collectList().block();
+    assertEquals(1, results3.size());
+  }
 
   public abstract DocumentProvider getDocumentProvider();
 
