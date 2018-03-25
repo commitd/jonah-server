@@ -5,11 +5,15 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import io.committed.invest.core.dto.analytic.GeoBox;
+import io.committed.invest.core.dto.analytic.GeoRadius;
+import io.committed.invest.support.elasticsearch.utils.GeoUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.utils.ValueConversion;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class EntityFilters {
   private EntityFilters() {
     // Singleton
@@ -82,14 +86,20 @@ public final class EntityFilters {
               .lte(filter.getEndTimestamp().getTime()));
     }
 
+    if (filter.getNear() != null) {
+      final GeoRadius gr = filter.getNear();
+      final String field = prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON;
+      GeoUtils.createGeoShapeQuery(field, gr).ifPresent(queryBuilder::must);
+    }
 
     if (filter.getWithin() != null) {
       final GeoBox box = filter.getWithin();
-      queryBuilder
-          .must(QueryBuilders.geoBoundingBoxQuery(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON)
-              .setCorners(box.getSafeN(), box.getSafeW(), box.getSafeS(), box.getSafeE()));
+      final String field = prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON;
+      GeoUtils.createGeoShapeQuery(field, box).ifPresent(queryBuilder::must);
     }
 
     return Optional.of(queryBuilder);
   }
+
+
 }

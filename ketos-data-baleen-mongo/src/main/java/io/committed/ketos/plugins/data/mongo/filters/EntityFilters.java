@@ -8,10 +8,12 @@ import java.util.stream.Stream;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.geojson.NamedCoordinateReferenceSystem;
+import com.mongodb.client.model.geojson.Point;
 import com.mongodb.client.model.geojson.Polygon;
 import com.mongodb.client.model.geojson.PolygonCoordinates;
 import com.mongodb.client.model.geojson.Position;
 import io.committed.invest.core.dto.analytic.GeoBox;
+import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.EntityFilter;
@@ -85,6 +87,16 @@ public final class EntityFilters {
               entityFilter.getEndTimestamp().getTime()));
     }
 
+    if (entityFilter.getNear() != null) {
+      final GeoRadius near = entityFilter.getNear();
+
+      final Point p = new Point(new Position(near.getLon(),
+          near.getLat()));
+      filters.add(Filters.near(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, p,
+          near.getRadius(), null));
+    }
+
+    // TODO: This doesn't work in an aggregation... we need a argument to say is agg or not
     if (entityFilter.getWithin() != null) {
       final GeoBox within = entityFilter.getWithin();
 

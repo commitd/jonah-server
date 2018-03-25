@@ -2,6 +2,7 @@ package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
 import io.committed.invest.core.dto.analytic.GeoBox;
+import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
@@ -27,5 +28,7 @@ public class MentionFilter {
   private Date endTimestamp;
 
   private GeoBox within;
+
+  private GeoRadius near;
 
 }
