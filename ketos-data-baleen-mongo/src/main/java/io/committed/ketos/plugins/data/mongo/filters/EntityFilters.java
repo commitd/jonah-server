@@ -87,17 +87,19 @@ public final class EntityFilters {
               entityFilter.getEndTimestamp().getTime()));
     }
 
-    if (entityFilter.getNear() != null) {
+    // Doesn't work in operator mode
+    // Mongo does not support near inside aggregation! So ou'd have to add this as a geoNear aggration
+    if (entityFilter.getNear() != null && !operatorMode) {
       final GeoRadius near = entityFilter.getNear();
-
       final Point p = new Point(new Position(near.getLon(),
           near.getLat()));
+
       filters.add(Filters.near(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, p,
           near.getRadius(), null));
     }
 
-    // TODO: This doesn't work in an aggregation... we need a argument to say is agg or not
-    if (entityFilter.getWithin() != null) {
+    // TODO: This doesn't work in an aggregation...
+    if (entityFilter.getWithin() != null && !operatorMode) {
       final GeoBox within = entityFilter.getWithin();
 
       // Ideally we'd use a box and within as that's nice and easy...

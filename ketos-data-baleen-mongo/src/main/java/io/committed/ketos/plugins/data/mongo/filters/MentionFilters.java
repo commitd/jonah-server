@@ -84,7 +84,7 @@ public final class MentionFilters {
               mentionFilter.getEndTimestamp().getTime()));
     }
 
-    if (mentionFilter.getNear() != null) {
+    if (mentionFilter.getNear() != null && !operatorMode) {
       final GeoRadius near = mentionFilter.getNear();
 
       final Point p = new Point(new Position(near.getLon(),
@@ -94,7 +94,7 @@ public final class MentionFilters {
     }
 
     // TODO: Doesn't work in aggregation
-    if (mentionFilter.getWithin() != null) {
+    if (mentionFilter.getWithin() != null && !operatorMode) {
       final GeoBox within = mentionFilter.getWithin();
 
       // Ideally we'd use a box and within as that's nice and easy...
