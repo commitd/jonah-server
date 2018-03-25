@@ -35,7 +35,8 @@ public class EntityMentionsService extends AbstractGraphQlService {
 
     final MentionSearch search = new MentionSearch(entity, filter);
     return getProvidersFromContext(entity, MentionProvider.class, hints)
-        .flatMap(p -> p.search(search, 0, 1000).getResults());
+        .flatMap(p -> p.search(search, 0, 1000).getResults())
+        .doOnNext(eachAddParent(entity));
 
   }
 
