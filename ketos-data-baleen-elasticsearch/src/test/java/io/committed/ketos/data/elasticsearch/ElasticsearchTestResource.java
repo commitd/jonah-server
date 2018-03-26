@@ -31,89 +31,124 @@ public class ElasticsearchTestResource {
 
   private ObjectMapper mapper;
 
-  public void setupElastic(String resourcePath) {
-    Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
+  private EmbeddedElasticsearch5 elasticsearch;
 
-    InetSocketTransportAddress inetSocketAddress;
+  public void setupElastic(final String resourcePath) {
     try {
-      inetSocketAddress = new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300);
-      client = new PreBuiltTransportClient(settings).addTransportAddress(inetSocketAddress);
-    } catch (UnknownHostException e) {
-      fail("Error creating elastic client");
+      elasticsearch = new EmbeddedElasticsearch5();
+
+      client = createElasticClient();
+    } catch (final Exception e1) {
+      throw new RuntimeException(e1);
     }
+
+
     mapper = new ObjectMapper();
     loadResource(resourcePath);
   }
 
   public void cleanElastic() {
-    DeleteIndexRequest request = new DeleteIndexRequest(TEST_DB);
-    client.admin().indices().delete(request).actionGet();
+    if (client != null) {
+      final DeleteIndexRequest request = new DeleteIndexRequest(TEST_DB);
+      client.admin().indices().delete(request).actionGet();
+    }
+
+    try {
+      if (elasticsearch != null) {
+        elasticsearch.close();
+      }
+    } catch (final Exception e) {
+      throw new RuntimeException();
+    }
   }
 
-  protected Client createElasticClient() throws UnknownHostException {
-    Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
+  private Client createElasticClient() throws UnknownHostException {
+    final Settings settings = Settings.builder().put("cluster.name", elasticsearch.getClusterName()).build();
 
-    InetSocketTransportAddress inetSocketAddress =
-        new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), 9300);
+    final InetSocketTransportAddress inetSocketAddress =
+        new InetSocketTransportAddress(InetAddress.getByName("127.0.0.1"), elasticsearch.getTransportPort());
     return new PreBuiltTransportClient(settings).addTransportAddress(inetSocketAddress);
   }
 
-  protected void loadResource(String resourcePath) {
+  protected void loadResource(final String resourcePath) {
     Map<String, List<Map<String, Object>>> value = null;
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
       value = mapper.readValue(resource, new TypeReference<HashMap<String, List<Map<String, Object>>>>() {});
-    } catch (IOException e) {
+    } catch (final IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
 
+    loadMappings();
     if (value.get("documents") != null) {
-      loadMappings("document");
       load(client, TEST_DB, "document", value.get("documents"));
     }
     if (value.get("entities") != null) {
-      loadMappings("entity");
-      load(client, TEST_DB, "entity", value.get("entities"));
+      loadWithParent(client, TEST_DB, "entity", value.get("entities"));
     }
     if (value.get("mentions") != null) {
-      loadMappings("mention");
-      load(client, TEST_DB, "mention", value.get("mentions"));
+      loadWithParent(client, TEST_DB, "mention", value.get("mentions"));
     }
-    if (value.get("relation") != null) {
-      loadMappings("relation");
-      load(client, TEST_DB, "relation", value.get("relations"));
+    if (value.get("relations") != null) {
+      loadWithParent(client, TEST_DB, "relation", value.get("relations"));
     }
 
     client.admin().indices().refresh(new RefreshRequest(TEST_DB)).actionGet();
   }
 
-  private void loadMappings(String type) {
-    CreateIndexRequestBuilder prepareBuilder = client.admin().indices().prepareCreate("testdb");
+  private void loadMappings() {
+    final CreateIndexRequestBuilder prepareBuilder = client.admin().indices().prepareCreate("testdb");
+    prepareBuilder.addMapping("document", getMapping("document"));
+    prepareBuilder.addMapping("entity", getMapping("entity"));
+    prepareBuilder.addMapping("mention", getMapping("mention"));
+    prepareBuilder.addMapping("relation", getMapping("relation"));
+    prepareBuilder.execute().actionGet();
+  }
+
+  private Map<String, Object> getMapping(String type) {
     Map<String, Object> mapping = null;
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(type + "Mapping.json")) {
       mapping = mapper.readValue(resource, new TypeReference<HashMap<String, Map<String, Object>>>() {});
-    } catch (IOException e) {
+    } catch (final IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
-    prepareBuilder.addMapping(type, mapping).execute().actionGet();
+    return mapping;
   }
 
-  private void load(Client client, String db, String type, List<Map<String, Object>> values) {
-    for (Map<String, Object> item : values) {
+  private void load(final Client client, final String db, final String type, final List<Map<String, Object>> values) {
+    for (final Map<String, Object> item : values) {
       client.prepareIndex(db, type).setRefreshPolicy(RefreshPolicy.IMMEDIATE)
           .setSource(toJson(item), XContentType.JSON)
           .get();
     }
   }
 
-  protected String toJson(Map<String, Object> value) {
+  private void loadWithParent(final Client client, final String db, final String type,
+      final List<Map<String, Object>> values) {
+    for (final Map<String, Object> item : values) {
+      client.prepareIndex(db, type).setRefreshPolicy(RefreshPolicy.IMMEDIATE)
+          .setParent((String) item.get("docId"))
+          .setRouting((String) item.get("docId"))
+          .setSource(toJson(item), XContentType.JSON)
+          .get();
+    }
+  }
+
+  protected String toJson(final Map<String, Object> value) {
     try {
       return mapper.writeValueAsString(value);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       System.out.println(e);
       fail("Failed to create json from resource map");
     }
     return "";
   }
 
+  public int getPort() {
+    return elasticsearch.getTransportPort();
+  }
+
+  public String getClusterName() {
+    return elasticsearch.getClusterName();
+  }
 
 }

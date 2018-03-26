@@ -9,12 +9,12 @@ import org.junit.BeforeClass;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
-import io.committed.ketos.common.providers.baleen.DocumentProvider;
+import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.data.elasticsearch.ElasticsearchTestResource;
-import io.committed.ketos.data.elasticsearch.factory.EsDocumentProviderFactory;
-import io.committed.ketos.test.common.providers.baleen.AbstractDocumentProviderTest;
+import io.committed.ketos.data.elasticsearch.factory.EsRelationProviderFactory;
+import io.committed.ketos.test.common.providers.baleen.AbstractRelationProviderTest;
 
-public class ElasticSearchDocumentProviderTest extends AbstractDocumentProviderTest {
+public class ElasticSearchRelationProviderTest extends AbstractRelationProviderTest {
 
   private static final ElasticsearchTestResource resource = new ElasticsearchTestResource();
 
@@ -29,33 +29,17 @@ public class ElasticSearchDocumentProviderTest extends AbstractDocumentProviderT
   }
 
   @Override
-  public DocumentProvider getDocumentProvider() {
-    final EsDocumentProviderFactory factory = new EsDocumentProviderFactory(new ObjectMapper());
+  public RelationProvider getRelationProvider() {
+    final EsRelationProviderFactory factory = new EsRelationProviderFactory(new ObjectMapper());
     final Map<String, Object> settings = new HashMap<>();
     settings.put(AbstractElasticsearchDataProviderFactory.SETTING_INDEX, ElasticsearchTestResource.TEST_DB);
     settings.put(AbstractElasticsearchDataProviderFactory.SETTING_PORT, resource.getPort());
     settings.put(AbstractElasticsearchDataProviderFactory.SETTING_CLUSTER, resource.getClusterName());
 
-
     return factory
         .build(ElasticsearchTestResource.TEST_DB, ElasticsearchTestResource.TEST_DB,
             settings)
         .block();
-  }
-
-  @Override
-  public void testSearchWithEntities() {
-    // TODO Embedded Elasticsearch integration tests do not support has child operations
-  }
-
-  @Override
-  public void testCountByJoinedField() {
-    // TODO Embedded Elasticsearch integration tests do not support has child operations
-  }
-
-  @Override
-  public void testDocumentLocations() {
-    // TODO Embedded Elasticsearch integration tests do not support has child operations
   }
 
 }
