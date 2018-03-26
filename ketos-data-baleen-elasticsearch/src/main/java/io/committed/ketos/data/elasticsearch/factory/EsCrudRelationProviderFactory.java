@@ -33,11 +33,13 @@ public class EsCrudRelationProviderFactory
     try {
       final Client elastic = buildElasticClient(settings);
 
+      final String documentType =
+          (String) settings.getOrDefault("documentType", BaleenElasticsearchConstants.DEFAULT_DOCUMENT_TYPE);
       final EsRelationService relations =
           new EsRelationService(elastic, mapper, getIndexName(settings), getTypeName(settings));
 
       return Mono
-          .just(new ElasticsearchCrudRelationProvider(dataset, datasource, relations));
+          .just(new ElasticsearchCrudRelationProvider(dataset, datasource, documentType, relations));
     } catch (final Exception e) {
       log.error("Unable to create ES Relation Provider", e);
       return Mono.empty();

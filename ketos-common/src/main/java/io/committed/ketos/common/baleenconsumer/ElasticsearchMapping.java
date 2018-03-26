@@ -68,7 +68,7 @@ public class ElasticsearchMapping {
     if (path.get(offset).equals(BaleenProperties.METADATA)) {
       // if its key then that's a keyword
       if (size > 2) {
-        // No idea... just return;
+        // No idea what is could be, leave it alone
         return path;
       } else if (path.get(offset + 1).equalsIgnoreCase(BaleenProperties.METADATA_KEY)) {
         // Key is a keyword anyway
@@ -82,7 +82,7 @@ public class ElasticsearchMapping {
     if (path.get(offset).equals(BaleenProperties.PROPERTIES)) {
       // if its key then that's a keyword
       if (size > 2) {
-        // No idea... just return;
+        // No idea what is could be, leave it alone
         return path;
       } else {
         return getAggregationFieldForProperties(path, path.get(offset + 1));

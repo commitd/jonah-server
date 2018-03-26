@@ -33,9 +33,7 @@ public abstract class AbstractGraphQlService {
 
   protected <T extends AbstractGraphQLNode> Consumer<T> eachAddParent(
       final GraphQLNode parent) {
-    return (final T t) -> {
-      t.setParent(parent);
-    };
+    return (final T t) -> t.setParent(parent);
   }
 
   protected <T extends DataProvider> Flux<T> getProviders(final BaleenCorpus corpus,

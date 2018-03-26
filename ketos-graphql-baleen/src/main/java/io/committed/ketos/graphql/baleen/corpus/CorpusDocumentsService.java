@@ -176,9 +176,7 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
 
-  // TODO: This could also exist on the documents search but it would raise issues what what we do
-  // with the (entity,relation,metnion) filter on that search. It seems like quite a lot of work to
-  // make it consistent with the document search)
+
   @GraphQLQuery(name = "countByTypesField",
       description = "Count of type (entity,relation,mention) by field value including a document filter")
   public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,

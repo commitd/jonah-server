@@ -103,8 +103,8 @@ public final class Converters {
     final OutputEntity o = new OutputEntity();
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
-    // TODO: ... mentions will be lost here. We need to actually get the entity and then put it here and
-    // we don't use it ourselves.
+    // NOTE: mentions will be lost here. If we wanted to fix that we'd to actually get the entity and
+    // then put it here
     o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
     o.setType(item.getType());

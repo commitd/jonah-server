@@ -30,6 +30,7 @@ import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.ElasticsearchMapping;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
+import io.committed.ketos.common.baleenconsumer.OutputEntity;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.constants.BaleenTypes;
 import io.committed.ketos.common.constants.ItemTypes;
@@ -49,6 +50,11 @@ public class ElasticsearchDocumentProvider
     extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements DocumentProvider {
 
+  private static final String MAX_AGG = "max";
+  private static final String MIN_AGG = "min";
+  private static final String TERMS_AGG = "terms";
+  private static final String DH_AGG = "dh";
+  private static final String CHILDREN_AGG = "children";
   private final String mentionType;
   private final String entityType;
   private final String relationType;
@@ -135,8 +141,8 @@ public class ElasticsearchDocumentProvider
         .toAggregationField(Arrays.asList(BaleenProperties.PROPERTIES, BaleenProperties.START_TIMESTAMP));
 
     final ChildrenAggregationBuilder aggregationBuilder =
-        new ChildrenAggregationBuilder("children", type)
-            .subAggregation(AggregationBuilders.dateHistogram("dh")
+        new ChildrenAggregationBuilder(CHILDREN_AGG, type)
+            .subAggregation(AggregationBuilders.dateHistogram(DH_AGG)
                 .minDocCount(1)
                 .field(field)
                 .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval)));
@@ -146,8 +152,8 @@ public class ElasticsearchDocumentProvider
         // NOTE new ... as aggregationbuilders.children does not exist yet!
         aggregationBuilder)
         .flatMapMany(agg -> {
-          final Children children = agg.get("children");
-          final Histogram histogram = children.getAggregations().get("dh");
+          final Children children = agg.get(CHILDREN_AGG);
+          final Histogram histogram = children.getAggregations().get(DH_AGG);
           return Flux.fromIterable(histogram.getBuckets()).map(b -> {
             final Instant i = Instant.ofEpochMilli(((DateTime) b.getKey()).toInstant().getMillis());
             return new TimeBin(i, b.getDocCount());
@@ -165,19 +171,17 @@ public class ElasticsearchDocumentProvider
     final String field = ElasticsearchMapping.toAggregationField(path);
 
 
-    final ChildrenAggregationBuilder aggregationBuilder = new ChildrenAggregationBuilder("children", type);
-    final TermsAggregationBuilder termBuilder = AggregationBuilders.terms("terms").field(field).size(size);
+    final ChildrenAggregationBuilder aggregationBuilder = new ChildrenAggregationBuilder(CHILDREN_AGG, type);
+    final TermsAggregationBuilder termBuilder = AggregationBuilders.terms(TERMS_AGG).field(field).size(size);
     aggregationBuilder.subAggregation(termBuilder);
 
     return getService().aggregation(query,
         // NOTE new ... as aggregationbuilders.children does not exist yet!
         aggregationBuilder)
         .flatMapMany(agg -> {
-          final Children children = agg.get("children");
-          final Terms terms = children.getAggregations().get("terms");
-          return Flux.fromIterable(terms.getBuckets()).map(b -> {
-            return new TermBin(b.getKeyAsString(), b.getDocCount());
-          });
+          final Children children = agg.get(CHILDREN_AGG);
+          final Terms terms = children.getAggregations().get(TERMS_AGG);
+          return Flux.fromIterable(terms.getBuckets()).map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
         });
 
 
@@ -212,14 +216,12 @@ public class ElasticsearchDocumentProvider
         false)));
 
     return entityService.search(find, 0, size)
-        .flatMapMany(e -> {
-          return e.getResults();
-        })
-        .filter(e -> {
-          return e.getProperties() != null && e.getProperties().get("poi") != null
-              && e.getProperties().get("poi") instanceof Collection;
-        })
+        .flatMapMany(SearchHits<OutputEntity>::getResults)
+        .filter(e -> e.getProperties() != null && e.getProperties().get("poi") != null
+            && e.getProperties().get("poi") instanceof Collection)
         .flatMap(e -> {
+          // Checked in the filter
+          @SuppressWarnings("unchecked")
           final Collection<Object> pois = (Collection<Object>) e.getProperties().get("poi");
 
           Mono<NamedGeoLocation> mono = Mono.empty();
@@ -244,13 +246,13 @@ public class ElasticsearchDocumentProvider
   public Mono<TimeRange> documentTimeRange(final Optional<DocumentFilter> documentFilter) {
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
     return getService().aggregation(query,
-        AggregationBuilders.min("min")
+        AggregationBuilders.min(MIN_AGG)
             .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE),
-        AggregationBuilders.max("max")
+        AggregationBuilders.max(MAX_AGG)
             .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.DOCUMENT_DATE))
         .map(agg -> {
-          final Min min = agg.get("min");
-          final Max max = agg.get("max");
+          final Min min = agg.get(MIN_AGG);
+          final Max max = agg.get(MAX_AGG);
           return new TimeRange(new Date((long) min.getValue()), new Date((long) max.getValue()));
         });
   }
@@ -260,15 +262,15 @@ public class ElasticsearchDocumentProvider
     final Optional<QueryBuilder> query = DocumentFilters.toQuery(documentFilter);
     return getService().aggregation(query,
         // NOTE new ... as aggregationbuilders.children does not exist yet!
-        new ChildrenAggregationBuilder("children", entityType)
-            .subAggregation(AggregationBuilders.min("min")
+        new ChildrenAggregationBuilder(CHILDREN_AGG, entityType)
+            .subAggregation(AggregationBuilders.min(MIN_AGG)
                 .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP))
-            .subAggregation(AggregationBuilders.max("max")
+            .subAggregation(AggregationBuilders.max(MAX_AGG)
                 .field(BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP)))
         .map(agg -> {
-          final Children children = agg.get("children");
-          final Min min = children.getAggregations().get("min");
-          final Max max = children.getAggregations().get("max");
+          final Children children = agg.get(CHILDREN_AGG);
+          final Min min = children.getAggregations().get(MIN_AGG);
+          final Max max = children.getAggregations().get(MAX_AGG);
           return new TimeRange(new Date((long) min.getValue()), new Date((long) max.getValue()));
         });
   }

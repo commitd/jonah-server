@@ -20,10 +20,6 @@ public class MentionFilter {
 
   private PropertiesMap properties;
 
-  // TODO: WE could have begin / end as startAfter/startBefore
-  // private int begin;
-  // private int end;
-
   private Date startTimestamp;
   private Date endTimestamp;
 

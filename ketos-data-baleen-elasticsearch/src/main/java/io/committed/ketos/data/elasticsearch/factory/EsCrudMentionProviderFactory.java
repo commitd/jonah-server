@@ -8,7 +8,6 @@ import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataP
 import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
 import io.committed.ketos.common.providers.baleen.CrudMentionProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchCrudMentionProvider;
-import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,21 +33,18 @@ public class EsCrudMentionProviderFactory
     try {
       final Client elastic = buildElasticClient(settings);
 
-
-      final String entityType =
-          (String) settings.getOrDefault("entityType", BaleenElasticsearchConstants.DEFAULT_ENTITY_TYPE);
       final String relationType =
           (String) settings.getOrDefault("relationType", BaleenElasticsearchConstants.DEFAULT_RELATION_TYPE);
+      final String documentType =
+          (String) settings.getOrDefault("documentType", BaleenElasticsearchConstants.DEFAULT_DOCUMENT_TYPE);
 
       final EsMentionService mentions =
           new EsMentionService(elastic, mapper, getIndexName(settings), getTypeName(settings));
-      final EsEntityService entities =
-          new EsEntityService(elastic, mapper, getIndexName(settings), entityType);
       final EsRelationService relations =
           new EsRelationService(elastic, mapper, getIndexName(settings), relationType);
 
       return Mono
-          .just(new ElasticsearchCrudMentionProvider(dataset, datasource, mentions, entities, relations));
+          .just(new ElasticsearchCrudMentionProvider(dataset, datasource, documentType, mentions, relations));
     } catch (final Exception e) {
       log.error("Unable to create ES Mention Provider", e);
       return Mono.empty();

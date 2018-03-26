@@ -10,6 +10,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
 
+  // Thse should match the settings in Mongo*ProviderFactory
+  private static final String RELATION_COLLECTION = "relationCollection";
+  private static final String ENTITY_COLLECTION = "entityCollection";
+  private static final String MENTION_COLLECTION = "mentionCollection";
+
   private String host = BaleenMongoConstants.DEFAULT_HOST;
   private int port = BaleenMongoConstants.DEFAULT_PORT;
 
@@ -49,9 +54,9 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
   protected Map<String, Object> getCrudDocumentProviderSettings() {
     return newSettings()
         .put(BaleenMongoConstants.SETTING_COLLECTION, documents)
-        .put("mentionCollection", mentions)
-        .put("entityCollection", entities)
-        .put("relationCollection", relations)
+        .put(MENTION_COLLECTION, mentions)
+        .put(ENTITY_COLLECTION, entities)
+        .put(RELATION_COLLECTION, relations)
         .build();
   }
 
@@ -59,8 +64,8 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
   protected Map<String, Object> getMentionProviderSettings() {
     return newSettings()
         .put(BaleenMongoConstants.SETTING_COLLECTION, mentions)
-        .put("entityCollection", entities)
-        .put("relationCollection", relations)
+        .put(ENTITY_COLLECTION, entities)
+        .put(RELATION_COLLECTION, relations)
         .build();
   }
 
@@ -82,9 +87,9 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
   protected Map<String, Object> getDocumentProviderSettings() {
     return newSettings()
         .put(BaleenMongoConstants.SETTING_COLLECTION, documents)
-        .put("mentionCollection", mentions)
-        .put("entityCollection", entities)
-        .put("relationCollection", relations)
+        .put(MENTION_COLLECTION, mentions)
+        .put(ENTITY_COLLECTION, entities)
+        .put(RELATION_COLLECTION, relations)
         .build();
   }
 

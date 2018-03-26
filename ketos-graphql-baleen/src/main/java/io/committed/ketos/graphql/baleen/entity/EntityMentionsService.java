@@ -24,18 +24,19 @@ public class EntityMentionsService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "mentions", description = "The mentions of this entity")
-  public Flux<BaleenMention> getMentionsFromEntity(@GraphQLContext final BaleenEntity entity, @GraphQLArgument(
-      name = "hints",
-      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Flux<BaleenMention> getMentionsFromEntity(@GraphQLContext final BaleenEntity entity,
+      @GraphQLArgument(name = "size", defaultValue = "1000") final int size,
+      @GraphQLArgument(
+          name = "hints",
+          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
 
-    // TODO: Silly that we have to provide a limit here?
     final MentionFilter filter = new MentionFilter();
     filter.setDocId(entity.getDocId());
     filter.setEntityId(entity.getId());
 
     final MentionSearch search = new MentionSearch(entity, filter);
     return getProvidersFromContext(entity, MentionProvider.class, hints)
-        .flatMap(p -> p.search(search, 0, 1000).getResults())
+        .flatMap(p -> p.search(search, 0, size).getResults())
         .doOnNext(eachAddParent(entity));
 
   }

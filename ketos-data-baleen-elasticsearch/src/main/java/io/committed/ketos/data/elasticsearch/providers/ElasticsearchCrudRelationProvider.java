@@ -13,10 +13,13 @@ public class ElasticsearchCrudRelationProvider
     implements CrudRelationProvider {
 
   private final EsRelationService relations;
+  private final String documentType;
 
   public ElasticsearchCrudRelationProvider(final String dataset, final String datasource,
+      final String documentType,
       final EsRelationService relations) {
     super(dataset, datasource);
+    this.documentType = documentType;
     this.relations = relations;
   }
 
@@ -27,8 +30,7 @@ public class ElasticsearchCrudRelationProvider
 
   @Override
   public boolean save(final BaleenRelation item) {
-    // TODO: hard coded documnts
-    return relations.updateOrSave(Optional.of("document"), Optional.ofNullable(item.getDocId()),
+    return relations.updateOrSave(Optional.of(documentType), Optional.ofNullable(item.getDocId()),
         BaleenProperties.EXTERNAL_ID, item.getId(),
         Converters.toOutputRelation(item));
   }

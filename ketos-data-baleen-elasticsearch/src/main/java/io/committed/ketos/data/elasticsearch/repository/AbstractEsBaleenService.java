@@ -43,6 +43,10 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportService<T> {
 
+  private static final String AGG = "agg";
+
+  private static final String NESTED_AGG = "nested";
+
   // We have to provide an upper value...
   private static final int ALL_RESULTS = 10000;
 
@@ -66,19 +70,17 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
       final String nestedPath, final String field, final int size) {
 
     final NestedAggregationBuilder aggregationBuilder =
-        AggregationBuilders.nested("nested", nestedPath)
-            .subAggregation(AggregationBuilders.terms("agg")
+        AggregationBuilders.nested(NESTED_AGG, nestedPath)
+            .subAggregation(AggregationBuilders.terms(AGG)
                 .field(field)
                 .size(size));
 
 
     return aggregation(query, aggregationBuilder)
         .flatMapMany(as -> {
-          final Nested nested = as.get("nested");
-          final Terms terms = nested.getAggregations().get("agg");
-          return Flux.fromIterable(terms.getBuckets()).map(b -> {
-            return new TermBin(b.getKeyAsString(), b.getDocCount());
-          });
+          final Nested nested = as.get(NESTED_AGG);
+          final Terms terms = nested.getAggregations().get(AGG);
+          return Flux.fromIterable(terms.getBuckets()).map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
 
         });
   }
@@ -87,8 +89,8 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
       final String nestedPath, final String field) {
 
     final NestedAggregationBuilder aggregationBuilder =
-        AggregationBuilders.nested("nested", nestedPath)
-            .subAggregation(AggregationBuilders.dateHistogram("agg")
+        AggregationBuilders.nested(NESTED_AGG, nestedPath)
+            .subAggregation(AggregationBuilders.dateHistogram(AGG)
                 .field(field)
                 .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval))
                 .minDocCount(1));
@@ -96,8 +98,8 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
 
     return aggregation(query, aggregationBuilder)
         .flatMapMany(as -> {
-          final Nested nested = as.get("nested");
-          final Histogram terms = nested.getAggregations().get("agg");
+          final Nested nested = as.get(NESTED_AGG);
+          final Histogram terms = nested.getAggregations().get(AGG);
           return Flux.fromIterable(terms.getBuckets()).map(b -> {
             final Instant i = Instant.ofEpochMilli(((DateTime) b.getKey()).toInstant().getMillis());
             return new TimeBin(i, b.getDocCount());
@@ -142,7 +144,6 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     if (parent.isPresent() && parentType.isPresent()) {
       find.must(JoinQueryBuilders.hasParentQuery(
           parentType.get(),
-          // TODO: Hard coded to ExternalId probably ok?
           QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, parent.get()),
           false));
     }
@@ -207,8 +208,6 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     }
 
     final String sourceValue = source.get();
-
-    // TODO: We could use a bulk index here
 
     if (!ids.isEmpty()) {
       boolean success = true;

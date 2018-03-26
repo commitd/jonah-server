@@ -7,7 +7,6 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.providers.baleen.CrudMentionProvider;
 import io.committed.ketos.common.references.BaleenMentionReference;
-import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 
@@ -17,21 +16,21 @@ public class ElasticsearchCrudMentionProvider
 
   private final EsMentionService mentions;
   private final EsRelationService relations;
-  private final EsEntityService entities;
+  private final String documentType;
 
   public ElasticsearchCrudMentionProvider(final String dataset, final String datasource,
-      final EsMentionService mentions, final EsEntityService entities,
-      final EsRelationService relations) {
+      final String documentType,
+      final EsMentionService mentions, final EsRelationService relations) {
     super(dataset, datasource);
+    this.documentType = documentType;
     this.mentions = mentions;
-    this.entities = entities;
     this.relations = relations;
   }
 
   @Override
   public boolean delete(final BaleenMentionReference reference) {
 
-    // TODO: Remove mentionId from any entities which contain it entities..
+    // Remove mentionId from any entities which contain it entities..
     // but we don't map it here in Ketos so just leaving it for now
 
     delete(relations, reference.getDocumentId(), BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.EXTERNAL_ID,
@@ -51,8 +50,7 @@ public class ElasticsearchCrudMentionProvider
     relations.updateSource(item.getId(), mention);
     relations.updateTarget(item.getId(), mention);
 
-    // TODO: hard coded documents
-    return mentions.updateOrSave(Optional.of("document"), Optional.ofNullable(item.getDocId()),
+    return mentions.updateOrSave(Optional.of(documentType), Optional.ofNullable(item.getDocId()),
         BaleenProperties.EXTERNAL_ID, item.getId(),
         mention);
   }

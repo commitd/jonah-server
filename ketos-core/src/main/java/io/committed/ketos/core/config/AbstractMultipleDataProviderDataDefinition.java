@@ -11,6 +11,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractMultipleDataProviderDataDefinition extends AbstractKetosDataDefinition {
 
+  private static final String BALEEN_PREFIX = "baleen-";
+
   private boolean edittable = false;
   private String factoryMiddle;
 
@@ -26,22 +28,25 @@ public abstract class AbstractMultipleDataProviderDataDefinition extends Abstrac
 
     final Map<String, Object> baseSettings = getBaseSettings();
 
-    addProvider(providers, "baleen-" + factoryMiddle + "-documents",
+    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-documents",
         merge(baseSettings, getDocumentProviderSettings()));
-    addProvider(providers, "baleen-" + factoryMiddle + "-entities", merge(baseSettings, getEntityProviderSettings()));
-    addProvider(providers, "baleen-" + factoryMiddle + "-relations",
+    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-entities",
+        merge(baseSettings, getEntityProviderSettings()));
+    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-relations",
         merge(baseSettings, getRelationProviderSettings()));
-    addProvider(providers, "baleen-" + factoryMiddle + "-mentions", merge(baseSettings, getMentionProviderSettings()));
-    addProvider(providers, "baleen-" + factoryMiddle + "-metadata", merge(baseSettings, getMetadataProviderSettings()));
+    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-mentions",
+        merge(baseSettings, getMentionProviderSettings()));
+    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-metadata",
+        merge(baseSettings, getMetadataProviderSettings()));
 
     if (edittable) {
-      addProvider(providers, "baleen-" + factoryMiddle + "-crud-documents",
+      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-documents",
           merge(baseSettings, getCrudDocumentProviderSettings()));
-      addProvider(providers, "baleen-" + factoryMiddle + "-crud-entities",
+      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-entities",
           merge(baseSettings, getCrudEntityProviderSettings()));
-      addProvider(providers, "baleen-" + factoryMiddle + "-crud-relations",
+      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-relations",
           merge(baseSettings, getCrudRelationProviderSettings()));
-      addProvider(providers, "baleen-" + factoryMiddle + "-crud-mentions",
+      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-mentions",
           merge(baseSettings, getCrudMentionProviderSettings()));
     }
 

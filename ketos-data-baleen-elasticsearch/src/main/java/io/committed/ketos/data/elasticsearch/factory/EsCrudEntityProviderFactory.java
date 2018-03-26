@@ -35,6 +35,9 @@ public class EsCrudEntityProviderFactory
     try {
       final Client elastic = buildElasticClient(settings);
 
+      final String documentType =
+          (String) settings.getOrDefault("documentType", BaleenElasticsearchConstants.DEFAULT_DOCUMENT_TYPE);
+
       final EsEntityService entities =
           new EsEntityService(elastic, mapper, getIndexName(settings), getTypeName(settings));
       final EsMentionService mentions =
@@ -44,7 +47,7 @@ public class EsCrudEntityProviderFactory
           new EsRelationService(elastic, mapper, getIndexName(settings),
               BaleenElasticsearchConstants.DEFAULT_RELATION_TYPE);
       return Mono
-          .just(new ElasticsearchCrudEntityProvider(dataset, datasource, mentions, entities, relations));
+          .just(new ElasticsearchCrudEntityProvider(dataset, datasource, documentType, mentions, entities, relations));
     } catch (final Exception e) {
       log.error("Unable to create ES Document Provider", e);
       return Mono.empty();

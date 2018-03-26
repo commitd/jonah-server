@@ -17,10 +17,13 @@ public class ElasticsearchCrudEntityProvider
   private final EsEntityService entities;
   private final EsMentionService mentions;
   private final EsRelationService relations;
+  private final String documentType;
 
   public ElasticsearchCrudEntityProvider(final String dataset, final String datasource,
+      final String documentType,
       final EsMentionService mentions, final EsEntityService entities, final EsRelationService relations) {
     super(dataset, datasource);
+    this.documentType = documentType;
     this.mentions = mentions;
     this.entities = entities;
     this.relations = relations;
@@ -42,8 +45,7 @@ public class ElasticsearchCrudEntityProvider
 
   @Override
   public boolean save(final BaleenEntity item) {
-    // TODO: use configuration name
-    return entities.updateOrSave(Optional.of("document"), Optional.ofNullable(item.getDocId()),
+    return entities.updateOrSave(Optional.of(documentType), Optional.ofNullable(item.getDocId()),
         BaleenProperties.EXTERNAL_ID,
         item.getId(),
         Converters.toOutputEntity(item));

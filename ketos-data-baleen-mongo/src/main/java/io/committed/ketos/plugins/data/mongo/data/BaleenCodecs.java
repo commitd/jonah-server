@@ -42,8 +42,6 @@ public final class BaleenCodecs {
         CodecRegistries.fromProviders(new BsonCodecProvider()));
   }
 
-
-
   public static PojoCodecProvider pojoCodecProviders() {
     return PojoCodecProvider.builder()
         .register(new MapStringObjectPropertyCodecProvider())
@@ -88,7 +86,7 @@ public final class BaleenCodecs {
     @SuppressWarnings({"rawtypes"})
     public static class MapType implements TypeWithTypeParameters<Map> {
 
-      private static MapType INSTANCE = new MapType();
+      private static final MapType INSTANCE = new MapType();
 
       @Override
       public Class<Map> getType() {

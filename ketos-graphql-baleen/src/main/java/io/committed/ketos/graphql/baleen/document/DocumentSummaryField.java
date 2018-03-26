@@ -40,9 +40,7 @@ public class DocumentSummaryField {
 
 
   private Optional<String> lookInMetadata(final BaleenDocument document) {
-
     final Mono<String> mono = document.findSingleFromMetadata("summary");
-    // TODO: Rewrite with mono throughout
 
     final Optional<String> optional = mono.blockOptional();
     if (optional.isPresent() && !isEmpty(optional.get())) {

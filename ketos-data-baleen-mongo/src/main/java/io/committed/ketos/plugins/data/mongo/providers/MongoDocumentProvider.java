@@ -146,7 +146,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
         Filters.and(
             Filters.eq(BaleenProperties.TYPE, BaleenTypes.TEMPORAL),
             Filters.eq(BaleenProperties.PROPERTIES + "." + BaleenProperties.TEMPORAL_PRECISION,
-                BaleenProperties.TEMPORAL_PRECISION__EXACT))));
+                BaleenProperties.TEMPORAL_PRECISION_EXACT))));
 
     // It's hard to pick a sensible data here... this will produce a lot of stuff on the start of month
     // or day as
@@ -229,7 +229,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
     aggregation.add(Aggregates.match(Filters.and(
         Filters.eq(BaleenProperties.TYPE, BaleenTypes.TEMPORAL),
         Filters.eq(BaleenProperties.PROPERTIES + "." + BaleenProperties.TEMPORAL_PRECISION,
-            BaleenProperties.TEMPORAL_PRECISION__EXACT))));
+            BaleenProperties.TEMPORAL_PRECISION_EXACT))));
 
     return calculateTimeRange(aggregation, "properties.timestampStart", "properties.timestampStop")
         .doOnNext(r -> {

@@ -62,7 +62,7 @@ public final class BaleenProperties {
   public static final String NORMALISED_QUANTITY = "normalizedQuantity";
 
   // Mention/Entity property values
-  public static final String TEMPORAL_PRECISION__EXACT = "EXACT";
+  public static final String TEMPORAL_PRECISION_EXACT = "EXACT";
 
   // Mention only
   public static final String ENTITY_ID = "entityId";
