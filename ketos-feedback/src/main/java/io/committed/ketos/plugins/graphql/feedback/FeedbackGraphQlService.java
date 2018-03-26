@@ -1,10 +1,11 @@
 package io.committed.ketos.plugins.graphql.feedback;
 
-import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
+import io.committed.invest.core.auth.InvestRoles;
 import io.committed.invest.core.graphql.InvestRootContext;
 import io.committed.invest.extensions.InvestUiExtension;
 import io.committed.invest.extensions.annotations.GraphQLService;
@@ -40,8 +41,7 @@ public class FeedbackGraphQlService {
       @GraphQLArgument(name = "type") final String type,
       @GraphQLNonNull @GraphQLArgument(name = "comment") final String comment) {
 
-    final String user =
-        context.getAuthentication().map(Principal::getName).defaultIfEmpty("guest").block();
+    final String user = getUsername(context).orElse("guest");
 
     final Feedback f = Feedback.builder().comment(comment).subject(subject).type(type).user(user)
         .pluginId(pluginId).timestamp(Instant.now()).build();
@@ -59,13 +59,25 @@ public class FeedbackGraphQlService {
   public boolean deleteFeedback(@GraphQLRootContext final InvestRootContext context,
       @GraphQLArgument(name = "id") final String feedbackId) {
 
-    // TODO: Check if we are admin or the original feedback author
+    final Optional<Authentication> optional = getUser(context);
+    if (!optional.isPresent()) {
+      return false;
+    }
 
-    getFeedbackProviders()
-        .subscribe(d -> d.delete(feedbackId));
+    final Authentication auth = optional.get();
+
+    if (isAdmin(auth)) {
+      getFeedbackProviders()
+          .subscribe(d -> d.delete(feedbackId));
+    } else {
+      getFeedbackProviders()
+          .subscribe(d -> d.deleteByUser(feedbackId, auth.getName()));
+    }
 
     return true;
   }
+
+
 
   @GraphQLQuery(name = "feedback", description = "List feedback")
   public Flux<Feedback> listFeedback(@GraphQLRootContext final InvestRootContext context,
@@ -74,9 +86,21 @@ public class FeedbackGraphQlService {
       @GraphQLArgument(name = "size", description = "Maximum values to return",
           defaultValue = "10") final int limit) {
 
-    // TODO: Admin can list everything, user can only list there own. if not logged in then nothing
+    // Admin can list everything, user can only list there own. if not logged in then nothing
 
-    return getFeedbackProviders().flatMap(d -> d.findAll(offset, limit));
+    final Optional<Authentication> optional = getUser(context);
+    if (!optional.isPresent()) {
+      return Flux.empty();
+    }
+
+    final Authentication auth = optional.get();
+
+    if (isAdmin(auth)) {
+      return getFeedbackProviders().flatMap(d -> d.findAll(offset, limit));
+    } else {
+      return getFeedbackProviders().flatMap(d -> d.findAllByUser(auth.getName(), offset, limit));
+    }
+
   }
 
   @GraphQLQuery(name = "pluginName", description = "Get plugin display name")
@@ -100,4 +124,21 @@ public class FeedbackGraphQlService {
   private Flux<FeedbackDataProvider> getFeedbackProviders() {
     return providers.findAll(FeedbackDataProvider.class);
   }
+
+  private Optional<String> getUsername(final InvestRootContext context) {
+    return getUser(context)
+        .map(Authentication::getName);
+  }
+
+  private Optional<Authentication> getUser(final InvestRootContext context) {
+    return context.getAuthentication()
+        .filter(Authentication::isAuthenticated)
+        .blockOptional();
+  }
+
+  private boolean isAdmin(final Authentication auth) {
+    return auth.getAuthorities().stream()
+        .anyMatch(p -> p.getAuthority().equals(InvestRoles.ROLE_ADMINISTRATOR));
+  }
+
 }

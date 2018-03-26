@@ -13,7 +13,12 @@ public interface FeedbackDataProvider extends DataProvider {
 
   Flux<Feedback> findAll(int offset, int limit);
 
+  Flux<Feedback> findAllByUser(String user, int offset, int limit);
+
   Mono<Feedback> save(Feedback feedback);
 
   void delete(String id);
+
+  void deleteByUser(String id, String user);
+
 }

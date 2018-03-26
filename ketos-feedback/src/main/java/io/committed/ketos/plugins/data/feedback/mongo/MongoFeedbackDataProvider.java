@@ -20,7 +20,7 @@ public class MongoFeedbackDataProvider extends AbstractDataProvider
 
   @Override
   public Flux<Feedback> findAll(final int offset, final int limit) {
-    return repository.findAll();
+    return repository.findAll().skip(offset).take(limit);
   }
 
   @Override
@@ -36,6 +36,17 @@ public class MongoFeedbackDataProvider extends AbstractDataProvider
   @Override
   public String getDatabase() {
     return DatabaseConstants.MONGO;
+  }
+
+  @Override
+  public Flux<Feedback> findAllByUser(final String user, final int offset, final int limit) {
+    return repository.findByUser(user).skip(offset).take(limit);
+
+  }
+
+  @Override
+  public void deleteByUser(final String id, final String user) {
+    repository.deleteByIdAndUser(id, user).subscribe();
   }
 
 
