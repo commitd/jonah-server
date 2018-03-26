@@ -26,6 +26,8 @@ import reactor.core.publisher.Mono;
 
 public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCollectionDataProvider<T> {
 
+  private static final String COUNT_FIELD = "count";
+
   public AbstractBaleenMongoDataProvider(final String dataset, final String datasource,
       final MongoDatabase database, final String collectionName, final Class<T> clazz) {
     super(dataset, datasource, database, collectionName, clazz);
@@ -56,11 +58,11 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
 
     aggregation.add(Aggregates.sortByCount(field));
     aggregation.add(
-        Aggregates.project(Projections.fields(Projections.computed("term", "$_id"), Projections.include("count"))));
+        Aggregates.project(Projections.fields(Projections.computed("term", "$_id"), Projections.include(COUNT_FIELD))));
     return aggregate(aggregation, Document.class)
         .map(d -> {
           final Object k = d.get("term", "NA");
-          final long c = d.getInteger("count", 0);
+          final long c = d.getInteger(COUNT_FIELD, 0);
           return new TermBin(k.toString(), c);
         })
         .take(size);
@@ -77,8 +79,8 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
       case MONTH:
         dateString = "%Y-%m-01";
         break;
-      default: // TODO: Everything else we drop to day resolution (could do hour, min, sec but we'd need to get the
-               // format right)
+      default:
+        // Everything else we drop to final day resolution (could do hour, min, sec if we wanted)
         dateString = "%Y-%m-%d";
     }
 
@@ -98,10 +100,10 @@ public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCo
                 .append("format", dateString)
                 .append("date", "$ts")));
     aggregation.add(Aggregates.project(dateToString));
-    aggregation.add(Aggregates.group("$date", Accumulators.sum("count", 1)));
+    aggregation.add(Aggregates.group("$date", Accumulators.sum(COUNT_FIELD, 1)));
     aggregation
         .add(Aggregates
-            .project(Projections.fields(Projections.computed("term", "$_id"), Projections.include("count"))));
+            .project(Projections.fields(Projections.computed("term", "$_id"), Projections.include(COUNT_FIELD))));
 
     return aggregate(aggregation, TermBin.class)
         // Cna't to anything with empty dates

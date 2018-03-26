@@ -23,20 +23,20 @@ public final class CustomFilters {
     }
   }
 
-  // Filters.eq(key, value) becomes { key: value } but this does not work in the
-  // places which require a boolean result (eg in $cond). So this Bson Filter
-  // produces a full { $eq: [ key, value] }
-  public static class EqFilter<TItem> implements Bson {
+  // Mongo's Filters.eq becomes { key : value } but this does not work in the
+  // places which require a boolean result (eg aggegration cond). So this Bson Filter
+  // produces a full operation like results { $eq: [ key, value] }
+  public static class EqFilter<I> implements Bson {
     private final String fieldName;
-    private final TItem value;
+    private final I value;
 
-    public EqFilter(final String fieldName, final TItem value) {
+    public EqFilter(final String fieldName, final I value) {
       this.fieldName = notNull("fieldName", fieldName);
       this.value = value;
     }
 
     @Override
-    public <TDocument> BsonDocument toBsonDocument(final Class<TDocument> documentClass,
+    public <D> BsonDocument toBsonDocument(final Class<D> documentClass,
         final CodecRegistry codecRegistry) {
       final BsonDocumentWriter writer = new BsonDocumentWriter(new BsonDocument());
 
@@ -51,7 +51,7 @@ public final class CustomFilters {
     }
 
     // Copied from from BuilderHelper
-    private <TItem> void encodeValue(final BsonDocumentWriter writer, final TItem value,
+    private void encodeValue(final BsonDocumentWriter writer, final I value,
         final CodecRegistry codecRegistry) {
       if (value == null) {
         writer.writeNull();

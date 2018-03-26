@@ -120,9 +120,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
 
     final List<Bson> aggregation = new LinkedList<>();
 
-    DocumentFilters.createFilter(documentFilter).ifPresent(f -> {
-      aggregation.add(Aggregates.match(f));
-    });
+    DocumentFilters.createFilter(documentFilter).ifPresent(f -> aggregation.add(Aggregates.match(f)));
 
     return timelineAggregation(aggregation, interval,
         FieldUtils.joinField(BaleenProperties.PROPERTIES, BaleenProperties.DOCUMENT_DATE));
@@ -170,8 +168,6 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
   }
 
 
-  // TODO: Quite specific... but perhaps this is better? (no entity/mention field... leave it to the
-  // impl)
   @Override
   public Flux<NamedGeoLocation> documentLocations(final Optional<DocumentFilter> documentFilter, final int size) {
     final List<Bson> aggregation = joinCollection(documentFilter, ItemTypes.ENTITY);
@@ -216,9 +212,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
   @Override
   public Mono<TimeRange> documentTimeRange(final Optional<DocumentFilter> documentFilter) {
     final List<Bson> aggregation = new LinkedList<>();
-    DocumentFilters.createFilter(documentFilter).ifPresent(f -> {
-      aggregation.add(Aggregates.match(f));
-    });
+    DocumentFilters.createFilter(documentFilter).ifPresent(f -> aggregation.add(Aggregates.match(f)));
     return calculateTimeRange(aggregation, "properties.documentDate", "properties.documentDate");
   }
 
@@ -242,9 +236,7 @@ public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<Outpu
   private List<Bson> joinCollection(final Optional<DocumentFilter> documentFilter, final ItemTypes joinedType) {
     final List<Bson> aggregation = new LinkedList<>();
 
-    DocumentFilters.createFilter(documentFilter).ifPresent(f -> {
-      aggregation.add(Aggregates.match(f));
-    });
+    DocumentFilters.createFilter(documentFilter).ifPresent(f -> aggregation.add(Aggregates.match(f)));
 
     final String collection = itemTypeToJoinCollection(joinedType);
 

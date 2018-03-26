@@ -93,7 +93,7 @@ public final class MentionFilters {
           near.getRadius(), null));
     }
 
-    // TODO: Doesn't work in aggregation
+    // Doesn't work in aggregation
     if (mentionFilter.getWithin() != null && !operatorMode) {
       final GeoBox within = mentionFilter.getWithin();
 

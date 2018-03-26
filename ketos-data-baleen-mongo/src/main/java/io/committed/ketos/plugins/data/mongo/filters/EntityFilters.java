@@ -98,7 +98,7 @@ public final class EntityFilters {
           near.getRadius(), null));
     }
 
-    // TODO: This doesn't work in an aggregation...
+    // This doesn't work in an aggregation...
     if (entityFilter.getWithin() != null && !operatorMode) {
       final GeoBox within = entityFilter.getWithin();
 

@@ -240,9 +240,8 @@ public final class DocumentFilters {
     final List<Bson> pipeline = new ArrayList<>();
 
     // Add the document matches
-    DocumentFilters.createFilter(Optional.ofNullable(documentSearch.getDocumentFilter())).ifPresent(f -> {
-      pipeline.add(Aggregates.match(f));
-    });
+    DocumentFilters.createFilter(Optional.ofNullable(documentSearch.getDocumentFilter()))
+        .ifPresent(f -> pipeline.add(Aggregates.match(f)));
 
     // Just keep the doc id:
     pipeline.add(Aggregates.project(Projections.include(BaleenProperties.EXTERNAL_ID)));
@@ -326,7 +325,6 @@ public final class DocumentFilters {
       queryMatched.add(Filters.eq(key, true));
     }
 
-    // TODO: if operator is OR / AND
     pipeline.add(Aggregates.match(Filters.and(queryMatched)));
 
     // Project back to being jsut like document with externalId
