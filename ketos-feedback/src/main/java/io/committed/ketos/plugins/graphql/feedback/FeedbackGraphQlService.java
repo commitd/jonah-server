@@ -138,7 +138,7 @@ public class FeedbackGraphQlService {
 
   private boolean isAdmin(final Authentication auth) {
     return auth.getAuthorities().stream()
-        .anyMatch(p -> p.getAuthority().equals(InvestRoles.ROLE_ADMINISTRATOR));
+        .anyMatch(p -> p.getAuthority().equals(InvestRoles.ADMINISTRATOR_AUTHORITY));
   }
 
 }

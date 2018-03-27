@@ -108,7 +108,8 @@ public class FeedbackGraphQlServiceTest {
   public void testDeleteFeedbackWhenAdmin() {
     doReturn("user").when(auth).getName();
     doReturn(true).when(auth).isAuthenticated();
-    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ROLE_ADMINISTRATOR))).when(auth).getAuthorities();
+    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ADMINISTRATOR_AUTHORITY))).when(auth)
+        .getAuthorities();
 
     service.deleteFeedback(context, "feedbackId");
 
@@ -157,7 +158,8 @@ public class FeedbackGraphQlServiceTest {
   public void testListFeedbackWhenAdmin() {
     doReturn("user").when(auth).getName();
     doReturn(true).when(auth).isAuthenticated();
-    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ROLE_ADMINISTRATOR))).when(auth).getAuthorities();
+    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ADMINISTRATOR_AUTHORITY))).when(auth)
+        .getAuthorities();
 
     final List<Feedback> list = Arrays.asList(mock(Feedback.class));
     doReturn(Flux.fromIterable(list)).when(fdp).findAll(0, 10);
