@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import io.committed.invest.extensions.InvestDataExtension;
 import io.committed.ketos.plugins.data.feedback.mongo.MongoFeedbackProviderFactory;
 
+/**
+ * Extension which offers Mongo data provider for feedback
+ *
+ */
 @Configuration
 public class FeedbackDataExtension implements InvestDataExtension {
 

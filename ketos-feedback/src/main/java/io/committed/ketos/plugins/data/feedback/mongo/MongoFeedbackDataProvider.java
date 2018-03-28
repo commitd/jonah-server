@@ -7,6 +7,10 @@ import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Mongo implementation of {@link FeedbackDataProvider}
+ *
+ */
 public class MongoFeedbackDataProvider extends AbstractDataProvider
     implements FeedbackDataProvider {
 

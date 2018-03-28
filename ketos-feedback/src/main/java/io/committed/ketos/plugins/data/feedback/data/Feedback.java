@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Feedback (dto and dao)
+ *
+ */
 @Data
 @Builder
 @NoArgsConstructor

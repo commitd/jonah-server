@@ -7,6 +7,10 @@ import io.committed.invest.support.data.mongo.AbstractSpringDataMongoDataProvide
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
 import reactor.core.publisher.Mono;
 
+/**
+ * Factory for Mongo backed feedback data provider
+ *
+ */
 public class MongoFeedbackProviderFactory
     extends AbstractSpringDataMongoDataProviderFactory<FeedbackDataProvider> {
 

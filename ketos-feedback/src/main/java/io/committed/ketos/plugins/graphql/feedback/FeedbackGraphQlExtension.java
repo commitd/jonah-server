@@ -8,6 +8,10 @@ import io.committed.invest.extensions.InvestGraphQlExtension;
 import io.committed.invest.extensions.InvestUiExtension;
 import io.committed.invest.extensions.data.providers.DataProviders;
 
+/**
+ * Extension providing GraphQL resolvers for feedback.
+ *
+ */
 @Configuration
 public class FeedbackGraphQlExtension implements InvestGraphQlExtension {
 

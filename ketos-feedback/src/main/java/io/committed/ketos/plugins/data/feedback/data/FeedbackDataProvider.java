@@ -4,6 +4,10 @@ import io.committed.invest.extensions.data.providers.DataProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Feedback data provider
+ *
+ */
 public interface FeedbackDataProvider extends DataProvider {
 
   @Override

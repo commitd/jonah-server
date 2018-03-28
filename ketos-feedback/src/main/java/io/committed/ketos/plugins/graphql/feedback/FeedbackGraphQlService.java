@@ -21,6 +21,13 @@ import io.leangen.graphql.annotations.GraphQLRootContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * GraphQL resolvers to add, list, delete feedback.
+ *
+ * Authenticated users should be able to add, list, delete their own feedback. Administrative users
+ * can list and delete any feedback.
+ *
+ */
 @GraphQLService
 public class FeedbackGraphQlService {
 
@@ -46,7 +53,7 @@ public class FeedbackGraphQlService {
     final Feedback f = Feedback.builder().comment(comment).subject(subject).type(type).user(user)
         .pluginId(pluginId).timestamp(Instant.now()).build();
 
-    // Save into every feeback provider...
+    // Save into every feedback provider...
     final Feedback blockLast = getFeedbackProviders()
         .flatMap(d -> d.save(f))
         .blockLast();
