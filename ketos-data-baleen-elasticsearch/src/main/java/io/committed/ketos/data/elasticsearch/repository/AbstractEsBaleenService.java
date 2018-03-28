@@ -40,6 +40,13 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Base class to support Elasticsearch with Baleen data provides.
+ *
+ * Note many of these might migrate to the parent {@link ElasticsearchSupportService} over time.
+ *
+ * @param <T> entity class
+ */
 @Slf4j
 public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportService<T> {
 

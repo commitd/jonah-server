@@ -46,6 +46,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Elasticsearch DocumentProvider.
+ * 
+ */
 public class ElasticsearchDocumentProvider
     extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements DocumentProvider {

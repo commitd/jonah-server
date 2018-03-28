@@ -10,6 +10,10 @@ import io.committed.ketos.common.references.BaleenMentionReference;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 
+/**
+ * Elasticsearch CrudMentionProvider.
+ *
+ */
 public class ElasticsearchCrudMentionProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenMentionReference, BaleenMention>
     implements CrudMentionProvider {

@@ -12,6 +12,10 @@ import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.providers.baleen.CrudMentionProvider;
 import io.committed.ketos.common.references.BaleenMentionReference;
 
+/**
+ * Mongo CrudMentionProvider.
+ *
+ */
 public class MongoCrudMentionProvider
     extends AbstractMongoCrudDataProvider<BaleenMentionReference, BaleenMention>
     implements CrudMentionProvider {

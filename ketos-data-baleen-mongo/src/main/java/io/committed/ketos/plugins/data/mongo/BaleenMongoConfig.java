@@ -13,6 +13,9 @@ import io.committed.ketos.plugins.data.mongo.factory.MongoMentionProviderFactory
 import io.committed.ketos.plugins.data.mongo.factory.MongoMetadataProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoRelationProviderFactory;
 
+/**
+ * Configuration and wiring for services.
+ */
 @Configuration
 @ComponentScan(basePackageClasses = {BaleenMongoConfig.class})
 public class BaleenMongoConfig {

@@ -12,6 +12,9 @@ import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
+/**
+ * Convert Ketos mention queries to ES queries.
+ */
 public final class MentionFilters {
   private MentionFilters() {
     // Singleton

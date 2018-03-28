@@ -13,6 +13,9 @@ import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
+/**
+ * Convert Ketos Document queries to ES queries.
+ */
 public final class DocumentFilters {
 
   private DocumentFilters() {

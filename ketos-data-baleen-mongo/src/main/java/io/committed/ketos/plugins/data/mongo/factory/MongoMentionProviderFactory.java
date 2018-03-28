@@ -9,6 +9,9 @@ import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
 import io.committed.ketos.plugins.data.mongo.providers.MongoMentionProvider;
 import reactor.core.publisher.Mono;
 
+/**
+ * A factory for creating Mongo MentionProviders.
+ */
 public class MongoMentionProviderFactory extends AbstractMongoDataProviderFactory<MentionProvider> {
 
   public MongoMentionProviderFactory() {

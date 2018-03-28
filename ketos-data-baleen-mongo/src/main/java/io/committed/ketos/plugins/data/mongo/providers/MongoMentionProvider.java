@@ -18,6 +18,10 @@ import io.committed.ketos.plugins.data.mongo.filters.MentionFilters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Mongo MentionProvider.
+ *
+ */
 public class MongoMentionProvider extends AbstractBaleenMongoDataProvider<OutputMention>
     implements MentionProvider {
 

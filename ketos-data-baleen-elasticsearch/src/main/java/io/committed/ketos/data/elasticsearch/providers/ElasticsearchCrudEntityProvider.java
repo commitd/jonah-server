@@ -10,6 +10,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 
+/**
+ * Elasticsearch CrudEntityProvider.
+ *
+ */
 public class ElasticsearchCrudEntityProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenEntityReference, BaleenEntity>
     implements CrudEntityProvider {

@@ -13,6 +13,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 
+/**
+ * Elasticsearch CrudDocumentProvider.
+ *
+ */
 public class ElasticsearchCrudDocumentProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenDocumentReference, BaleenDocument>
     implements CrudDocumentProvider {

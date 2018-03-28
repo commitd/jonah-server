@@ -24,6 +24,12 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Base class for Mongo CrudDataProviders.
+ *
+ * @param <R> the reference
+ * @param <T> the type to save
+ */
 public abstract class AbstractBaleenMongoDataProvider<T> extends AbstractMongoCollectionDataProvider<T> {
 
   private static final String COUNT_FIELD = "count";

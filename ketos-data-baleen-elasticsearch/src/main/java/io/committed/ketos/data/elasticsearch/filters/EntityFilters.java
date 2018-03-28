@@ -11,9 +11,10 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.utils.ValueConversion;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+/**
+ * Convert Ketos entity queries to ES queries.
+ */
 public final class EntityFilters {
   private EntityFilters() {
     // Singleton

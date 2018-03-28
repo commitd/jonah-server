@@ -26,6 +26,13 @@ import io.committed.ketos.common.baleenconsumer.OutputLatLon;
 import io.committed.ketos.common.baleenconsumer.OutputMention;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
 
+/**
+ * Add some specific deserialation sto support intput and output of the POJO Output*.
+ *
+ * There's nothing particularly special here, rather it just implements things you'd expect the
+ * Mongo driver to do by default.
+ *
+ */
 public final class BaleenCodecs {
 
   private BaleenCodecs() {

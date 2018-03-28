@@ -7,6 +7,12 @@ import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataP
 import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportService;
 import io.committed.ketos.common.constants.BaleenProperties;
 
+/**
+ * Base class for Elasticsearch CrudDataProviders.
+ *
+ * @param <R> the reference
+ * @param <T> the type to save
+ */
 public abstract class AbstractElasticsearchCrudDataProvider<R, T>
     extends AbstractElasticsearchDataProvider
     implements CrudDataProvider<R, T> {

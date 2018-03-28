@@ -20,6 +20,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Elasticsearch MentionProvider.
+ *
+ */
 public class ElasticsearchMentionProvider
     extends AbstractElasticsearchServiceDataProvider<OutputMention, EsMentionService>
     implements MentionProvider {

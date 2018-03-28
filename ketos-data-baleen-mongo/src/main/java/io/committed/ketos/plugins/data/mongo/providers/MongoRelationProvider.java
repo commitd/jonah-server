@@ -19,6 +19,10 @@ import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Mongo RelationProvider.
+ *
+ */
 public class MongoRelationProvider extends AbstractBaleenMongoDataProvider<OutputRelation>
     implements RelationProvider {
 

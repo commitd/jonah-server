@@ -8,6 +8,10 @@ import io.committed.ketos.common.providers.baleen.CrudRelationProvider;
 import io.committed.ketos.common.references.BaleenRelationReference;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 
+/**
+ * Elasticsearch CrudRelationProvider.
+ *
+ */
 public class ElasticsearchCrudRelationProvider
     extends AbstractElasticsearchCrudDataProvider<BaleenRelationReference, BaleenRelation>
     implements CrudRelationProvider {

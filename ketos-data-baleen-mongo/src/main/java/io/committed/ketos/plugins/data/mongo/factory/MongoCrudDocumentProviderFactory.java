@@ -9,6 +9,9 @@ import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
 import io.committed.ketos.plugins.data.mongo.providers.MongoCrudDocumentProvider;
 import reactor.core.publisher.Mono;
 
+/**
+ * A factory for creating Mongo CrudDocumentProvider.
+ */
 public class MongoCrudDocumentProviderFactory
     extends AbstractMongoDataProviderFactory<CrudDocumentProvider> {
 

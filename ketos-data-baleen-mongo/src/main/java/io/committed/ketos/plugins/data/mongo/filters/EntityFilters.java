@@ -21,6 +21,9 @@ import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.utils.ValueConversion;
 import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
+/**
+ * Convert Ketos entity queries to Mongo queries.
+ */
 public final class EntityFilters {
 
   private EntityFilters() {

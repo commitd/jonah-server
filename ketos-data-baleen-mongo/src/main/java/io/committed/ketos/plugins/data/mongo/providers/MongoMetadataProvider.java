@@ -15,6 +15,10 @@ import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import reactor.core.publisher.Flux;
 
+/**
+ * Mongo MetadataProvider.
+ *
+ */
 public class MongoMetadataProvider extends AbstractBaleenMongoDataProvider<OutputDocument>
     implements MetadataProvider {
 

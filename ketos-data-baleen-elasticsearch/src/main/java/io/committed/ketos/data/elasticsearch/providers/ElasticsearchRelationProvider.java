@@ -23,6 +23,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Elasticsearch RelationProvider.
+ *
+ */
 public class ElasticsearchRelationProvider
     extends AbstractElasticsearchServiceDataProvider<OutputRelation, EsRelationService>
     implements RelationProvider {

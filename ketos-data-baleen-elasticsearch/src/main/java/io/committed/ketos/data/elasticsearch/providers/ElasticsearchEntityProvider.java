@@ -20,6 +20,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Elasticsearch EntityProvider.
+ *
+ */
 public class ElasticsearchEntityProvider
     extends AbstractElasticsearchServiceDataProvider<OutputEntity, EsEntityService>
     implements EntityProvider {

@@ -21,6 +21,9 @@ import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
+/**
+ * Convert Ketos mention queries to Mongo queries.
+ */
 public final class MentionFilters {
 
   private MentionFilters() {

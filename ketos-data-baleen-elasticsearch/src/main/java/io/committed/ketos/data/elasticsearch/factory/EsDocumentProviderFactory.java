@@ -13,6 +13,9 @@ import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+/**
+ * A factory for creating ES DocumentProvider objects.
+ */
 @Slf4j
 @Service
 public class EsDocumentProviderFactory

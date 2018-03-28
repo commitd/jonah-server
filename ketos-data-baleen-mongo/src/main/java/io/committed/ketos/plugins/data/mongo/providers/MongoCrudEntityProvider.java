@@ -11,6 +11,10 @@ import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.CrudEntityProvider;
 import io.committed.ketos.common.references.BaleenEntityReference;
 
+/**
+ * Mongo CrudEntityProvider.
+ *
+ */
 public class MongoCrudEntityProvider
     extends AbstractMongoCrudDataProvider<BaleenEntityReference, BaleenEntity>
     implements CrudEntityProvider {

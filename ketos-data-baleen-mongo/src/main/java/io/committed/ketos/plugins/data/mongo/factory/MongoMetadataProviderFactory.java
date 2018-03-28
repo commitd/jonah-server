@@ -9,6 +9,9 @@ import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
 import io.committed.ketos.plugins.data.mongo.providers.MongoMetadataProvider;
 import reactor.core.publisher.Mono;
 
+/**
+ * A factory for creating Mongo MetadataProviders.
+ */
 public class MongoMetadataProviderFactory
     extends AbstractMongoDataProviderFactory<MetadataProvider> {
 

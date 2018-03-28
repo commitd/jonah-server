@@ -9,6 +9,9 @@ import io.committed.ketos.plugins.data.mongo.data.BaleenCodecs;
 import io.committed.ketos.plugins.data.mongo.providers.MongoRelationProvider;
 import reactor.core.publisher.Mono;
 
+/**
+ * A factory for creating Mongo RelationProviders.
+ */
 public class MongoRelationProviderFactory
     extends AbstractMongoDataProviderFactory<RelationProvider> {
 

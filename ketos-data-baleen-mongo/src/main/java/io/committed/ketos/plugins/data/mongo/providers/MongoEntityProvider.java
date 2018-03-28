@@ -19,6 +19,10 @@ import io.committed.ketos.plugins.data.mongo.filters.EntityFilters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Mongo EntityProvider.
+ *
+ */
 public class MongoEntityProvider extends AbstractBaleenMongoDataProvider<OutputEntity>
     implements EntityProvider {
 

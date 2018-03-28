@@ -11,6 +11,10 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.providers.baleen.CrudDocumentProvider;
 import io.committed.ketos.common.references.BaleenDocumentReference;
 
+/**
+ * Mongo CrudDocumentProvider.
+ *
+ */
 public class MongoCrudDocumentProvider
     extends AbstractMongoCrudDataProvider<BaleenDocumentReference, BaleenDocument>
     implements CrudDocumentProvider {

@@ -21,6 +21,10 @@ import io.committed.ketos.data.elasticsearch.repository.EsDocumentService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Elasticsearch MetadataProvider.
+ *
+ */
 public class ElasticsearchMetadataProvider
     extends AbstractElasticsearchServiceDataProvider<OutputDocument, EsDocumentService>
     implements MetadataProvider {

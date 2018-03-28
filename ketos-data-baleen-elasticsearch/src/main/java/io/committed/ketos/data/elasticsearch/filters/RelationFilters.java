@@ -9,6 +9,9 @@ import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
+/**
+ * Convert Ketos relation queries to ES queries.
+ */
 public final class RelationFilters {
   private RelationFilters() {
     // Singleton

@@ -9,6 +9,9 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 
+/**
+ * Additional Filters which tweak the standard {@link Filters} of Mongo..
+ */
 public final class CustomFilters {
 
   private CustomFilters() {

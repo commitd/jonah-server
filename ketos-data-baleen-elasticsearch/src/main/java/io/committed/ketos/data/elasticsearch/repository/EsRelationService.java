@@ -9,6 +9,9 @@ import io.committed.ketos.common.baleenconsumer.OutputRelation;
 import io.committed.ketos.common.constants.BaleenProperties;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Relation specific ES support service.
+ */
 @Slf4j
 public class EsRelationService extends AbstractEsBaleenService<OutputRelation> {
 

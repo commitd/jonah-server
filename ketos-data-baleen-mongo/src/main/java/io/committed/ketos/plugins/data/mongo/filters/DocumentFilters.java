@@ -20,6 +20,9 @@ import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
+/**
+ * Convert Ketos entity queries to Mongo queries.
+ */
 public final class DocumentFilters {
 
   private static final String QUERY_PREFIX = "q";

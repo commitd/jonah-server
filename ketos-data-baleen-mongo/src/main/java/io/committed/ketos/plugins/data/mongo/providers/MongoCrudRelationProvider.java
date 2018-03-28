@@ -11,12 +11,16 @@ import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.providers.baleen.CrudRelationProvider;
 import io.committed.ketos.common.references.BaleenRelationReference;
 
+/**
+ * Elasticsearch CrudRelationProvider.
+ *
+ */
 public class MongoCrudRelationProvider
     extends AbstractMongoCrudDataProvider<BaleenRelationReference, BaleenRelation>
     implements CrudRelationProvider {
 
 
-  private String relationCollection;
+  private final String relationCollection;
 
   public MongoCrudRelationProvider(final String dataset, final String datasource, final MongoDatabase mongoDatabase,
       final String relationCollection) {

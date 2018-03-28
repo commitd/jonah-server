@@ -35,7 +35,10 @@ import io.committed.ketos.plugins.data.mongo.filters.DocumentFilters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
+/**
+ * Mongo DocumentProvider.
+ *
+ */
 public class MongoDocumentProvider extends AbstractBaleenMongoDataProvider<OutputDocument>
     implements DocumentProvider {
 
