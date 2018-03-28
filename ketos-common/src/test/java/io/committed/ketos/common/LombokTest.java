@@ -13,7 +13,6 @@ import io.committed.ketos.common.graphql.intermediate.EntitySearchResult;
 import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.graphql.support.GraphQLNode;
 import io.committed.ketos.common.references.BaleenDocumentReference;
-import io.committed.ketos.common.ui.payloads.DocumentPayload;
 
 public class LombokTest {
 
@@ -34,8 +33,6 @@ public class LombokTest {
     mt.testPackage(Documents.class);
 
     mt.testPackage(BaleenDocumentReference.class);
-
-    mt.testPackage(DocumentPayload.class);
 
     mt.testClass(NamedGeoLocation.class);
   }

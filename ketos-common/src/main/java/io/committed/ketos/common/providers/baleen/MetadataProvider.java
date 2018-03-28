@@ -5,6 +5,10 @@ import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import reactor.core.publisher.Flux;
 
+/**
+ * Metadata query data provider
+ *
+ */
 public interface MetadataProvider extends DataProvider {
 
   @Override

@@ -4,6 +4,10 @@ import io.committed.invest.extensions.data.providers.CrudDataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.references.BaleenDocumentReference;
 
+/**
+ * CRUD for Documents
+ *
+ */
 public interface CrudDocumentProvider extends CrudDataProvider<BaleenDocumentReference, BaleenDocument> {
 
   @Override

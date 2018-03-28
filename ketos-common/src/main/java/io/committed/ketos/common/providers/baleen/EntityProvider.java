@@ -14,6 +14,10 @@ import io.committed.ketos.common.graphql.output.EntitySearch;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Entity query data provider
+ *
+ */
 public interface EntityProvider extends DataProvider {
 
   Mono<BaleenEntity> getById(final String id);

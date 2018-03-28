@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Helper functions ot work with Map<String,Object>
+ */
 public final class MapUtils {
 
   private MapUtils() {

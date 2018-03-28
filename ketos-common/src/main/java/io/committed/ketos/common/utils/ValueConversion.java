@@ -2,6 +2,12 @@ package io.committed.ketos.common.utils;
 
 import java.util.Optional;
 
+/**
+ * Helper to establish some convensions for input values.
+ *
+ * For example a search for * would return all for ES but documents containing a * in Mongo.
+ *
+ */
 public final class ValueConversion {
 
   private ValueConversion() {

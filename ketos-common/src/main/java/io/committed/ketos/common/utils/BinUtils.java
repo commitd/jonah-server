@@ -8,6 +8,13 @@ import io.committed.invest.core.dto.analytic.Timeline;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Helper functions to fuse multiple data provider aggregation output
+ *
+ * These do not address granularity issues - (eg merging a histogram of a month with one for a
+ * week).
+ *
+ */
 public final class BinUtils {
 
   private BinUtils() {

@@ -14,6 +14,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * A full document search query.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

@@ -3,7 +3,11 @@ package io.committed.ketos.common.ui.actions;
 import java.util.Arrays;
 import com.google.common.base.Joiner;
 
-public class KetosCoreActions {
+/**
+ * Constants which represent the UI actions for Ketos.
+ *
+ */
+public final class KetosCoreActions {
 
   private KetosCoreActions() {
     // Singleton

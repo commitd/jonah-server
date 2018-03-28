@@ -18,6 +18,10 @@ import io.committed.ketos.common.graphql.output.DocumentSearch;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Documents query data provider
+ *
+ */
 public interface DocumentProvider extends DataProvider {
 
   @Override

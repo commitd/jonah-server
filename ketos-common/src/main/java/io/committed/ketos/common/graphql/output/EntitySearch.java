@@ -10,6 +10,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * A full entity search query.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

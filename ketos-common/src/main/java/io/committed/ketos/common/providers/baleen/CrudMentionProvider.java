@@ -4,6 +4,10 @@ import io.committed.invest.extensions.data.providers.CrudDataProvider;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.references.BaleenMentionReference;
 
+/**
+ * CRUD for Mentions
+ *
+ */
 public interface CrudMentionProvider extends CrudDataProvider<BaleenMentionReference, BaleenMention> {
 
   @Override

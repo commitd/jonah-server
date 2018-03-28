@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * A full relation search query.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

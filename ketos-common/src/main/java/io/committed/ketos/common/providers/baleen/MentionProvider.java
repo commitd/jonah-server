@@ -13,6 +13,10 @@ import io.committed.ketos.common.graphql.output.MentionSearch;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Mention query data provider
+ *
+ */
 public interface MentionProvider extends DataProvider {
 
   @Override

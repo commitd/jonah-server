@@ -14,6 +14,10 @@ import io.committed.ketos.common.graphql.output.RelationSearch;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Relation query data provider
+ *
+ */
 public interface RelationProvider extends DataProvider {
 
   Flux<BaleenRelation> getAll(int offset, int size);
