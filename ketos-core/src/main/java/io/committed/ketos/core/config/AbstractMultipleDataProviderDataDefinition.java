@@ -7,6 +7,9 @@ import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Base for DataDefinitions which generate mutitple Baleen provider.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class AbstractMultipleDataProviderDataDefinition extends AbstractKetosDataDefinition {

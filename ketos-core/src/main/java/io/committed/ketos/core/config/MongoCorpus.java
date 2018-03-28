@@ -6,6 +6,9 @@ import io.committed.ketos.common.constants.BaleenMongoConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Mongo Data configuration for a Baleen corpus.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {

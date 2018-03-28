@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.committed.invest.extensions.data.dataset.Dataset;
 
+/**
+ * Expose Ketos data definitions as Invest datasets.
+ */
 @Configuration
 public class ExportDatasetConfig {
 

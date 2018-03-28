@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Clusters of topics (dto)
+ *
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

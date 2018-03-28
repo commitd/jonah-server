@@ -11,6 +11,10 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
+/**
+ * GraphQL Resolveer exposing document clustering
+ *
+ */
 @GraphQLService
 public class DocumentClusterResolver {
 

@@ -6,6 +6,9 @@ import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Mongo feedback data definition.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class MongoFeedback extends AbstractKetosDataDefinition {

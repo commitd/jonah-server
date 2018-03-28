@@ -8,6 +8,10 @@ import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
 import io.committed.invest.extensions.data.dataset.Dataset;
 import lombok.Data;
 
+/**
+ * Base for Ketos data definitions.
+ *
+ */
 @Data
 public abstract class AbstractKetosDataDefinition {
 

@@ -6,6 +6,9 @@ import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Elasticsearch data definition for Baleen corpus.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinition {

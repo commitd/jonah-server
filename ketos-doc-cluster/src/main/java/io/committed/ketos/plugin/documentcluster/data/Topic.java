@@ -5,6 +5,12 @@ import io.committed.ketos.common.data.BaleenDocument;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
 
+/**
+ * Single topics
+ *
+ * Label and documentation should be non-null. Other fields might vary between providers.
+ *
+ */
 @Data
 public class Topic {
   private double score;
