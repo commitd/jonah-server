@@ -18,6 +18,9 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Core mention search functionality.
+ */
 @GraphQLService
 public class MentionSearchService extends AbstractGraphQlService {
   @Autowired

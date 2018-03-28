@@ -15,6 +15,9 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
+/**
+ * Extends entities with mention related functionality.
+ */
 @GraphQLService
 public class EntityMentionsService extends AbstractGraphQlService {
 

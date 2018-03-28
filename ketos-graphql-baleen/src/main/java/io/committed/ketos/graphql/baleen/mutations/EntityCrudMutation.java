@@ -13,6 +13,9 @@ import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import reactor.core.publisher.Flux;
 
+/**
+ * CRUD mutations for entities.
+ */
 @GraphQLService
 public class EntityCrudMutation extends AbstractCrudMutation<BaleenEntityReference, BaleenEntity, CrudEntityProvider> {
 

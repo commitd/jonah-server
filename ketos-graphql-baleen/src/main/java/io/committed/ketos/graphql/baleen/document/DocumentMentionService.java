@@ -13,7 +13,10 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
-
+/**
+ * Mention resolvers which enhance the Document object.
+ *
+ */
 @GraphQLService
 public class DocumentMentionService extends AbstractGraphQlService {
 

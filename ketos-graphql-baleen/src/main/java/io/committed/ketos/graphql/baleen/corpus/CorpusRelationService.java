@@ -18,7 +18,10 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
+/**
+ * Relation resolvers which enhance the Corpus object.
+ *
+ */
 @GraphQLService
 public class CorpusRelationService extends AbstractGraphQlService {
 

@@ -18,6 +18,10 @@ import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
+/**
+ * Enhance document search which document related features.
+ *
+ */
 @GraphQLService
 public class DocumentSearchDocumentsService extends AbstractGraphQlService {
 

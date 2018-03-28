@@ -18,6 +18,10 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Core functionality for document search.
+ *
+ */
 @GraphQLService
 public class DocumentSearchService extends AbstractGraphQlService {
   @Autowired

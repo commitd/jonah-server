@@ -14,6 +14,9 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
 
+/**
+ * Extend mention with document related functionality.
+ */
 @GraphQLService
 public class MentionDocumentService extends AbstractGraphQlService {
 

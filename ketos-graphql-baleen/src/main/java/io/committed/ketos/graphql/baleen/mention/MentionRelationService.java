@@ -14,6 +14,9 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
 
+/**
+ * Extend mention with relation related functionality.
+ */
 @GraphQLService
 public class MentionRelationService extends AbstractGraphQlService {
 

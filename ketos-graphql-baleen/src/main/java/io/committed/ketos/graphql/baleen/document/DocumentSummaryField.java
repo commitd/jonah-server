@@ -10,6 +10,12 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
+/**
+ * Resolvers which enhance the Document object with a summary.
+ *
+ * This is pulled from metadata or generated from the start of the document.
+ *
+ */
 @GraphQLService
 public class DocumentSummaryField {
 

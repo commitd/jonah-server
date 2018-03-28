@@ -9,6 +9,11 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
+/**
+ * Resolvers which enhance the Corpus object, which information about available data providers for
+ * that corpus.
+ *
+ */
 @GraphQLService
 public class CorpusProviderService {
 

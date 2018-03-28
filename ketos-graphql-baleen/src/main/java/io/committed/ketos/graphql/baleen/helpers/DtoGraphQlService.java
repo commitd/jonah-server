@@ -7,6 +7,9 @@ import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 
+/**
+ * Support for extending GraphQl DTOs.
+ */
 @GraphQLService
 public class DtoGraphQlService {
 

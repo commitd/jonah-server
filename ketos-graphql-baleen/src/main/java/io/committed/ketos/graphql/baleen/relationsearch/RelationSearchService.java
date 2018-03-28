@@ -18,6 +18,9 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Core relation search functionality.
+ */
 @GraphQLService
 public class RelationSearchService extends AbstractGraphQlService {
   @Autowired

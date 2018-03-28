@@ -12,6 +12,9 @@ import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
 import io.committed.ketos.common.graphql.support.GraphQLNode;
 import reactor.core.publisher.Flux;
 
+/**
+ * Base for GraphQL resolvers which used datasets which offer some convenience methods..
+ */
 public abstract class AbstractGraphQlService {
   private final DataProviders dataProviders;
 

@@ -12,6 +12,11 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Corpus/Dataset functionality.
+ *
+ * The corpus is the root of the query tree.
+ */
 @GraphQLService
 public class CorpusService {
 

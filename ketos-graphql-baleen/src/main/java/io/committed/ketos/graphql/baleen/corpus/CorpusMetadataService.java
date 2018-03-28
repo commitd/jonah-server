@@ -17,6 +17,11 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+
+/**
+ * Metadata resolvers which enhance the Corpus object.
+ *
+ */
 @GraphQLService
 public class CorpusMetadataService extends AbstractGraphQlService {
 

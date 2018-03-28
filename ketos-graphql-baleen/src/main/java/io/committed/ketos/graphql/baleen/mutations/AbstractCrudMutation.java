@@ -9,6 +9,13 @@ import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Base class for crud mutations.
+ *
+ * @param <R> the reference to an item for delivery
+ * @param <T> the item which will be saved
+ * @param <P> the data provider
+ */
 public abstract class AbstractCrudMutation<R, T, P extends CrudDataProvider<R, T>>
     extends AbstractGraphQlService {
 

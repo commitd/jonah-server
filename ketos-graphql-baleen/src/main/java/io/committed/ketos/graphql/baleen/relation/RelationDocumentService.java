@@ -13,7 +13,9 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
-
+/**
+ * Extend relation with document related functionality.
+ */
 @GraphQLService
 public class RelationDocumentService extends AbstractGraphQlService {
 

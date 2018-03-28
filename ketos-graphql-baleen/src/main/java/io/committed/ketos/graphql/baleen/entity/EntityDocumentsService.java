@@ -14,6 +14,9 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Mono;
 
+/**
+ * Extend entities with document related functionality.
+ */
 @GraphQLService
 public class EntityDocumentsService extends AbstractGraphQlService {
 

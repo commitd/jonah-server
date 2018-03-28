@@ -13,6 +13,10 @@ import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import reactor.core.publisher.Flux;
 
+
+/**
+ * CRUD mutations for mentions.
+ */
 @GraphQLService
 public class MentionCrudMutation
     extends AbstractCrudMutation<BaleenMentionReference, BaleenMention, CrudMentionProvider> {

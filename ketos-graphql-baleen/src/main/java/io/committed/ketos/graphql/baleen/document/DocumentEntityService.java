@@ -16,7 +16,10 @@ import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import reactor.core.publisher.Flux;
 
-
+/**
+ * Entity resolvers which enhance the Document object.
+ *
+ */
 @GraphQLService
 public class DocumentEntityService extends AbstractGraphQlService {
 

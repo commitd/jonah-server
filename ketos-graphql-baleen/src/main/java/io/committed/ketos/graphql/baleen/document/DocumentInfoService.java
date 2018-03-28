@@ -13,6 +13,11 @@ import io.committed.ketos.common.utils.MapUtils;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
 
+
+/**
+ * Document info resolvers which enhance the Document object.
+ *
+ */
 @GraphQLService
 public class DocumentInfoService {
 
