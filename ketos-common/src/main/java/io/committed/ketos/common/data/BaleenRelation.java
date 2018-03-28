@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * GraphQL/DTO representation of a Baleen relation
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder

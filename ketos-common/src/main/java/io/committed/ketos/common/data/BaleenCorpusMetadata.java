@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Corpus Metadata.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

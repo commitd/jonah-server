@@ -1,5 +1,8 @@
 package io.committed.ketos.common.constants;
 
+/**
+ * Commonly used Baleen Types (others exist!).
+ */
 public final class BaleenTypes {
 
   public static final String LOCATION = "Location";

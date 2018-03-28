@@ -7,7 +7,9 @@ import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
 import lombok.Data;
 
-
+/**
+ * Search by example document.
+ */
 @Data
 public class DocumentProbe {
 

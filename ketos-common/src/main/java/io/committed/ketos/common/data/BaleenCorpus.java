@@ -8,6 +8,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents the output of Baleen.
+ *
+ * This is effect is an Invest dataset. It will typically be the output of one or more Baleen
+ * pipelines.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

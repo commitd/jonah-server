@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * GraphQL/DTO representation of a Baleen document info (documentation annotation)
+ */
 @Data
 @NoArgsConstructor
 @Builder

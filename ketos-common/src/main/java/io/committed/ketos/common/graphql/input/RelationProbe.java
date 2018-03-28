@@ -3,6 +3,9 @@ package io.committed.ketos.common.graphql.input;
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
+/**
+ * Search by example relation.
+ */
 @Data
 public class RelationProbe {
 

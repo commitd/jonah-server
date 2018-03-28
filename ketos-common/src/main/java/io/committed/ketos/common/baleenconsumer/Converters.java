@@ -11,6 +11,12 @@ import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.data.BaleenMention.BaleenMentionBuilder;
 import io.committed.ketos.common.data.BaleenRelation;
 
+/**
+ * Convert from Baleen output (Ouput*) to Ketos Baleen* POJOs and vice versa.
+ *
+ * Largely a direct mapping.
+ *
+ */
 public final class Converters {
 
   private Converters() {

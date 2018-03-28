@@ -1,5 +1,8 @@
 package io.committed.ketos.common.constants;
 
+/**
+ * Mongo Constants relating to Baleen collection, settings.
+ */
 public final class BaleenMongoConstants {
 
   // Settings for MongoDataProviders

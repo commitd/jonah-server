@@ -1,11 +1,13 @@
 package io.committed.ketos.common.baleenconsumer;
 
 import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Data;
 
+/**
+ * Baleen's output format for a document.
+ *
+ */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OutputMention {

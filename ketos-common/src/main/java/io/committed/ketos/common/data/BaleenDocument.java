@@ -14,6 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
+/**
+ * GraphQL/DTO representation of a Baleen document
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder

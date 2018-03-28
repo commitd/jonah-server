@@ -6,6 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * A geo location with a name.
+ *
+ * Useful for converting say a location entity to a lat,lon marker
+ */
 @Data
 @AllArgsConstructor()
 @NoArgsConstructor

@@ -5,6 +5,9 @@ import io.committed.invest.core.dto.collections.PropertiesList;
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
+/**
+ * Search query for a document.
+ */
 @Data
 public class DocumentFilter {
 

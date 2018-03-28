@@ -6,6 +6,9 @@ import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
+/**
+ * Search query for a mention.
+ */
 @Data
 public class MentionFilter {
 

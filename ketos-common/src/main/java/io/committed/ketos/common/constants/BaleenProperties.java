@@ -1,5 +1,8 @@
 package io.committed.ketos.common.constants;
 
+/**
+ * Names and values of properties in the 'JSON' objects as output from Baleen's analysis consumers.
+ */
 public final class BaleenProperties {
 
   // General
