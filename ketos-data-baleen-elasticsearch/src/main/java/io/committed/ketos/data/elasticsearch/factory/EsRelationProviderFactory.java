@@ -1,20 +1,23 @@
 package io.committed.ketos.data.elasticsearch.factory;
 
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.elasticsearch.client.Client;
 import org.springframework.stereotype.Service;
+
+import reactor.core.publisher.Mono;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchRelationProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsRelationService;
-import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
-/**
- * A factory for creating ES RelationProvider objects.
- */
+/** A factory for creating ES RelationProvider objects. */
 @Slf4j
 @Service
 public class EsRelationProviderFactory
@@ -22,17 +25,18 @@ public class EsRelationProviderFactory
 
   private final ObjectMapper mapper;
 
-
   public EsRelationProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-relations", RelationProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
+    super(
+        "baleen-es-relations",
+        RelationProvider.class,
+        BaleenElasticsearchConstants.DEFAULT_INDEX,
         BaleenElasticsearchConstants.DEFAULT_RELATION_TYPE);
     this.mapper = mapper;
   }
 
-
   @Override
-  public Mono<RelationProvider> build(final String dataset, final String datasource,
-      final Map<String, Object> settings) {
+  public Mono<RelationProvider> build(
+      final String dataset, final String datasource, final Map<String, Object> settings) {
     try {
       final Client elastic = buildElasticClient(settings);
 
@@ -46,5 +50,4 @@ public class EsRelationProviderFactory
       return Mono.empty();
     }
   }
-
 }

@@ -1,15 +1,13 @@
 package io.committed.ketos.plugin.documentcluster.data;
 
 import java.util.List;
-import io.leangen.graphql.annotations.GraphQLQuery;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import io.leangen.graphql.annotations.GraphQLQuery;
 
-/**
- * Clusters of topics (dto)
- *
- */
+/** Clusters of topics (dto) */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

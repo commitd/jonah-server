@@ -1,17 +1,17 @@
 package io.committed.ketos.plugins.data.mongo.data;
 
 import static com.mongodb.assertions.Assertions.notNull;
+
 import org.bson.BsonDocument;
 import org.bson.BsonDocumentWriter;
 import org.bson.codecs.Encoder;
 import org.bson.codecs.EncoderContext;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
+
 import com.mongodb.client.model.Filters;
 
-/**
- * Additional Filters which tweak the standard {@link Filters} of Mongo..
- */
+/** Additional Filters which tweak the standard {@link Filters} of Mongo.. */
 public final class CustomFilters {
 
   private CustomFilters() {
@@ -39,8 +39,8 @@ public final class CustomFilters {
     }
 
     @Override
-    public <D> BsonDocument toBsonDocument(final Class<D> documentClass,
-        final CodecRegistry codecRegistry) {
+    public <D> BsonDocument toBsonDocument(
+        final Class<D> documentClass, final CodecRegistry codecRegistry) {
       final BsonDocumentWriter writer = new BsonDocumentWriter(new BsonDocument());
 
       writer.writeStartDocument();
@@ -54,25 +54,25 @@ public final class CustomFilters {
     }
 
     // Copied from from BuilderHelper
-    private void encodeValue(final BsonDocumentWriter writer, final I value,
-        final CodecRegistry codecRegistry) {
+    private void encodeValue(
+        final BsonDocumentWriter writer, final I value, final CodecRegistry codecRegistry) {
       if (value == null) {
         writer.writeNull();
       } else if (value instanceof Bson) {
-        ((Encoder) codecRegistry.get(BsonDocument.class)).encode(writer,
-            ((Bson) value).toBsonDocument(BsonDocument.class, codecRegistry),
-            EncoderContext.builder().build());
+        ((Encoder) codecRegistry.get(BsonDocument.class))
+            .encode(
+                writer,
+                ((Bson) value).toBsonDocument(BsonDocument.class, codecRegistry),
+                EncoderContext.builder().build());
       } else {
-        ((Encoder) codecRegistry.get(value.getClass())).encode(writer, value, EncoderContext.builder().build());
+        ((Encoder) codecRegistry.get(value.getClass()))
+            .encode(writer, value, EncoderContext.builder().build());
       }
     }
 
     @Override
     public String toString() {
-      return "EqFilter{"
-          + "fieldName='" + fieldName + '\''
-          + ", value=" + value
-          + '}';
+      return "EqFilter{" + "fieldName='" + fieldName + '\'' + ", value=" + value + '}';
     }
   }
 }

@@ -3,6 +3,7 @@ package io.committed.ketos.common.baleenconsumer;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentMetadata;
@@ -14,8 +15,7 @@ import io.committed.ketos.common.data.BaleenRelation;
 /**
  * Convert from Baleen output (Ouput*) to Ketos Baleen* POJOs and vice versa.
  *
- * Largely a direct mapping.
- *
+ * <p>Largely a direct mapping.
  */
 public final class Converters {
 
@@ -32,18 +32,20 @@ public final class Converters {
         .build();
   }
 
-  public static List<BaleenDocumentMetadata> toBaleenDocumentMetadata(final List<OutputDocumentMetadata> metadata) {
-    return metadata != null ? metadata.stream().map(Converters::toBaleenDocumentMetadata).collect(Collectors.toList())
+  public static List<BaleenDocumentMetadata> toBaleenDocumentMetadata(
+      final List<OutputDocumentMetadata> metadata) {
+    return metadata != null
+        ? metadata.stream().map(Converters::toBaleenDocumentMetadata).collect(Collectors.toList())
         : Collections.emptyList();
   }
 
-  public static BaleenDocumentMetadata toBaleenDocumentMetadata(final OutputDocumentMetadata metadata) {
+  public static BaleenDocumentMetadata toBaleenDocumentMetadata(
+      final OutputDocumentMetadata metadata) {
     return BaleenDocumentMetadata.builder()
         .key(metadata.getKey())
         .value(metadata.getValue())
         .build();
   }
-
 
   public static BaleenEntity toBaleenEntity(final OutputEntity entity) {
     return BaleenEntity.builder()
@@ -58,12 +60,12 @@ public final class Converters {
 
   public static BaleenMention toBaleenMention(final OutputMention mention) {
 
-
     final BaleenMentionBuilder builder = BaleenMention.builder();
 
     // Mention can be null if the relation is 'corrupt'...
     if (mention != null) {
-      builder.begin(mention.getBegin())
+      builder
+          .begin(mention.getBegin())
           .docId(mention.getDocId())
           .end(mention.getEnd())
           .entityId(mention.getEntityId())
@@ -92,24 +94,25 @@ public final class Converters {
         .build();
   }
 
-
   public static OutputDocument toOutputDocument(final BaleenDocument item) {
     final OutputDocument o = new OutputDocument();
     o.setContent(item.getContent());
     o.setExternalId(item.getId());
-    o.setMetadata(item.getMetadata().stream()
-        .map(m -> new OutputDocumentMetadata(m.getKey(), m.getValue()))
-        .collect(Collectors.toList()));
+    o.setMetadata(
+        item.getMetadata()
+            .stream()
+            .map(m -> new OutputDocumentMetadata(m.getKey(), m.getValue()))
+            .collect(Collectors.toList()));
     o.setProperties(item.getProperties().asMap());
     return o;
   }
-
 
   public static OutputEntity toOutputEntity(final BaleenEntity item) {
     final OutputEntity o = new OutputEntity();
     o.setDocId(item.getDocId());
     o.setExternalId(item.getId());
-    // NOTE: mentions will be lost here. If we wanted to fix that we'd to actually get the entity and
+    // NOTE: mentions will be lost here. If we wanted to fix that we'd to actually get the entity
+    // and
     // then put it here
     o.setProperties(item.getProperties().asMap());
     o.setSubType(item.getSubType());
@@ -117,7 +120,6 @@ public final class Converters {
     o.setValue(item.getValue());
     return o;
   }
-
 
   public static OutputRelation toOutputRelation(final BaleenRelation item) {
     final OutputRelation o = new OutputRelation();

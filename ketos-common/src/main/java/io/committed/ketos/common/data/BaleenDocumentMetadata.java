@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * GraphQL/DTO representation of a Baleen document metadata
- */
+/** GraphQL/DTO representation of a Baleen document metadata */
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,4 +16,3 @@ public class BaleenDocumentMetadata {
 
   private String value;
 }
-

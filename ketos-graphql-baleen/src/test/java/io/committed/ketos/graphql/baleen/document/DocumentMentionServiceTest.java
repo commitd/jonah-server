@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenMention;
@@ -24,8 +27,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -65,23 +66,31 @@ public class DocumentMentionServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  public MentionProvider mentionProvider;
+  @Autowired public MentionProvider mentionProvider;
 
   @Test
   public void testGetMentionsByDocument() {
 
     List<BaleenMention> mentions =
-        Collections.singletonList(new BaleenMention("mid", 0, 1, "test", "testSub", "testVal", "1", "2", null));
-    when(mentionProvider.getByDocument(any(BaleenDocument.class))).thenReturn(Flux.fromIterable(mentions));
+        Collections.singletonList(
+            new BaleenMention("mid", 0, 1, "test", "testSub", "testVal", "1", "2", null));
+    when(mentionProvider.getByDocument(any(BaleenDocument.class)))
+        .thenReturn(Flux.fromIterable(mentions));
 
-    postQuery(corpusQuery("document(id: \"testDoc\") { mentions { id begin end type value } }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.mentions").isArray()
-        .jsonPath("$.data.corpus.document.mentions[0].id").isEqualTo("mid")
-        .jsonPath("$.data.corpus.document.mentions[0].begin").isEqualTo(0)
-        .jsonPath("$.data.corpus.document.mentions[0].end").isEqualTo(1)
-        .jsonPath("$.data.corpus.document.mentions[0].type").isEqualTo("test")
-        .jsonPath("$.data.corpus.document.mentions[0].value").isEqualTo("testVal");
+    postQuery(
+            corpusQuery("document(id: \"testDoc\") { mentions { id begin end type value } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.document.mentions")
+        .isArray()
+        .jsonPath("$.data.corpus.document.mentions[0].id")
+        .isEqualTo("mid")
+        .jsonPath("$.data.corpus.document.mentions[0].begin")
+        .isEqualTo(0)
+        .jsonPath("$.data.corpus.document.mentions[0].end")
+        .isEqualTo(1)
+        .jsonPath("$.data.corpus.document.mentions[0].type")
+        .isEqualTo("test")
+        .jsonPath("$.data.corpus.document.mentions[0].value")
+        .isEqualTo("testVal");
   }
-
 }

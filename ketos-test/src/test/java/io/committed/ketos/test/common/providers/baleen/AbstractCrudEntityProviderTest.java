@@ -17,9 +17,12 @@ public abstract class AbstractCrudEntityProviderTest
 
   @Override
   public BaleenEntity getSaveItem() {
-    return new BaleenEntity("0bd40743-fbec-4484-b9fc-08d89a916840", "a19f6ed4-87bb-4dc6-919e-596761127082", "Test", "",
-        "newval", new PropertiesMap());
+    return new BaleenEntity(
+        "0bd40743-fbec-4484-b9fc-08d89a916840",
+        "a19f6ed4-87bb-4dc6-919e-596761127082",
+        "Test",
+        "",
+        "newval",
+        new PropertiesMap());
   }
-
-
 }

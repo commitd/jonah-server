@@ -1,15 +1,16 @@
 package io.committed.ketos.plugin.documentcluster.data;
 
 import java.util.List;
+
+import lombok.Data;
+
 import io.committed.ketos.common.data.BaleenDocument;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import lombok.Data;
 
 /**
  * Single topics
  *
- * Label and documentation should be non-null. Other fields might vary between providers.
- *
+ * <p>Label and documentation should be non-null. Other fields might vary between providers.
  */
 @Data
 public class Topic {

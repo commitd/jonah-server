@@ -38,7 +38,8 @@ public abstract class AbstractRelationProviderTest {
   public void testGetSourceRelations() {
     BaleenMention mention = new BaleenMention();
     mention.setId("b857d949-3ae6-4942-bcf5-e1e727eda58d");
-    List<BaleenRelation> sourceRelations = getRelationProvider().getSourceRelations(mention).collectList().block();
+    List<BaleenRelation> sourceRelations =
+        getRelationProvider().getSourceRelations(mention).collectList().block();
     assertEquals(1, sourceRelations.size());
   }
 
@@ -46,13 +47,15 @@ public abstract class AbstractRelationProviderTest {
   public void testGetTargetRelations() {
     BaleenMention mention = new BaleenMention();
     mention.setId("a8672e25-0f23-43cf-b735-fba8f2d48f3b");
-    List<BaleenRelation> targetRelations = getRelationProvider().getTargetRelations(mention).collectList().block();
+    List<BaleenRelation> targetRelations =
+        getRelationProvider().getTargetRelations(mention).collectList().block();
     assertEquals(1, targetRelations.size());
   }
 
   @Test
   public void testGetById() {
-    BaleenRelation relation = getRelationProvider().getById("9dec8723-5ba5-4fb1-8718-6c12586aaa89").block();
+    BaleenRelation relation =
+        getRelationProvider().getById("9dec8723-5ba5-4fb1-8718-6c12586aaa89").block();
     assertNotNull(relation);
     assertEquals("9dec8723-5ba5-4fb1-8718-6c12586aaa89", relation.getId());
   }
@@ -65,8 +68,11 @@ public abstract class AbstractRelationProviderTest {
 
   @Test
   public void testCountByField() {
-    List<TermBin> results = getRelationProvider()
-        .countByField(Optional.empty(), Collections.singletonList("type"), 1000).collectList().block();
+    List<TermBin> results =
+        getRelationProvider()
+            .countByField(Optional.empty(), Collections.singletonList("type"), 1000)
+            .collectList()
+            .block();
     assertEquals(1, results.size());
     assertEquals(1, results.get(0).getCount());
   }
@@ -76,8 +82,8 @@ public abstract class AbstractRelationProviderTest {
     RelationFilter filter = new RelationFilter();
     filter.setType("associated");
     RelationSearch search = new RelationSearch(null, filter);
-    List<BaleenRelation> results = getRelationProvider().search(search, 0, 1000).getResults().collectList().block();
+    List<BaleenRelation> results =
+        getRelationProvider().search(search, 0, 1000).getResults().collectList().block();
     assertEquals(1, results.size());
   }
-
 }

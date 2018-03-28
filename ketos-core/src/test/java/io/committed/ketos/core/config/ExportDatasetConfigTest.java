@@ -2,9 +2,12 @@ package io.committed.ketos.core.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Test;
+
 import io.committed.invest.extensions.data.dataset.Dataset;
 
 public class ExportDatasetConfigTest {
@@ -17,7 +20,6 @@ public class ExportDatasetConfigTest {
     final List<Dataset> datasets = config.getDatasets(settings);
 
     assertThat(datasets).isEmpty();
-
   }
 
   @Test
@@ -38,14 +40,14 @@ public class ExportDatasetConfigTest {
   public void testWithMongoAndElastic() {
     final KetosCoreSettings settings = new KetosCoreSettings();
 
-
     final MongoCorpus edittableMongo = new MongoCorpus();
     edittableMongo.setEdittable(true);
 
     final ElasticsearchCorpus edittableEs = new ElasticsearchCorpus();
     edittableEs.setEdittable(true);
     settings.setMongo(Arrays.asList(new MongoCorpus(), edittableMongo));
-    settings.setElasticsearch(Arrays.asList(new ElasticsearchCorpus(), new ElasticsearchCorpus(), edittableEs));
+    settings.setElasticsearch(
+        Arrays.asList(new ElasticsearchCorpus(), new ElasticsearchCorpus(), edittableEs));
 
     settings.setFeedback(new MongoFeedback());
 
@@ -56,5 +58,4 @@ public class ExportDatasetConfigTest {
     // TODO: could check we have exactly what we want here
     assertThat(datasets).hasSize(6);
   }
-
 }

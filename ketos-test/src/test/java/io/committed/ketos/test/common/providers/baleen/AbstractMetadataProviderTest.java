@@ -16,7 +16,8 @@ public abstract class AbstractMetadataProviderTest {
 
   @Test
   public void testCountByKey() {
-    List<TermBin> metadata = getMetadataProvider().countByKey(Optional.of("Content-Type"), 1000).collectList().block();
+    List<TermBin> metadata =
+        getMetadataProvider().countByKey(Optional.of("Content-Type"), 1000).collectList().block();
     assertEquals(1, metadata.size());
     assertEquals("Content-Type", metadata.get(0).getTerm());
     assertEquals(4, metadata.get(0).getCount());
@@ -30,5 +31,4 @@ public abstract class AbstractMetadataProviderTest {
     assertEquals("application/pdf", metadata.get(0).getTerm());
     assertEquals(4, metadata.get(0).getCount());
   }
-
 }

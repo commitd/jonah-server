@@ -33,8 +33,8 @@ public class DocumentSearchDocumentsServiceTest extends AbstractKetosGraphqlTest
     }
 
     @Bean
-    public DocumentSearchDocumentsService documentSearchDocumentsService(DataProviders providers,
-        CorpusDocumentsService documentsService) {
+    public DocumentSearchDocumentsService documentSearchDocumentsService(
+        DataProviders providers, CorpusDocumentsService documentsService) {
       return new DocumentSearchDocumentsService(providers, documentsService);
     }
 
@@ -48,19 +48,20 @@ public class DocumentSearchDocumentsServiceTest extends AbstractKetosGraphqlTest
     }
   }
 
-  @Autowired
-  private DocumentProvider documentProvider;
+  @Autowired private DocumentProvider documentProvider;
 
   @Test
   public void testGetDocumentTypes() {
     when(documentProvider.countByField(any(), anyList(), anyInt())).thenReturn(getTestTermBins());
     postQuery(
-        corpusQuery(
-            "searchDocuments(query: {id: \"testDoc\"}) { countByField(field: \"test\") { bins { term count } } }"),
-        defaultVariables())
-            .jsonPath("$.data.corpus.searchDocuments.countByField.bins").isArray()
-            .jsonPath("$.data.corpus.searchDocuments.countByField.bins[0].term").isEqualTo("test")
-            .jsonPath("$.data.corpus.searchDocuments.countByField.bins[0].count").isEqualTo(1);
+            corpusQuery(
+                "searchDocuments(query: {id: \"testDoc\"}) { countByField(field: \"test\") { bins { term count } } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.searchDocuments.countByField.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.searchDocuments.countByField.bins[0].term")
+        .isEqualTo("test")
+        .jsonPath("$.data.corpus.searchDocuments.countByField.bins[0].count")
+        .isEqualTo(1);
   }
-
 }

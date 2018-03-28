@@ -40,7 +40,9 @@ public class MongoTestResource {
   protected void loadResource(String resourcePath) {
     Map<String, List<Map<String, Object>>> value = null;
     try (InputStream resource = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
-      value = mapper.readValue(resource, new TypeReference<HashMap<String, List<Map<String, Object>>>>() {});
+      value =
+          mapper.readValue(
+              resource, new TypeReference<HashMap<String, List<Map<String, Object>>>>() {});
     } catch (IOException e) {
       fail("Exception when loading test resource:\n" + e.getMessage());
     }
@@ -76,7 +78,9 @@ public class MongoTestResource {
   }
 
   private List<Document> toDocuments(List<Map<String, Object>> values) {
-    return values.stream().map(o -> new Document(o)).collect(Collectors.toCollection(ArrayList::new));
+    return values
+        .stream()
+        .map(o -> new Document(o))
+        .collect(Collectors.toCollection(ArrayList::new));
   }
-
 }

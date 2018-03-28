@@ -2,7 +2,12 @@ package io.committed.ketos.graphql.baleen.corpus;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermCount;
 import io.committed.invest.core.dto.analytic.TimeBin;
@@ -26,17 +31,13 @@ import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.common.utils.BinUtils;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
+
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Document resolvers which enhance the Corpus object.
- *
- */
+/** Document resolvers which enhance the Corpus object. */
 @GraphQLService
 public class CorpusDocumentsService extends AbstractGraphQlService {
 
@@ -46,10 +47,15 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "document", description = "Get document by id")
-  public Mono<BaleenDocument> getDocument(@GraphQLContext final BaleenCorpus corpus,
+  public Mono<BaleenDocument> getDocument(
+      @GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "id", description = "Document id") final String id,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     return getProviders(corpus, DocumentProvider.class, hints)
         .flatMap(p -> p.getById(id))
@@ -58,16 +64,28 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "documents", description = "Get document by example")
-  public Flux<BaleenDocument> getDocumentByExample(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "probe", description = "Document by example") final DocumentProbe probe,
-      @GraphQLArgument(name = "offset",
-          description = "Index of first document to return, for pagination",
-          defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "size",
-          description = "Maximum number of documents to return, for pagination",
-          defaultValue = "10") final int size,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Flux<BaleenDocument> getDocumentByExample(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "probe", description = "Document by example")
+          final DocumentProbe probe,
+      @GraphQLArgument(
+            name = "offset",
+            description = "Index of first document to return, for pagination",
+            defaultValue = "0"
+          )
+          final int offset,
+      @GraphQLArgument(
+            name = "size",
+            description = "Maximum number of documents to return, for pagination",
+            defaultValue = "10"
+          )
+          final int size,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
 
@@ -76,51 +94,73 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       documents = providers.flatMap(p -> p.getByExample(probe, offset, size));
     } else {
       documents = providers.flatMap(p -> p.getAll(offset, size));
-
     }
 
     return documents.doOnNext(eachAddParent(corpus));
   }
 
   @GraphQLQuery(name = "sampleDocuments", description = "Return a selection of documents")
-  public Documents getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "offset",
-          description = "Index of first document to return, for pagination",
-          defaultValue = "0") final int offset,
-      @GraphQLArgument(name = "size",
-          description = "Maximum number of documents to return, for pagination",
-          defaultValue = "10") final int size,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Documents getDocuments(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(
+            name = "offset",
+            description = "Index of first document to return, for pagination",
+            defaultValue = "0"
+          )
+          final int offset,
+      @GraphQLArgument(
+            name = "size",
+            description = "Maximum number of documents to return, for pagination",
+            defaultValue = "10"
+          )
+          final int size,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
 
-    final Flux<BaleenDocument> documents =
-        providers.flatMap(p -> p.getAll(offset, size));
+    final Flux<BaleenDocument> documents = providers.flatMap(p -> p.getAll(offset, size));
 
     final Mono<Long> count = providers.flatMap(DocumentProvider::count).reduce(Long::sum);
 
-    return Documents.builder().parent(corpus).results(documents).total(count).offset(offset).size(size).build();
+    return Documents.builder()
+        .parent(corpus)
+        .results(documents)
+        .total(count)
+        .offset(offset)
+        .size(size)
+        .build();
   }
 
   @GraphQLQuery(name = "countDocuments", description = "Get the number of documents")
-  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
-      name = "hints",
-      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, DocumentProvider.class, hints).flatMap(DocumentProvider::count)
+  public Mono<Long> getDocuments(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
+    return getProviders(corpus, DocumentProvider.class, hints)
+        .flatMap(DocumentProvider::count)
         .reduce(Long::sum);
   }
 
   @GraphQLQuery(name = "searchDocuments", description = "Search for documents by query")
-  public DocumentSearch getDocuments(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLArgument(name = "mentions",
-          description = "Including mentions") final List<MentionFilter> mentionFilters,
-      @GraphQLArgument(name = "entities",
-          description = "Including entities") final List<EntityFilter> entityFilters,
-      @GraphQLArgument(name = "relations",
-          description = "Include relations") final List<RelationFilter> relationFilters) {
+  public DocumentSearch getDocuments(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLNonNull @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLArgument(name = "mentions", description = "Including mentions")
+          final List<MentionFilter> mentionFilters,
+      @GraphQLArgument(name = "entities", description = "Including entities")
+          final List<EntityFilter> entityFilters,
+      @GraphQLArgument(name = "relations", description = "Include relations")
+          final List<RelationFilter> relationFilters) {
 
     return DocumentSearch.builder()
         .parent(corpus)
@@ -132,16 +172,29 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "countByDocumentField", description = "Count of documents by value")
-  public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLNonNull @GraphQLArgument(name = "field",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
-      @GraphQLArgument(name = "size",
-          description = "Maximum number of documents to return, for pagination",
-          defaultValue = "10") final int size,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Mono<TermCount> getDocumentTypes(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLNonNull
+          @GraphQLArgument(
+            name = "field",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final String field,
+      @GraphQLArgument(
+            name = "size",
+            description = "Maximum number of documents to return, for pagination",
+            defaultValue = "10"
+          )
+          final int size,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     final List<String> path = FieldUtils.fieldSplitter(field);
 
@@ -149,18 +202,24 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
       return Mono.empty();
     }
 
-    return BinUtils.joinTermBins(getProviders(corpus, DocumentProvider.class, hints)
-        .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path, size)));
+    return BinUtils.joinTermBins(
+        getProviders(corpus, DocumentProvider.class, hints)
+            .flatMap(p -> p.countByField(Optional.ofNullable(documentFilter), path, size)));
   }
 
   @GraphQLQuery(name = "documentTimeline", description = "Timeline of documents per day")
-  public Mono<Timeline> getDocumentTimeline(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLArgument(name = "interval",
-          description = "Time interval to group by") final TimeInterval interval,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Mono<Timeline> getDocumentTimeline(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLArgument(name = "interval", description = "Time interval to group by")
+          final TimeInterval interval,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     // If intervalis null, calculate one
     TimeInterval bestInterval;
@@ -173,28 +232,45 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     return getProviders(corpus, DocumentProvider.class, hints)
         .flatMap(p -> p.countByDate(Optional.ofNullable(documentFilter), bestInterval))
         .groupBy(TimeBin::getTs)
-        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount())
-            .map(l -> new TimeBin(g.key(), l)))
+        .flatMap(g -> g.reduce(0L, (a, b) -> a + b.getCount()).map(l -> new TimeBin(g.key(), l)))
         .collectList()
         .map(l -> new Timeline(bestInterval, l));
   }
 
-
-
-  @GraphQLQuery(name = "countByTypesField",
-      description = "Count of type (entity,relation,mention) by field value including a document filter")
-  public Mono<TermCount> getDocumentTypes(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLNonNull @GraphQLArgument(name = "field",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final String field,
-      @GraphQLNonNull @GraphQLArgument(name = "type",
-          description = "The type (entity,relation,mention) to join") final ItemTypes type,
-      @GraphQLArgument(name = "size",
-          description = "Maximum number of documents to return, for pagination",
-          defaultValue = "10") final int size,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  @GraphQLQuery(
+    name = "countByTypesField",
+    description =
+        "Count of type (entity,relation,mention) by field value including a document filter"
+  )
+  public Mono<TermCount> getDocumentTypes(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLNonNull
+          @GraphQLArgument(
+            name = "field",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final String field,
+      @GraphQLNonNull
+          @GraphQLArgument(
+            name = "type",
+            description = "The type (entity,relation,mention) to join"
+          )
+          final ItemTypes type,
+      @GraphQLArgument(
+            name = "size",
+            description = "Maximum number of documents to return, for pagination",
+            defaultValue = "10"
+          )
+          final int size,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     final List<String> path = FieldUtils.fieldSplitter(field);
 
@@ -203,22 +279,30 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
     }
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
-    return BinUtils.joinTermBins(providers
-        .flatMap(p -> p.countByJoinedField(Optional.ofNullable(documentFilter), type, path, size)));
+    return BinUtils.joinTermBins(
+        providers.flatMap(
+            p -> p.countByJoinedField(Optional.ofNullable(documentFilter), type, path, size)));
   }
 
-  @GraphQLQuery(name = "timelineByTypeField",
-      description = "Count of type (entity,mention) by field value including a document filter")
-  public Mono<Timeline> countByTypeDates(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLNonNull @GraphQLArgument(name = "type",
-          description = "The type (entity,mention) to join") final ItemTypes type,
-      @GraphQLArgument(name = "interval",
-          description = "Time interval to group by") final TimeInterval interval,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-
+  @GraphQLQuery(
+    name = "timelineByTypeField",
+    description = "Count of type (entity,mention) by field value including a document filter"
+  )
+  public Mono<Timeline> countByTypeDates(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLNonNull
+          @GraphQLArgument(name = "type", description = "The type (entity,mention) to join")
+          final ItemTypes type,
+      @GraphQLArgument(name = "interval", description = "Time interval to group by")
+          final TimeInterval interval,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     // If intervalis null, calculate one
     TimeInterval bestInterval;
@@ -237,51 +321,75 @@ public class CorpusDocumentsService extends AbstractGraphQlService {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
     return BinUtils.joinTimeBins(
-        providers.flatMap(p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, bestInterval)),
+        providers.flatMap(
+            p -> p.countByJoinedDate(Optional.ofNullable(documentFilter), type, bestInterval)),
         bestInterval);
   }
 
-  @GraphQLQuery(name = "documentLocations",
-      description = "Count of type (entity,mention) by field value including a document filter")
-  public Flux<NamedGeoLocation> documentLocations(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLArgument(name = "size",
-          description = "Maximum number of locations to return",
-          defaultValue = "10") final int size,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  @GraphQLQuery(
+    name = "documentLocations",
+    description = "Count of type (entity,mention) by field value including a document filter"
+  )
+  public Flux<NamedGeoLocation> documentLocations(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLArgument(
+            name = "size",
+            description = "Maximum number of locations to return",
+            defaultValue = "10"
+          )
+          final int size,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     final Flux<DocumentProvider> providers = getProviders(corpus, DocumentProvider.class, hints);
     return providers.flatMap(p -> p.documentLocations(Optional.ofNullable(documentFilter), size));
   }
 
   @GraphQLQuery(name = "documentTimeRange", description = "Get the range of dates for entities")
-  public Mono<TimeRange> documentTimeRange(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Mono<TimeRange> documentTimeRange(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
         .flatMap(p -> p.documentTimeRange(Optional.ofNullable(documentFilter)))
-        .reduce(new TimeRange(), (acc, r) -> {
-          acc.expand(r);
-          return acc;
-        });
+        .reduce(
+            new TimeRange(),
+            (acc, r) -> {
+              acc.expand(r);
+              return acc;
+            });
   }
 
-
   @GraphQLQuery(name = "entityTimeRange", description = "Get the range of dates for entities")
-  public Mono<TimeRange> entityTimeRange(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLArgument(name = "query",
-          description = "Search query") final DocumentFilter documentFilter,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public Mono<TimeRange> entityTimeRange(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(name = "query", description = "Search query")
+          final DocumentFilter documentFilter,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
     return getProviders(corpus, DocumentProvider.class, hints)
         .flatMap(p -> p.entityTimeRange(Optional.ofNullable(documentFilter)))
-        .reduce(new TimeRange(), (acc, r) -> {
-          acc.expand(r);
-          return acc;
-        });
+        .reduce(
+            new TimeRange(),
+            (acc, r) -> {
+              acc.expand(r);
+              return acc;
+            });
   }
 }

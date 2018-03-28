@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
@@ -19,7 +21,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusMentionService;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,11 +50,9 @@ public class MentionDocumentServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private MentionProvider mentionProvider;
+  @Autowired private MentionProvider mentionProvider;
 
-  @Autowired
-  private DocumentProvider documentProvider;
+  @Autowired private DocumentProvider documentProvider;
 
   @Test
   public void testGetDocument() {
@@ -61,7 +60,7 @@ public class MentionDocumentServiceTest extends AbstractKetosGraphqlTest {
     when(mentionProvider.getById(anyString())).thenReturn(Mono.just(mention));
     when(documentProvider.getById(eq("testDoc"))).thenReturn(Mono.just(getTestDoc()));
     postQuery(corpusQuery("mention(id: \"1\"){ document { id } }"), defaultVariables())
-        .jsonPath("$.data.corpus.mention.document.id").isEqualTo("testDoc");
+        .jsonPath("$.data.corpus.mention.document.id")
+        .isEqualTo("testDoc");
   }
-
 }

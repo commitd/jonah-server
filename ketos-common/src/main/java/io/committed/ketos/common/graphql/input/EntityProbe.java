@@ -1,11 +1,10 @@
 package io.committed.ketos.common.graphql.input;
 
-import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
-/**
- * Search by example entity.
- */
+import io.committed.invest.core.dto.collections.PropertiesMap;
+
+/** Search by example entity. */
 @Data
 public class EntityProbe {
 
@@ -15,7 +14,6 @@ public class EntityProbe {
   private String subType;
   private String value;
   private PropertiesMap properties;
-
 
   public EntityFilter toFilter() {
     final EntityFilter filter = new EntityFilter();
@@ -29,5 +27,4 @@ public class EntityProbe {
 
     return filter;
   }
-
 }

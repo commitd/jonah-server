@@ -25,7 +25,7 @@ public class MongoMentionProviderTest extends AbstractMentionProviderTest {
   @Override
   public MentionProvider getMentionProvider() {
     MongoMentionProviderFactory factory = new MongoMentionProviderFactory();
-    return (MongoMentionProvider) factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
+    return (MongoMentionProvider)
+        factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

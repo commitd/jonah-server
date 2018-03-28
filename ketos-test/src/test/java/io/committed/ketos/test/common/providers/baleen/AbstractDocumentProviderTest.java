@@ -58,8 +58,7 @@ public abstract class AbstractDocumentProviderTest {
     DocumentSearchResult results = getDocumentProvider().search(search, 0, 4);
     List<BaleenDocument> resultList = results.getResults().collectList().block();
     assertEquals(1, resultList.size());
-    assertEquals("a19f6ed4-87bb-4dc6-919e-596761127082",
-        resultList.get(0).getId());
+    assertEquals("a19f6ed4-87bb-4dc6-919e-596761127082", resultList.get(0).getId());
   }
 
   @Test
@@ -69,7 +68,8 @@ public abstract class AbstractDocumentProviderTest {
     infoFilter.setLanguage("x-unspecified");
     filter.setInfo(infoFilter);
     DocumentSearch search = new DocumentSearch(null, filter, null, null, null);
-    List<BaleenDocument> results = getDocumentProvider().search(search, 0, 1000).getResults().collectList().block();
+    List<BaleenDocument> results =
+        getDocumentProvider().search(search, 0, 1000).getResults().collectList().block();
     assertEquals(1, results.size());
   }
 
@@ -93,18 +93,25 @@ public abstract class AbstractDocumentProviderTest {
     menFilter.setType("Person");
     DocumentFilter docFilter = new DocumentFilter();
     docFilter.setId("a19f6ed4-87bb-4dc6-919e-596761127082");
-    DocumentSearch search = new DocumentSearch(null, docFilter,
-        Collections.singletonList(menFilter),
-        Collections.singletonList(filter), null);
-    List<BaleenDocument> results = getDocumentProvider().search(search, 0,
-        1000).getResults().collectList().block();
+    DocumentSearch search =
+        new DocumentSearch(
+            null,
+            docFilter,
+            Collections.singletonList(menFilter),
+            Collections.singletonList(filter),
+            null);
+    List<BaleenDocument> results =
+        getDocumentProvider().search(search, 0, 1000).getResults().collectList().block();
     assertEquals(1, results.size());
   }
 
   @Test
   public void testCountByField() {
-    List<TermBin> bins = getDocumentProvider()
-        .countByField(Optional.empty(), Collections.singletonList("externalId"), 4).collectList().block();
+    List<TermBin> bins =
+        getDocumentProvider()
+            .countByField(Optional.empty(), Collections.singletonList("externalId"), 4)
+            .collectList()
+            .block();
 
     assertEquals(4, bins.size());
     for (TermBin bin : bins) {
@@ -114,7 +121,11 @@ public abstract class AbstractDocumentProviderTest {
 
   @Test
   public void testCountByDate() {
-    List<TimeBin> hours = getDocumentProvider().countByDate(Optional.empty(), TimeInterval.HOUR).collectList().block();
+    List<TimeBin> hours =
+        getDocumentProvider()
+            .countByDate(Optional.empty(), TimeInterval.HOUR)
+            .collectList()
+            .block();
     assertEquals(1, hours.size());
   }
 
@@ -152,23 +163,29 @@ public abstract class AbstractDocumentProviderTest {
   @Test
   public void testCountByJoinedField() {
     List<TermBin> results =
-        getDocumentProvider().countByJoinedField(Optional.empty(), ItemTypes.ENTITY, Collections.singletonList("type"),
-            1000).collectList().block();
+        getDocumentProvider()
+            .countByJoinedField(
+                Optional.empty(), ItemTypes.ENTITY, Collections.singletonList("type"), 1000)
+            .collectList()
+            .block();
     assertEquals(3, results.size());
 
     List<TermBin> results2 =
-        getDocumentProvider().countByJoinedField(Optional.empty(), ItemTypes.MENTION, Collections.singletonList("type"),
-            1000).collectList().block();
+        getDocumentProvider()
+            .countByJoinedField(
+                Optional.empty(), ItemTypes.MENTION, Collections.singletonList("type"), 1000)
+            .collectList()
+            .block();
     assertEquals(3, results2.size());
 
     List<TermBin> results3 =
         getDocumentProvider()
-            .countByJoinedField(Optional.empty(), ItemTypes.RELATION, Collections.singletonList("type"),
-                1000)
-            .collectList().block();
+            .countByJoinedField(
+                Optional.empty(), ItemTypes.RELATION, Collections.singletonList("type"), 1000)
+            .collectList()
+            .block();
     assertEquals(1, results3.size());
   }
 
   public abstract DocumentProvider getDocumentProvider();
-
 }

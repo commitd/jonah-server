@@ -6,7 +6,11 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+
 import javax.annotation.Nullable;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
@@ -27,8 +31,13 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.joda.time.DateTime;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
@@ -36,14 +45,11 @@ import io.committed.invest.support.data.elasticsearch.ElasticsearchSupportServic
 import io.committed.invest.support.data.elasticsearch.SearchHits;
 import io.committed.invest.support.elasticsearch.utils.TimeIntervalUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
-import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * Base class to support Elasticsearch with Baleen data provides.
  *
- * Note many of these might migrate to the parent {@link ElasticsearchSupportService} over time.
+ * <p>Note many of these might migrate to the parent {@link ElasticsearchSupportService} over time.
  *
  * @param <T> entity class
  */
@@ -57,8 +63,12 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
   // We have to provide an upper value...
   private static final int ALL_RESULTS = 10000;
 
-  public AbstractEsBaleenService(final Client client, final ObjectMapper mapper, final String indexName,
-      final String typeName, final Class<T> clazz) {
+  public AbstractEsBaleenService(
+      final Client client,
+      final ObjectMapper mapper,
+      final String indexName,
+      final String typeName,
+      final Class<T> clazz) {
     super(client, mapper, indexName, typeName, clazz);
   }
 
@@ -73,56 +83,67 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
         .flatMapMany(SearchHits::getResults);
   }
 
-  public Flux<TermBin> nestedTermAggregation(final Optional<QueryBuilder> query,
-      final String nestedPath, final String field, final int size) {
+  public Flux<TermBin> nestedTermAggregation(
+      final Optional<QueryBuilder> query,
+      final String nestedPath,
+      final String field,
+      final int size) {
 
     final NestedAggregationBuilder aggregationBuilder =
         AggregationBuilders.nested(NESTED_AGG, nestedPath)
-            .subAggregation(AggregationBuilders.terms(AGG)
-                .field(field)
-                .size(size));
-
+            .subAggregation(AggregationBuilders.terms(AGG).field(field).size(size));
 
     return aggregation(query, aggregationBuilder)
-        .flatMapMany(as -> {
-          final Nested nested = as.get(NESTED_AGG);
-          final Terms terms = nested.getAggregations().get(AGG);
-          return Flux.fromIterable(terms.getBuckets()).map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
-
-        });
+        .flatMapMany(
+            as -> {
+              final Nested nested = as.get(NESTED_AGG);
+              final Terms terms = nested.getAggregations().get(AGG);
+              return Flux.fromIterable(terms.getBuckets())
+                  .map(b -> new TermBin(b.getKeyAsString(), b.getDocCount()));
+            });
   }
 
-  public Flux<TimeBin> nestedTimelineAggregation(final Optional<QueryBuilder> query, final TimeInterval interval,
-      final String nestedPath, final String field) {
+  public Flux<TimeBin> nestedTimelineAggregation(
+      final Optional<QueryBuilder> query,
+      final TimeInterval interval,
+      final String nestedPath,
+      final String field) {
 
     final NestedAggregationBuilder aggregationBuilder =
         AggregationBuilders.nested(NESTED_AGG, nestedPath)
-            .subAggregation(AggregationBuilders.dateHistogram(AGG)
-                .field(field)
-                .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval))
-                .minDocCount(1));
-
+            .subAggregation(
+                AggregationBuilders.dateHistogram(AGG)
+                    .field(field)
+                    .dateHistogramInterval(TimeIntervalUtils.toDateHistogram(interval))
+                    .minDocCount(1));
 
     return aggregation(query, aggregationBuilder)
-        .flatMapMany(as -> {
-          final Nested nested = as.get(NESTED_AGG);
-          final Histogram terms = nested.getAggregations().get(AGG);
-          return Flux.fromIterable(terms.getBuckets()).map(b -> {
-            final Instant i = Instant.ofEpochMilli(((DateTime) b.getKey()).toInstant().getMillis());
-            return new TimeBin(i, b.getDocCount());
-          });
-
-        });
+        .flatMapMany(
+            as -> {
+              final Nested nested = as.get(NESTED_AGG);
+              final Histogram terms = nested.getAggregations().get(AGG);
+              return Flux.fromIterable(terms.getBuckets())
+                  .map(
+                      b -> {
+                        final Instant i =
+                            Instant.ofEpochMilli(((DateTime) b.getKey()).toInstant().getMillis());
+                        return new TimeBin(i, b.getDocCount());
+                      });
+            });
   }
 
-  protected <S> void scroll(final QueryBuilder query, final Class<S> clazz, final BiConsumer<String, S> consumer) {
+  protected <S> void scroll(
+      final QueryBuilder query, final Class<S> clazz, final BiConsumer<String, S> consumer) {
 
-    SearchResponse scrollResp = getClient().prepareSearch(getIndex())
-        .setTypes(getType())
-        .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
-        .setScroll(new TimeValue(60000))
-        .setQuery(query)
-        .setSize(100).get();
+    SearchResponse scrollResp =
+        getClient()
+            .prepareSearch(getIndex())
+            .setTypes(getType())
+            .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
+            .setScroll(new TimeValue(60000))
+            .setQuery(query)
+            .setSize(100)
+            .get();
     do {
       for (final SearchHit hit : scrollResp.getHits().getHits()) {
         final Optional<S> s = convertFromJsonSource(hit.getSourceAsString(), clazz);
@@ -130,46 +151,57 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
       }
 
       scrollResp =
-          getClient().prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(60000)).execute()
+          getClient()
+              .prepareSearchScroll(scrollResp.getScrollId())
+              .setScroll(new TimeValue(60000))
+              .execute()
               .actionGet();
     } while (scrollResp.getHits().getHits().length != 0);
-
   }
 
-
-  protected Set<String> findElasticId(final Optional<String> parentType, final Optional<String> parent,
-      final String type, final String ourIdField,
+  protected Set<String> findElasticId(
+      final Optional<String> parentType,
+      final Optional<String> parent,
+      final String type,
+      final String ourIdField,
       final String ourId) {
     final Set<String> ids = new HashSet<>();
 
     // Find matches and record id
 
-    final BoolQueryBuilder find = QueryBuilders.boolQuery()
-        // .must(QueryBuilders.typeQuery(type))
-        .must(QueryBuilders.matchQuery(ourIdField, ourId));
+    final BoolQueryBuilder find =
+        QueryBuilders.boolQuery()
+            // .must(QueryBuilders.typeQuery(type))
+            .must(QueryBuilders.matchQuery(ourIdField, ourId));
 
     if (parent.isPresent() && parentType.isPresent()) {
-      find.must(JoinQueryBuilders.hasParentQuery(
-          parentType.get(),
-          QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, parent.get()),
-          false));
+      find.must(
+          JoinQueryBuilders.hasParentQuery(
+              parentType.get(),
+              QueryBuilders.matchQuery(BaleenProperties.EXTERNAL_ID, parent.get()),
+              false));
     }
 
-    SearchResponse scrollResp = getClient().prepareSearch(getIndex())
-
-        .setTypes(type)
-        .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
-        .setScroll(new TimeValue(60000))
-        .storedFields("__none__")
-        .setQuery(find)
-        .setSize(100).get();
+    SearchResponse scrollResp =
+        getClient()
+            .prepareSearch(getIndex())
+            .setTypes(type)
+            .addSort(FieldSortBuilder.DOC_FIELD_NAME, SortOrder.ASC)
+            .setScroll(new TimeValue(60000))
+            .storedFields("__none__")
+            .setQuery(find)
+            .setSize(100)
+            .get();
     do {
       for (final SearchHit hit : scrollResp.getHits().getHits()) {
         ids.add(hit.getId());
       }
 
       scrollResp =
-          getClient().prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(60000)).execute()
+          getClient()
+              .prepareSearchScroll(scrollResp.getScrollId())
+              .setScroll(new TimeValue(60000))
+              .execute()
               .actionGet();
     } while (scrollResp.getHits().getHits().length != 0);
 
@@ -194,10 +226,12 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     }
   }
 
-
-
-  public boolean updateOrSave(final Optional<String> parentType, final Optional<String> parent, final String idField,
-      final String id, final T t) {
+  public boolean updateOrSave(
+      final Optional<String> parentType,
+      final Optional<String> parent,
+      final String idField,
+      final String id,
+      final T t) {
 
     // The initial implementation used UpdateByQuery to attempt to replace the _source
     // but that didn't work.
@@ -226,7 +260,6 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     } else {
       return save(parent.orElse(null), getType(), sourceValue);
     }
-
   }
 
   protected boolean save(@Nullable final String parent, final String type, final Object o) {
@@ -238,19 +271,17 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     return save(parent, type, optional.get());
   }
 
-  protected boolean save(@Nullable final String parent, final String type,
-      final String value) {
+  protected boolean save(@Nullable final String parent, final String type, final String value) {
     try {
 
-      final IndexRequestBuilder builder = getClient().prepareIndex(getIndex(), type)
-          .setSource(value, XContentType.JSON);
+      final IndexRequestBuilder builder =
+          getClient().prepareIndex(getIndex(), type).setSource(value, XContentType.JSON);
 
       if (parent != null) {
         builder.setParent(parent);
       }
 
-      final IndexResponse indexResponse = builder.execute()
-          .get();
+      final IndexResponse indexResponse = builder.execute().get();
       return indexResponse.status().equals(RestStatus.OK);
     } catch (final Exception e) {
       log.warn("Ubable to execute index", e);
@@ -258,8 +289,8 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     }
   }
 
-  protected boolean update(@Nullable final String parent, final String id, final String type,
-      final Object o) {
+  protected boolean update(
+      @Nullable final String parent, final String id, final String type, final Object o) {
     final Optional<String> optional = convertToJsonSource(o);
     if (!optional.isPresent()) {
       return false;
@@ -268,19 +299,18 @@ public abstract class AbstractEsBaleenService<T> extends ElasticsearchSupportSer
     return update(parent, id, type, optional.get());
   }
 
-  protected boolean update(@Nullable final String parent, final String id, final String type,
-      final String value) {
+  protected boolean update(
+      @Nullable final String parent, final String id, final String type, final String value) {
     try {
 
-      final IndexRequestBuilder builder = getClient().prepareIndex(getIndex(), type, id)
-          .setSource(value, XContentType.JSON);
+      final IndexRequestBuilder builder =
+          getClient().prepareIndex(getIndex(), type, id).setSource(value, XContentType.JSON);
 
       if (parent != null) {
         builder.setParent(parent);
       }
 
-      final IndexResponse indexResponse = builder.execute()
-          .get();
+      final IndexResponse indexResponse = builder.execute().get();
       return indexResponse.status().equals(RestStatus.OK);
     } catch (final Exception e) {
       log.warn("Ubable to execute update", e);

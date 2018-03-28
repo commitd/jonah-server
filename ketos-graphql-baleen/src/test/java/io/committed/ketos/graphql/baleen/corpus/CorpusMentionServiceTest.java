@@ -17,6 +17,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenMention;
@@ -25,8 +28,6 @@ import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,15 +50,16 @@ public class CorpusMentionServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private MentionProvider mentionProvider;
+  @Autowired private MentionProvider mentionProvider;
 
   @Test
   public void testGetById() {
     when(mentionProvider.getById(anyString())).thenReturn(Mono.just(createMention("1", "test")));
     postQuery(corpusQuery("mention(id:\"test\"){id value}"), defaultVariables())
-        .jsonPath("$.data.corpus.mention.id").isEqualTo("1")
-        .jsonPath("$.data.corpus.mention.value").isEqualTo("test");
+        .jsonPath("$.data.corpus.mention.id")
+        .isEqualTo("1")
+        .jsonPath("$.data.corpus.mention.value")
+        .isEqualTo("test");
   }
 
   @Test
@@ -65,9 +67,12 @@ public class CorpusMentionServiceTest extends AbstractKetosGraphqlTest {
     List<BaleenMention> results = Collections.singletonList(createMention("1", "test"));
     when(mentionProvider.getAll(anyInt(), anyInt())).thenReturn(Flux.fromIterable(results));
     postQuery(corpusQuery("mentions{ id value }"), defaultVariables())
-        .jsonPath("$.data.corpus.mentions").isArray()
-        .jsonPath("$.data.corpus.mentions[0].id").isEqualTo("1")
-        .jsonPath("$.data.corpus.mentions[0].value").isEqualTo("test");
+        .jsonPath("$.data.corpus.mentions")
+        .isArray()
+        .jsonPath("$.data.corpus.mentions[0].id")
+        .isEqualTo("1")
+        .jsonPath("$.data.corpus.mentions[0].value")
+        .isEqualTo("test");
   }
 
   @Test
@@ -76,56 +81,71 @@ public class CorpusMentionServiceTest extends AbstractKetosGraphqlTest {
     when(mentionProvider.getByExample(any(MentionProbe.class), anyInt(), anyInt()))
         .thenReturn(Flux.fromIterable(results));
     postQuery(corpusQuery("mentions(probe: {id: \"probe\"}){ id value }"), defaultVariables())
-        .jsonPath("$.data.corpus.mentions").isArray()
-        .jsonPath("$.data.corpus.mentions[0].id").isEqualTo("probe")
-        .jsonPath("$.data.corpus.mentions[0].value").isEqualTo("test");
+        .jsonPath("$.data.corpus.mentions")
+        .isArray()
+        .jsonPath("$.data.corpus.mentions[0].id")
+        .isEqualTo("probe")
+        .jsonPath("$.data.corpus.mentions[0].value")
+        .isEqualTo("test");
   }
 
   @Test
   public void testSearchForEntities() {
-    postQuery(corpusQuery("searchMentions(query: {id: \"test\"}){ mentionFilter { id } }"), defaultVariables())
-        .jsonPath("$.data.corpus.searchMentions.mentionFilter.id").isEqualTo("test");
+    postQuery(
+            corpusQuery("searchMentions(query: {id: \"test\"}){ mentionFilter { id } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.searchMentions.mentionFilter.id")
+        .isEqualTo("test");
   }
 
   @Test
   public void testSearchForEntitiesNullArgs() {
     postQuery(corpusQuery("searchMentions{ mentionFilter { id } }"), defaultVariables())
-        .jsonPath("$.errors").exists();
+        .jsonPath("$.errors")
+        .exists();
   }
 
   @Test
   public void testCountMentions() {
     when(mentionProvider.count()).thenReturn(Mono.just(10l));
     postQuery(corpusQuery("countMentions"), defaultVariables())
-        .jsonPath("$.data.corpus.countMentions").isEqualTo(10);
+        .jsonPath("$.data.corpus.countMentions")
+        .isEqualTo(10);
   }
 
   @Test
   public void testCountByField() {
     List<TermBin> results = Collections.singletonList(new TermBin("test", 1));
-    when(mentionProvider.countByField(any(), anyList(), anyInt())).thenReturn(Flux.fromIterable(results));
-    postQuery(corpusQuery("countByMentionField(field: \"type\") { bins { term count } }"), defaultVariables())
-        .jsonPath("$.data.corpus.countByMentionField.bins").isArray()
-        .jsonPath("$.data.corpus.countByMentionField.bins[0].term").isEqualTo("test")
-        .jsonPath("$.data.corpus.countByMentionField.bins[0].count").isEqualTo(1);
+    when(mentionProvider.countByField(any(), anyList(), anyInt()))
+        .thenReturn(Flux.fromIterable(results));
+    postQuery(
+            corpusQuery("countByMentionField(field: \"type\") { bins { term count } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.countByMentionField.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.countByMentionField.bins[0].term")
+        .isEqualTo("test")
+        .jsonPath("$.data.corpus.countByMentionField.bins[0].count")
+        .isEqualTo(1);
   }
 
   @Test
   public void testCountByFieldEmptyField() {
-    postQuery(corpusQuery("countByMentionField(field: \"\") { bins { term count } }"), defaultVariables())
-        .jsonPath("$.data.corpus.countByMentionField").isEqualTo(null);
+    postQuery(
+            corpusQuery("countByMentionField(field: \"\") { bins { term count } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.countByMentionField")
+        .isEqualTo(null);
   }
 
   @Test
   public void testCountByFieldNullField() {
     postQuery(corpusQuery("countByMentionField { bins { term count } }"), defaultVariables())
-        .jsonPath("$.errors").exists();
+        .jsonPath("$.errors")
+        .exists();
   }
 
   private BaleenMention createMention(String id, String value) {
     return new BaleenMention(id, 0, 0, "test", "testSub", value, "testEntity", "testDoc", null);
   }
-
-
-
 }

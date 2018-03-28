@@ -1,7 +1,9 @@
 package io.committed.ketos.common.graphql.input;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
+
 import io.committed.invest.core.dto.collections.PropertiesMap;
 
 public class RelationProbeTest {
@@ -25,7 +27,5 @@ public class RelationProbeTest {
     assertThat(filter.getSubType()).isEqualTo(probe.getSubType());
     assertThat(filter.getType()).isEqualTo(probe.getType());
     assertThat(filter.getValue()).isEqualTo(probe.getValue());
-
   }
-
 }

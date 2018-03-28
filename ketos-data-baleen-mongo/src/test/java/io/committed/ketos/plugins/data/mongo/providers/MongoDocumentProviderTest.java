@@ -25,6 +25,7 @@ public class MongoDocumentProviderTest extends AbstractDocumentProviderTest {
   @Override
   public DocumentProvider getDocumentProvider() {
     MongoDocumentProviderFactory factory = new MongoDocumentProviderFactory();
-    return (MongoDocumentProvider) factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
+    return (MongoDocumentProvider)
+        factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
 }

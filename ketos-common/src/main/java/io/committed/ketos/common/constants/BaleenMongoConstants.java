@@ -1,8 +1,6 @@
 package io.committed.ketos.common.constants;
 
-/**
- * Mongo Constants relating to Baleen collection, settings.
- */
+/** Mongo Constants relating to Baleen collection, settings. */
 public final class BaleenMongoConstants {
 
   // Settings for MongoDataProviders
@@ -20,9 +18,7 @@ public final class BaleenMongoConstants {
   public static final String DEFAULT_ENTITY_COLLECTION = "entities";
   public static final String DEFAULT_RELATION_COLLECTION = "relations";
 
-
   private BaleenMongoConstants() {
     // Singleton
   }
-
 }

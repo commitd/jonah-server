@@ -25,5 +25,4 @@ public abstract class AbstractCrudDataProviderTest<R, T> {
     boolean delete = getDataProvider().delete(getDeleteReference());
     assertTrue(delete);
   }
-
 }

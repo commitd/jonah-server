@@ -6,13 +6,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.BsonField;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+
 import io.committed.invest.support.mongo.utils.FilterUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.DocumentFilter;
@@ -20,13 +23,10 @@ import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
-/**
- * Convert Ketos entity queries to Mongo queries.
- */
+/** Convert Ketos entity queries to Mongo queries. */
 public final class DocumentFilters {
 
   private static final String QUERY_PREFIX = "q";
-
 
   private DocumentFilters() {
     // Singleton
@@ -92,31 +92,44 @@ public final class DocumentFilters {
     }
 
     if (documentFilter.getMetadata() != null) {
-      documentFilter.getMetadata().stream()
+      documentFilter
+          .getMetadata()
+          .stream()
           .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
-          .map(e -> Filters.elemMatch("metadata", Filters.and(
-              Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY, e.getKey()),
-              Filters.eq(BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE,
-                  ValueConversion.valueOrNull(e.getValue())))))
+          .map(
+              e ->
+                  Filters.elemMatch(
+                      "metadata",
+                      Filters.and(
+                          Filters.eq(
+                              BaleenProperties.METADATA + "." + BaleenProperties.METADATA_KEY,
+                              e.getKey()),
+                          Filters.eq(
+                              BaleenProperties.METADATA + "." + BaleenProperties.METADATA_VALUE,
+                              ValueConversion.valueOrNull(e.getValue())))))
           .forEach(filters::add);
-
     }
 
     if (documentFilter.getProperties() != null) {
-      documentFilter.getProperties().stream()
+      documentFilter
+          .getProperties()
+          .stream()
           .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
-          .map(e -> Filters.eq(BaleenProperties.PROPERTIES + "." + e.getKey(),
-              ValueConversion.valueOrNull(e.getValue())))
+          .map(
+              e ->
+                  Filters.eq(
+                      BaleenProperties.PROPERTIES + "." + e.getKey(),
+                      ValueConversion.valueOrNull(e.getValue())))
           .forEach(filters::add);
-
     }
-
 
     return FilterUtils.combine(filters);
   }
 
   public static boolean isAggregation(final DocumentSearch documentSearch) {
-    return documentSearch.hasMentions() || documentSearch.hasRelations() || documentSearch.hasEntities();
+    return documentSearch.hasMentions()
+        || documentSearch.hasRelations()
+        || documentSearch.hasEntities();
   }
 
   public static Optional<Bson> createFilter(final DocumentSearch documentSearch) {
@@ -125,8 +138,12 @@ public final class DocumentFilters {
     return createFilter(Optional.ofNullable(documentSearch.getDocumentFilter()));
   }
 
-  public static List<Bson> createAggregation(final DocumentSearch documentSearch, final String documentCollection,
-      final String mentionCollection, final String entityCollection, final String relationCollection) {
+  public static List<Bson> createAggregation(
+      final DocumentSearch documentSearch,
+      final String documentCollection,
+      final String mentionCollection,
+      final String entityCollection,
+      final String relationCollection) {
 
     // In order to join in Mongo you need to do an aggregation, and then use $lookup.
     // Lookup as two opiotns one to so a simple join (id in one collection -> docId to another),
@@ -138,20 +155,26 @@ public final class DocumentFilters {
     // document you create a Mongo Document which is easily over the 16 mb limit.
     // So that doesn't work at all, Mongo will just stop..
 
-    // Instead we need to need to use the pipeline optimisation to do lookup-then-unwind which basically
-    // will join the documents-entities and immediately spilt them again (so you have document-single
+    // Instead we need to need to use the pipeline optimisation to do lookup-then-unwind which
+    // basically
+    // will join the documents-entities and immediately spilt them again (so you have
+    // document-single
     // entity).
-    // At that point you have something that will fit into 16mb (assuming the entity did originallu!)
+    // At that point you have something that will fit into 16mb (assuming the entity did
+    // originallu!)
 
     // So our approach here is:
     // - doucmentFilter
     // - extact just the docIds (the rest is useless for filtering with)
     // - join entities - via the lookup-unwind approach
     // - for each entity we've joined:
-    // - since technically an entityFilter is a mentionFilter we actually need to unwind again... this
-    // is a bit silly in that both times we have multiple copies of the same mention within an entity,
+    // - since technically an entityFilter is a mentionFilter we actually need to unwind again...
+    // this
+    // is a bit silly in that both times we have multiple copies of the same mention within an
+    // entity,
     // bu
-    // - For each entityFilter: add a flag which says we amtched this query (named e1...eN for entities
+    // - For each entityFilter: add a flag which says we amtched this query (named e1...eN for
+    // entities
     // and r1... rN for
     // relations)
     // -
@@ -164,7 +187,8 @@ public final class DocumentFilters {
 
     // At this stage you have docId which match doc, entity and relation filters.
 
-    // Rejoin document collection with docId, so we lookup documents again to basically join the full
+    // Rejoin document collection with docId, so we lookup documents again to basically join the
+    // full
     // documents back on.
 
     // You will definitely want to have an index or docId in relation, mention and externalId in
@@ -175,70 +199,69 @@ public final class DocumentFilters {
 
     /* In Mongo this looks like:...
 
-      db.documents.aggregate(
-    // Document search
-    { "$match" : { "$text" : { "$search" : "test" } } },
-    // Just retain the document id
-     { $project : { "externalId": 1} },
-//     // Join on the entities
-    { "$lookup" : {
-        "from" : "entities",
-        localField: "externalId",
-        foreignField: "docId",
-        "as": "entities"
-      }
-    },
-//     // Unwind to mentions (we need to need to do this in order to make the queries work in $cond
-    { $unwind: {path: "$entities" }},
-    { $replaceRoot: {newRoot: "$entities" }},
-//     // For each query run it and if it matches 'flag the match'
-    {
-        $addFields: {
-            q1: { $cond: [ {$and: [{$eq: ["$type", "Temporal"]}]}, true, false] },
-            q2: { $cond: [{"type": "Buzzword"}, true, false] }
-        }
-      },
-     { $group: { _id: "$docId", q1:{ $max: '$q1'}, q2:{ $max: '$q2'}  } },
- //      // And query:
-     { $match: { $and: [{'q1':true}, {'q2':true}]} },
-// //    Or query:  { $match: { $or: [{'q1':true}, {'q2':true}]} },
-     { $project: { "externalId": "$_id" }},
-     // Relations
-      { "$lookup" : {
-        "from" : "relations",
-        localField: "externalId",
-        foreignField: "docId",
-        "as": "relations"
-       }
-    },
-    { $unwind: {path: "$relations" }},
-    { $replaceRoot: {newRoot: "$relations" }},
-    {
-        $addFields: {
-            q1: { $cond: [ {$and: [{$eq: ["$source.type", "Buzzword"]}]}, true, false] },
-            q2: { $cond: [{"type": "sentenceRelation"}, true, false] }
-        }
-      },
-     { $group: { _id: "$docId", q1:{ $max: '$q1'}, q2:{ $max: '$q2'}  } },
-//      // And vs Or:
-     { $match: { $and: [{'q1':true}, {'q2':true}]} },
-//
-//     // Find the document again:
-    { "$lookup" : {
-        "from" : "documents",
-        localField: "_id",
-        foreignField: "externalId",
-        "as": "documents"
-      }
-    },
-    { $unwind: {path: "$documents" }},
-    { $replaceRoot: { newRoot: "$documents" } }
+          db.documents.aggregate(
+        // Document search
+        { "$match" : { "$text" : { "$search" : "test" } } },
+        // Just retain the document id
+         { $project : { "externalId": 1} },
+    //     // Join on the entities
+        { "$lookup" : {
+            "from" : "entities",
+            localField: "externalId",
+            foreignField: "docId",
+            "as": "entities"
+          }
+        },
+    //     // Unwind to mentions (we need to need to do this in order to make the queries work in $cond
+        { $unwind: {path: "$entities" }},
+        { $replaceRoot: {newRoot: "$entities" }},
+    //     // For each query run it and if it matches 'flag the match'
+        {
+            $addFields: {
+                q1: { $cond: [ {$and: [{$eq: ["$type", "Temporal"]}]}, true, false] },
+                q2: { $cond: [{"type": "Buzzword"}, true, false] }
+            }
+          },
+         { $group: { _id: "$docId", q1:{ $max: '$q1'}, q2:{ $max: '$q2'}  } },
+     //      // And query:
+         { $match: { $and: [{'q1':true}, {'q2':true}]} },
+    // //    Or query:  { $match: { $or: [{'q1':true}, {'q2':true}]} },
+         { $project: { "externalId": "$_id" }},
+         // Relations
+          { "$lookup" : {
+            "from" : "relations",
+            localField: "externalId",
+            foreignField: "docId",
+            "as": "relations"
+           }
+        },
+        { $unwind: {path: "$relations" }},
+        { $replaceRoot: {newRoot: "$relations" }},
+        {
+            $addFields: {
+                q1: { $cond: [ {$and: [{$eq: ["$source.type", "Buzzword"]}]}, true, false] },
+                q2: { $cond: [{"type": "sentenceRelation"}, true, false] }
+            }
+          },
+         { $group: { _id: "$docId", q1:{ $max: '$q1'}, q2:{ $max: '$q2'}  } },
+    //      // And vs Or:
+         { $match: { $and: [{'q1':true}, {'q2':true}]} },
+    //
+    //     // Find the document again:
+        { "$lookup" : {
+            "from" : "documents",
+            localField: "_id",
+            foreignField: "externalId",
+            "as": "documents"
+          }
+        },
+        { $unwind: {path: "$documents" }},
+        { $replaceRoot: { newRoot: "$documents" } }
 
-)
-     */
+    )
+         */
 
- // @formatter:on
-
+    // @formatter:on
 
     final List<Bson> pipeline = new ArrayList<>();
 
@@ -248,7 +271,6 @@ public final class DocumentFilters {
 
     // Just keep the doc id:
     pipeline.add(Aggregates.project(Projections.include(BaleenProperties.EXTERNAL_ID)));
-
 
     if (documentSearch.hasMentions()) {
       final List<Bson> filters =
@@ -278,27 +300,31 @@ public final class DocumentFilters {
     return pipeline;
   }
 
-  private static void addJoinToDocuments(final List<Bson> pipeline, final String documentCollection) {
+  private static void addJoinToDocuments(
+      final List<Bson> pipeline, final String documentCollection) {
     final String joinedField = "joined_document";
 
     pipeline.add(
-        Aggregates.lookup(documentCollection, BaleenProperties.EXTERNAL_ID, BaleenProperties.EXTERNAL_ID,
+        Aggregates.lookup(
+            documentCollection,
+            BaleenProperties.EXTERNAL_ID,
+            BaleenProperties.EXTERNAL_ID,
             joinedField));
     pipeline.add(Aggregates.unwind("$" + joinedField));
     pipeline.add(Aggregates.replaceRoot("$" + joinedField));
   }
 
-  private static void addFiltersToAggregation(final List<Bson> pipeline,
-      final List<Bson> filters, final String collectionToJoin) {
+  private static void addFiltersToAggregation(
+      final List<Bson> pipeline, final List<Bson> filters, final String collectionToJoin) {
 
     // Join relations (lookup and unwind)
     final String joinedField = "joined";
-    pipeline
-        .add(Aggregates.lookup(collectionToJoin, BaleenProperties.EXTERNAL_ID, BaleenProperties.DOC_ID, joinedField));
+    pipeline.add(
+        Aggregates.lookup(
+            collectionToJoin, BaleenProperties.EXTERNAL_ID, BaleenProperties.DOC_ID, joinedField));
     pipeline.add(Aggregates.unwind("$" + joinedField));
     // Move into the relations 'field' as our root (so that relationFilter works)
     pipeline.add(Aggregates.replaceRoot("$" + joinedField));
-
 
     // Create cond for each query
     final int numFilters = filters.size();
@@ -311,8 +337,7 @@ public final class DocumentFilters {
       filterConditional.add(Projections.computed(key, cond));
     }
     filterConditional.add(Projections.include(BaleenProperties.DOC_ID));
-    pipeline.add(Aggregates.project(
-        Projections.fields(filterConditional)));
+    pipeline.add(Aggregates.project(Projections.fields(filterConditional)));
 
     // Group back to document level
     final List<BsonField> groupByFields = new ArrayList<>(numFilters);
@@ -333,7 +358,4 @@ public final class DocumentFilters {
     // Project back to being jsut like document with externalId
     pipeline.add(Aggregates.project(Projections.computed("externalId", "$_id")));
   }
-
 }
-
-

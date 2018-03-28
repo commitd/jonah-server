@@ -1,6 +1,7 @@
 package io.committed.ketos.common.ui.actions;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 
 public class KetosCoreActionsTest {
@@ -11,15 +12,10 @@ public class KetosCoreActionsTest {
     assertThat(KetosCoreActions.CORPUS_VIEW).isEqualTo("corpus.view");
   }
 
-
   @Test
   public void testMake() {
     assertThat(KetosCoreActions.make("a", "b")).isEqualTo("a.b");
     assertThat(KetosCoreActions.make("a", "b", "c")).isEqualTo("a.b.c");
     assertThat(KetosCoreActions.make("a")).isEqualTo("a");
-
   }
-
-
-
 }

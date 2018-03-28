@@ -5,13 +5,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import org.bson.conversions.Bson;
+
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.geojson.NamedCoordinateReferenceSystem;
 import com.mongodb.client.model.geojson.Point;
 import com.mongodb.client.model.geojson.Polygon;
 import com.mongodb.client.model.geojson.PolygonCoordinates;
 import com.mongodb.client.model.geojson.Position;
+
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.support.mongo.utils.FilterUtils;
@@ -21,17 +24,15 @@ import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.utils.ValueConversion;
 import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
-/**
- * Convert Ketos entity queries to Mongo queries.
- */
+/** Convert Ketos entity queries to Mongo queries. */
 public final class EntityFilters {
 
   private EntityFilters() {
     // Singleton
   }
 
-  public static Optional<Bson> createFilter(final Optional<EntityFilter> filter, final String prefix,
-      final boolean operatorMode) {
+  public static Optional<Bson> createFilter(
+      final Optional<EntityFilter> filter, final String prefix, final boolean operatorMode) {
 
     if (!filter.isPresent()) {
       return Optional.empty();
@@ -41,11 +42,10 @@ public final class EntityFilters {
 
     final List<Bson> filters = new LinkedList<>();
 
-    // Since there is only a single text index, we can't be specific here about which value to use (eg
+    // Since there is only a single text index, we can't be specific here about which value to use
+    // (eg
     // if we have a prefix opply)
-    ValueConversion.stringValue(entityFilter.getValue())
-        .map(Filters::text)
-        .ifPresent(filters::add);
+    ValueConversion.stringValue(entityFilter.getValue()).map(Filters::text).ifPresent(filters::add);
 
     ValueConversion.stringValue(entityFilter.getId())
         .map(s -> CustomFilters.eqFilter(prefix + BaleenProperties.EXTERNAL_ID, s, operatorMode))
@@ -68,37 +68,47 @@ public final class EntityFilters {
         .ifPresent(filters::add);
 
     if (entityFilter.getProperties() != null) {
-      entityFilter.getProperties().stream()
+      entityFilter
+          .getProperties()
+          .stream()
           .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
-          .map(e -> CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
-              ValueConversion.valueOrNull(e.getValue()),
-              operatorMode))
+          .map(
+              e ->
+                  CustomFilters.eqFilter(
+                      prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+                      ValueConversion.valueOrNull(e.getValue()),
+                      operatorMode))
           .forEach(filters::add);
     }
 
     if (entityFilter.getStartTimestamp() != null) {
 
       filters.add(
-          Filters.gte(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP,
+          Filters.gte(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP,
               entityFilter.getStartTimestamp().getTime()));
     }
 
-
     if (entityFilter.getEndTimestamp() != null) {
       filters.add(
-          Filters.gte(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP,
+          Filters.gte(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP,
               entityFilter.getEndTimestamp().getTime()));
     }
 
     // Doesn't work in operator mode
-    // Mongo does not support near inside aggregation! So ou'd have to add this as a geoNear aggration
+    // Mongo does not support near inside aggregation! So ou'd have to add this as a geoNear
+    // aggration
     if (entityFilter.getNear() != null && !operatorMode) {
       final GeoRadius near = entityFilter.getNear();
-      final Point p = new Point(new Position(near.getLon(),
-          near.getLat()));
+      final Point p = new Point(new Position(near.getLon(), near.getLat()));
 
-      filters.add(Filters.near(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, p,
-          near.getRadius(), null));
+      filters.add(
+          Filters.near(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON,
+              p,
+              near.getRadius(),
+              null));
     }
 
     // This doesn't work in an aggregation...
@@ -118,10 +128,13 @@ public final class EntityFilters {
       // than a hemisphere!
       // https://docs.mongodb.com/manual/reference/operator/query/geoIntersects/#intersects-a-big-polygon
 
-      final PolygonCoordinates coordinates = new PolygonCoordinates(Arrays.asList(bl, br, tr, tl, bl));
-      final Polygon polygon = new Polygon(NamedCoordinateReferenceSystem.EPSG_4326_STRICT_WINDING, coordinates);
-      filters
-          .add(Filters.geoWithin(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon));
+      final PolygonCoordinates coordinates =
+          new PolygonCoordinates(Arrays.asList(bl, br, tr, tl, bl));
+      final Polygon polygon =
+          new Polygon(NamedCoordinateReferenceSystem.EPSG_4326_STRICT_WINDING, coordinates);
+      filters.add(
+          Filters.geoWithin(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon));
     }
 
     return FilterUtils.combine(filters);
@@ -131,7 +144,8 @@ public final class EntityFilters {
     return createFilter(Optional.ofNullable(entitySearch.getEntityFilter()), "", false);
   }
 
-  public static Stream<Bson> createFilters(final Stream<EntityFilter> filters, final boolean operatorMode) {
+  public static Stream<Bson> createFilters(
+      final Stream<EntityFilter> filters, final boolean operatorMode) {
     return filters
         .map(f -> createFilter(Optional.ofNullable(f), "", operatorMode))
         .filter(Optional::isPresent)

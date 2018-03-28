@@ -2,13 +2,12 @@ package io.committed.ketos.common.baleenconsumer;
 
 import java.util.Map;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
-/**
- * Baleen's output format for an entity.
- *
- */
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/** Baleen's output format for an entity. */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OutputEntity {
@@ -26,5 +25,4 @@ public class OutputEntity {
   private Map<String, Object> properties;
 
   private Set<String> mentionIds;
-
 }

@@ -25,7 +25,7 @@ public class MongoRelationProviderTest extends AbstractRelationProviderTest {
   @Override
   public RelationProvider getRelationProvider() {
     MongoRelationProviderFactory factory = new MongoRelationProviderFactory();
-    return (MongoRelationProvider) factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
+    return (MongoRelationProvider)
+        factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

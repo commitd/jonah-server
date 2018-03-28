@@ -16,6 +16,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenCorpus;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -28,8 +31,6 @@ import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService;
 import io.committed.ketos.graphql.baleen.corpus.CorpusEntityService;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,11 +43,11 @@ public class DocumentEntityServiceTest extends AbstractKetosGraphqlTest {
       CorpusEntityService service = Mockito.mock(CorpusEntityService.class);
       List<BaleenEntity> results =
           Collections.singletonList(new BaleenEntity("test", "testDoc", "test", "", "value", null));
-      when(service.getEntities(any(BaleenCorpus.class), any(EntityProbe.class), anyInt(), anyInt(),
-          isNull())).thenReturn(Flux.fromIterable(results));
+      when(service.getEntities(
+              any(BaleenCorpus.class), any(EntityProbe.class), anyInt(), anyInt(), isNull()))
+          .thenReturn(Flux.fromIterable(results));
 
       return service;
-
     }
 
     @Bean
@@ -55,7 +56,8 @@ public class DocumentEntityServiceTest extends AbstractKetosGraphqlTest {
     }
 
     @Bean
-    public DocumentEntityService documentEntityService(DataProviders providers, CorpusEntityService entityService) {
+    public DocumentEntityService documentEntityService(
+        DataProviders providers, CorpusEntityService entityService) {
       return new DocumentEntityService(providers, entityService);
     }
 
@@ -76,15 +78,20 @@ public class DocumentEntityServiceTest extends AbstractKetosGraphqlTest {
   @Test
   public void testDocumentEntities() {
     postQuery(corpusQuery("document(id: \"testDoc\") { entities { id } }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.entities").isArray()
-        .jsonPath("$.data.corpus.document.entities[0].id").isEqualTo("test");
+        .jsonPath("$.data.corpus.document.entities")
+        .isArray()
+        .jsonPath("$.data.corpus.document.entities[0].id")
+        .isEqualTo("test");
   }
 
   @Test
   public void testDocumentEntitiesWithProbe() {
-    postQuery(corpusQuery("document(id: \"testDoc\") { entities(probe:{id: \"testDoc\"}){ id } }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.entities").isArray()
-        .jsonPath("$.data.corpus.document.entities[0].id").isEqualTo("test");
+    postQuery(
+            corpusQuery("document(id: \"testDoc\") { entities(probe:{id: \"testDoc\"}){ id } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.document.entities")
+        .isArray()
+        .jsonPath("$.data.corpus.document.entities[0].id")
+        .isEqualTo("test");
   }
-
 }

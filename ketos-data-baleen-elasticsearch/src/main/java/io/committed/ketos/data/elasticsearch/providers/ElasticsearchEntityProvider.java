@@ -2,7 +2,12 @@ package io.committed.ketos.data.elasticsearch.providers;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.elasticsearch.index.query.QueryBuilder;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchServiceDataProvider;
 import io.committed.invest.support.data.elasticsearch.SearchHits;
@@ -17,22 +22,16 @@ import io.committed.ketos.common.graphql.output.EntitySearch;
 import io.committed.ketos.common.providers.baleen.EntityProvider;
 import io.committed.ketos.data.elasticsearch.filters.EntityFilters;
 import io.committed.ketos.data.elasticsearch.repository.EsEntityService;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Elasticsearch EntityProvider.
- *
- */
+/** Elasticsearch EntityProvider. */
 public class ElasticsearchEntityProvider
     extends AbstractElasticsearchServiceDataProvider<OutputEntity, EsEntityService>
     implements EntityProvider {
 
-  public ElasticsearchEntityProvider(final String dataset, final String datasource,
-      final EsEntityService service) {
+  public ElasticsearchEntityProvider(
+      final String dataset, final String datasource, final EsEntityService service) {
     super(dataset, datasource, service);
   }
-
 
   @Override
   public Mono<BaleenEntity> getById(final String id) {
@@ -45,8 +44,8 @@ public class ElasticsearchEntityProvider
   }
 
   @Override
-  public Flux<TermBin> countByField(final Optional<EntityFilter> filter, final List<String> path,
-      final int limit) {
+  public Flux<TermBin> countByField(
+      final Optional<EntityFilter> filter, final List<String> path, final int limit) {
     final String keywordField = ElasticsearchMapping.toAggregationField(path);
     return getService().termAggregation(EntityFilters.toQuery(filter, ""), keywordField, limit);
   }
@@ -54,16 +53,17 @@ public class ElasticsearchEntityProvider
   @Override
   public Flux<BaleenEntity> getAll(final int offset, final int limit) {
     return getService().getAll(offset, limit).map(Converters::toBaleenEntity);
-
   }
 
   @Override
-  public EntitySearchResult search(final EntitySearch entitySearch, final int offset, final int limit) {
+  public EntitySearchResult search(
+      final EntitySearch entitySearch, final int offset, final int limit) {
     final Optional<QueryBuilder> query = EntityFilters.toQuery(entitySearch);
 
     if (query.isPresent()) {
       final Mono<SearchHits<OutputEntity>> hits = getService().search(query.get(), offset, limit);
-      final Flux<BaleenEntity> results = hits.flatMapMany(SearchHits::getResults).map(Converters::toBaleenEntity);
+      final Flux<BaleenEntity> results =
+          hits.flatMapMany(SearchHits::getResults).map(Converters::toBaleenEntity);
       final Mono<Long> total = hits.map(SearchHits::getTotal);
       return new EntitySearchResult(results, total, offset, limit);
     } else {
@@ -75,6 +75,4 @@ public class ElasticsearchEntityProvider
   public Mono<Long> count() {
     return getService().count();
   }
-
-
 }

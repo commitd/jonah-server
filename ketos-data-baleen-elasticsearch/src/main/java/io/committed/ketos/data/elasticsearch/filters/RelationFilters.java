@@ -1,23 +1,24 @@
 package io.committed.ketos.data.elasticsearch.filters;
 
 import java.util.Optional;
+
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+
 import io.committed.ketos.common.constants.BaleenProperties;
 import io.committed.ketos.common.graphql.input.RelationFilter;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
-/**
- * Convert Ketos relation queries to ES queries.
- */
+/** Convert Ketos relation queries to ES queries. */
 public final class RelationFilters {
   private RelationFilters() {
     // Singleton
   }
 
-  public static Optional<QueryBuilder> toQuery(final Optional<RelationFilter> relationFilter, final String prefix) {
+  public static Optional<QueryBuilder> toQuery(
+      final Optional<RelationFilter> relationFilter, final String prefix) {
     if (!relationFilter.isPresent()) {
       return Optional.empty();
     }
@@ -47,22 +48,29 @@ public final class RelationFilters {
         .ifPresent(queryBuilder::must);
 
     if (filter.getProperties() != null) {
-      filter.getProperties().stream()
+      filter
+          .getProperties()
+          .stream()
           .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
-          .map(e -> QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
-              ValueConversion.valueOrNull(e.getValue())))
+          .map(
+              e ->
+                  QueryBuilders.matchQuery(
+                      prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+                      ValueConversion.valueOrNull(e.getValue())))
           .forEach(queryBuilder::must);
     }
 
     if (filter.getSource() != null) {
-      MentionFilters
-          .toQuery(Optional.ofNullable(filter.getSource()), prefix + BaleenProperties.RELATION_SOURCE + ".")
+      MentionFilters.toQuery(
+              Optional.ofNullable(filter.getSource()),
+              prefix + BaleenProperties.RELATION_SOURCE + ".")
           .ifPresent(queryBuilder::must);
     }
 
     if (filter.getTarget() != null) {
-      MentionFilters
-          .toQuery(Optional.ofNullable(filter.getTarget()), prefix + BaleenProperties.RELATION_TARGET + ".")
+      MentionFilters.toQuery(
+              Optional.ofNullable(filter.getTarget()),
+              prefix + BaleenProperties.RELATION_TARGET + ".")
           .ifPresent(queryBuilder::must);
     }
 

@@ -1,20 +1,21 @@
 package io.committed.ketos.plugin.documentcluster.resolvers;
 
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
 import io.committed.ketos.common.graphql.output.Documents;
 import io.committed.ketos.plugin.documentcluster.data.Clusters;
 import io.committed.ketos.plugin.documentcluster.service.CarrotClusterService;
+
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import reactor.core.publisher.Mono;
 
-/**
- * GraphQL Resolveer exposing document clustering
- *
- */
+/** GraphQL Resolveer exposing document clustering */
 @GraphQLService
 public class DocumentClusterResolver {
 
@@ -32,14 +33,17 @@ public class DocumentClusterResolver {
     }
 
     // Use the parent to find a suitable query to pass in
-    final Optional<String> query = results.findParent(DocumentSearch.class)
-        .flatMap(search -> {
-          if (search.getDocumentFilter() != null) {
-            return Optional.ofNullable(search.getDocumentFilter().getContent());
-          } else {
-            return Optional.empty();
-          }
-        });
+    final Optional<String> query =
+        results
+            .findParent(DocumentSearch.class)
+            .flatMap(
+                search -> {
+                  if (search.getDocumentFilter() != null) {
+                    return Optional.ofNullable(search.getDocumentFilter().getContent());
+                  } else {
+                    return Optional.empty();
+                  }
+                });
 
     return cluster.cluster(query, results.getResults());
   }

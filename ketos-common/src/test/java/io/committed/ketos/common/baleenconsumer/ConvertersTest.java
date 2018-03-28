@@ -1,10 +1,13 @@
 package io.committed.ketos.common.baleenconsumer;
 
 import static org.junit.Assert.assertEquals;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.junit.Test;
+
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.data.BaleenMention;
@@ -102,6 +105,4 @@ public class ConvertersTest {
 
     return input;
   }
-
-
 }

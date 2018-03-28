@@ -1,13 +1,12 @@
 package io.committed.ketos.common.baleenconsumer;
 
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
-/**
- * Baleen's output format for a relation.
- *
- */
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/** Baleen's output format for a relation. */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OutputRelation {
@@ -31,7 +30,4 @@ public class OutputRelation {
   private int begin;
 
   private int end;
-
 }
-
-

@@ -29,7 +29,8 @@ public abstract class AbstractMentionProviderTest {
 
   @Test
   public void testGetById() {
-    BaleenMention mention = getMentionProvider().getById("a8672e25-0f23-43cf-b735-fba8f2d48f3b").block();
+    BaleenMention mention =
+        getMentionProvider().getById("a8672e25-0f23-43cf-b735-fba8f2d48f3b").block();
     assertNotNull(mention);
     assertEquals("a8672e25-0f23-43cf-b735-fba8f2d48f3b", mention.getId());
   }
@@ -42,8 +43,11 @@ public abstract class AbstractMentionProviderTest {
 
   @Test
   public void testCountByField() {
-    List<TermBin> mentions = getMentionProvider()
-        .countByField(Optional.empty(), Collections.singletonList("type"), 1000).collectList().block();
+    List<TermBin> mentions =
+        getMentionProvider()
+            .countByField(Optional.empty(), Collections.singletonList("type"), 1000)
+            .collectList()
+            .block();
     assertEquals(3, mentions.size());
   }
 
@@ -58,8 +62,8 @@ public abstract class AbstractMentionProviderTest {
     MentionFilter filter = new MentionFilter();
     filter.setType("Person");
     MentionSearch search = new MentionSearch(null, filter);
-    List<BaleenMention> results = getMentionProvider().search(search, 0, 1000).getResults().collectList().block();
+    List<BaleenMention> results =
+        getMentionProvider().search(search, 0, 1000).getResults().collectList().block();
     assertEquals(3, results.size());
   }
-
 }

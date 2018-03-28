@@ -25,7 +25,7 @@ public class MongoMetadataProviderTest extends AbstractMetadataProviderTest {
   @Override
   public MetadataProvider getMetadataProvider() {
     MongoMetadataProviderFactory factory = new MongoMetadataProviderFactory();
-    return (MongoMetadataProvider) factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
+    return (MongoMetadataProvider)
+        factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

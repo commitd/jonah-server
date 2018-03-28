@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenDocumentMetadata;
@@ -23,7 +25,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -52,17 +53,18 @@ public class DocumentSummaryFieldTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private DocumentProvider documentProvider;
+  @Autowired private DocumentProvider documentProvider;
 
   @Test
   public void testGetSummaryFromMetadata() {
     BaleenDocumentMetadata metadata = new BaleenDocumentMetadata("summary", "metadataSummary");
-    BaleenDocument doc = new BaleenDocument("testDoc", Collections.singletonList(metadata), "", null);
+    BaleenDocument doc =
+        new BaleenDocument("testDoc", Collections.singletonList(metadata), "", null);
     when(documentProvider.getById(anyString())).thenReturn(Mono.just(doc));
 
     postQuery(corpusQuery("document(id: \"testDoc\") { summary }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.summary").isEqualTo("metadataSummary");
+        .jsonPath("$.data.corpus.document.summary")
+        .isEqualTo("metadataSummary");
   }
 
   @Test
@@ -71,17 +73,20 @@ public class DocumentSummaryFieldTest extends AbstractKetosGraphqlTest {
     when(documentProvider.getById(anyString())).thenReturn(Mono.just(doc));
 
     postQuery(corpusQuery("document(id: \"testDoc\") { summary }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.summary").isEqualTo("content");
+        .jsonPath("$.data.corpus.document.summary")
+        .isEqualTo("content");
   }
 
   @Test
   public void testGetSummaryFromKeywords() {
     BaleenDocumentMetadata metadata = new BaleenDocumentMetadata("keywords", "keywords");
-    BaleenDocument doc = new BaleenDocument("testDoc", Collections.singletonList(metadata), "content", null);
+    BaleenDocument doc =
+        new BaleenDocument("testDoc", Collections.singletonList(metadata), "content", null);
     when(documentProvider.getById(anyString())).thenReturn(Mono.just(doc));
 
     postQuery(corpusQuery("document(id: \"testDoc\") { summary }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.summary").isEqualTo("keywords");
+        .jsonPath("$.data.corpus.document.summary")
+        .isEqualTo("keywords");
   }
 
   @Test
@@ -93,7 +98,8 @@ public class DocumentSummaryFieldTest extends AbstractKetosGraphqlTest {
     when(documentProvider.getById(anyString())).thenReturn(Mono.just(doc));
 
     postQuery(corpusQuery("document(id: \"testDoc\") { summary }"), defaultVariables())
-        .jsonPath("$.data.corpus.document.summary").isEqualTo("keywords; keywords2");
+        .jsonPath("$.data.corpus.document.summary")
+        .isEqualTo("keywords; keywords2");
   }
 
   @Test
@@ -102,8 +108,9 @@ public class DocumentSummaryFieldTest extends AbstractKetosGraphqlTest {
     when(documentProvider.getById(anyString())).thenReturn(Mono.just(doc));
 
     postQuery(corpusQuery("document(id: \"testDoc\") { summary }"), defaultVariables())
-        .jsonPath("$.data.corpus.document").exists()
-        .jsonPath("$.data.corpus.document.summary").isEqualTo("");
+        .jsonPath("$.data.corpus.document")
+        .exists()
+        .jsonPath("$.data.corpus.document.summary")
+        .isEqualTo("");
   }
-
 }

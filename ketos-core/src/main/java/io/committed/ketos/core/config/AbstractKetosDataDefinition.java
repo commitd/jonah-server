@@ -2,16 +2,16 @@ package io.committed.ketos.core.config;
 
 import java.util.List;
 import java.util.Map;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
-import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
-import io.committed.invest.extensions.data.dataset.Dataset;
+
 import lombok.Data;
 
-/**
- * Base for Ketos data definitions.
- *
- */
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+
+import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
+import io.committed.invest.extensions.data.dataset.Dataset;
+
+/** Base for Ketos data definitions. */
 @Data
 public abstract class AbstractKetosDataDefinition {
 
@@ -20,7 +20,8 @@ public abstract class AbstractKetosDataDefinition {
   private String description;
   private String datasource;
 
-  protected AbstractKetosDataDefinition(final String id, final String name, final String description) {
+  protected AbstractKetosDataDefinition(
+      final String id, final String name, final String description) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -49,8 +50,8 @@ public abstract class AbstractKetosDataDefinition {
     return ImmutableMap.<String, Object>builder().putAll(baseSettings);
   }
 
-  protected Map<String, Object> merge(final Map<String, Object> generalSettings,
-      final Map<String, Object> specificSettings) {
+  protected Map<String, Object> merge(
+      final Map<String, Object> generalSettings, final Map<String, Object> specificSettings) {
     final Builder<String, Object> settings = newSettings();
 
     if (generalSettings != null) {
@@ -64,14 +65,16 @@ public abstract class AbstractKetosDataDefinition {
     return settings.build();
   }
 
-  protected void addProvider(final List<DataProviderSpecification> providers, final String factory,
+  protected void addProvider(
+      final List<DataProviderSpecification> providers,
+      final String factory,
       final Map<String, Object> settings) {
 
-    providers.add(DataProviderSpecification.builder()
-        .datasource(getDatasource())
-        .factory(factory)
-        .settings(settings)
-        .build());
-
+    providers.add(
+        DataProviderSpecification.builder()
+            .datasource(getDatasource())
+            .factory(factory)
+            .settings(settings)
+            .build());
   }
 }

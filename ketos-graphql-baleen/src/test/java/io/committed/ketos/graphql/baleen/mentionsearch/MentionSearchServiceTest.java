@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenMention;
 import io.committed.ketos.common.graphql.intermediate.MentionSearchResult;
@@ -23,8 +26,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusMentionService;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,12 +55,12 @@ public class MentionSearchServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private MentionProvider mentionProvider;
+  @Autowired private MentionProvider mentionProvider;
 
   @Test
   public void testGetMentionSearchHits() {
-    BaleenMention mention = new BaleenMention("mid", 0, 0, "test", "", "value", "eid", "docId", null);
+    BaleenMention mention =
+        new BaleenMention("mid", 0, 0, "test", "", "value", "eid", "docId", null);
     MentionSearchResult result = new MentionSearchResult();
     result.setResults(Flux.fromIterable(Collections.singletonList(mention)));
     result.setSize(1);
@@ -67,9 +68,12 @@ public class MentionSearchServiceTest extends AbstractKetosGraphqlTest {
     result.setOffset(0);
     when(mentionProvider.search(any(MentionSearch.class), anyInt(), anyInt())).thenReturn(result);
 
-    postQuery(corpusQuery("searchMentions(query: {id: \"mid\"}) { hits { results { id } } }"), defaultVariables())
-        .jsonPath("$.data.corpus.searchMentions.hits.results").isArray()
-        .jsonPath("$.data.corpus.searchMentions.hits.results[0].id").isEqualTo("mid");
+    postQuery(
+            corpusQuery("searchMentions(query: {id: \"mid\"}) { hits { results { id } } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.searchMentions.hits.results")
+        .isArray()
+        .jsonPath("$.data.corpus.searchMentions.hits.results[0].id")
+        .isEqualTo("mid");
   }
-
 }

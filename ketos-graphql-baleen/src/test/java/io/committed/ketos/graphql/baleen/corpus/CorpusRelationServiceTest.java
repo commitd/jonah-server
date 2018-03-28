@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.input.RelationProbe;
@@ -22,8 +25,6 @@ import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,23 +47,22 @@ public class CorpusRelationServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private RelationProvider relationProvider;
+  @Autowired private RelationProvider relationProvider;
 
   @Test
   public void testGetById() {
     BaleenRelation relation = createRelation("1", "2", "3");
     when(relationProvider.getById(anyString())).thenReturn(Mono.just(relation));
     postQuery(corpusQuery("relation(id: \"1\"){ id }"), defaultVariables())
-        .jsonPath("$.data.corpus.relation.id").isEqualTo("1");
+        .jsonPath("$.data.corpus.relation.id")
+        .isEqualTo("1");
   }
 
   @Test
   public void testGetByIdNullArgs() {
     BaleenRelation relation = createRelation("1", "2", "3");
     when(relationProvider.getById(anyString())).thenReturn(Mono.just(relation));
-    postQuery(corpusQuery("relation{ id }"), defaultVariables())
-        .jsonPath("$.errors").exists();
+    postQuery(corpusQuery("relation{ id }"), defaultVariables()).jsonPath("$.errors").exists();
   }
 
   @Test
@@ -71,8 +71,10 @@ public class CorpusRelationServiceTest extends AbstractKetosGraphqlTest {
     when(relationProvider.getAll(anyInt(), anyInt()))
         .thenReturn(Flux.fromIterable(Collections.singletonList(relation)));
     postQuery(corpusQuery(" relations { id }"), defaultVariables())
-        .jsonPath("$.data.corpus.relations").isArray()
-        .jsonPath("$.data.corpus.relations[0].id").isEqualTo("1");
+        .jsonPath("$.data.corpus.relations")
+        .isArray()
+        .jsonPath("$.data.corpus.relations[0].id")
+        .isEqualTo("1");
   }
 
   @Test
@@ -81,22 +83,28 @@ public class CorpusRelationServiceTest extends AbstractKetosGraphqlTest {
     when(relationProvider.getByExample(any(RelationProbe.class), anyInt(), anyInt()))
         .thenReturn(Flux.fromIterable(Collections.singletonList(relation)));
     postQuery(corpusQuery(" relations(probe: {type: \"Test\"}){ id }"), defaultVariables())
-        .jsonPath("$.data.corpus.relations").isArray()
-        .jsonPath("$.data.corpus.relations[0].id").isEqualTo("1");
+        .jsonPath("$.data.corpus.relations")
+        .isArray()
+        .jsonPath("$.data.corpus.relations[0].id")
+        .isEqualTo("1");
   }
 
   @Test
   public void testSearchForRleations() {
-    postQuery(corpusQuery(" searchRelations(query: {id: \"test\"}){ relationFilter { id } }"), defaultVariables())
-        .jsonPath("$.data.corpus.searchRelations.relationFilter").exists()
-        .jsonPath("$.data.corpus.searchRelations.relationFilter.id").isEqualTo("test");
+    postQuery(
+            corpusQuery(" searchRelations(query: {id: \"test\"}){ relationFilter { id } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.searchRelations.relationFilter")
+        .exists()
+        .jsonPath("$.data.corpus.searchRelations.relationFilter.id")
+        .isEqualTo("test");
   }
 
   @Test
   public void testCountRelations() {
     when(relationProvider.count()).thenReturn(Mono.just(10l));
     postQuery(corpusQuery(" countRelations "), defaultVariables())
-        .jsonPath("$.data.corpus.countRelations").isEqualTo(10);
+        .jsonPath("$.data.corpus.countRelations")
+        .isEqualTo(10);
   }
-
 }

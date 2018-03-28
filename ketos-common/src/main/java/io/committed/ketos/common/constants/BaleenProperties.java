@@ -14,7 +14,6 @@ public final class BaleenProperties {
   public static final String METADATA_VALUE = "value";
   public static final String PROPERTIES = "properties";
 
-
   // Documentation based properties
 
   public static final String DOCUMENT_TYPE = "type";

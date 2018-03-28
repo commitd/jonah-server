@@ -6,9 +6,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,6 +18,10 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.server.WebSession;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.auth.InvestRoles;
 import io.committed.invest.core.graphql.InvestRootContext;
 import io.committed.invest.extensions.InvestUiExtension;
@@ -25,8 +31,6 @@ import io.committed.invest.extensions.data.providers.DatabaseConstants;
 import io.committed.invest.server.data.services.DefaultDatasetProviders;
 import io.committed.ketos.plugins.data.feedback.data.Feedback;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 public class FeedbackGraphQlServiceTest {
 
@@ -47,10 +51,11 @@ public class FeedbackGraphQlServiceTest {
     auth = mock(Authentication.class);
     session = mock(WebSession.class);
 
-    context = InvestRootContext.builder()
-        .authentication(Mono.just(auth))
-        .session(Mono.just(session))
-        .build();
+    context =
+        InvestRootContext.builder()
+            .authentication(Mono.just(auth))
+            .session(Mono.just(session))
+            .build();
   }
 
   @Test
@@ -70,7 +75,6 @@ public class FeedbackGraphQlServiceTest {
     assertThat(value.getType()).isEqualTo("type");
 
     assertThat(value.getUser()).isEqualTo("user");
-
   }
 
   @Test
@@ -91,7 +95,6 @@ public class FeedbackGraphQlServiceTest {
 
     // Guest user if not authenticated (properly or at all)
     assertThat(value.getUser()).isEqualTo("guest");
-
   }
 
   @Test
@@ -108,7 +111,8 @@ public class FeedbackGraphQlServiceTest {
   public void testDeleteFeedbackWhenAdmin() {
     doReturn("user").when(auth).getName();
     doReturn(true).when(auth).isAuthenticated();
-    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ADMINISTRATOR_AUTHORITY))).when(auth)
+    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ADMINISTRATOR_AUTHORITY)))
+        .when(auth)
         .getAuthorities();
 
     service.deleteFeedback(context, "feedbackId");
@@ -125,7 +129,6 @@ public class FeedbackGraphQlServiceTest {
 
     verify(fdp, never()).delete(ArgumentMatchers.anyString());
     verify(fdp, never()).deleteByUser(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
-
   }
 
   @Test
@@ -136,7 +139,6 @@ public class FeedbackGraphQlServiceTest {
     final Flux<Feedback> listFeedback = service.listFeedback(context, 0, 10);
 
     assertThat(listFeedback.collectList().block()).isEmpty();
-
   }
 
   @Test
@@ -150,15 +152,14 @@ public class FeedbackGraphQlServiceTest {
     service.listFeedback(context, 0, 10).subscribe();
 
     verify(fdp).findAllByUser("user", 0, 10);
-
-
   }
 
   @Test
   public void testListFeedbackWhenAdmin() {
     doReturn("user").when(auth).getName();
     doReturn(true).when(auth).isAuthenticated();
-    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ADMINISTRATOR_AUTHORITY))).when(auth)
+    doReturn(Arrays.asList(new SimpleGrantedAuthority(InvestRoles.ADMINISTRATOR_AUTHORITY)))
+        .when(auth)
         .getAuthorities();
 
     final List<Feedback> list = Arrays.asList(mock(Feedback.class));
@@ -167,7 +168,6 @@ public class FeedbackGraphQlServiceTest {
     service.listFeedback(context, 0, 10).subscribe();
 
     verify(fdp).findAll(0, 10);
-
   }
 
   @Test
@@ -182,8 +182,8 @@ public class FeedbackGraphQlServiceTest {
     assertThat(pluginName).isEqualTo("name");
   }
 
-
-  public class StubFeedbackDataProvider extends AbstractDataProvider implements FeedbackDataProvider {
+  public class StubFeedbackDataProvider extends AbstractDataProvider
+      implements FeedbackDataProvider {
 
     protected StubFeedbackDataProvider() {
       super("dataset", "datasource");
@@ -220,6 +220,5 @@ public class FeedbackGraphQlServiceTest {
       // Do nothing
 
     }
-
   }
 }

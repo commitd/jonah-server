@@ -1,9 +1,11 @@
 package io.committed.ketos.data.elasticsearch.filters;
 
 import java.util.Optional;
+
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.support.elasticsearch.utils.GeoUtils;
@@ -12,16 +14,14 @@ import io.committed.ketos.common.graphql.input.MentionFilter;
 import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 
-/**
- * Convert Ketos mention queries to ES queries.
- */
+/** Convert Ketos mention queries to ES queries. */
 public final class MentionFilters {
   private MentionFilters() {
     // Singleton
   }
 
-  public static Optional<QueryBuilder> toQuery(final Optional<MentionFilter> mentionFilter,
-      final String prefix) {
+  public static Optional<QueryBuilder> toQuery(
+      final Optional<MentionFilter> mentionFilter, final String prefix) {
 
     if (!mentionFilter.isPresent()) {
       return Optional.empty();
@@ -56,22 +56,29 @@ public final class MentionFilters {
         .ifPresent(queryBuilder::must);
 
     if (filter.getProperties() != null) {
-      filter.getProperties().stream()
+      filter
+          .getProperties()
+          .stream()
           .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
-          .map(e -> QueryBuilders.matchQuery(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
-              ValueConversion.valueOrNull(e.getValue())))
+          .map(
+              e ->
+                  QueryBuilders.matchQuery(
+                      prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+                      ValueConversion.valueOrNull(e.getValue())))
           .forEach(queryBuilder::must);
     }
 
     if (filter.getStartTimestamp() != null) {
-      queryBuilder
-          .must(QueryBuilders.rangeQuery(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP)
+      queryBuilder.must(
+          QueryBuilders.rangeQuery(
+                  prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP)
               .gte(filter.getStartTimestamp().getTime()));
     }
 
     if (filter.getEndTimestamp() != null) {
-      queryBuilder
-          .must(QueryBuilders.rangeQuery(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP)
+      queryBuilder.must(
+          QueryBuilders.rangeQuery(
+                  prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP)
               .lte(filter.getEndTimestamp().getTime()));
     }
 

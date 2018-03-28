@@ -1,16 +1,15 @@
 package io.committed.ketos.common.graphql.output;
 
-import io.committed.ketos.common.graphql.input.MentionFilter;
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
-import io.committed.ketos.common.graphql.support.GraphQLNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * A full mention search query.
- */
+import io.committed.ketos.common.graphql.input.MentionFilter;
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
+import io.committed.ketos.common.graphql.support.GraphQLNode;
+
+/** A full mention search query. */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

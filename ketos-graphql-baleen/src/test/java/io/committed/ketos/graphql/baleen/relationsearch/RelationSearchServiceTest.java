@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenRelation;
 import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
@@ -22,8 +25,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusRelationService;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,8 +49,7 @@ public class RelationSearchServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private RelationProvider relationProvider;
+  @Autowired private RelationProvider relationProvider;
 
   @Test
   public void testGetRelationHits() {
@@ -60,9 +60,12 @@ public class RelationSearchServiceTest extends AbstractKetosGraphqlTest {
     result.setOffset(0);
     result.setTotal(Mono.just(1l));
     when(relationProvider.search(any(RelationSearch.class), anyInt(), anyInt())).thenReturn(result);
-    postQuery(corpusQuery("searchRelations(query: {id: \"rel\"}) { hits { results { id} } }"), defaultVariables())
-        .jsonPath("$.data.corpus.searchRelations.hits.results").isArray()
-        .jsonPath("$.data.corpus.searchRelations.hits.results[0].id").isEqualTo("rel");
+    postQuery(
+            corpusQuery("searchRelations(query: {id: \"rel\"}) { hits { results { id} } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.searchRelations.hits.results")
+        .isArray()
+        .jsonPath("$.data.corpus.searchRelations.hits.results[0].id")
+        .isEqualTo("rel");
   }
-
 }

@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.DocumentProvider;
@@ -20,7 +22,6 @@ import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService;
 import io.committed.ketos.graphql.baleen.corpus.CorpusEntityService;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,8 +41,8 @@ public class EntityDocumentsServiceTest extends AbstractKetosGraphqlTest {
     }
 
     @Bean
-    public EntityDocumentsService entityDocumentsService(DataProviders dataProviders,
-        CorpusDocumentsService documentsService) {
+    public EntityDocumentsService entityDocumentsService(
+        DataProviders dataProviders, CorpusDocumentsService documentsService) {
       return new EntityDocumentsService(dataProviders, documentsService);
     }
 
@@ -56,11 +57,9 @@ public class EntityDocumentsServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  public DocumentProvider documentProvider;
+  @Autowired public DocumentProvider documentProvider;
 
-  @Autowired
-  public EntityProvider entityProvider;
+  @Autowired public EntityProvider entityProvider;
 
   @Test
   public void testGetDocumentForEntity() {
@@ -68,7 +67,7 @@ public class EntityDocumentsServiceTest extends AbstractKetosGraphqlTest {
     BaleenEntity entity = new BaleenEntity("testEnt", "testDoc", "test", "", "testing", null);
     when(entityProvider.getById(anyString())).thenReturn(Mono.just(entity));
     postQuery(corpusQuery("entity(id: \"1\"){ document { id } }"), defaultVariables())
-        .jsonPath("$.data.corpus.entity.document.id").isEqualTo("testDoc");
+        .jsonPath("$.data.corpus.entity.document.id")
+        .isEqualTo("testDoc");
   }
-
 }

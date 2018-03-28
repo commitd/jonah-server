@@ -25,7 +25,7 @@ public class MongoEntityProviderTest extends AbstractEntityProviderTest {
   @Override
   public EntityProvider getEntityProvider() {
     MongoEntityProviderFactory factory = new MongoEntityProviderFactory();
-    return (MongoEntityProvider) factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
+    return (MongoEntityProvider)
+        factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

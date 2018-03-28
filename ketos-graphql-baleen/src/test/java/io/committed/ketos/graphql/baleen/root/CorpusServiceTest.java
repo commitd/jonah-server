@@ -24,7 +24,8 @@ public class CorpusServiceTest extends AbstractKetosGraphqlTest {
 
     @Bean
     public DocumentProvider relationProvider() {
-      DocumentProvider mockedProvider = GraphqlTestConfiguration.getMockedProvider(DocumentProvider.class);
+      DocumentProvider mockedProvider =
+          GraphqlTestConfiguration.getMockedProvider(DocumentProvider.class);
       when(mockedProvider.getProviderType()).thenReturn("DocumentProvider");
       return mockedProvider;
     }
@@ -32,47 +33,67 @@ public class CorpusServiceTest extends AbstractKetosGraphqlTest {
 
   @Test
   public void testCorpus() {
-    postQuery("query { corpus(id: \"" + GraphqlTestConfiguration.TEST_DATASET + "\") { id } }", Collections.EMPTY_MAP)
-        .jsonPath("$.data.corpus.id").isEqualTo(getTestCorpus().getId());
+    postQuery(
+            "query { corpus(id: \"" + GraphqlTestConfiguration.TEST_DATASET + "\") { id } }",
+            Collections.EMPTY_MAP)
+        .jsonPath("$.data.corpus.id")
+        .isEqualTo(getTestCorpus().getId());
   }
 
   @Test
   public void testCorpora() {
     postQuery("query { corpora { id } }", Collections.EMPTY_MAP)
-        .jsonPath("$.data.corpora").isArray()
-        .jsonPath("$.data.corpora[0].id").isEqualTo(getTestCorpus().getId());
+        .jsonPath("$.data.corpora")
+        .isArray()
+        .jsonPath("$.data.corpora[0].id")
+        .isEqualTo(getTestCorpus().getId());
   }
 
   @Test
   public void testCorporaWithDatabase() {
-    postQuery("query { corpora(database: \"" + GraphqlTestConfiguration.TEST_DB + "\") { id } }", Collections.EMPTY_MAP)
-        .jsonPath("$.data.corpora").isArray()
-        .jsonPath("$.data.corpora[0].id").isEqualTo(getTestCorpus().getId());
+    postQuery(
+            "query { corpora(database: \"" + GraphqlTestConfiguration.TEST_DB + "\") { id } }",
+            Collections.EMPTY_MAP)
+        .jsonPath("$.data.corpora")
+        .isArray()
+        .jsonPath("$.data.corpora[0].id")
+        .isEqualTo(getTestCorpus().getId());
   }
 
   @Test
   public void testCorporaWithDatasource() {
-    postQuery("query { corpora(datasource: \"" + GraphqlTestConfiguration.TEST_DATASOURCE + "\") { id } }",
-        Collections.EMPTY_MAP)
-            .jsonPath("$.data.corpora").isArray()
-            .jsonPath("$.data.corpora[0].id").isEqualTo(getTestCorpus().getId());
+    postQuery(
+            "query { corpora(datasource: \""
+                + GraphqlTestConfiguration.TEST_DATASOURCE
+                + "\") { id } }",
+            Collections.EMPTY_MAP)
+        .jsonPath("$.data.corpora")
+        .isArray()
+        .jsonPath("$.data.corpora[0].id")
+        .isEqualTo(getTestCorpus().getId());
   }
 
   @Test
   public void testCorporaWithProvider() {
-    postQuery("query { corpora(provider: \"DocumentProvider\") { id } }",
-        Collections.EMPTY_MAP)
-            .jsonPath("$.data.corpora").isArray()
-            .jsonPath("$.data.corpora[0].id").isEqualTo(getTestCorpus().getId());
+    postQuery("query { corpora(provider: \"DocumentProvider\") { id } }", Collections.EMPTY_MAP)
+        .jsonPath("$.data.corpora")
+        .isArray()
+        .jsonPath("$.data.corpora[0].id")
+        .isEqualTo(getTestCorpus().getId());
   }
 
   @Test
   public void testCorporaWithAllArgs() {
-    postQuery("query { corpora(datasource: \"" + GraphqlTestConfiguration.TEST_DATASOURCE + "\", database: \""
-        + GraphqlTestConfiguration.TEST_DB + "\", provider: \"DocumentProvider\") { id } }",
-        Collections.EMPTY_MAP)
-            .jsonPath("$.data.corpora").isArray()
-            .jsonPath("$.data.corpora[0].id").isEqualTo(getTestCorpus().getId());
+    postQuery(
+            "query { corpora(datasource: \""
+                + GraphqlTestConfiguration.TEST_DATASOURCE
+                + "\", database: \""
+                + GraphqlTestConfiguration.TEST_DB
+                + "\", provider: \"DocumentProvider\") { id } }",
+            Collections.EMPTY_MAP)
+        .jsonPath("$.data.corpora")
+        .isArray()
+        .jsonPath("$.data.corpora[0].id")
+        .isEqualTo(getTestCorpus().getId());
   }
-
 }

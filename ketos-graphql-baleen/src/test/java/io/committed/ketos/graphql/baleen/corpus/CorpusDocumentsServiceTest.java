@@ -24,6 +24,10 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
 import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
@@ -41,9 +45,6 @@ import io.committed.ketos.common.providers.baleen.DocumentProvider;
 import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -66,11 +67,9 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private CorpusDocumentsService corpusDocumentsService;
+  @Autowired private CorpusDocumentsService corpusDocumentsService;
 
-  @Autowired
-  private DocumentProvider documentProvider;
+  @Autowired private DocumentProvider documentProvider;
 
   @Autowired
   public CorpusDocumentsServiceTest() {
@@ -86,10 +85,13 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
   public void testDocument() {
     when(documentProvider.getById(anyString()))
         .thenReturn(Mono.just(new BaleenDocument("test", null, "", null)));
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { document(id: \"test\"){ id } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus.document.id").isEqualTo("test");
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { document(id: \"test\"){ id } } }",
+            Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus.document.id")
+        .isEqualTo("test");
 
     StepVerifier.create(corpusDocumentsService.getDocument(getTestCorpus(), "test", null))
         .assertNext(d -> assertNotNull(d.getParent()))
@@ -98,39 +100,54 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
 
   @Test
   public void testGetDocumentNullId() {
-    postQuery("query(($corpus: String!) { corpus(id: $corpus) { document(id: $id){ id } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
-            .jsonPath("$.errors").isNotEmpty()
-            .jsonPath("$.data").doesNotExist();
+    postQuery(
+            "query(($corpus: String!) { corpus(id: $corpus) { document(id: $id){ id } } }",
+            Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        .jsonPath("$.errors")
+        .isNotEmpty()
+        .jsonPath("$.data")
+        .doesNotExist();
   }
 
   @Test
   public void testNoDocument() {
     when(documentProvider.getById(anyString())).thenReturn(Mono.empty());
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { document(id: \"test\"){ id } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus").exists()
-            .jsonPath("$.data.corpus.document").isEqualTo(null);
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { document(id: \"test\"){ id } } }",
+            Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus")
+        .exists()
+        .jsonPath("$.data.corpus.document")
+        .isEqualTo(null);
   }
 
   @Test
   public void testGetDocumentByExample() {
-    List<BaleenDocument> docs = Collections.singletonList(new BaleenDocument("test", null, "", null));
+    List<BaleenDocument> docs =
+        Collections.singletonList(new BaleenDocument("test", null, "", null));
     when(documentProvider.getAll(anyInt(), anyInt())).thenReturn(Flux.fromIterable(docs));
     when(documentProvider.getByExample(any(DocumentProbe.class), anyInt(), anyInt()))
         .thenReturn(Flux.fromIterable(docs));
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { documents{ id } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus.documents").isArray();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { documents{ id } } }",
+            Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus.documents")
+        .isArray();
 
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { documents(probe:{id: \"test\"}){ id } } }",
-        defaultVariables())
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus.documents").isArray();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { documents(probe:{id: \"test\"}){ id } } }",
+            defaultVariables())
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus.documents")
+        .isArray();
 
-    StepVerifier.create(corpusDocumentsService.getDocumentByExample(getTestCorpus(), null, 0, 10, null))
+    StepVerifier.create(
+            corpusDocumentsService.getDocumentByExample(getTestCorpus(), null, 0, 10, null))
         .assertNext(d -> assertNotNull(d.getParent()))
         .verifyComplete();
   }
@@ -147,8 +164,12 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     mentionFilter.setId("mentionId");
 
     DocumentSearch documents =
-        corpusDocumentsService.getDocuments(getTestCorpus(), filter, Collections.singletonList(mentionFilter),
-            Collections.singletonList(entityFilter), Collections.singletonList(relationFilter));
+        corpusDocumentsService.getDocuments(
+            getTestCorpus(),
+            filter,
+            Collections.singletonList(mentionFilter),
+            Collections.singletonList(entityFilter),
+            Collections.singletonList(relationFilter));
 
     assertEquals(getTestCorpus(), documents.getParent());
     assertEquals(mentionFilter, documents.getMentionFilters().get(0));
@@ -158,29 +179,40 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
 
   @Test
   public void testSampleDocuments() {
-    List<BaleenDocument> results = Collections.singletonList(new BaleenDocument("sample", null, "", null));
+    List<BaleenDocument> results =
+        Collections.singletonList(new BaleenDocument("sample", null, "", null));
     when(documentProvider.getAll(anyInt(), anyInt())).thenReturn(Flux.fromIterable(results));
 
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { sampleDocuments { size results { id } } } }",
-        defaultVariables())
-            .jsonPath("$.data.corpus.sampleDocuments.results").isArray()
-            .jsonPath("$.data.corpus.sampleDocuments.results").isNotEmpty()
-            .jsonPath("$.data.corpus.sampleDocuments.results[0].id").isEqualTo("sample");
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { sampleDocuments { size results { id } } } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.sampleDocuments.results")
+        .isArray()
+        .jsonPath("$.data.corpus.sampleDocuments.results")
+        .isNotEmpty()
+        .jsonPath("$.data.corpus.sampleDocuments.results[0].id")
+        .isEqualTo("sample");
   }
 
   @Test
   public void testCountDocuments() {
     when(documentProvider.count()).thenReturn(Mono.just(1l));
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { countDocuments } }", defaultVariables())
-        .jsonPath("$.data.corpus.countDocuments").isEqualTo(1);
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { countDocuments } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.countDocuments")
+        .isEqualTo(1);
   }
 
   @Test
   public void testSearchDocumentsNullArgs() {
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { searchDocuments { hits { total } } } }",
-        defaultVariables())
-            .jsonPath("$.errors").isArray()
-            .jsonPath("$.errors").isNotEmpty();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { searchDocuments { hits { total } } } }",
+            defaultVariables())
+        .jsonPath("$.errors")
+        .isArray()
+        .jsonPath("$.errors")
+        .isNotEmpty();
   }
 
   @Test
@@ -189,26 +221,34 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     when(documentProvider.countByField(any(), anyList(), anyInt()))
         .thenReturn(Flux.fromIterable(bins));
     postQuery(
-        "query($corpus: String!) { corpus(id: $corpus) { countByDocumentField(field: \"id\") { bins { term } } } }",
-        defaultVariables())
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus.countByDocumentField.bins").isArray()
-            .jsonPath("$.data.corpus.countByDocumentField.bins[0].term").isEqualTo("test");
+            "query($corpus: String!) { corpus(id: $corpus) { countByDocumentField(field: \"id\") { bins { term } } } }",
+            defaultVariables())
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus.countByDocumentField.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.countByDocumentField.bins[0].term")
+        .isEqualTo("test");
   }
 
   @Test
   public void testGetDocumentTypesNullArgs() {
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { countByDocumentField{ count } } }",
-        Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
-            .jsonPath("$.errors").isNotEmpty();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { countByDocumentField{ count } } }",
+            Collections.singletonMap("corpus", GraphqlTestConfiguration.TEST_DATASET))
+        .jsonPath("$.errors")
+        .isNotEmpty();
   }
 
   @Test
   public void testGetDocumentTypesEmptyArgs() {
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { countByDocumentField(field: \"\"){ count } } }",
-        defaultVariables())
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus.countByDocumentField").isEqualTo(null);
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { countByDocumentField(field: \"\"){ count } } }",
+            defaultVariables())
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus.countByDocumentField")
+        .isEqualTo(null);
   }
 
   @Test
@@ -217,27 +257,34 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     when(documentProvider.countByJoinedField(any(), any(ItemTypes.class), anyList(), anyInt()))
         .thenReturn(Flux.fromIterable(results));
     postQuery(
-        "query($corpus: String!) { corpus(id: $corpus) { countByTypesField(field: \"test\", type: DOCUMENT){ bins { term } } } }",
-        defaultVariables())
-            .jsonPath("$.data.corpus.countByTypesField.bins").isArray()
-            .jsonPath("$.data.corpus.countByTypesField.bins[0].term").isEqualTo("test");
+            "query($corpus: String!) { corpus(id: $corpus) { countByTypesField(field: \"test\", type: DOCUMENT){ bins { term } } } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.countByTypesField.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.countByTypesField.bins[0].term")
+        .isEqualTo("test");
   }
 
   @Test
   public void testCountByTypesFieldNullArgs() {
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { countByTypesField{ count } } }",
-        defaultVariables())
-            .jsonPath("$.errors").exists()
-            .jsonPath("$.errors").isArray();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { countByTypesField{ count } } }",
+            defaultVariables())
+        .jsonPath("$.errors")
+        .exists()
+        .jsonPath("$.errors")
+        .isArray();
   }
 
   @Test
   public void testCountByTypesFieldEmptyArgs() {
     postQuery(
-        "query($corpus: String!) { corpus(id: $corpus) { countByTypesField(field: \"\", type: DOCUMENT){ count } } }",
-        defaultVariables())
-            .jsonPath("$.errors").doesNotExist()
-            .jsonPath("$.data.corpus.countByTypesField").isEqualTo(null);
+            "query($corpus: String!) { corpus(id: $corpus) { countByTypesField(field: \"\", type: DOCUMENT){ count } } }",
+            defaultVariables())
+        .jsonPath("$.errors")
+        .doesNotExist()
+        .jsonPath("$.data.corpus.countByTypesField")
+        .isEqualTo(null);
   }
 
   @Test
@@ -246,13 +293,19 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     timeRange.setStart(new Date(1521106230000l));
     timeRange.setEnd(new Date(1521365430000l));
     when(documentProvider.documentTimeRange(any())).thenReturn(Mono.just(timeRange));
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { documentTimeRange{ start end duration } } }",
-        defaultVariables())
-            .jsonPath("$.data.corpus.documentTimeRange.start").exists()
-            .jsonPath("$.data.corpus.documentTimeRange.start").isEqualTo("2018-03-15T09:30:30Z")
-            .jsonPath("$.data.corpus.documentTimeRange.end").exists()
-            .jsonPath("$.data.corpus.documentTimeRange.end").isEqualTo("2018-03-18T09:30:30Z")
-            .jsonPath("$.data.corpus.documentTimeRange.duration").exists();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { documentTimeRange{ start end duration } } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.documentTimeRange.start")
+        .exists()
+        .jsonPath("$.data.corpus.documentTimeRange.start")
+        .isEqualTo("2018-03-15T09:30:30Z")
+        .jsonPath("$.data.corpus.documentTimeRange.end")
+        .exists()
+        .jsonPath("$.data.corpus.documentTimeRange.end")
+        .isEqualTo("2018-03-18T09:30:30Z")
+        .jsonPath("$.data.corpus.documentTimeRange.duration")
+        .exists();
   }
 
   @Test
@@ -261,13 +314,19 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     timeRange.setStart(new Date(1521106230000l));
     timeRange.setEnd(new Date(1521365430000l));
     when(documentProvider.entityTimeRange(any())).thenReturn(Mono.just(timeRange));
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { entityTimeRange{ start end duration } } }",
-        defaultVariables())
-            .jsonPath("$.data.corpus.entityTimeRange.start").exists()
-            .jsonPath("$.data.corpus.entityTimeRange.start").isEqualTo("2018-03-15T09:30:30Z")
-            .jsonPath("$.data.corpus.entityTimeRange.end").exists()
-            .jsonPath("$.data.corpus.entityTimeRange.end").isEqualTo("2018-03-18T09:30:30Z")
-            .jsonPath("$.data.corpus.entityTimeRange.duration").exists();
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { entityTimeRange{ start end duration } } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.entityTimeRange.start")
+        .exists()
+        .jsonPath("$.data.corpus.entityTimeRange.start")
+        .isEqualTo("2018-03-15T09:30:30Z")
+        .jsonPath("$.data.corpus.entityTimeRange.end")
+        .exists()
+        .jsonPath("$.data.corpus.entityTimeRange.end")
+        .isEqualTo("2018-03-18T09:30:30Z")
+        .jsonPath("$.data.corpus.entityTimeRange.duration")
+        .exists();
   }
 
   @Test
@@ -278,16 +337,24 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     bins.add(new TimeBin(Instant.ofEpochMilli(1521451830000l), 2));
     TimeRange timeRange = new TimeRange(new Date(1521365430000l), new Date(1521451830000l));
     when(documentProvider.documentTimeRange(any())).thenReturn(Mono.just(timeRange));
-    when(documentProvider.countByDate(any(), eq(TimeInterval.HOUR))).thenReturn(Flux.fromIterable(bins));
+    when(documentProvider.countByDate(any(), eq(TimeInterval.HOUR)))
+        .thenReturn(Flux.fromIterable(bins));
 
-    postQuery("query($corpus: String!) { corpus(id: $corpus) { documentTimeline{ interval bins { count ts } } } }",
-        defaultVariables())
-            .jsonPath("$.data.corpus.documentTimeline.interval").isEqualTo("HOUR")
-            .jsonPath("$.data.corpus.documentTimeline.bins").isArray()
-            .jsonPath("$.data.corpus.documentTimeline.bins[0].count").isEqualTo("2")
-            .jsonPath("$.data.corpus.documentTimeline.bins[0].ts").isEqualTo("2018-03-18T09:30:30Z")
-            .jsonPath("$.data.corpus.documentTimeline.bins[1].count").isEqualTo("5")
-            .jsonPath("$.data.corpus.documentTimeline.bins[1].ts").isEqualTo("2018-03-19T09:30:30Z");
+    postQuery(
+            "query($corpus: String!) { corpus(id: $corpus) { documentTimeline{ interval bins { count ts } } } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.documentTimeline.interval")
+        .isEqualTo("HOUR")
+        .jsonPath("$.data.corpus.documentTimeline.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.documentTimeline.bins[0].count")
+        .isEqualTo("2")
+        .jsonPath("$.data.corpus.documentTimeline.bins[0].ts")
+        .isEqualTo("2018-03-18T09:30:30Z")
+        .jsonPath("$.data.corpus.documentTimeline.bins[1].count")
+        .isEqualTo("5")
+        .jsonPath("$.data.corpus.documentTimeline.bins[1].ts")
+        .isEqualTo("2018-03-19T09:30:30Z");
   }
 
   @Test
@@ -298,17 +365,23 @@ public class CorpusDocumentsServiceTest extends AbstractKetosGraphqlTest {
     bins.add(new TimeBin(Instant.ofEpochMilli(1521451830000l), 2));
     TimeRange timeRange = new TimeRange(new Date(1521365430000l), new Date(1521451830000l));
     when(documentProvider.documentTimeRange(any())).thenReturn(Mono.just(timeRange));
-    when(documentProvider.countByDate(any(), eq(TimeInterval.MINUTE))).thenReturn(Flux.fromIterable(bins));
+    when(documentProvider.countByDate(any(), eq(TimeInterval.MINUTE)))
+        .thenReturn(Flux.fromIterable(bins));
 
     postQuery(
-        "query($corpus: String!) { corpus(id: $corpus) { documentTimeline(interval: MINUTE){ interval bins { count ts } } } }",
-        defaultVariables())
-            .jsonPath("$.data.corpus.documentTimeline.interval").isEqualTo("MINUTE")
-            .jsonPath("$.data.corpus.documentTimeline.bins").isArray()
-            .jsonPath("$.data.corpus.documentTimeline.bins[0].count").isEqualTo("2")
-            .jsonPath("$.data.corpus.documentTimeline.bins[0].ts").isEqualTo("2018-03-18T09:30:30Z")
-            .jsonPath("$.data.corpus.documentTimeline.bins[1].count").isEqualTo("5")
-            .jsonPath("$.data.corpus.documentTimeline.bins[1].ts").isEqualTo("2018-03-19T09:30:30Z");
+            "query($corpus: String!) { corpus(id: $corpus) { documentTimeline(interval: MINUTE){ interval bins { count ts } } } }",
+            defaultVariables())
+        .jsonPath("$.data.corpus.documentTimeline.interval")
+        .isEqualTo("MINUTE")
+        .jsonPath("$.data.corpus.documentTimeline.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.documentTimeline.bins[0].count")
+        .isEqualTo("2")
+        .jsonPath("$.data.corpus.documentTimeline.bins[0].ts")
+        .isEqualTo("2018-03-18T09:30:30Z")
+        .jsonPath("$.data.corpus.documentTimeline.bins[1].count")
+        .isEqualTo("5")
+        .jsonPath("$.data.corpus.documentTimeline.bins[1].ts")
+        .isEqualTo("2018-03-19T09:30:30Z");
   }
-
 }

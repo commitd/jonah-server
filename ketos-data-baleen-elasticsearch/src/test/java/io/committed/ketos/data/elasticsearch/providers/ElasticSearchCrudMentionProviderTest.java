@@ -32,15 +32,17 @@ public class ElasticSearchCrudMentionProviderTest extends AbstractCrudMentionPro
 
   @Override
   public CrudDataProvider<BaleenMentionReference, BaleenMention> getDataProvider() {
-    final EsCrudMentionProviderFactory factory = new EsCrudMentionProviderFactory(new ObjectMapper());
+    final EsCrudMentionProviderFactory factory =
+        new EsCrudMentionProviderFactory(new ObjectMapper());
     final Map<String, Object> settings = new HashMap<>();
-    settings.put(AbstractElasticsearchDataProviderFactory.SETTING_INDEX, ElasticsearchTestResource.TEST_DB);
+    settings.put(
+        AbstractElasticsearchDataProviderFactory.SETTING_INDEX, ElasticsearchTestResource.TEST_DB);
     settings.put(AbstractElasticsearchDataProviderFactory.SETTING_PORT, resource.getPort());
-    settings.put(AbstractElasticsearchDataProviderFactory.SETTING_CLUSTER, resource.getClusterName());
+    settings.put(
+        AbstractElasticsearchDataProviderFactory.SETTING_CLUSTER, resource.getClusterName());
 
     return factory
-        .build(ElasticsearchTestResource.TEST_DB, ElasticsearchTestResource.TEST_DB,
-            settings)
+        .build(ElasticsearchTestResource.TEST_DB, ElasticsearchTestResource.TEST_DB, settings)
         .block();
   }
 
@@ -48,5 +50,4 @@ public class ElasticSearchCrudMentionProviderTest extends AbstractCrudMentionPro
   public void testSave() {
     // TODO Embedded Elasticsearch integration tests do not support has child operations
   }
-
 }

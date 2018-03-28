@@ -1,14 +1,14 @@
 package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
+
+import lombok.Data;
+
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.core.dto.collections.PropertiesMap;
-import lombok.Data;
 
-/**
- * Search query for a mention.
- */
+/** Search query for a mention. */
 @Data
 public class MentionFilter {
 
@@ -29,5 +29,4 @@ public class MentionFilter {
   private GeoBox within;
 
   private GeoRadius near;
-
 }

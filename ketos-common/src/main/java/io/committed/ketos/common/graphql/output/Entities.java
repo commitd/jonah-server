@@ -1,8 +1,5 @@
 package io.committed.ketos.common.graphql.output;
 
-import io.committed.ketos.common.data.BaleenEntity;
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
-import io.committed.ketos.common.graphql.support.GraphQLNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +8,11 @@ import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- * Collection of entities.
- */
+import io.committed.ketos.common.data.BaleenEntity;
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
+import io.committed.ketos.common.graphql.support.GraphQLNode;
+
+/** Collection of entities. */
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -28,7 +27,11 @@ public class Entities extends AbstractGraphQLNode {
   private long size;
 
   @Builder
-  public Entities(final GraphQLNode parent, final Mono<Long> total, final Flux<BaleenEntity> results, final long offset,
+  public Entities(
+      final GraphQLNode parent,
+      final Mono<Long> total,
+      final Flux<BaleenEntity> results,
+      final long offset,
       final long size) {
     super(parent);
     this.offset = offset;

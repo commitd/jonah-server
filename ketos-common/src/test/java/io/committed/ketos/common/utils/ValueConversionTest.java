@@ -1,8 +1,8 @@
 package io.committed.ketos.common.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
-import io.committed.ketos.common.utils.ValueConversion;
 
 public class ValueConversionTest {
 
@@ -17,7 +17,6 @@ public class ValueConversionTest {
     assertThat(ValueConversion.hasStringValue("*")).isFalse();
     assertThat(ValueConversion.hasStringValue("  *")).isFalse();
     assertThat(ValueConversion.hasStringValue("  ")).isFalse();
-
   }
 
   @Test
@@ -27,8 +26,6 @@ public class ValueConversionTest {
 
     assertThat(ValueConversion.stringValue("*")).isEmpty();
     assertThat(ValueConversion.stringValue("   ")).isEmpty();
-
-
   }
 
   @Test
@@ -36,11 +33,9 @@ public class ValueConversionTest {
     assertThat(ValueConversion.isValueOrOther("real thing")).isTrue();
     assertThat(ValueConversion.isValueOrOther("*")).isFalse();
 
-
     final Object object = new Object();
     assertThat(ValueConversion.isValueOrOther(object)).isTrue();
     assertThat(ValueConversion.isValueOrOther(null)).isFalse();
-
   }
 
   @Test
@@ -48,7 +43,6 @@ public class ValueConversionTest {
     assertThat(ValueConversion.valueOrNull("real thing")).isEqualTo("real thing");
     assertThat(ValueConversion.valueOrNull("*")).isNull();
     assertThat(ValueConversion.valueOrNull("")).isNull();
-
 
     final Object object = new Object();
     assertThat(ValueConversion.valueOrNull(object)).isSameAs(object);

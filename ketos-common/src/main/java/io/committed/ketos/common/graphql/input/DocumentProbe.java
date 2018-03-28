@@ -2,14 +2,14 @@ package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
 import java.util.List;
+
+import lombok.Data;
+
 import io.committed.invest.core.dto.collections.PropertiesList;
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.ketos.common.graphql.input.DocumentFilter.DocumentInfoFilter;
-import lombok.Data;
 
-/**
- * Search by example document.
- */
+/** Search by example document. */
 @Data
 public class DocumentProbe {
 
@@ -52,7 +52,6 @@ public class DocumentProbe {
 
   public DocumentFilter toDocumentFilter() {
     final DocumentFilter filter = new DocumentFilter();
-
 
     filter.setId(id);
     filter.setContent(content);

@@ -5,13 +5,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import org.bson.conversions.Bson;
+
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.geojson.NamedCoordinateReferenceSystem;
 import com.mongodb.client.model.geojson.Point;
 import com.mongodb.client.model.geojson.Polygon;
 import com.mongodb.client.model.geojson.PolygonCoordinates;
 import com.mongodb.client.model.geojson.Position;
+
 import io.committed.invest.core.dto.analytic.GeoBox;
 import io.committed.invest.core.dto.analytic.GeoRadius;
 import io.committed.invest.support.mongo.utils.FilterUtils;
@@ -21,17 +24,15 @@ import io.committed.ketos.common.graphql.output.MentionSearch;
 import io.committed.ketos.common.utils.ValueConversion;
 import io.committed.ketos.plugins.data.mongo.data.CustomFilters;
 
-/**
- * Convert Ketos mention queries to Mongo queries.
- */
+/** Convert Ketos mention queries to Mongo queries. */
 public final class MentionFilters {
 
   private MentionFilters() {
     // Singleton
   }
 
-  public static Optional<Bson> createFilter(final Optional<MentionFilter> filter, final String prefix,
-      final boolean operatorMode) {
+  public static Optional<Bson> createFilter(
+      final Optional<MentionFilter> filter, final String prefix, final boolean operatorMode) {
     if (!filter.isPresent()) {
       return Optional.empty();
     }
@@ -65,35 +66,44 @@ public final class MentionFilters {
         .ifPresent(filters::add);
 
     if (mentionFilter.getProperties() != null) {
-      mentionFilter.getProperties().stream()
+      mentionFilter
+          .getProperties()
+          .stream()
           .filter(p -> ValueConversion.isValueOrOther(p.getValue()))
-          .map(e -> CustomFilters.eqFilter(prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
-              ValueConversion.valueOrNull(e.getValue()),
-              operatorMode))
+          .map(
+              e ->
+                  CustomFilters.eqFilter(
+                      prefix + BaleenProperties.PROPERTIES + "." + e.getKey(),
+                      ValueConversion.valueOrNull(e.getValue()),
+                      operatorMode))
           .forEach(filters::add);
     }
 
     if (mentionFilter.getStartTimestamp() != null) {
 
       filters.add(
-          Filters.gte(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP,
+          Filters.gte(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.START_TIMESTAMP,
               mentionFilter.getStartTimestamp().getTime()));
     }
 
-
     if (mentionFilter.getEndTimestamp() != null) {
       filters.add(
-          Filters.gte(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP,
+          Filters.gte(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.STOP_TIMESTAMP,
               mentionFilter.getEndTimestamp().getTime()));
     }
 
     if (mentionFilter.getNear() != null && !operatorMode) {
       final GeoRadius near = mentionFilter.getNear();
 
-      final Point p = new Point(new Position(near.getLon(),
-          near.getLat()));
-      filters.add(Filters.near(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, p,
-          near.getRadius(), null));
+      final Point p = new Point(new Position(near.getLon(), near.getLat()));
+      filters.add(
+          Filters.near(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON,
+              p,
+              near.getRadius(),
+              null));
     }
 
     // Doesn't work in aggregation
@@ -113,12 +123,14 @@ public final class MentionFilters {
       // than a hemisphere!
       // https://docs.mongodb.com/manual/reference/operator/query/geoIntersects/#intersects-a-big-polygon
 
-      final PolygonCoordinates coordinates = new PolygonCoordinates(Arrays.asList(bl, br, tr, tl, bl));
-      final Polygon polygon = new Polygon(NamedCoordinateReferenceSystem.EPSG_4326_STRICT_WINDING, coordinates);
-      filters
-          .add(Filters.geoWithin(prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon));
+      final PolygonCoordinates coordinates =
+          new PolygonCoordinates(Arrays.asList(bl, br, tr, tl, bl));
+      final Polygon polygon =
+          new Polygon(NamedCoordinateReferenceSystem.EPSG_4326_STRICT_WINDING, coordinates);
+      filters.add(
+          Filters.geoWithin(
+              prefix + BaleenProperties.PROPERTIES + "." + BaleenProperties.GEOJSON, polygon));
     }
-
 
     return FilterUtils.combine(filters);
   }
@@ -127,7 +139,8 @@ public final class MentionFilters {
     return createFilter(Optional.ofNullable(mentionSearch.getMentionFilter()), "", false);
   }
 
-  public static Stream<Bson> createFilters(final Stream<MentionFilter> mentionFilters, final boolean operatorMode) {
+  public static Stream<Bson> createFilters(
+      final Stream<MentionFilter> mentionFilters, final boolean operatorMode) {
     return mentionFilters
         .map(f -> createFilter(Optional.ofNullable(f), "", operatorMode))
         .filter(Optional::isPresent)

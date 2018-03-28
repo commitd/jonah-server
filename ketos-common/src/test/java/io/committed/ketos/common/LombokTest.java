@@ -1,8 +1,9 @@
 package io.committed.ketos.common;
 
-
 import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
+
 import io.committed.invest.test.BeanTestSupport;
 import io.committed.invest.test.LombokDataTestSupport;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
@@ -36,5 +37,4 @@ public class LombokTest {
 
     mt.testClass(NamedGeoLocation.class);
   }
-
 }

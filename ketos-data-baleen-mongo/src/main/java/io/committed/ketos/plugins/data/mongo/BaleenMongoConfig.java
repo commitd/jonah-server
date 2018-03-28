@@ -3,6 +3,7 @@ package io.committed.ketos.plugins.data.mongo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
 import io.committed.ketos.plugins.data.mongo.factory.MongoCrudDocumentProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoCrudEntityProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoCrudMentionProviderFactory;
@@ -13,9 +14,7 @@ import io.committed.ketos.plugins.data.mongo.factory.MongoMentionProviderFactory
 import io.committed.ketos.plugins.data.mongo.factory.MongoMetadataProviderFactory;
 import io.committed.ketos.plugins.data.mongo.factory.MongoRelationProviderFactory;
 
-/**
- * Configuration and wiring for services.
- */
+/** Configuration and wiring for services. */
 @Configuration
 @ComponentScan(basePackageClasses = {BaleenMongoConfig.class})
 public class BaleenMongoConfig {
@@ -64,5 +63,4 @@ public class BaleenMongoConfig {
   public MongoCrudMentionProviderFactory mongoMentionCrudDataProviderFactory() {
     return new MongoCrudMentionProviderFactory();
   }
-
 }

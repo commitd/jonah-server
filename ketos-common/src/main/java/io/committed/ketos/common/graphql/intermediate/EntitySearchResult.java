@@ -1,6 +1,5 @@
 package io.committed.ketos.common.graphql.intermediate;
 
-import io.committed.ketos.common.data.BaleenEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,9 +7,9 @@ import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- * Results of an entity search.
- */
+import io.committed.ketos.common.data.BaleenEntity;
+
+/** Results of an entity search. */
 @Data
 @Builder
 @AllArgsConstructor

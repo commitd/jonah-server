@@ -1,6 +1,7 @@
 package io.committed.ketos.common.graphql.output;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 
 public class OutputTest {
@@ -17,7 +18,6 @@ public class OutputTest {
     assertThat(documentSearch.getEntityFilters()).isEmpty();
     assertThat(documentSearch.getMentionFilters()).isEmpty();
     assertThat(documentSearch.getRelationFilters()).isEmpty();
-
   }
 
   @Test
@@ -26,6 +26,5 @@ public class OutputTest {
 
     assertThat(doc.getResults().collectList().block()).isEmpty();
     assertThat(doc.getTotal().blockOptional()).isEmpty();
-
   }
 }

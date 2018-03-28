@@ -1,8 +1,10 @@
 package io.committed.ketos.plugins.data.mongo.providers;
 
 import org.bson.conversions.Bson;
+
 import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.MongoDatabase;
+
 import io.committed.invest.support.data.mongo.AbstractMongoCrudDataProvider;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputEntity;
@@ -11,10 +13,7 @@ import io.committed.ketos.common.data.BaleenEntity;
 import io.committed.ketos.common.providers.baleen.CrudEntityProvider;
 import io.committed.ketos.common.references.BaleenEntityReference;
 
-/**
- * Mongo CrudEntityProvider.
- *
- */
+/** Mongo CrudEntityProvider. */
 public class MongoCrudEntityProvider
     extends AbstractMongoCrudDataProvider<BaleenEntityReference, BaleenEntity>
     implements CrudEntityProvider {
@@ -23,8 +22,13 @@ public class MongoCrudEntityProvider
   private final String mentionCollection;
   private final String relationCollection;
 
-  public MongoCrudEntityProvider(final String dataset, final String datasource, final MongoDatabase mongoDatabase,
-      final String mentionCollection, final String entityCollection, final String relationCollection) {
+  public MongoCrudEntityProvider(
+      final String dataset,
+      final String datasource,
+      final MongoDatabase mongoDatabase,
+      final String mentionCollection,
+      final String entityCollection,
+      final String relationCollection) {
     super(dataset, datasource, mongoDatabase);
     this.mentionCollection = mentionCollection;
     this.entityCollection = entityCollection;
@@ -34,26 +38,37 @@ public class MongoCrudEntityProvider
   @Override
   public boolean delete(final BaleenEntityReference reference) {
 
-    delete(mentionCollection, Filters.and(
-        Filters.eq(BaleenProperties.ENTITY_ID, reference.getEntityId()),
-        Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId())));
+    delete(
+        mentionCollection,
+        Filters.and(
+            Filters.eq(BaleenProperties.ENTITY_ID, reference.getEntityId()),
+            Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId())));
 
-    delete(relationCollection, Filters.and(
-        Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId()),
-        Filters.or(
-            Filters.eq(BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.ENTITY_ID, reference.getEntityId()),
-            Filters.eq(BaleenProperties.RELATION_TARGET + "." + BaleenProperties.ENTITY_ID,
-                reference.getEntityId()))));
+    delete(
+        relationCollection,
+        Filters.and(
+            Filters.eq(BaleenProperties.DOC_ID, reference.getDocumentId()),
+            Filters.or(
+                Filters.eq(
+                    BaleenProperties.RELATION_SOURCE + "." + BaleenProperties.ENTITY_ID,
+                    reference.getEntityId()),
+                Filters.eq(
+                    BaleenProperties.RELATION_TARGET + "." + BaleenProperties.ENTITY_ID,
+                    reference.getEntityId()))));
 
-    return delete(entityCollection, filterForEntity(reference.getDocumentId(), reference.getEntityId()));
+    return delete(
+        entityCollection, filterForEntity(reference.getDocumentId(), reference.getEntityId()));
   }
 
   @Override
   public boolean save(final BaleenEntity item) {
-    // NOTE if you have changed the docId here (or entityId) then you'll not be replacing the old one!
-    return replace(entityCollection, filterForEntity(item.getDocId(), item.getId()), Converters.toOutputEntity(item),
+    // NOTE if you have changed the docId here (or entityId) then you'll not be replacing the old
+    // one!
+    return replace(
+        entityCollection,
+        filterForEntity(item.getDocId(), item.getId()),
+        Converters.toOutputEntity(item),
         OutputEntity.class);
-
   }
 
   private Bson filterForEntity(final String documentId, final String entityId) {
@@ -61,5 +76,4 @@ public class MongoCrudEntityProvider
         Filters.eq(BaleenProperties.EXTERNAL_ID, entityId),
         Filters.eq(BaleenProperties.DOC_ID, documentId));
   }
-
 }

@@ -1,13 +1,11 @@
 package io.committed.ketos.plugins.data.feedback.data;
 
-import io.committed.invest.extensions.data.providers.DataProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- * Feedback data provider
- *
- */
+import io.committed.invest.extensions.data.providers.DataProvider;
+
+/** Feedback data provider */
 public interface FeedbackDataProvider extends DataProvider {
 
   @Override
@@ -24,5 +22,4 @@ public interface FeedbackDataProvider extends DataProvider {
   void delete(String id);
 
   void deleteByUser(String id, String user);
-
 }

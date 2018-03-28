@@ -38,8 +38,8 @@ public class EmbeddedElasticsearch5 implements AutoCloseable {
         generateRandomPort());
   }
 
-  public EmbeddedElasticsearch5(final Path dataPath, final String clusterName, final int httpPort,
-      final int transportPort)
+  public EmbeddedElasticsearch5(
+      final Path dataPath, final String clusterName, final int httpPort, final int transportPort)
       throws NodeValidationException {
     this.clusterName = clusterName;
     this.httpPort = httpPort;

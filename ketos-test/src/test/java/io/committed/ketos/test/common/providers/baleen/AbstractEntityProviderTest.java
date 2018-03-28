@@ -21,7 +21,8 @@ public abstract class AbstractEntityProviderTest {
 
   @Test
   public void testGetById() {
-    BaleenEntity entity = getEntityProvider().getById("42ad69a0-f11b-449e-947f-fe91f52be3d7").block();
+    BaleenEntity entity =
+        getEntityProvider().getById("42ad69a0-f11b-449e-947f-fe91f52be3d7").block();
     assertEquals("42ad69a0-f11b-449e-947f-fe91f52be3d7", entity.getId());
   }
 
@@ -34,8 +35,11 @@ public abstract class AbstractEntityProviderTest {
 
   @Test
   public void testCountByField() {
-    List<TermBin> results = getEntityProvider().countByField(Optional.empty(), Collections.singletonList("type"), 1000)
-        .collectList().block();
+    List<TermBin> results =
+        getEntityProvider()
+            .countByField(Optional.empty(), Collections.singletonList("type"), 1000)
+            .collectList()
+            .block();
     assertEquals(3, results.size());
   }
 
@@ -56,8 +60,9 @@ public abstract class AbstractEntityProviderTest {
     EntityFilter filter = new EntityFilter();
     filter.setType("Person");
     EntitySearch search = new EntitySearch(null, filter, null);
-    List<BaleenEntity> results = getEntityProvider().search(search, 0, 1000).getResults().collectList().block();;
+    List<BaleenEntity> results =
+        getEntityProvider().search(search, 0, 1000).getResults().collectList().block();
+    ;
     assertEquals(2, results.size());
   }
-
 }

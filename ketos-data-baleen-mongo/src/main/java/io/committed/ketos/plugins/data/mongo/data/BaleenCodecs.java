@@ -3,6 +3,7 @@ package io.committed.ketos.plugins.data.mongo.data;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import org.bson.BsonDocument;
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
@@ -18,6 +19,7 @@ import org.bson.codecs.pojo.PropertyCodecProvider;
 import org.bson.codecs.pojo.PropertyCodecRegistry;
 import org.bson.codecs.pojo.TypeWithTypeParameters;
 import org.bson.conversions.Bson;
+
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.ketos.common.baleenconsumer.OutputDocument;
 import io.committed.ketos.common.baleenconsumer.OutputDocumentMetadata;
@@ -29,9 +31,8 @@ import io.committed.ketos.common.baleenconsumer.OutputRelation;
 /**
  * Add some specific deserialation sto support intput and output of the POJO Output*.
  *
- * There's nothing particularly special here, rather it just implements things you'd expect the
+ * <p>There's nothing particularly special here, rather it just implements things you'd expect the
  * Mongo driver to do by default.
- *
  */
 public final class BaleenCodecs {
 
@@ -62,7 +63,6 @@ public final class BaleenCodecs {
         .build();
   }
 
-
   // Mongo 3.6 driver does not support Map<String,Object> which is odd because it has a
   // a bson document is a Map<String,Object>.
   // There is a fix for this as noted in the issue:
@@ -75,8 +75,8 @@ public final class BaleenCodecs {
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public <T> Codec<T> get(final TypeWithTypeParameters<T> type,
-        final PropertyCodecRegistry registry) {
+    public <T> Codec<T> get(
+        final TypeWithTypeParameters<T> type, final PropertyCodecRegistry registry) {
       // Check the main type and number of generic parameters
       if (Map.class.isAssignableFrom(type.getType())
           && type.getTypeParameters().size() == 2
@@ -107,17 +107,16 @@ public final class BaleenCodecs {
     }
   }
 
-
   /**
    * This is a strange one...
    *
-   * You cna define bson via Filters/Aggregates/etc or via new Document, but you can't mix them but
-   * since there's no $cond on Filter/etc, there's nothing to do but mix them since we use Filters
-   * everywhere.
+   * <p>You cna define bson via Filters/Aggregates/etc or via new Document, but you can't mix them
+   * but since there's no $cond on Filter/etc, there's nothing to do but mix them since we use
+   * Filters everywhere.
    *
-   * So here we help Mongo convert its own Bson converter.
+   * <p>So here we help Mongo convert its own Bson converter.
    *
-   * See https://jira.mongodb.org/browse/JAVA-1763
+   * <p>See https://jira.mongodb.org/browse/JAVA-1763
    */
   public static class BsonCodecProvider implements CodecProvider {
 
@@ -139,7 +138,8 @@ public final class BaleenCodecs {
     }
 
     @Override
-    public void encode(final BsonWriter writer, final Bson value, final EncoderContext encoderContext) {
+    public void encode(
+        final BsonWriter writer, final Bson value, final EncoderContext encoderContext) {
       final BsonDocument bsonDocument = value.toBsonDocument(Document.class, codecRegistry);
       final Codec<BsonDocument> codec = codecRegistry.get(BsonDocument.class);
       codec.encode(writer, bsonDocument, encoderContext);
@@ -153,8 +153,6 @@ public final class BaleenCodecs {
     @Override
     public Bson decode(final BsonReader reader, final DecoderContext decoderContext) {
       throw new UnsupportedOperationException("Decoding into a Bson is not allowed");
-
     }
-
   }
 }

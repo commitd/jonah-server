@@ -1,11 +1,10 @@
 package io.committed.ketos.common.graphql.input;
 
-import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
-/**
- * Search query for a relation.
- */
+import io.committed.invest.core.dto.collections.PropertiesMap;
+
+/** Search query for a relation. */
 @Data
 public class RelationFilter {
   private String id;
@@ -23,5 +22,4 @@ public class RelationFilter {
   private MentionFilter source;
 
   private MentionFilter target;
-
 }

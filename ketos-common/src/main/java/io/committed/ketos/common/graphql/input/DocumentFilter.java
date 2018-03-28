@@ -1,13 +1,13 @@
 package io.committed.ketos.common.graphql.input;
 
 import java.util.Date;
-import io.committed.invest.core.dto.collections.PropertiesList;
-import io.committed.invest.core.dto.collections.PropertiesMap;
+
 import lombok.Data;
 
-/**
- * Search query for a document.
- */
+import io.committed.invest.core.dto.collections.PropertiesList;
+import io.committed.invest.core.dto.collections.PropertiesMap;
+
+/** Search query for a document. */
 @Data
 public class DocumentFilter {
 
@@ -23,7 +23,6 @@ public class DocumentFilter {
 
     private Date startTimestamp;
     private Date endTimestamp;
-
   }
 
   private String id;
@@ -31,5 +30,4 @@ public class DocumentFilter {
   private PropertiesMap properties;
   private String content;
   private DocumentInfoFilter info;
-
 }

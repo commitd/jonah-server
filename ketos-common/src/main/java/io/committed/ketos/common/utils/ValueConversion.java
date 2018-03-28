@@ -5,15 +5,13 @@ import java.util.Optional;
 /**
  * Helper to establish some convensions for input values.
  *
- * For example a search for * would return all for ES but documents containing a * in Mongo.
- *
+ * <p>For example a search for * would return all for ES but documents containing a * in Mongo.
  */
 public final class ValueConversion {
 
   private ValueConversion() {
     // Singleton
   }
-
 
   /**
    * Allow use of "*" for any match in Mongo (like ES).
@@ -35,11 +33,9 @@ public final class ValueConversion {
    * @return true, if successful
    */
   public static boolean hasStringValue(final String value) {
-    if (value == null)
-      return false;
+    if (value == null) return false;
     final String s = value.trim();
-    if (s.isEmpty())
-      return false;
+    if (s.isEmpty()) return false;
     return !"*".equals(s);
   }
 

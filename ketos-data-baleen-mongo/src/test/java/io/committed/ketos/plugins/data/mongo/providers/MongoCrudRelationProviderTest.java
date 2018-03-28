@@ -29,5 +29,4 @@ public class MongoCrudRelationProviderTest extends AbstractCrudRelationProviderT
     MongoCrudRelationProviderFactory factory = new MongoCrudRelationProviderFactory();
     return factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

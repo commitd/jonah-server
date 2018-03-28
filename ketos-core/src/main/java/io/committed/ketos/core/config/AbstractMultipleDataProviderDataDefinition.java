@@ -3,24 +3,25 @@ package io.committed.ketos.core.config;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * Base for DataDefinitions which generate mutitple Baleen provider.
- */
+import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
+
+/** Base for DataDefinitions which generate mutitple Baleen provider. */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractMultipleDataProviderDataDefinition extends AbstractKetosDataDefinition {
+public abstract class AbstractMultipleDataProviderDataDefinition
+    extends AbstractKetosDataDefinition {
 
   private static final String BALEEN_PREFIX = "baleen-";
 
   private boolean edittable = false;
   private String factoryMiddle;
 
-  public AbstractMultipleDataProviderDataDefinition(final String id, final String name, final String description,
-      final String factoryMiddle) {
+  public AbstractMultipleDataProviderDataDefinition(
+      final String id, final String name, final String description, final String factoryMiddle) {
     super(id, name, description);
     this.factoryMiddle = factoryMiddle;
   }
@@ -31,25 +32,43 @@ public abstract class AbstractMultipleDataProviderDataDefinition extends Abstrac
 
     final Map<String, Object> baseSettings = getBaseSettings();
 
-    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-documents",
+    addProvider(
+        providers,
+        BALEEN_PREFIX + factoryMiddle + "-documents",
         merge(baseSettings, getDocumentProviderSettings()));
-    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-entities",
+    addProvider(
+        providers,
+        BALEEN_PREFIX + factoryMiddle + "-entities",
         merge(baseSettings, getEntityProviderSettings()));
-    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-relations",
+    addProvider(
+        providers,
+        BALEEN_PREFIX + factoryMiddle + "-relations",
         merge(baseSettings, getRelationProviderSettings()));
-    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-mentions",
+    addProvider(
+        providers,
+        BALEEN_PREFIX + factoryMiddle + "-mentions",
         merge(baseSettings, getMentionProviderSettings()));
-    addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-metadata",
+    addProvider(
+        providers,
+        BALEEN_PREFIX + factoryMiddle + "-metadata",
         merge(baseSettings, getMetadataProviderSettings()));
 
     if (edittable) {
-      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-documents",
+      addProvider(
+          providers,
+          BALEEN_PREFIX + factoryMiddle + "-crud-documents",
           merge(baseSettings, getCrudDocumentProviderSettings()));
-      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-entities",
+      addProvider(
+          providers,
+          BALEEN_PREFIX + factoryMiddle + "-crud-entities",
           merge(baseSettings, getCrudEntityProviderSettings()));
-      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-relations",
+      addProvider(
+          providers,
+          BALEEN_PREFIX + factoryMiddle + "-crud-relations",
           merge(baseSettings, getCrudRelationProviderSettings()));
-      addProvider(providers, BALEEN_PREFIX + factoryMiddle + "-crud-mentions",
+      addProvider(
+          providers,
+          BALEEN_PREFIX + factoryMiddle + "-crud-mentions",
           merge(baseSettings, getCrudMentionProviderSettings()));
     }
 

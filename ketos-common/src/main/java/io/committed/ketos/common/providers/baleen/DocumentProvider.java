@@ -1,8 +1,11 @@
 package io.committed.ketos.common.providers.baleen;
 
-
 import java.util.List;
 import java.util.Optional;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.constants.TimeInterval;
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.core.dto.analytic.TimeBin;
@@ -15,13 +18,8 @@ import io.committed.ketos.common.graphql.input.DocumentFilter;
 import io.committed.ketos.common.graphql.input.DocumentProbe;
 import io.committed.ketos.common.graphql.intermediate.DocumentSearchResult;
 import io.committed.ketos.common.graphql.output.DocumentSearch;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Documents query data provider
- *
- */
+/** Documents query data provider */
 public interface DocumentProvider extends DataProvider {
 
   @Override
@@ -29,11 +27,12 @@ public interface DocumentProvider extends DataProvider {
     return "DocumentProvider";
   }
 
-
   Mono<BaleenDocument> getById(String id);
 
-  default Flux<BaleenDocument> getByExample(final DocumentProbe probe, final int offset, final int size) {
-    return search(DocumentSearch.builder().documentFilter(probe.toDocumentFilter()).build(), offset, size)
+  default Flux<BaleenDocument> getByExample(
+      final DocumentProbe probe, final int offset, final int size) {
+    return search(
+            DocumentSearch.builder().documentFilter(probe.toDocumentFilter()).build(), offset, size)
         .getResults();
   }
 
@@ -47,19 +46,15 @@ public interface DocumentProvider extends DataProvider {
 
   Flux<TimeBin> countByDate(Optional<DocumentFilter> documentFilter, final TimeInterval interval);
 
+  Flux<TermBin> countByJoinedField(
+      Optional<DocumentFilter> documentFilter, ItemTypes joinedType, List<String> path, int size);
 
-  Flux<TermBin> countByJoinedField(Optional<DocumentFilter> documentFilter, ItemTypes joinedType, List<String> path,
-      int size);
-
-
-  Flux<TimeBin> countByJoinedDate(Optional<DocumentFilter> documentFilter, ItemTypes joinedType, TimeInterval interval);
-
+  Flux<TimeBin> countByJoinedDate(
+      Optional<DocumentFilter> documentFilter, ItemTypes joinedType, TimeInterval interval);
 
   Flux<NamedGeoLocation> documentLocations(Optional<DocumentFilter> documentFilter, int size);
-
 
   Mono<TimeRange> documentTimeRange(Optional<DocumentFilter> documentFilter);
 
   Mono<TimeRange> entityTimeRange(Optional<DocumentFilter> documentFilter);
-
 }

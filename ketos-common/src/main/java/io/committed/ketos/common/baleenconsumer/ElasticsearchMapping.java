@@ -3,41 +3,52 @@ package io.committed.ketos.common.baleenconsumer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import io.committed.invest.core.utils.FieldUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 
 /**
  * Helper to deal with mapping in Elasticsearch
  *
- * When Elasticsearch is setup a mapping is minimal applied (see ElasticsearchKetos in
+ * <p>When Elasticsearch is setup a mapping is minimal applied (see ElasticsearchKetos in
  * Baleen-collectionreaders). In an effort to stay standardised with ES we have the following
  * convention:
  *
  * <ul>
- * <li>Any field which is of a very specific type (time / geo) is mapped specifically.
- * <li>Any of the very core fields (eg docId, begin, end) is mapped specifically
- * <li>Anything else is left to ES, which means typically it's text with an inner field of keyword.
+ *   <li>Any field which is of a very specific type (time / geo) is mapped specifically.
+ *   <li>Any of the very core fields (eg docId, begin, end) is mapped specifically
+ *   <li>Anything else is left to ES, which means typically it's text with an inner field of
+ *       keyword.
  * </ul>
  *
  * For search this works well. If you search on properties.value you get a free text search, but for
  * aggregations you need to map to properties.value.keyword IF YOU ARE IN A TEXT field...
  *
- * So this class attempts to capture what ES should have done.
+ * <p>So this class attempts to capture what ES should have done.
  *
- * (In theory we could probably read the ES mapping and determine this ourselves, but that's a lot
- * to parse).
+ * <p>(In theory we could probably read the ES mapping and determine this ourselves, but that's a
+ * lot to parse).
  */
 public class ElasticsearchMapping {
 
-  private static final Set<String> NON_KEYWORD_PROPERTY_FIELD = Sets.newHashSet(
-      BaleenProperties.POI, BaleenProperties.GEOJSON,
-      BaleenProperties.TIMESTAMP, BaleenProperties.DOCUMENT_DATE,
-      BaleenProperties.START_TIMESTAMP, BaleenProperties.STOP_TIMESTAMP,
-      BaleenProperties.SENTENCE_DISTANCE, BaleenProperties.DOCUMENT_DISTANCE, BaleenProperties.WORD_DISTANCE,
-      BaleenProperties.QUANTITY, BaleenProperties.AMOUNT,
-      BaleenProperties.CONFIDENCE,
-      BaleenProperties.IS_NORMALISED, BaleenProperties.NORMALISED_QUANTITY);
+  private static final Set<String> NON_KEYWORD_PROPERTY_FIELD =
+      Sets.newHashSet(
+          BaleenProperties.POI,
+          BaleenProperties.GEOJSON,
+          BaleenProperties.TIMESTAMP,
+          BaleenProperties.DOCUMENT_DATE,
+          BaleenProperties.START_TIMESTAMP,
+          BaleenProperties.STOP_TIMESTAMP,
+          BaleenProperties.SENTENCE_DISTANCE,
+          BaleenProperties.DOCUMENT_DISTANCE,
+          BaleenProperties.WORD_DISTANCE,
+          BaleenProperties.QUANTITY,
+          BaleenProperties.AMOUNT,
+          BaleenProperties.CONFIDENCE,
+          BaleenProperties.IS_NORMALISED,
+          BaleenProperties.NORMALISED_QUANTITY);
 
   private ElasticsearchMapping() {
     // Singleton
@@ -100,7 +111,8 @@ public class ElasticsearchMapping {
     return path;
   }
 
-  private static List<String> getAggregationFieldForProperties(final List<String> path, final String field) {
+  private static List<String> getAggregationFieldForProperties(
+      final List<String> path, final String field) {
 
     if (NON_KEYWORD_PROPERTY_FIELD.contains(field)) {
       return path;
@@ -114,6 +126,4 @@ public class ElasticsearchMapping {
     newPath.add("keyword");
     return newPath;
   }
-
-
 }

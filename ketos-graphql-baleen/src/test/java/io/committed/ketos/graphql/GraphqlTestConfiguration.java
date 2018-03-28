@@ -32,5 +32,4 @@ public class GraphqlTestConfiguration {
     when(mock.getDatasource()).thenReturn(GraphqlTestConfiguration.TEST_DATASOURCE);
     return mock;
   }
-
 }

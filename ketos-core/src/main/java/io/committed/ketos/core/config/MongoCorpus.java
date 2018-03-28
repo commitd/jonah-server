@@ -1,14 +1,15 @@
 package io.committed.ketos.core.config;
 
 import java.util.Map;
-import com.google.common.collect.ImmutableMap;
-import io.committed.ketos.common.constants.BaleenMongoConstants;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * Mongo Data configuration for a Baleen corpus.
- */
+import com.google.common.collect.ImmutableMap;
+
+import io.committed.ketos.common.constants.BaleenMongoConstants;
+
+/** Mongo Data configuration for a Baleen corpus. */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
@@ -34,23 +35,17 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
 
   @Override
   protected Map<String, Object> getCrudMentionProviderSettings() {
-    return newSettings()
-        .put(BaleenMongoConstants.SETTING_COLLECTION, mentions)
-        .build();
+    return newSettings().put(BaleenMongoConstants.SETTING_COLLECTION, mentions).build();
   }
 
   @Override
   protected Map<String, Object> getCrudRelationProviderSettings() {
-    return newSettings()
-        .put(BaleenMongoConstants.SETTING_COLLECTION, relations)
-        .build();
+    return newSettings().put(BaleenMongoConstants.SETTING_COLLECTION, relations).build();
   }
 
   @Override
   protected Map<String, Object> getCrudEntityProviderSettings() {
-    return newSettings()
-        .put(BaleenMongoConstants.SETTING_COLLECTION, entities)
-        .build();
+    return newSettings().put(BaleenMongoConstants.SETTING_COLLECTION, entities).build();
   }
 
   @Override
@@ -74,16 +69,12 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
 
   @Override
   protected Map<String, Object> getRelationProviderSettings() {
-    return newSettings()
-        .put(BaleenMongoConstants.SETTING_COLLECTION, relations)
-        .build();
+    return newSettings().put(BaleenMongoConstants.SETTING_COLLECTION, relations).build();
   }
 
   @Override
   protected Map<String, Object> getEntityProviderSettings() {
-    return newSettings()
-        .put(BaleenMongoConstants.SETTING_COLLECTION, entities)
-        .build();
+    return newSettings().put(BaleenMongoConstants.SETTING_COLLECTION, entities).build();
   }
 
   @Override
@@ -98,9 +89,7 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
 
   @Override
   protected Map<String, Object> getMetadataProviderSettings() {
-    return newSettings()
-        .put(BaleenMongoConstants.SETTING_COLLECTION, documents)
-        .build();
+    return newSettings().put(BaleenMongoConstants.SETTING_COLLECTION, documents).build();
   }
 
   @Override
@@ -114,5 +103,4 @@ public class MongoCorpus extends AbstractMultipleDataProviderDataDefinition {
   public static String toMongoUri(final String host, final int port) {
     return String.format("mongodb://%s:%d/", host, port);
   }
-
 }

@@ -1,24 +1,22 @@
 package io.committed.ketos.common.data;
 
-import io.committed.invest.core.dto.collections.PropertiesMap;
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
-import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * GraphQL/DTO representation of a Baleen document
- */
+import io.committed.invest.core.dto.collections.PropertiesMap;
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
+import io.leangen.graphql.annotations.GraphQLId;
+
+/** GraphQL/DTO representation of a Baleen document */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 public class BaleenMention extends AbstractGraphQLNode {
 
-  @GraphQLId
-  private String id;
+  @GraphQLId private String id;
   private int begin;
   private int end;
   private String type;
@@ -29,9 +27,16 @@ public class BaleenMention extends AbstractGraphQLNode {
 
   private PropertiesMap properties;
 
-  public BaleenMention(@GraphQLId final String id, final int begin, final int end,
-      final String type, final String subType, final String value,
-      final String entityId, final String docId, final PropertiesMap properties) {
+  public BaleenMention(
+      @GraphQLId final String id,
+      final int begin,
+      final int end,
+      final String type,
+      final String subType,
+      final String value,
+      final String entityId,
+      final String docId,
+      final PropertiesMap properties) {
     super();
     this.id = id;
     this.begin = begin;
@@ -43,6 +48,4 @@ public class BaleenMention extends AbstractGraphQLNode {
     this.docId = docId;
     this.properties = properties == null ? new PropertiesMap() : properties;
   }
-
-
 }

@@ -1,9 +1,12 @@
 package io.committed.ketos.plugin.documentcluster.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.Test;
+
 import io.committed.ketos.plugin.documentcluster.DocumentFixtures;
 import io.committed.ketos.plugin.documentcluster.data.Clusters;
 import io.committed.ketos.plugin.documentcluster.data.Topic;
@@ -16,16 +19,15 @@ public class CarrotClusterServiceTest {
 
     final Clusters clusters = service.cluster(Optional.empty(), DocumentFixtures.flux()).block();
 
-
     assertValidClusters(clusters);
   }
-
 
   @Test
   public void testWithHint() {
     final CarrotClusterService service = new CarrotClusterService();
 
-    final Clusters clusters = service.cluster(Optional.of("United States"), DocumentFixtures.flux()).block();
+    final Clusters clusters =
+        service.cluster(Optional.of("United States"), DocumentFixtures.flux()).block();
 
     assertValidClusters(clusters);
   }
@@ -43,7 +45,6 @@ public class CarrotClusterServiceTest {
     final List<Topic> topics = clusters.getTopics();
     assertThat(topics.size()).isEqualTo(clusters.getSize());
 
-
     topics.stream().forEach(this::assertValidTopic);
   }
 
@@ -57,6 +58,5 @@ public class CarrotClusterServiceTest {
     assertThat(topic.getKeywords()).isNotEmpty();
 
     assertThat(topic.getDocuments()).doesNotContainNull();
-
   }
 }

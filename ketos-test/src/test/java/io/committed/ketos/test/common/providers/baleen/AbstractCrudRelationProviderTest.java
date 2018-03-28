@@ -17,9 +17,18 @@ public abstract class AbstractCrudRelationProviderTest
 
   @Override
   public BaleenRelation getSaveItem() {
-    BaleenRelation relation = new BaleenRelation("9dec8723-5ba5-4fb1-8718-6c12586aaa89",
-        "a19f6ed4-87bb-4dc6-919e-596761127082", 0, 1, "test", "test", "value", null, null, new PropertiesMap());
+    BaleenRelation relation =
+        new BaleenRelation(
+            "9dec8723-5ba5-4fb1-8718-6c12586aaa89",
+            "a19f6ed4-87bb-4dc6-919e-596761127082",
+            0,
+            1,
+            "test",
+            "test",
+            "value",
+            null,
+            null,
+            new PropertiesMap());
     return relation;
   }
-
 }

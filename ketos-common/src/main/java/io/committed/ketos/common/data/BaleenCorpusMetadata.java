@@ -1,16 +1,16 @@
 package io.committed.ketos.common.data;
 
 import java.util.Optional;
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
-import io.committed.ketos.common.graphql.support.GraphQLNode;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Corpus Metadata.
- */
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
+import io.committed.ketos.common.graphql.support.GraphQLNode;
+
+/** Corpus Metadata. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

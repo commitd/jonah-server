@@ -1,23 +1,21 @@
 package io.committed.ketos.plugins.data.feedback.mongo;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.AbstractDataProvider;
 import io.committed.invest.extensions.data.providers.DatabaseConstants;
 import io.committed.ketos.plugins.data.feedback.data.Feedback;
 import io.committed.ketos.plugins.data.feedback.data.FeedbackDataProvider;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Mongo implementation of {@link FeedbackDataProvider}
- *
- */
+/** Mongo implementation of {@link FeedbackDataProvider} */
 public class MongoFeedbackDataProvider extends AbstractDataProvider
     implements FeedbackDataProvider {
 
   private final MongoFeedbackRepository repository;
 
-  protected MongoFeedbackDataProvider(final String dataset, final String datasource,
-      final MongoFeedbackRepository repository) {
+  protected MongoFeedbackDataProvider(
+      final String dataset, final String datasource, final MongoFeedbackRepository repository) {
     super(dataset, datasource);
     this.repository = repository;
   }
@@ -45,13 +43,10 @@ public class MongoFeedbackDataProvider extends AbstractDataProvider
   @Override
   public Flux<Feedback> findAllByUser(final String user, final int offset, final int limit) {
     return repository.findByUser(user).skip(offset).take(limit);
-
   }
 
   @Override
   public void deleteByUser(final String id, final String user) {
     repository.deleteByIdAndUser(id, user).subscribe();
   }
-
-
 }

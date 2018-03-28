@@ -1,8 +1,6 @@
 package io.committed.ketos.common.constants;
 
-/**
- * Commonly used Baleen Types (others exist!).
- */
+/** Commonly used Baleen Types (others exist!). */
 public final class BaleenTypes {
 
   public static final String LOCATION = "Location";
@@ -12,7 +10,5 @@ public final class BaleenTypes {
   public static final String ORGANISATION = "Organisation";
   public static final String WEAPON = "Weapon";
 
-  private BaleenTypes() {
-
-  }
+  private BaleenTypes() {}
 }

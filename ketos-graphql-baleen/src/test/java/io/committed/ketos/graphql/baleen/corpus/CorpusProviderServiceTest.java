@@ -33,8 +33,9 @@ public class CorpusProviderServiceTest extends AbstractKetosGraphqlTest {
   @Test
   public void testProviders() {
     postQuery(corpusQuery("providers { dataset }"), defaultVariables())
-        .jsonPath("$.data.corpus.providers").isArray()
-        .jsonPath("$.data.corpus.providers[0].dataset").isEqualTo(GraphqlTestConfiguration.TEST_DATASET);
+        .jsonPath("$.data.corpus.providers")
+        .isArray()
+        .jsonPath("$.data.corpus.providers[0].dataset")
+        .isEqualTo(GraphqlTestConfiguration.TEST_DATASET);
   }
-
 }

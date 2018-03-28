@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.data.BaleenDocument;
 import io.committed.ketos.common.data.BaleenRelation;
@@ -24,8 +27,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -65,22 +66,27 @@ public class DocumentRelationServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  public RelationProvider relationProvider;
+  @Autowired public RelationProvider relationProvider;
 
   @Test
   public void testGetMentionsByDocument() {
 
     List<BaleenRelation> relations =
         Collections.singletonList(createRelation("rel", "source", "target"));
-    when(relationProvider.getByDocument(any(BaleenDocument.class))).thenReturn(Flux.fromIterable(relations));
+    when(relationProvider.getByDocument(any(BaleenDocument.class)))
+        .thenReturn(Flux.fromIterable(relations));
 
-    postQuery(corpusQuery("document(id: \"testDoc\") { relations { id source { id } target { id } } }"),
-        defaultVariables())
-            .jsonPath("$.data.corpus.document.relations").isArray()
-            .jsonPath("$.data.corpus.document.relations[0].id").isEqualTo("rel")
-            .jsonPath("$.data.corpus.document.relations[0].source.id").isEqualTo("source")
-            .jsonPath("$.data.corpus.document.relations[0].target.id").isEqualTo("target");
+    postQuery(
+            corpusQuery(
+                "document(id: \"testDoc\") { relations { id source { id } target { id } } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.document.relations")
+        .isArray()
+        .jsonPath("$.data.corpus.document.relations[0].id")
+        .isEqualTo("rel")
+        .jsonPath("$.data.corpus.document.relations[0].source.id")
+        .isEqualTo("source")
+        .jsonPath("$.data.corpus.document.relations[0].target.id")
+        .isEqualTo("target");
   }
-
 }

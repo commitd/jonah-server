@@ -29,5 +29,4 @@ public class MongoCrudMentionProviderTest extends AbstractCrudMentionProviderTes
     MongoCrudMentionProviderFactory factory = new MongoCrudMentionProviderFactory();
     return factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

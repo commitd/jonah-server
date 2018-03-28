@@ -1,14 +1,15 @@
 package io.committed.ketos.core.config;
 
 import java.util.Map;
-import com.google.common.collect.ImmutableMap;
-import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * Elasticsearch data definition for Baleen corpus.
- */
+import com.google.common.collect.ImmutableMap;
+
+import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
+
+/** Elasticsearch data definition for Baleen corpus. */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinition {
@@ -32,7 +33,11 @@ public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinit
   private String mentions = BaleenElasticsearchConstants.DEFAULT_MENTION_TYPE;
 
   public ElasticsearchCorpus() {
-    super("baleen-elasticsearch", "Elasticsearch Mongo", "Baleen output stored in Elasticsearch", "es");
+    super(
+        "baleen-elasticsearch",
+        "Elasticsearch Mongo",
+        "Baleen output stored in Elasticsearch",
+        "es");
   }
 
   @Override
@@ -46,9 +51,7 @@ public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinit
 
   @Override
   protected Map<String, Object> getCrudRelationProviderSettings() {
-    return newSettings()
-        .put(BaleenElasticsearchConstants.SETTING_TYPE, relations)
-        .build();
+    return newSettings().put(BaleenElasticsearchConstants.SETTING_TYPE, relations).build();
   }
 
   @Override
@@ -93,9 +96,7 @@ public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinit
 
   @Override
   protected Map<String, Object> getEntityProviderSettings() {
-    return newSettings()
-        .put(BaleenElasticsearchConstants.SETTING_TYPE, entities)
-        .build();
+    return newSettings().put(BaleenElasticsearchConstants.SETTING_TYPE, entities).build();
   }
 
   @Override
@@ -110,9 +111,7 @@ public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinit
 
   @Override
   protected Map<String, Object> getMetadataProviderSettings() {
-    return newSettings()
-        .put(BaleenElasticsearchConstants.SETTING_TYPE, documents)
-        .build();
+    return newSettings().put(BaleenElasticsearchConstants.SETTING_TYPE, documents).build();
   }
 
   @Override
@@ -124,6 +123,4 @@ public class ElasticsearchCorpus extends AbstractMultipleDataProviderDataDefinit
         .put(BaleenElasticsearchConstants.SETTING_PORT, port)
         .build();
   }
-
-
 }

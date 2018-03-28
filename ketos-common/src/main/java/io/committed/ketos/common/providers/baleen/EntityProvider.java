@@ -2,6 +2,10 @@ package io.committed.ketos.common.providers.baleen;
 
 import java.util.List;
 import java.util.Optional;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.ketos.common.data.BaleenDocument;
@@ -11,13 +15,8 @@ import io.committed.ketos.common.graphql.input.EntityFilter;
 import io.committed.ketos.common.graphql.input.EntityProbe;
 import io.committed.ketos.common.graphql.intermediate.EntitySearchResult;
 import io.committed.ketos.common.graphql.output.EntitySearch;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Entity query data provider
- *
- */
+/** Entity query data provider */
 public interface EntityProvider extends DataProvider {
 
   Mono<BaleenEntity> getById(final String id);
@@ -28,19 +27,15 @@ public interface EntityProvider extends DataProvider {
 
   Flux<BaleenEntity> getAll(final int offset, final int size);
 
-  default Flux<BaleenEntity> getByExample(final EntityProbe probe, final int offset, final int size) {
+  default Flux<BaleenEntity> getByExample(
+      final EntityProbe probe, final int offset, final int size) {
     return search(EntitySearch.builder().entityFilter(probe.toFilter()).build(), offset, size)
         .getResults();
   }
 
-
-  EntitySearchResult search(final EntitySearch entitySearch,
-      final int offset,
-      final int size);
-
+  EntitySearchResult search(final EntitySearch entitySearch, final int offset, final int size);
 
   Mono<Long> count();
-
 
   default Mono<BaleenEntity> mentionEntity(final BaleenMention mention) {
     return getById(mention.getEntityId());
@@ -50,5 +45,4 @@ public interface EntityProvider extends DataProvider {
   default String getProviderType() {
     return "EntityProvider";
   }
-
 }

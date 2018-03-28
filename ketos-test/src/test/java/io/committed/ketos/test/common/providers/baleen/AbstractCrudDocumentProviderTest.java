@@ -18,8 +18,12 @@ public abstract class AbstractCrudDocumentProviderTest
 
   @Override
   public BaleenDocument getSaveItem() {
-    BaleenDocument document = new BaleenDocument("cffa7e3a-4664-4308-b97b-cb7a1f96e7ff",
-        Collections.EMPTY_LIST, "", new PropertiesMap());
+    BaleenDocument document =
+        new BaleenDocument(
+            "cffa7e3a-4664-4308-b97b-cb7a1f96e7ff",
+            Collections.EMPTY_LIST,
+            "",
+            new PropertiesMap());
     return document;
   }
 }

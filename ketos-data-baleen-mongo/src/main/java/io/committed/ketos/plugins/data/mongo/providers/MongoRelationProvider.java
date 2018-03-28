@@ -2,9 +2,15 @@ package io.committed.ketos.plugins.data.mongo.providers;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import com.mongodb.reactivestreams.client.MongoDatabase;
+
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.ketos.common.baleenconsumer.Converters;
 import io.committed.ketos.common.baleenconsumer.OutputRelation;
@@ -16,22 +22,19 @@ import io.committed.ketos.common.graphql.intermediate.RelationSearchResult;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.plugins.data.mongo.filters.RelationFilters;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Mongo RelationProvider.
- *
- */
+/** Mongo RelationProvider. */
 public class MongoRelationProvider extends AbstractBaleenMongoDataProvider<OutputRelation>
     implements RelationProvider {
 
   @Autowired
-  public MongoRelationProvider(final String dataset, final String datasource,
-      final MongoDatabase mongoDatabase, final String collectionName) {
+  public MongoRelationProvider(
+      final String dataset,
+      final String datasource,
+      final MongoDatabase mongoDatabase,
+      final String collectionName) {
     super(dataset, datasource, mongoDatabase, collectionName, OutputRelation.class);
   }
-
 
   @Override
   public Mono<BaleenRelation> getById(final String id) {
@@ -43,20 +46,20 @@ public class MongoRelationProvider extends AbstractBaleenMongoDataProvider<Outpu
     return findByDocumentId(document.getId()).map(Converters::toBaleenRelation);
   }
 
-
   @Override
   public Flux<BaleenRelation> getAll(final int offset, final int size) {
     return findAll(offset, size).map(Converters::toBaleenRelation);
   }
 
   @Override
-  public Flux<TermBin> countByField(final Optional<RelationFilter> filter, final List<String> path,
-      final int size) {
+  public Flux<TermBin> countByField(
+      final Optional<RelationFilter> filter, final List<String> path, final int size) {
     return termAggregation(RelationFilters.createFilter(filter, false), path, size);
   }
 
   @Override
-  public RelationSearchResult search(final RelationSearch relationSearch, final int offset, final int size) {
+  public RelationSearchResult search(
+      final RelationSearch relationSearch, final int offset, final int size) {
 
     final Optional<Bson> filter = RelationFilters.createFilter(relationSearch);
 
@@ -64,10 +67,11 @@ public class MongoRelationProvider extends AbstractBaleenMongoDataProvider<Outpu
     final Flux<BaleenRelation> flux;
     if (filter.isPresent()) {
       total = toMono(getCollection().count(filter.get()));
-      flux = toFlux(getCollection().find(filter.get()))
-          .skip(offset)
-          .take(size)
-          .map(Converters::toBaleenRelation);
+      flux =
+          toFlux(getCollection().find(filter.get()))
+              .skip(offset)
+              .take(size)
+              .map(Converters::toBaleenRelation);
     } else {
       total = count();
       flux = getAll(offset, size);

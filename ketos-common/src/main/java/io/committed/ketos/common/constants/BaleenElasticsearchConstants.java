@@ -1,8 +1,6 @@
 package io.committed.ketos.common.constants;
 
-/**
- * Elasticsearch constants related to Baleen indices/types/settings.
- */
+/** Elasticsearch constants related to Baleen indices/types/settings. */
 public final class BaleenElasticsearchConstants {
 
   // Data Provider Factory constants

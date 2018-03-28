@@ -10,8 +10,7 @@ import io.committed.ketos.plugins.data.mongo.MongoTestResource;
 import io.committed.ketos.plugins.data.mongo.factory.MongoCrudDocumentProviderFactory;
 import io.committed.ketos.test.common.providers.baleen.AbstractCrudDocumentProviderTest;
 
-public class MongoCrudDocumentProviderTest
-    extends AbstractCrudDocumentProviderTest {
+public class MongoCrudDocumentProviderTest extends AbstractCrudDocumentProviderTest {
 
   private static final MongoTestResource testResource = new MongoTestResource();
 
@@ -30,5 +29,4 @@ public class MongoCrudDocumentProviderTest
     MongoCrudDocumentProviderFactory factory = new MongoCrudDocumentProviderFactory();
     return factory.build("testDataset", "testDatasource", testResource.getSettings()).block();
   }
-
 }

@@ -15,13 +15,14 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Flux;
+
 import io.committed.invest.core.dto.analytic.TermBin;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.providers.baleen.MetadataProvider;
 import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
-import reactor.core.publisher.Flux;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,13 +45,13 @@ public class CorpusMetadataServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private MetadataProvider metadataProvider;
+  @Autowired private MetadataProvider metadataProvider;
 
   @Test
   public void testGetMetadata() {
     postQuery(corpusQuery("metadata(key: \"test\"){key}"), defaultVariables())
-        .jsonPath("$.data.corpus.metadata.key").isEqualTo("test");
+        .jsonPath("$.data.corpus.metadata.key")
+        .isEqualTo("test");
   }
 
   @Test
@@ -58,9 +59,12 @@ public class CorpusMetadataServiceTest extends AbstractKetosGraphqlTest {
     List<TermBin> results = Collections.singletonList(new TermBin("test", 1));
     when(metadataProvider.countByKey(any(), anyInt())).thenReturn(Flux.fromIterable(results));
     postQuery(corpusQuery("metadata { keys { bins { term count } } }"), defaultVariables())
-        .jsonPath("$.data.corpus.metadata.keys.bins").isArray()
-        .jsonPath("$.data.corpus.metadata.keys.bins[0].term").isEqualTo("test")
-        .jsonPath("$.data.corpus.metadata.keys.bins[0].count").isEqualTo(1);
+        .jsonPath("$.data.corpus.metadata.keys.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.metadata.keys.bins[0].term")
+        .isEqualTo("test")
+        .jsonPath("$.data.corpus.metadata.keys.bins[0].count")
+        .isEqualTo(1);
   }
 
   @Test
@@ -68,8 +72,11 @@ public class CorpusMetadataServiceTest extends AbstractKetosGraphqlTest {
     List<TermBin> results = Collections.singletonList(new TermBin("test", 1));
     when(metadataProvider.countByValue(any(), anyInt())).thenReturn(Flux.fromIterable(results));
     postQuery(corpusQuery("metadata { values { bins { term count } } } "), defaultVariables())
-        .jsonPath("$.data.corpus.metadata.values.bins").isArray()
-        .jsonPath("$.data.corpus.metadata.values.bins[0].term").isEqualTo("test")
-        .jsonPath("$.data.corpus.metadata.values.bins[0].count").isEqualTo(1);
+        .jsonPath("$.data.corpus.metadata.values.bins")
+        .isArray()
+        .jsonPath("$.data.corpus.metadata.values.bins[0].term")
+        .isEqualTo("test")
+        .jsonPath("$.data.corpus.metadata.values.bins[0].count")
+        .isEqualTo(1);
   }
 }

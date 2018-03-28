@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.core.dto.collections.PropertiesMap;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.ketos.common.constants.BaleenProperties;
@@ -24,7 +26,6 @@ import io.committed.ketos.graphql.AbstractKetosGraphqlTest;
 import io.committed.ketos.graphql.GraphqlTestConfiguration;
 import io.committed.ketos.graphql.KetosGraphqlTest;
 import io.committed.ketos.graphql.baleen.corpus.CorpusDocumentsService;
-import reactor.core.publisher.Mono;
 
 @KetosGraphqlTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,23 +54,30 @@ public class DocumentInfoServiceTest extends AbstractKetosGraphqlTest {
     }
   }
 
-  @Autowired
-  private DocumentProvider documentProvider;
+  @Autowired private DocumentProvider documentProvider;
 
   @Test
   public void testGetInfoNoMetadata() {
     BaleenDocument doc = new BaleenDocument("testDoc", null, "", null);
     when(documentProvider.getById(eq("testDoc"))).thenReturn(Mono.just(doc));
     postQuery(
-        corpusQuery("document(id: \"testDoc\") { info { classification date language source timestamp title type } }"),
-        defaultVariables())
-            .jsonPath("$.data.corpus.document.info.classification").isEqualTo(null)
-            .jsonPath("$.data.corpus.document.info.date").isEqualTo(null)
-            .jsonPath("$.data.corpus.document.info.language").isEqualTo("NA")
-            .jsonPath("$.data.corpus.document.info.source").isEqualTo("")
-            .jsonPath("$.data.corpus.document.info.timestamp").isEqualTo(null)
-            .jsonPath("$.data.corpus.document.info.title").isEqualTo("Unknown")
-            .jsonPath("$.data.corpus.document.info.type").isEqualTo("Unknown");
+            corpusQuery(
+                "document(id: \"testDoc\") { info { classification date language source timestamp title type } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.document.info.classification")
+        .isEqualTo(null)
+        .jsonPath("$.data.corpus.document.info.date")
+        .isEqualTo(null)
+        .jsonPath("$.data.corpus.document.info.language")
+        .isEqualTo("NA")
+        .jsonPath("$.data.corpus.document.info.source")
+        .isEqualTo("")
+        .jsonPath("$.data.corpus.document.info.timestamp")
+        .isEqualTo(null)
+        .jsonPath("$.data.corpus.document.info.title")
+        .isEqualTo("Unknown")
+        .jsonPath("$.data.corpus.document.info.type")
+        .isEqualTo("Unknown");
   }
 
   @Test
@@ -79,9 +87,11 @@ public class DocumentInfoServiceTest extends AbstractKetosGraphqlTest {
     BaleenDocument doc = new BaleenDocument("testDoc", null, "", new PropertiesMap(properties));
     when(documentProvider.getById(eq("testDoc"))).thenReturn(Mono.just(doc));
     postQuery(
-        corpusQuery("document(id: \"testDoc\") { info { classification date language source timestamp title type } }"),
-        defaultVariables())
-            .jsonPath("$.data.corpus.document.info.title").isEqualTo("testTitle");
+            corpusQuery(
+                "document(id: \"testDoc\") { info { classification date language source timestamp title type } }"),
+            defaultVariables())
+        .jsonPath("$.data.corpus.document.info.title")
+        .isEqualTo("testTitle");
   }
 
   @Test
@@ -105,10 +115,10 @@ public class DocumentInfoServiceTest extends AbstractKetosGraphqlTest {
   private void assertPublishedIds(BaleenDocument doc) {
     when(documentProvider.getById(eq("testDoc"))).thenReturn(Mono.just(doc));
     postQuery(
-        corpusQuery("document(id: \"testDoc\") { info { publishedIds } }"),
-        defaultVariables())
-            .jsonPath("$.data.corpus.document.info.publishedIds").isArray()
-            .jsonPath("$.data.corpus.document.info.publishedIds[0]").isEqualTo("pubId");
+            corpusQuery("document(id: \"testDoc\") { info { publishedIds } }"), defaultVariables())
+        .jsonPath("$.data.corpus.document.info.publishedIds")
+        .isArray()
+        .jsonPath("$.data.corpus.document.info.publishedIds[0]")
+        .isEqualTo("pubId");
   }
-
 }

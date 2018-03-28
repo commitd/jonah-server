@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Helper functions ot work with Map<String,Object>
- */
+/** Helper functions ot work with Map<String,Object> */
 public final class MapUtils {
 
   private MapUtils() {
@@ -22,32 +20,34 @@ public final class MapUtils {
 
   // This is checked by isInstance
   @SuppressWarnings("unchecked")
-  public static <T> Optional<T> getAsKey(final Map<String, Object> metadata, final String key,
-      final Class<? extends T> clazz) {
+  public static <T> Optional<T> getAsKey(
+      final Map<String, Object> metadata, final String key, final Class<? extends T> clazz) {
     return getAsKey(metadata, key)
-        .flatMap(o -> {
-          if (clazz.isInstance(o)) {
-            return Optional.of((T) o);
-          } else {
-            return Optional.empty();
-          }
-        });
+        .flatMap(
+            o -> {
+              if (clazz.isInstance(o)) {
+                return Optional.of((T) o);
+              } else {
+                return Optional.empty();
+              }
+            });
   }
 
-  public static <T> T getAsKey(final Map<String, Object> metadata, final String key,
-      final T defaultValue) {
+  public static <T> T getAsKey(
+      final Map<String, Object> metadata, final String key, final T defaultValue) {
     Objects.requireNonNull(defaultValue);
     final Class<T> clazz = (Class<T>) defaultValue.getClass();
     final Optional<T> optional = getAsKey(metadata, key, clazz);
     return optional.orElse(defaultValue);
   }
 
-  public static Optional<String> getStringAsKey(final Map<String, Object> metadata, final String key) {
-    return getAsKey(metadata, key, String.class)
-        .filter(s -> !s.isEmpty());
+  public static Optional<String> getStringAsKey(
+      final Map<String, Object> metadata, final String key) {
+    return getAsKey(metadata, key, String.class).filter(s -> !s.isEmpty());
   }
 
-  public static Collection<String> getStringsAsKey(final Map<String, Object> metadata, final String key) {
+  public static Collection<String> getStringsAsKey(
+      final Map<String, Object> metadata, final String key) {
     final Optional<Object> optional = getAsKey(metadata, key);
 
     if (optional.isPresent()) {
@@ -62,21 +62,22 @@ public final class MapUtils {
     }
 
     return Collections.emptyList();
-
   }
 
-  public static Optional<Date> getDateAsKey(final Map<String, Object> properties, final String key) {
+  public static Optional<Date> getDateAsKey(
+      final Map<String, Object> properties, final String key) {
     return getAsKey(properties, key)
-        .flatMap(o -> {
-          Date d = null;
-          if (o instanceof Date) {
-            d = (Date) o;
-          } else if (o instanceof Number) {
-            final long l = ((Number) o).longValue();
-            d = new Date(l);
-          }
+        .flatMap(
+            o -> {
+              Date d = null;
+              if (o instanceof Date) {
+                d = (Date) o;
+              } else if (o instanceof Number) {
+                final long l = ((Number) o).longValue();
+                d = new Date(l);
+              }
 
-          return Optional.ofNullable(d);
-        });
+              return Optional.ofNullable(d);
+            });
   }
 }

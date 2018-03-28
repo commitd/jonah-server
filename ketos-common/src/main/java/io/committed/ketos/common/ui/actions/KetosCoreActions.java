@@ -1,12 +1,10 @@
 package io.committed.ketos.common.ui.actions;
 
 import java.util.Arrays;
+
 import com.google.common.base.Joiner;
 
-/**
- * Constants which represent the UI actions for Ketos.
- *
- */
+/** Constants which represent the UI actions for Ketos. */
 public final class KetosCoreActions {
 
   private KetosCoreActions() {
@@ -16,7 +14,6 @@ public final class KetosCoreActions {
   public static final String SEPARATOR = ".";
 
   private static final Joiner JOINER = Joiner.on(SEPARATOR).skipNulls();
-
 
   // Types
 
@@ -32,7 +29,6 @@ public final class KetosCoreActions {
 
   public static final String EVENT = "event";
 
-
   // Activities
 
   public static final String VIEW = "view";
@@ -40,7 +36,6 @@ public final class KetosCoreActions {
   public static final String SEARCH = "search";
 
   public static final String EDIT = "edit";
-
 
   // Actual actions
 
@@ -58,10 +53,7 @@ public final class KetosCoreActions {
 
   public static final String EVENT_VIEW = make(EVENT, VIEW);
 
-
-
   public static String make(final String... parts) {
     return JOINER.join(Arrays.asList(parts));
   }
-
 }

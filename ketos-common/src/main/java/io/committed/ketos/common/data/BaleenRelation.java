@@ -1,24 +1,22 @@
 package io.committed.ketos.common.data;
 
-import io.committed.invest.core.dto.collections.PropertiesMap;
-import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
-import io.leangen.graphql.annotations.GraphQLId;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * GraphQL/DTO representation of a Baleen relation
- */
+import io.committed.invest.core.dto.collections.PropertiesMap;
+import io.committed.ketos.common.graphql.support.AbstractGraphQLNode;
+import io.leangen.graphql.annotations.GraphQLId;
+
+/** GraphQL/DTO representation of a Baleen relation */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 public class BaleenRelation extends AbstractGraphQLNode {
 
-  @GraphQLId
-  private String id;
+  @GraphQLId private String id;
 
   private String docId;
 
@@ -38,9 +36,16 @@ public class BaleenRelation extends AbstractGraphQLNode {
 
   private PropertiesMap properties;
 
-  public BaleenRelation(final String id, final String docId, final int begin, final int end,
-      final String type, final String subtype,
-      final String value, final BaleenMention source, final BaleenMention target,
+  public BaleenRelation(
+      final String id,
+      final String docId,
+      final int begin,
+      final int end,
+      final String type,
+      final String subtype,
+      final String value,
+      final BaleenMention source,
+      final BaleenMention target,
       final PropertiesMap properties) {
     super();
     this.id = id;
@@ -63,5 +68,4 @@ public class BaleenRelation extends AbstractGraphQLNode {
       this.target.setParent(this);
     }
   }
-
 }

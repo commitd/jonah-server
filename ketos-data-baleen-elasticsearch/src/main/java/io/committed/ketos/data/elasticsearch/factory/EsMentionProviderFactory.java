@@ -1,20 +1,23 @@
 package io.committed.ketos.data.elasticsearch.factory;
 
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.elasticsearch.client.Client;
 import org.springframework.stereotype.Service;
+
+import reactor.core.publisher.Mono;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.committed.invest.support.data.elasticsearch.AbstractElasticsearchDataProviderFactory;
 import io.committed.ketos.common.constants.BaleenElasticsearchConstants;
 import io.committed.ketos.common.providers.baleen.MentionProvider;
 import io.committed.ketos.data.elasticsearch.providers.ElasticsearchMentionProvider;
 import io.committed.ketos.data.elasticsearch.repository.EsMentionService;
-import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
-/**
- * A factory for creating ES MentionProvider objects.
- */
+/** A factory for creating ES MentionProvider objects. */
 @Slf4j
 @Service
 public class EsMentionProviderFactory
@@ -22,17 +25,18 @@ public class EsMentionProviderFactory
 
   private final ObjectMapper mapper;
 
-
   public EsMentionProviderFactory(final ObjectMapper mapper) {
-    super("baleen-es-mentions", MentionProvider.class, BaleenElasticsearchConstants.DEFAULT_INDEX,
+    super(
+        "baleen-es-mentions",
+        MentionProvider.class,
+        BaleenElasticsearchConstants.DEFAULT_INDEX,
         BaleenElasticsearchConstants.DEFAULT_MENTION_TYPE);
     this.mapper = mapper;
   }
 
-
   @Override
-  public Mono<MentionProvider> build(final String dataset, final String datasource,
-      final Map<String, Object> settings) {
+  public Mono<MentionProvider> build(
+      final String dataset, final String datasource, final Map<String, Object> settings) {
     try {
       final Client elastic = buildElasticClient(settings);
 
@@ -46,5 +50,4 @@ public class EsMentionProviderFactory
       return Mono.empty();
     }
   }
-
 }

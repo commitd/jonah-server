@@ -19,16 +19,17 @@ import io.committed.ketos.graphql.baleen.root.CorpusService;
 
 @WebFluxTest
 @ContextConfiguration(
-    classes = {JacksonAutoConfiguration.class,
-        GraphqlTestConfiguration.class,
-        DefaultDatasetProviders.class,
-        CorpusService.class,
-        DefaultDatasetRegistry.class,
-        CorpusProviderService.class})
+  classes = {
+    JacksonAutoConfiguration.class,
+    GraphqlTestConfiguration.class,
+    DefaultDatasetProviders.class,
+    CorpusService.class,
+    DefaultDatasetRegistry.class,
+    CorpusProviderService.class
+  }
+)
 @Import({GraphQlConfig.class})
 @DirtiesContext
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface KetosGraphqlTest {
-
-}
+public @interface KetosGraphqlTest {}

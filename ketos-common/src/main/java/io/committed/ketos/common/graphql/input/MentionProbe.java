@@ -1,11 +1,10 @@
 package io.committed.ketos.common.graphql.input;
 
-import io.committed.invest.core.dto.collections.PropertiesMap;
 import lombok.Data;
 
-/**
- * Search by example mention.
- */
+import io.committed.invest.core.dto.collections.PropertiesMap;
+
+/** Search by example mention. */
 @Data
 public class MentionProbe {
 
@@ -31,8 +30,5 @@ public class MentionProbe {
     filter.setEntityId(entityId);
 
     return filter;
-
   }
-
-
 }

@@ -1,6 +1,7 @@
 package io.committed.ketos.plugin.documentcluster;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import io.committed.invest.server.graphql.GraphQlConfig;
 import io.committed.invest.test.InvestTestContext;
 
@@ -19,8 +21,7 @@ import io.committed.invest.test.InvestTestContext;
 @DirtiesContext
 public class DocumentClusterExtensionTest {
 
-  @Autowired
-  DocumentClusterExtension extension;
+  @Autowired DocumentClusterExtension extension;
 
   @Test
   public void test() {

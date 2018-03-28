@@ -1,15 +1,16 @@
 package io.committed.ketos.common.data.general;
 
-import io.committed.invest.core.dto.analytic.GeoLocation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import io.committed.invest.core.dto.analytic.GeoLocation;
+
 /**
  * A geo location with a name.
  *
- * Useful for converting say a location entity to a lat,lon marker
+ * <p>Useful for converting say a location entity to a lat,lon marker
  */
 @Data
 @AllArgsConstructor()
@@ -23,15 +24,14 @@ public class NamedGeoLocation extends GeoLocation {
 
   public NamedGeoLocation(final double lat, final double lon) {
     this("", "", lat, lon);
-
   }
 
-  public NamedGeoLocation(final String name, final String type, final double lat, final double lon) {
+  public NamedGeoLocation(
+      final String name, final String type, final double lat, final double lon) {
     super(lat, lon);
     this.name = name;
     this.type = type;
   }
-
 
   // Redeclare this so that they are noticed by GraphQl.
 
@@ -44,5 +44,4 @@ public class NamedGeoLocation extends GeoLocation {
   public double getLon() {
     return super.getLon();
   }
-
 }

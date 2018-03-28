@@ -1,6 +1,10 @@
 package io.committed.ketos.graphql.baleen.corpus;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import io.committed.invest.extensions.annotations.GraphQLService;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
@@ -11,17 +15,13 @@ import io.committed.ketos.common.graphql.input.RelationProbe;
 import io.committed.ketos.common.graphql.output.RelationSearch;
 import io.committed.ketos.common.providers.baleen.RelationProvider;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
+
 import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLContext;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-/**
- * Relation resolvers which enhance the Corpus object.
- *
- */
+/** Relation resolvers which enhance the Corpus object. */
 @GraphQLService
 public class CorpusRelationService extends AbstractGraphQlService {
 
@@ -30,13 +30,16 @@ public class CorpusRelationService extends AbstractGraphQlService {
     super(corpusProviders);
   }
 
-
-
   @GraphQLQuery(name = "relation", description = "Find a relation by id")
-  public Mono<BaleenRelation> getById(@GraphQLContext final BaleenCorpus corpus,
+  public Mono<BaleenRelation> getById(
+      @GraphQLContext final BaleenCorpus corpus,
       @GraphQLNonNull @GraphQLArgument(name = "id") final String id,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
     return getProviders(corpus, RelationProvider.class, hints)
         .flatMap(p -> p.getById(id))
         .next()
@@ -44,12 +47,17 @@ public class CorpusRelationService extends AbstractGraphQlService {
   }
 
   @GraphQLQuery(name = "relations", description = "Get all relations in the corpus")
-  public Flux<BaleenRelation> getAllRelations(@GraphQLContext final BaleenCorpus corpus,
+  public Flux<BaleenRelation> getAllRelations(
+      @GraphQLContext final BaleenCorpus corpus,
       @GraphQLArgument(name = "offset", defaultValue = "0") final int offset,
       @GraphQLArgument(name = "size", defaultValue = "10") final int size,
       @GraphQLArgument(name = "probe") final RelationProbe probe,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
 
     if (probe == null) {
       return getProviders(corpus, RelationProvider.class, hints)
@@ -61,24 +69,36 @@ public class CorpusRelationService extends AbstractGraphQlService {
           .flatMap(p -> p.getByExample(probe, offset, size))
           .doOnNext(eachAddParent(corpus));
     }
-
   }
 
   @GraphQLQuery(name = "searchRelations", description = "Search all relations")
-  public RelationSearch searchForRelations(@GraphQLContext final BaleenCorpus corpus,
-      @GraphQLNonNull @GraphQLArgument(name = "query",
-          description = "The filter to relations") final RelationFilter relationFilter,
-      @GraphQLArgument(name = "hints",
-          description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
+  public RelationSearch searchForRelations(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLNonNull @GraphQLArgument(name = "query", description = "The filter to relations")
+          final RelationFilter relationFilter,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
     return new RelationSearch(corpus, relationFilter);
   }
 
-  @GraphQLQuery(name = "countRelations",
-      description = "Count the number of relations in this corpus")
-  public Mono<Long> getDocuments(@GraphQLContext final BaleenCorpus corpus, @GraphQLArgument(
-      name = "hints",
-      description = "Provide hints about the datasource or database which should be used to execute this query") final DataHints hints) {
-    return getProviders(corpus, RelationProvider.class, hints).flatMap(RelationProvider::count)
+  @GraphQLQuery(
+    name = "countRelations",
+    description = "Count the number of relations in this corpus"
+  )
+  public Mono<Long> getDocuments(
+      @GraphQLContext final BaleenCorpus corpus,
+      @GraphQLArgument(
+            name = "hints",
+            description =
+                "Provide hints about the datasource or database which should be used to execute this query"
+          )
+          final DataHints hints) {
+    return getProviders(corpus, RelationProvider.class, hints)
+        .flatMap(RelationProvider::count)
         .reduce(Long::sum);
   }
 }

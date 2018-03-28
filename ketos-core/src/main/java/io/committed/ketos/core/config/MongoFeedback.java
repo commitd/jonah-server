@@ -2,13 +2,13 @@ package io.committed.ketos.core.config;
 
 import java.util.Collections;
 import java.util.List;
-import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * Mongo feedback data definition.
- */
+import io.committed.invest.extensions.data.dataset.DataProviderSpecification;
+
+/** Mongo feedback data definition. */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class MongoFeedback extends AbstractKetosDataDefinition {
@@ -29,10 +29,8 @@ public class MongoFeedback extends AbstractKetosDataDefinition {
         DataProviderSpecification.builder()
             .datasource(getDatasource())
             .factory("feedback-mongo")
-            .settings(newSettings()
-                .put("uri", MongoCorpus.toMongoUri(host, port))
-                .put("db", db)
-                .build())
+            .settings(
+                newSettings().put("uri", MongoCorpus.toMongoUri(host, port)).put("db", db).build())
             .build());
   }
 }
