@@ -1,15 +1,13 @@
 package io.committed.ketos.graphql.baleen.mutations;
 
 import java.util.Optional;
-
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
 import io.committed.invest.extensions.data.providers.CrudDataProvider;
 import io.committed.invest.extensions.data.providers.DataProvider;
 import io.committed.invest.extensions.data.providers.DataProviders;
 import io.committed.invest.extensions.data.query.DataHints;
 import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Base class for crud mutations.
@@ -19,7 +17,7 @@ import io.committed.ketos.graphql.baleen.utils.AbstractGraphQlService;
  * @param <P> the data provider
  */
 public abstract class AbstractCrudMutation<R, T, P extends CrudDataProvider<R, T>>
-    extends AbstractGraphQlService {
+extends AbstractGraphQlService {
 
   private final Class<T> itemClass;
   private final Class<P> providerClass;
@@ -61,10 +59,16 @@ public abstract class AbstractCrudMutation<R, T, P extends CrudDataProvider<R, T
   }
 
   protected Flux<P> getProviders(final Optional<String> datasetId, final DataHints hints) {
+
+    // We want to apply this to all the datasources we
+    // have (dupliation == true) unless the user asks otherwise
+    final DataHints hintsToApply =
+        hints != null ? hints : new DataHints(null, null, true);
+
     if (datasetId.isPresent()) {
-      return getDataProviders().findForDataset(datasetId.get(), providerClass, hints);
+      return getDataProviders().findForDataset(datasetId.get(), providerClass, hintsToApply);
     } else {
-      return getDataProviders().find(providerClass, hints);
+      return getDataProviders().find(providerClass, hintsToApply);
     }
   }
 }
