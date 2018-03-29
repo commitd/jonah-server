@@ -3,9 +3,7 @@ package io.committed.ketos.common.baleenconsumer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import com.google.common.collect.Sets;
-
 import io.committed.invest.core.utils.FieldUtils;
 import io.committed.ketos.common.constants.BaleenProperties;
 
@@ -85,8 +83,8 @@ public class ElasticsearchMapping {
         // Key is a keyword anyway
         return path;
       } else if (path.get(offset + 1).equalsIgnoreCase(BaleenProperties.METADATA_VALUE)) {
-        // METADATA_VALUE is text, so we want to aggregate over keyword
-        return addKeyword(path);
+        // METADATA_VALUE is keyword, so we want to aggregate over keyword
+        return path;
       }
     }
 
