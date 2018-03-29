@@ -75,15 +75,14 @@ public class ElasticsearchMapping {
     }
 
     if (path.get(offset).equals(BaleenProperties.METADATA)) {
+      final String key = path.get(offset + 1);
+
       // if its key then that's a keyword
-      if (size > 2) {
-        // No idea what is could be, leave it alone
-        return path;
-      } else if (path.get(offset + 1).equalsIgnoreCase(BaleenProperties.METADATA_KEY)) {
-        // Key is a keyword anyway
-        return path;
-      } else if (path.get(offset + 1).equalsIgnoreCase(BaleenProperties.METADATA_VALUE)) {
-        // METADATA_VALUE is keyword, so we want to aggregate over keyword
+      if (size > 2
+          || key.equalsIgnoreCase(BaleenProperties.METADATA_KEY)
+          || key.equalsIgnoreCase(BaleenProperties.METADATA_VALUE)) {
+        // If size > 2, No idea what is could be, leave it alone
+        // Key/Value are both mapped as keyword so can be left unchanged
         return path;
       }
     }
