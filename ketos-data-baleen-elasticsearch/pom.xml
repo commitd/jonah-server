@@ -11,6 +11,10 @@
 
   <dependencies>
     <dependency>
+   		<groupId>org.projectlombok</groupId>
+   		<artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-support-data</artifactId>
       <scope>provided</scope>

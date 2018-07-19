@@ -11,6 +11,11 @@
   <description>Data beans for common Baleen objects</description>
 
   <dependencies>
+     <dependency>
+   		<groupId>org.projectlombok</groupId>
+   		<artifactId>lombok</artifactId>
+    </dependency>  
+  
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-server-data</artifactId>

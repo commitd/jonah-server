@@ -10,6 +10,11 @@
   <name>Ketos Core</name>
 
   <dependencies>
+     <dependency>
+   		<groupId>org.projectlombok</groupId>
+   		<artifactId>lombok</artifactId>
+    </dependency>  
+  
     <dependency>
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
