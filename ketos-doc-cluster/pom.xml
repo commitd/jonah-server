@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.committed.ketos</groupId>
     <artifactId>ketos-java</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0-SNAPSHOT</version>
   </parent>
   <artifactId>ketos-doc-cluster</artifactId>
   <name>Ketos Document Clustering GraphQL</name>
