@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.committed.ketos</groupId>
     <artifactId>ketos-java</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
+    <version>0.7.0</version>
   </parent>
   <artifactId>ketos-ui-example-html</artifactId>
   <name>Ketos UI Pure HTML Example</name>
