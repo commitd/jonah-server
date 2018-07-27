@@ -49,11 +49,6 @@
       <artifactId>invest-plugin-ui-host</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>io.committed.invest</groupId>
-      <artifactId>invest-plugin-server-auth</artifactId>
-    </dependency>
-
     <!-- Ketos -->
     <dependency>
       <groupId>io.committed.ketos</groupId>
