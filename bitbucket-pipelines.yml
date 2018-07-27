@@ -1,0 +1,40 @@
+image: maven:3.3.9
+
+pipelines:
+  branches:
+    develop:
+      - step:
+          services:
+            - mongo
+          caches:
+            - maven
+          script:
+            - mvn -s ci-maven-settings.xml -B clean install
+            # mvn -s ci-maven-settings.xml -B sonar:sonar
+            # mvn -s ci-maven-settings.xml deploy -DskipTests=true
+    # As per above exactly, technically this would also output Maven central
+    master:
+      - step:
+          services:
+            - mongo
+          caches:
+            - maven
+          script:
+            - mvn -s ci-maven-settings.xml -B clean install
+            # mvn -s ci-maven-settings.xml -B sonar:sonar
+            # Usually you can't repush the same version, so this will often fail!
+            # mvn -s ci-maven-settings.xml -B deploy -DskipTests=true         
+  default:
+    - step:
+        services:
+          - mongo
+        caches:
+          - maven
+        script:
+          - mvn -s ci-maven-settings.xml -B clean verify
+          # Don't run sonar / etc as it'll interfere with the develop/deploy branch
+
+definitions: 
+  services: 
+    mongo: 
+      image: mongo
