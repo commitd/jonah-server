@@ -24,7 +24,14 @@
       <groupId>io.committed.ketos</groupId>
       <artifactId>ketos-common</artifactId>
     </dependency>
-
+    <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>transport</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.elasticsearch.plugin</groupId>
+        <artifactId>transport-netty4-client</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-elasticsearch</artifactId>
