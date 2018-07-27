@@ -3,21 +3,46 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.committed.ketos</groupId>
-    <artifactId>ketos</artifactId>
-    <version>0.8.0-SNAPSHOT</version>
-  </parent>
+  <groupId>io.committed.ketos</groupId>
   <artifactId>ketos-java</artifactId>
   <packaging>pom</packaging>
-  <name>Ketos Java Parent</name>
+  <version>0.8.0-SNAPSHOT</version>
+  <name>Ketos</name>
+  <description>Modular plugin based application framework, based on Spring</description>
+  <url>http://committed.io</url>
+  <inceptionYear>2017</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Committed</name>
+    <url>http://committed.io</url>
+  </organization>
+
+  <scm>
+    <url>https://github.com/commitd/jonah-server</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Chris Flatley</name>
+      <organization>Committed</organization>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>1.8</java.version>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
+
+    <invest-java.version>0.7.1</invest-java.version>
+    
+    <maven-spotless.version>1.14.0</maven-spotless.version>
   </properties>
 
   <dependencies>
@@ -25,34 +50,62 @@
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-plugin</artifactId>
     </dependency>
-          <!-- Testing -->
+    <!-- Testing -->
     <dependency>
-		<groupId>io.projectreactor</groupId>
-		<artifactId>reactor-test</artifactId>
-		<scope>test</scope>
-	</dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
     <dependencies>
 
-      <!-- Ketos -->
-      <dependency>
-        <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.committed.ketos</groupId>
-        <artifactId>ketos-graphql-baleen</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
+    <!-- Ketos -->
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-data-baleen-elasticsearch</artifactId>
+      <version>${project.version}</version>
+      <!-- Exclude this API as we already have a different version, which 
+        is managed with Spring. We get an error, due I think to version difference, 
+        if we leave this in -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-data-baleen-mongo</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-graphql-baleen</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-plugin-feedback</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.ketos</groupId>
+      <artifactId>ketos-doc-cluster</artifactId>
+      <version>${project.version}</version>
+    </dependency>
       <!-- Invest -->
       <dependency>
         <groupId>io.committed.invest</groupId>
@@ -61,7 +114,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
 
       <!-- Used by Baleen GraphQL -->
       <dependency>
@@ -73,6 +125,178 @@
     </dependencies>
   </dependencyManagement>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>committed.nexus.snapshots</id>
+      <url>https://nexus.committed.software/repository/maven-snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>committed.nexus.releases</id>
+      <url>https://nexus.committed.software/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>committed.nexus.snapshots</id>
+      <name>Committed Snapshots</name>
+      <url>https://nexus.committed.software/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>committed.nexus.releases</id>
+      <name>Committed Releases</name>
+      <url>https://nexus.committed.software/repository/maven-releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${maven-spotless.version}</version>
+        <configuration>
+          <java>
+            <googleJavaFormat>
+              <style>GOOGLE</style>
+            </googleJavaFormat>
+            <removeUnusedImports />
+            <importOrder>
+              <order>java,javax,org,com,io.committed</order>
+            </importOrder>
+          </java>
+        </configuration>
+      </plugin>      
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <!-- Release to Maven Central via OSSHR -->
+      <distributionManagement>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.4</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <modules>
     <module>ketos-core</module>
@@ -84,5 +308,6 @@
     <module>ketos-feedback</module>
     <module>ketos-doc-cluster</module>
     <module>ketos-test</module>
+    <module>ketos-runner</module>
   </modules>
 </project>
