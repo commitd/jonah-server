@@ -1,0 +1,90 @@
+spring:
+  application:
+    name: Ketos
+
+invest:
+  config:
+    title: Ketos
+# Override global settings with:    
+#    settings: 
+#       ketos_map_url:  "http://a.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png"
+#       ketos_map_attribution: "@copy; OpenCycleMap, OSM contributors"
+
+logging:
+  level: 
+    org.mongodb.driver: WARN   
+---
+# TODO Data setup - you will need to amend this if you have multiple data sources or not using the default output from Baleen.
+# Not you don't need both ES and Mongo 
+
+ketos:
+  core:
+    mongo: 
+      - id: baleen_mongo
+        datasource: baleen
+        name: Baleen (Mongo)
+        description: Output from Baleen in Mongo
+        edittable: true
+        db: baleen
+    elasticsearch: 
+      - id: baleen_es
+        datasource: baleen
+        name: Baleen (ES)
+        description: Output from Baleen in Mongo
+        edittable: true
+        index: baleen
+    feedback:
+      id: feedback
+
+
+---
+# If you want to develop the outer application, use this
+# Rebuild it and then changes will appear (on refresh)
+spring:
+  profiles: dev-ui-app
+
+invest:
+  #  TODO Change this to point to your build directory for the invest-app if you have one
+  app:
+    directory: ../../vessel-js/apps/invest-app/build
+---
+# If you want to develop plugins by building them and then refreshing in place use this profile
+# it'll save you the redeploy
+
+spring:
+  profiles: dev-ui-plugins
+
+invest:  
+  ui:
+    host: 
+      roots: 
+        - ../ketos-js/packages/ketos-ui-corpuslist/build/
+        - ../ketos-js/packages/ketos-ui-corpussummary/build/
+        - ../ketos-js/packages/ketos-ui-metadataexplorer/build/
+        - ../ketos-js/packages/ketos-ui-cluster/build/
+        - ../ketos-js/packages/ketos-ui-documentsearch/build/
+        - ../ketos-js/packages/ketos-ui-documentreader/build/
+        - ../ketos-js/packages/ketos-ui-documentdetails/build/
+        - ../ketos-js/packages/ketos-ui-mentionsearch/build/
+        - ../ketos-js/packages/ketos-ui-mentiondetails/build/
+        - ../ketos-js/packages/ketos-ui-entitysearch/build/
+        - ../ketos-js/packages/ketos-ui-entitydetails/build/
+        - ../ketos-js/packages/ketos-ui-relationsearch/build/
+        - ../ketos-js/packages/ketos-ui-relationdetails/build/
+        - ../ketos-js/packages/ketos-ui-map/build/
+        - ../ketos-js/packages/ketos-ui-subjectoverview/build/
+        - ../ketos-js/packages/ketos-ui-network/build/
+        - ../ketos-js/packages/ketos-feedback-form/build/
+        - ../ketos-js/packages/ketos-feedback-reader/build/
+        - ../ketos-js/packages/ketos-ui-editor/build/
+        - ../ketos-js/packages/ketos-ui-usermanagement/build/
+        - ../../vessel-js/plugins/invest-plugin-actiondev/build   
+      # You can override seetings for each plugin like this.  
+      # override: 
+      #   - id: ketos-ui-corpuslist
+      #     settings: 
+      #       hello: world
+      #   - id: ketos-ui-map
+      #     settings:
+      #       override: you
+
