@@ -10,7 +10,21 @@
   <name>Ketos Runner</name>
 
   <dependencies>
-    <!-- Invest -->
+    <!-- Invest server -->
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-server-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-server-data</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.committed.invest</groupId>
+      <artifactId>invest-server-libs</artifactId>
+    </dependency>
+    
+    <!--  Invest plugins -->
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-plugin-graphql</artifactId>
@@ -30,10 +44,6 @@
     <dependency>
       <groupId>io.committed.invest</groupId>
       <artifactId>invest-plugin-ui-libs</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.committed.invest</groupId>
-      <artifactId>invest-plugin-ui-livedev</artifactId>
     </dependency>
     <dependency>
       <groupId>io.committed.invest</groupId>
