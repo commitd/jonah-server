@@ -5,7 +5,7 @@ mkdir build\plugins
 
 REM ##########################################
 echo "Building Java plugins"
-mvn clean install -DskipTests
+call mvn clean install -DskipTests
 
 REM ##########################################
 echo "Moving plugins to build directory"
