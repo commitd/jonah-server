@@ -1,11 +1,11 @@
-del build\*.jar
-rmdir /s build\plugins
+del /q build\*.jar
+rmdir /s /q build\plugins
 mkdir build
 mkdir build\plugins
 
-##########################################
+REM ##########################################
 echo "Building Java plugins"
-mvn clean install -DskipTests
+call mvn clean install -DskipTests
 
 REM ##########################################
 echo "Moving plugins to build directory"
